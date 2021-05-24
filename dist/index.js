@@ -1066,10 +1066,34 @@ exports.WebpartHeight = WebpartHeight;
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
+/* WEBPACK VAR INJECTION */(function(module) {
 
+(function () {
+  var enterModule = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal.enterModule : undefined;
+  enterModule && enterModule(module);
+})();
 
 var __signature__ = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal["default"].signature : function (a) {
   return a;
+};
+
+var __createBinding = this && this.__createBinding || (Object.create ? function (o, m, k, k2) {
+  if (k2 === undefined) k2 = k;
+  Object.defineProperty(o, k2, {
+    enumerable: true,
+    get: function get() {
+      return m[k];
+    }
+  });
+} : function (o, m, k, k2) {
+  if (k2 === undefined) k2 = k;
+  o[k2] = m[k];
+});
+
+var __exportStar = this && this.__exportStar || function (m, exports) {
+  for (var p in m) {
+    if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
+  }
 };
 
 Object.defineProperty(exports, "__esModule", {
@@ -1103,6 +1127,29 @@ Object.defineProperty(exports, "WebpartHeight", {
     return WebpartHeight_1.WebpartHeight;
   }
 });
+
+__exportStar(__webpack_require__(/*! ../models/interfaces/index */ "./src/models/interfaces/index.ts"), exports);
+
+;
+
+(function () {
+  var reactHotLoader = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal.default : undefined;
+
+  if (!reactHotLoader) {
+    return;
+  }
+
+  reactHotLoader.register(__createBinding, "__createBinding", "C:\\Users\\Bruno\\OneDrive\\\xC1rea de Trabalho\\Projects\\trentim-react-sdk\\src\\helpers\\index.ts");
+  reactHotLoader.register(__exportStar, "__exportStar", "C:\\Users\\Bruno\\OneDrive\\\xC1rea de Trabalho\\Projects\\trentim-react-sdk\\src\\helpers\\index.ts");
+})();
+
+;
+
+(function () {
+  var leaveModule = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal.leaveModule : undefined;
+  leaveModule && leaveModule(module);
+})();
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../node_modules/webpack/buildin/module.js */ "./node_modules/webpack/buildin/module.js")(module)))
 
 /***/ }),
 
@@ -1319,6 +1366,164 @@ exports.ConvertionOptions = ConvertionOptions;
   leaveModule && leaveModule(module);
 })();
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../node_modules/webpack/buildin/module.js */ "./node_modules/webpack/buildin/module.js")(module)))
+
+/***/ }),
+
+/***/ "./src/models/interfaces/ICacheHandler.ts":
+/*!************************************************!*\
+  !*** ./src/models/interfaces/ICacheHandler.ts ***!
+  \************************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var __signature__ = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal["default"].signature : function (a) {
+  return a;
+};
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+/***/ }),
+
+/***/ "./src/models/interfaces/IDataTable.ts":
+/*!*********************************************!*\
+  !*** ./src/models/interfaces/IDataTable.ts ***!
+  \*********************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var __signature__ = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal["default"].signature : function (a) {
+  return a;
+};
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+/***/ }),
+
+/***/ "./src/models/interfaces/IFileInfo.ts":
+/*!********************************************!*\
+  !*** ./src/models/interfaces/IFileInfo.ts ***!
+  \********************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var __signature__ = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal["default"].signature : function (a) {
+  return a;
+};
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+/***/ }),
+
+/***/ "./src/models/interfaces/IMimeConverter.ts":
+/*!*************************************************!*\
+  !*** ./src/models/interfaces/IMimeConverter.ts ***!
+  \*************************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var __signature__ = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal["default"].signature : function (a) {
+  return a;
+};
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+/***/ }),
+
+/***/ "./src/models/interfaces/index.ts":
+/*!****************************************!*\
+  !*** ./src/models/interfaces/index.ts ***!
+  \****************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(module) {
+
+(function () {
+  var enterModule = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal.enterModule : undefined;
+  enterModule && enterModule(module);
+})();
+
+var __signature__ = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal["default"].signature : function (a) {
+  return a;
+};
+
+var __createBinding = this && this.__createBinding || (Object.create ? function (o, m, k, k2) {
+  if (k2 === undefined) k2 = k;
+  Object.defineProperty(o, k2, {
+    enumerable: true,
+    get: function get() {
+      return m[k];
+    }
+  });
+} : function (o, m, k, k2) {
+  if (k2 === undefined) k2 = k;
+  o[k2] = m[k];
+});
+
+var __exportStar = this && this.__exportStar || function (m, exports) {
+  for (var p in m) {
+    if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
+  }
+};
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+__exportStar(__webpack_require__(/*! ./ICacheHandler */ "./src/models/interfaces/ICacheHandler.ts"), exports);
+
+__exportStar(__webpack_require__(/*! ./IDataTable */ "./src/models/interfaces/IDataTable.ts"), exports);
+
+__exportStar(__webpack_require__(/*! ./IFileInfo */ "./src/models/interfaces/IFileInfo.ts"), exports);
+
+__exportStar(__webpack_require__(/*! ./IMimeConverter */ "./src/models/interfaces/IMimeConverter.ts"), exports);
+
+;
+
+(function () {
+  var reactHotLoader = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal.default : undefined;
+
+  if (!reactHotLoader) {
+    return;
+  }
+
+  reactHotLoader.register(__createBinding, "__createBinding", "C:\\Users\\Bruno\\OneDrive\\\xC1rea de Trabalho\\Projects\\trentim-react-sdk\\src\\models\\interfaces\\index.ts");
+  reactHotLoader.register(__exportStar, "__exportStar", "C:\\Users\\Bruno\\OneDrive\\\xC1rea de Trabalho\\Projects\\trentim-react-sdk\\src\\models\\interfaces\\index.ts");
+})();
+
+;
+
+(function () {
+  var leaveModule = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal.leaveModule : undefined;
+  leaveModule && leaveModule(module);
+})();
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../node_modules/webpack/buildin/module.js */ "./node_modules/webpack/buildin/module.js")(module)))
 
 /***/ }),
 
