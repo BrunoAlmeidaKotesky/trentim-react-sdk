@@ -1,0 +1,8 @@
+.git/
+.idea/
+coverage/
+node_modules/
+temp/
+npm-debug.log
+bash.exe.stackdump
+/yarn-error.log
