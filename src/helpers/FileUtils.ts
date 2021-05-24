@@ -117,8 +117,3 @@ export class FileUtils {
         return new ConvertionOptions(blob, byteArrays, type, this?.mime ?? undefined);
       }
 }
-
-let fileUtils = new FileUtils();
-const asdas = async () => {
-  const blob = fileUtils.converBase64To('').getMimeType();
-}

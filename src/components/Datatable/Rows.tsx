@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useRef } from 'react'; 
-import { IDatableColumns, ITableCustomEvents } from '../models/IDataTable';
+import { IDatableColumns, ITableCustomEvents } from '../../models/interfaces/IDataTable';
 
 interface RowProps<T extends object> {
     rows: T[];

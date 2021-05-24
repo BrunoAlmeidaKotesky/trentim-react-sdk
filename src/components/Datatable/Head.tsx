@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { IDatableColumns, IDatatableStyles } from '../models/IDataTable';
+import { IDatableColumns, IDatatableStyles } from '../models/interfaces/IDataTable';
 
 interface HeadColumnsProps {
     columns:IDatableColumns[];

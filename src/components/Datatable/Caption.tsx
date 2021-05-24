@@ -1,7 +1,6 @@
 import * as React from 'react';
 import {CSSProperties, useMemo} from 'react';
-import {IDatatableStyles} from '../models/IDataTable';
-
+import {IDatatableStyles} from '../../models/interfaces/IDataTable';
 interface CaptionProps {
     tableCaption: string;
     styles?: Partial<IDatatableStyles>;

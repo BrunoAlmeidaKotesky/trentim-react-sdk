@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { useState } from "react";
-import { Datatable } from '../src/Datatable/Datatable';
+import { Datatable } from '../src/components/Datatable/Datatable';
 
 declare const module: any;
 let hmrUpdate: undefined | (() => void);
