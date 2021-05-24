@@ -3,7 +3,7 @@ import { memo, useEffect } from 'react';
 import {Caption} from './Caption';
 import {HeadColumns} from './Head';
 import {Rows} from './Rows';
-import {IDatatableProps} from '../models/interfaces/IDataTable';
+import {IDatatableProps} from '../../models/interfaces/IDataTable';
 
 export const Datatable = memo(
 <T extends object>({ 

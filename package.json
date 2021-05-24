@@ -4,7 +4,7 @@
   "description": "About",
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "https://github.com/BrunoAlmeidaKotesky/trentim-react-sdk"
   },
   "private": false,
   "sideEffects": false,
