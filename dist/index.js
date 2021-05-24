@@ -463,6 +463,717 @@ exports.Rows = Rows;
 
 /***/ }),
 
+/***/ "./src/helpers/CacheHandler.ts":
+/*!*************************************!*\
+  !*** ./src/helpers/CacheHandler.ts ***!
+  \*************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(module) {
+
+(function () {
+  var enterModule = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal.enterModule : undefined;
+  enterModule && enterModule(module);
+})();
+
+var __signature__ = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal["default"].signature : function (a) {
+  return a;
+};
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.CacheHandler = void 0;
+;
+
+var CacheHandler =
+/** @class */
+function () {
+  function CacheHandler(_json) {
+    this._json = _json;
+  }
+
+  CacheHandler.prototype.setCache = function (key, object, _a) {
+    var _b;
+
+    var type = _a.type;
+    var createdDate = new Date();
+    var requestedAt = createdDate.toISOString();
+    var expireDate = this.setRefreshDate(createdDate);
+    var cacheValue = {
+      value: object,
+      expireDate: expireDate,
+      requestedAt: requestedAt
+    };
+    var stringify = (this === null || this === void 0 ? void 0 : this._json) ? (_b = this === null || this === void 0 ? void 0 : this._json) === null || _b === void 0 ? void 0 : _b.stringify : JSON.stringify;
+    if (type === 'local') localStorage.setItem(key, stringify(cacheValue));else sessionStorage.setItem(key, stringify(cacheValue));
+  };
+
+  CacheHandler.prototype.getCache = function (key, _a) {
+    var type = _a.type;
+    var strinfyedValue;
+    if (type === 'local') strinfyedValue = localStorage.getItem(key);else strinfyedValue = sessionStorage.getItem(key);
+    var cachedValues = this.parseCache(strinfyedValue);
+    if ((cachedValues === null || cachedValues === void 0 ? void 0 : cachedValues.value) && (cachedValues === null || cachedValues === void 0 ? void 0 : cachedValues.expireDate) && (cachedValues === null || cachedValues === void 0 ? void 0 : cachedValues.requestedAt)) return {
+      value: cachedValues === null || cachedValues === void 0 ? void 0 : cachedValues.value,
+      expireDate: cachedValues === null || cachedValues === void 0 ? void 0 : cachedValues.expireDate,
+      requestedAt: cachedValues === null || cachedValues === void 0 ? void 0 : cachedValues.requestedAt
+    };
+    return null;
+  };
+
+  CacheHandler.prototype.parseCache = function (key) {
+    var _a;
+
+    try {
+      var parsedValue = (this === null || this === void 0 ? void 0 : this._json) ? (_a = this === null || this === void 0 ? void 0 : this._json) === null || _a === void 0 ? void 0 : _a.parse(key) : JSON.parse(key);
+      var value = parsedValue.value,
+          expireDate = parsedValue.expireDate,
+          requestedAt = parsedValue.requestedAt;
+      return {
+        value: value,
+        expireDate: expireDate,
+        requestedAt: requestedAt
+      };
+    } catch (_b) {
+      return {
+        value: null,
+        expireDate: null,
+        requestedAt: null
+      };
+    }
+  };
+
+  CacheHandler.prototype.removeCacheKey = function (key) {
+    localStorage.removeItem(key);
+  };
+
+  CacheHandler.prototype.setRefreshDate = function (date, hours) {
+    if (hours === void 0) {
+      hours = 36;
+    }
+
+    var refreshDate = date;
+    refreshDate.setHours(refreshDate.getHours() + hours);
+    return refreshDate.toISOString();
+  };
+
+  return CacheHandler;
+}();
+
+exports.CacheHandler = CacheHandler;
+;
+
+(function () {
+  var reactHotLoader = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal.default : undefined;
+
+  if (!reactHotLoader) {
+    return;
+  }
+
+  reactHotLoader.register(CacheHandler, "CacheHandler", "C:\\Users\\Bruno\\OneDrive\\\xC1rea de Trabalho\\Projects\\trentim-react-sdk\\src\\helpers\\CacheHandler.ts");
+})();
+
+;
+
+(function () {
+  var leaveModule = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal.leaveModule : undefined;
+  leaveModule && leaveModule(module);
+})();
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../node_modules/webpack/buildin/module.js */ "./node_modules/webpack/buildin/module.js")(module)))
+
+/***/ }),
+
+/***/ "./src/helpers/FileUtils.ts":
+/*!**********************************!*\
+  !*** ./src/helpers/FileUtils.ts ***!
+  \**********************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(module) {
+
+(function () {
+  var enterModule = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal.enterModule : undefined;
+  enterModule && enterModule(module);
+})();
+
+var __signature__ = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal["default"].signature : function (a) {
+  return a;
+};
+
+var __awaiter = this && this.__awaiter || function (thisArg, _arguments, P, generator) {
+  function adopt(value) {
+    return value instanceof P ? value : new P(function (resolve) {
+      resolve(value);
+    });
+  }
+
+  return new (P || (P = Promise))(function (resolve, reject) {
+    function fulfilled(value) {
+      try {
+        step(generator.next(value));
+      } catch (e) {
+        reject(e);
+      }
+    }
+
+    function rejected(value) {
+      try {
+        step(generator["throw"](value));
+      } catch (e) {
+        reject(e);
+      }
+    }
+
+    function step(result) {
+      result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
+    }
+
+    step((generator = generator.apply(thisArg, _arguments || [])).next());
+  });
+};
+
+var __generator = this && this.__generator || function (thisArg, body) {
+  var _ = {
+    label: 0,
+    sent: function sent() {
+      if (t[0] & 1) throw t[1];
+      return t[1];
+    },
+    trys: [],
+    ops: []
+  },
+      f,
+      y,
+      t,
+      g;
+  return g = {
+    next: verb(0),
+    "throw": verb(1),
+    "return": verb(2)
+  }, typeof Symbol === "function" && (g[Symbol.iterator] = function () {
+    return this;
+  }), g;
+
+  function verb(n) {
+    return function (v) {
+      return step([n, v]);
+    };
+  }
+
+  function step(op) {
+    if (f) throw new TypeError("Generator is already executing.");
+
+    while (_) {
+      try {
+        if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+        if (y = 0, t) op = [op[0] & 2, t.value];
+
+        switch (op[0]) {
+          case 0:
+          case 1:
+            t = op;
+            break;
+
+          case 4:
+            _.label++;
+            return {
+              value: op[1],
+              done: false
+            };
+
+          case 5:
+            _.label++;
+            y = op[1];
+            op = [0];
+            continue;
+
+          case 7:
+            op = _.ops.pop();
+
+            _.trys.pop();
+
+            continue;
+
+          default:
+            if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) {
+              _ = 0;
+              continue;
+            }
+
+            if (op[0] === 3 && (!t || op[1] > t[0] && op[1] < t[3])) {
+              _.label = op[1];
+              break;
+            }
+
+            if (op[0] === 6 && _.label < t[1]) {
+              _.label = t[1];
+              t = op;
+              break;
+            }
+
+            if (t && _.label < t[2]) {
+              _.label = t[2];
+
+              _.ops.push(op);
+
+              break;
+            }
+
+            if (t[2]) _.ops.pop();
+
+            _.trys.pop();
+
+            continue;
+        }
+
+        op = body.call(thisArg, _);
+      } catch (e) {
+        op = [6, e];
+        y = 0;
+      } finally {
+        f = t = 0;
+      }
+    }
+
+    if (op[0] & 5) throw op[1];
+    return {
+      value: op[0] ? op[1] : void 0,
+      done: true
+    };
+  }
+};
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.FileUtils = void 0;
+
+var ConverterOptions_1 = __webpack_require__(/*! ../models/ConverterOptions */ "./src/models/ConverterOptions.ts");
+
+var FileUtils =
+/** @class */
+function () {
+  function FileUtils(mime) {
+    this.mime = mime;
+    /**
+     * Takes any `Blob` object or inherited objects from this interface and convert it to a base64 string.
+     * @param blob - Any Blob object, such as `File` and many Others
+     * @returns A promise of the base64 string
+     */
+
+    this.blobToBase64 = function (blob) {
+      var reader = new FileReader();
+      reader.readAsDataURL(blob);
+      return new Promise(function (resolve) {
+        reader.onloadend = function () {
+          var b64 = reader.result;
+          var metarRegex = /^data:.+;base64,/;
+          resolve(b64.replace(metarRegex, ''));
+        };
+      });
+    };
+  }
+  /**
+  * Take an object Url, or an url of an image an convert it back to a File object.
+  *
+  * @param url - The first input number
+  * @param fileInfo - The second input number
+  * @param {RequestInit=} fetchOptions - An optional fetching options about the url request, it uses the same `{RequestInit}` interface from fetch api.
+  * @returns A promise containing the file
+  *
+  *@example
+  *```ts
+  * const newFile = await urlToFile("blob:https://tenant.com/bd3df1f7-38c5-44db-9a97-aa956072ef02", {
+  *   fileName: "bird.png",
+  *   fileMime: "image/png",
+  *   lastModified: new Date().getTime()
+  * });
+  * ```
+  * */
+
+
+  FileUtils.prototype.urlToFile = function (url, fileInfo, fetchOptions) {
+    if (fetchOptions === void 0) {
+      fetchOptions = null;
+    }
+
+    return __awaiter(this, void 0, void 0, function () {
+      var fileBlob, fileObj, e_1;
+      return __generator(this, function (_a) {
+        switch (_a.label) {
+          case 0:
+            _a.trys.push([0, 2,, 3]);
+
+            return [4
+            /*yield*/
+            , fetch(url, fetchOptions).then(function (r) {
+              return r.blob();
+            })];
+
+          case 1:
+            fileBlob = _a.sent();
+            fileObj = new File([fileBlob], fileInfo.fileName, {
+              type: (fileInfo === null || fileInfo === void 0 ? void 0 : fileInfo.fileMime) || this.checkIfHasMime(fileInfo === null || fileInfo === void 0 ? void 0 : fileInfo.fileName),
+              lastModified: (fileInfo === null || fileInfo === void 0 ? void 0 : fileInfo.lastModified) || new Date().getTime()
+            });
+            return [2
+            /*return*/
+            , fileObj];
+
+          case 2:
+            e_1 = _a.sent();
+            console.error(e_1 === null || e_1 === void 0 ? void 0 : e_1.message);
+            return [2
+            /*return*/
+            , null];
+
+          case 3:
+            return [2
+            /*return*/
+            ];
+        }
+      });
+    });
+  };
+  /**
+   * Downloads in the browser an XML File of the same given string.
+   *
+   * @param xmlText  - String of the whole content of the XML file
+   * @param {String=} fileName - the name of the XML file.
+   */
+
+
+  FileUtils.prototype.downloadXml = function (xmlText, fileName) {
+    if (xmlText) {
+      var xmlTag_1 = document.createElement('a');
+      var filename = fileName || 'undefinedName.xml';
+      filename = this.fileNameValidator(filename, '.xml');
+      var xmlBlob = new Blob([xmlText], {
+        type: 'application/octet-stream'
+      });
+      var objUrl_1 = URL.createObjectURL(xmlBlob);
+      xmlTag_1.setAttribute('href', objUrl_1);
+      xmlTag_1.setAttribute('download', filename);
+      xmlTag_1.dataset.downloadurl = ['text/plain', xmlTag_1.download, xmlTag_1.href].join(':');
+      xmlTag_1.draggable = true;
+      xmlTag_1.classList.add('dragout');
+      xmlTag_1.click();
+      setTimeout(function () {
+        window.URL.revokeObjectURL(objUrl_1);
+        xmlTag_1 === null || xmlTag_1 === void 0 ? void 0 : xmlTag_1.remove();
+      }, 200);
+    }
+  };
+
+  FileUtils.prototype.fileNameValidator = function (fileName, ext) {
+    if (!ext.startsWith('.')) ext = "." + ext;
+
+    if (fileName) {
+      if (!fileName.endsWith(ext)) return fileName + ext;
+      return fileName;
+    }
+  };
+
+  FileUtils.prototype.checkIfHasMime = function (fileName) {
+    var _a;
+
+    if (!fileName) return null;
+    var type = ((_a = this === null || this === void 0 ? void 0 : this.mime) === null || _a === void 0 ? void 0 : _a.contentType(fileName)) || 'application/octet-stream';
+    return type;
+  };
+
+  FileUtils.prototype.converBase64To = function (base64, fileName) {
+    var _a;
+
+    var type = this.checkIfHasMime(fileName);
+    var sliceSize = 512;
+    var byteCharacters = atob(base64); //method which converts base64 to binary
+
+    var byteArrays = [];
+
+    for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+      var slice = byteCharacters.slice(offset, offset + sliceSize);
+      var byteNumbers = new Array(slice.length);
+
+      for (var i = 0; i < slice.length; i++) {
+        byteNumbers[i] = slice.charCodeAt(i);
+      }
+
+      var byteArray = new Uint8Array(byteNumbers);
+      byteArrays.push(byteArray);
+    }
+
+    var blob = type ? new Blob(byteArrays, {
+      type: type
+    }) : new Blob(byteArrays);
+    return new ConverterOptions_1.ConvertionOptions(blob, byteArrays, type, (_a = this === null || this === void 0 ? void 0 : this.mime) !== null && _a !== void 0 ? _a : undefined);
+  };
+
+  return FileUtils;
+}();
+
+exports.FileUtils = FileUtils;
+;
+
+(function () {
+  var reactHotLoader = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal.default : undefined;
+
+  if (!reactHotLoader) {
+    return;
+  }
+
+  reactHotLoader.register(__awaiter, "__awaiter", "C:\\Users\\Bruno\\OneDrive\\\xC1rea de Trabalho\\Projects\\trentim-react-sdk\\src\\helpers\\FileUtils.ts");
+  reactHotLoader.register(__generator, "__generator", "C:\\Users\\Bruno\\OneDrive\\\xC1rea de Trabalho\\Projects\\trentim-react-sdk\\src\\helpers\\FileUtils.ts");
+  reactHotLoader.register(FileUtils, "FileUtils", "C:\\Users\\Bruno\\OneDrive\\\xC1rea de Trabalho\\Projects\\trentim-react-sdk\\src\\helpers\\FileUtils.ts");
+})();
+
+;
+
+(function () {
+  var leaveModule = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal.leaveModule : undefined;
+  leaveModule && leaveModule(module);
+})();
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../node_modules/webpack/buildin/module.js */ "./node_modules/webpack/buildin/module.js")(module)))
+
+/***/ }),
+
+/***/ "./src/helpers/WebpartHeight.ts":
+/*!**************************************!*\
+  !*** ./src/helpers/WebpartHeight.ts ***!
+  \**************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(module) {
+
+(function () {
+  var enterModule = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal.enterModule : undefined;
+  enterModule && enterModule(module);
+})();
+
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+var __signature__ = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal["default"].signature : function (a) {
+  return a;
+};
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.WebpartHeight = void 0;
+
+var WebpartHeight =
+/** @class */
+function () {
+  function WebpartHeight() {}
+
+  WebpartHeight.prototype.changeSize = function (element) {
+    if (element === null || element === void 0 ? void 0 : element.style) element.style.height = '100%';
+  };
+  /**
+   * @param nodeElement - Base Node element that contains a collection of children divs that can reach the target element
+   * @param target - The target element such as an class name selector like `my-element` or an `HTMLElement` using
+   * ```js
+   * document.querySelector('my-element');
+   * ```
+   * @returns
+   */
+
+
+  WebpartHeight.prototype.changeWebpartHeight = function (nodeElement, target) {
+    var _a, _b;
+
+    try {
+      var childCanvasChild = null;
+
+      if ((nodeElement === null || nodeElement === void 0 ? void 0 : nodeElement.length) > 1) {
+        if ((_b = (_a = nodeElement[0]) === null || _a === void 0 ? void 0 : _a.className) === null || _b === void 0 ? void 0 : _b.includes('ControlZone-control')) childCanvasChild = nodeElement[0];else childCanvasChild = nodeElement[1];
+      } else childCanvasChild = nodeElement[0];
+
+      var canChange = this.targetCondition(target, childCanvasChild);
+      return canChange ? canChange : this.changeNodeRecursive(childCanvasChild, target);
+    } catch (err) {
+      console.error('Erro ao atualizar o tamannho das divs');
+      return false;
+    }
+  };
+
+  WebpartHeight.prototype.changeNodeRecursive = function (childCanvasChild, target) {
+    var _a;
+
+    if (!(childCanvasChild === null || childCanvasChild === void 0 ? void 0 : childCanvasChild.children)) return this.changeWebpartHeight((_a = childCanvasChild === null || childCanvasChild === void 0 ? void 0 : childCanvasChild.nextElementSibling) === null || _a === void 0 ? void 0 : _a.children, target);else {
+      this.changeSize(childCanvasChild);
+      return this.changeWebpartHeight(childCanvasChild === null || childCanvasChild === void 0 ? void 0 : childCanvasChild.children, target);
+    }
+  };
+
+  WebpartHeight.prototype.targetCondition = function (target, child) {
+    var _a;
+
+    if (typeof target === 'string') {
+      if ((_a = child === null || child === void 0 ? void 0 : child.className) === null || _a === void 0 ? void 0 : _a.startsWith(target)) return true;
+      return false;
+    } else if (_typeof(target) === 'object') {
+      var nodeCondition = child === null || child === void 0 ? void 0 : child.isEqualNode(target);
+      if (nodeCondition) return true;
+      return false;
+    }
+
+    return false;
+  };
+
+  return WebpartHeight;
+}();
+
+exports.WebpartHeight = WebpartHeight;
+;
+
+(function () {
+  var reactHotLoader = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal.default : undefined;
+
+  if (!reactHotLoader) {
+    return;
+  }
+
+  reactHotLoader.register(WebpartHeight, "WebpartHeight", "C:\\Users\\Bruno\\OneDrive\\\xC1rea de Trabalho\\Projects\\trentim-react-sdk\\src\\helpers\\WebpartHeight.ts");
+})();
+
+;
+
+(function () {
+  var leaveModule = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal.leaveModule : undefined;
+  leaveModule && leaveModule(module);
+})();
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../node_modules/webpack/buildin/module.js */ "./node_modules/webpack/buildin/module.js")(module)))
+
+/***/ }),
+
+/***/ "./src/helpers/index.ts":
+/*!******************************!*\
+  !*** ./src/helpers/index.ts ***!
+  \******************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var __signature__ = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal["default"].signature : function (a) {
+  return a;
+};
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.WebpartHeight = exports.FileUtils = exports.CacheHandler = void 0;
+
+var CacheHandler_1 = __webpack_require__(/*! ./CacheHandler */ "./src/helpers/CacheHandler.ts");
+
+Object.defineProperty(exports, "CacheHandler", {
+  enumerable: true,
+  get: function get() {
+    return CacheHandler_1.CacheHandler;
+  }
+});
+
+var FileUtils_1 = __webpack_require__(/*! ./FileUtils */ "./src/helpers/FileUtils.ts");
+
+Object.defineProperty(exports, "FileUtils", {
+  enumerable: true,
+  get: function get() {
+    return FileUtils_1.FileUtils;
+  }
+});
+
+var WebpartHeight_1 = __webpack_require__(/*! ./WebpartHeight */ "./src/helpers/WebpartHeight.ts");
+
+Object.defineProperty(exports, "WebpartHeight", {
+  enumerable: true,
+  get: function get() {
+    return WebpartHeight_1.WebpartHeight;
+  }
+});
+
+/***/ }),
+
+/***/ "./src/hooks/useDebounce.ts":
+/*!**********************************!*\
+  !*** ./src/hooks/useDebounce.ts ***!
+  \**********************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(module) {
+
+(function () {
+  var enterModule = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal.enterModule : undefined;
+  enterModule && enterModule(module);
+})();
+
+var __signature__ = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal["default"].signature : function (a) {
+  return a;
+};
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.useDebouncer = void 0;
+
+var react_1 = __webpack_require__(/*! react */ "react");
+
+function useDebouncer(value, delay) {
+  var _a = react_1.useState(value),
+      debouncedValue = _a[0],
+      setDebouncedValue = _a[1];
+
+  react_1.useEffect(function () {
+    var handler = setTimeout(function () {
+      setDebouncedValue(value);
+    }, delay);
+    return function () {
+      clearTimeout(handler);
+    };
+  }, [value]);
+  return debouncedValue;
+}
+
+__signature__(useDebouncer, "useState{_a(value)}\nuseEffect{}");
+
+exports.useDebouncer = useDebouncer;
+;
+
+(function () {
+  var reactHotLoader = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal.default : undefined;
+
+  if (!reactHotLoader) {
+    return;
+  }
+
+  reactHotLoader.register(useDebouncer, "useDebouncer", "C:\\Users\\Bruno\\OneDrive\\\xC1rea de Trabalho\\Projects\\trentim-react-sdk\\src\\hooks\\useDebounce.ts");
+})();
+
+;
+
+(function () {
+  var leaveModule = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal.leaveModule : undefined;
+  leaveModule && leaveModule(module);
+})();
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../node_modules/webpack/buildin/module.js */ "./node_modules/webpack/buildin/module.js")(module)))
+
+/***/ }),
+
 /***/ "./src/index.tsx":
 /*!***********************!*\
   !*** ./src/index.tsx ***!
@@ -481,7 +1192,7 @@ var __signature__ = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoader
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.Datatable = void 0;
+exports.useDebouncer = exports.WebpartHeight = exports.FileUtils = exports.CacheHandler = exports.Datatable = void 0;
 
 var Datatable_1 = __webpack_require__(/*! ./components/Datatable/Datatable */ "./src/components/Datatable/Datatable.tsx");
 
@@ -491,6 +1202,123 @@ Object.defineProperty(exports, "Datatable", {
     return Datatable_1.Datatable;
   }
 });
+
+var index_1 = __webpack_require__(/*! ./helpers/index */ "./src/helpers/index.ts");
+
+Object.defineProperty(exports, "CacheHandler", {
+  enumerable: true,
+  get: function get() {
+    return index_1.CacheHandler;
+  }
+});
+Object.defineProperty(exports, "FileUtils", {
+  enumerable: true,
+  get: function get() {
+    return index_1.FileUtils;
+  }
+});
+Object.defineProperty(exports, "WebpartHeight", {
+  enumerable: true,
+  get: function get() {
+    return index_1.WebpartHeight;
+  }
+});
+
+var useDebounce_1 = __webpack_require__(/*! ./hooks/useDebounce */ "./src/hooks/useDebounce.ts");
+
+Object.defineProperty(exports, "useDebouncer", {
+  enumerable: true,
+  get: function get() {
+    return useDebounce_1.useDebouncer;
+  }
+});
+
+/***/ }),
+
+/***/ "./src/models/ConverterOptions.ts":
+/*!****************************************!*\
+  !*** ./src/models/ConverterOptions.ts ***!
+  \****************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(module) {
+
+(function () {
+  var enterModule = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal.enterModule : undefined;
+  enterModule && enterModule(module);
+})();
+
+var __signature__ = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal["default"].signature : function (a) {
+  return a;
+};
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.ConvertionOptions = void 0;
+
+var ConvertionOptions =
+/** @class */
+function () {
+  function ConvertionOptions(blob, byteArrays, mimeType, mimeUtils) {
+    this.blob = blob;
+    this.byteArrays = byteArrays;
+    this.mimeType = mimeType;
+    this.mimeUtils = mimeUtils;
+  }
+  /**
+   * @returns Return the coneverted value as an blob Object
+   */
+
+
+  ConvertionOptions.prototype.getBlob = function () {
+    return this.blob;
+  };
+  /**
+   * @returns Return an array representation of the type `Uint8Array` from the given base64 value.
+   */
+
+
+  ConvertionOptions.prototype.getByteAraray = function () {
+    return this.byteArrays;
+  };
+  /**
+   *  Applies only if the a file name was given, if the npm module `mime-types` or an similar module was provided on the class constructor it will return the correct detected mime, otherwhise it will return 'application/octet-stream'
+   *
+   * @returns The converted mime type, or null if the fileName parameter was not provided.
+   */
+
+
+  ConvertionOptions.prototype.getMimeType = function () {
+    return this.mimeUtils.contentType(this.mimeType) || this.mimeType;
+  };
+
+  return ConvertionOptions;
+}();
+
+exports.ConvertionOptions = ConvertionOptions;
+;
+
+(function () {
+  var reactHotLoader = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal.default : undefined;
+
+  if (!reactHotLoader) {
+    return;
+  }
+
+  reactHotLoader.register(ConvertionOptions, "ConvertionOptions", "C:\\Users\\Bruno\\OneDrive\\\xC1rea de Trabalho\\Projects\\trentim-react-sdk\\src\\models\\ConverterOptions.ts");
+})();
+
+;
+
+(function () {
+  var leaveModule = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal.leaveModule : undefined;
+  leaveModule && leaveModule(module);
+})();
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../node_modules/webpack/buildin/module.js */ "./node_modules/webpack/buildin/module.js")(module)))
 
 /***/ }),
 
