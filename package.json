@@ -141,5 +141,8 @@
   },
   "jest-junit": {
     "output": "./coverage/junit.xml"
+  },
+  "dependencies": {
+    "rimraf": "^3.0.2"
   }
 }

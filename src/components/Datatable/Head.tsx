@@ -1,14 +1,15 @@
 import * as React from 'react';
-import { IDatableColumns, IDatatableStyles } from '../../models/interfaces/IDataTable';
+import { IDatableColumns } from '../../models/interfaces/IDataTable';
+import {IHeaderStyles} from '../../models/interfaces/IDatatableStyles';
 
 interface HeadColumnsProps {
     columns:IDatableColumns[];
-    styles: Partial<IDatatableStyles>;
+    styles: Partial<IHeaderStyles>;
 }
 export function HeadColumns({columns, styles}:HeadColumnsProps) {
     return (
-    <thead>
-        <tr>
+    <thead style={styles?.tableHeaderContainer ?? {}}>
+        <tr style={styles?.tableHeaderRows ?? {}}>
         {columns?.map(h => (
             <th style={styles?.tableHeader ?? {}} key={`${h.keyName}_x0h`}>{h?.title ?? ''}</th>
         ))}

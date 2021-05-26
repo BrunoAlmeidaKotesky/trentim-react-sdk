@@ -11,6 +11,7 @@
     "declaration": true,
     "declarationDir": "./dist/",
     "sourceMap": true,
+    "sourceRoot": "./dist",
     "module": "commonjs",
     "target": "es5",
     "jsx": "react",

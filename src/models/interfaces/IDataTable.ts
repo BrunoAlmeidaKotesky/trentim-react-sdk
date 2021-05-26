@@ -1,14 +1,4 @@
-import {CSSProperties} from 'react';
-
-export interface IDatatableStyles {
-    tableContainer: CSSProperties;
-    rootTable: CSSProperties;
-    tableHeader: CSSProperties;
-    tableRootBody: CSSProperties;
-    tableCell: CSSProperties;
-    tableRow: {specificKey?: string, style: CSSProperties};
-    caption: CSSProperties;
-}
+import { IDatatableStyles } from "./IDatatableStyles";
 
 /**Represents the columns of the table for the `<thead>` */
 export interface IDatableColumns {

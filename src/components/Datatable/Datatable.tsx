@@ -5,14 +5,14 @@ import {HeadColumns} from './Head';
 import {Rows} from './Rows';
 import {IDatatableProps} from '../../models/interfaces/IDataTable';
 
-export const Datatable = memo(
+export const DataTable = memo(
 <T extends object>({ 
   columns, 
   styles, 
   footer, 
   rows, 
   ignoreKeys, 
-  idName = "nf-table",
+  idName = "default-table",
   customEvents,
   tableCaption,
   classes
@@ -40,7 +40,7 @@ IDatatableProps<T>) => {
             <table style={styles?.rootTable ?? {}} className={idName}>
                 {tableCaption && 
                 <Caption 
-                    styles={styles} 
+                    captionStyle={styles?.captionStyle ?? null} 
                     tableCaption={tableCaption}/>}
                 <HeadColumns 
                     columns={columns} 
@@ -48,7 +48,8 @@ IDatatableProps<T>) => {
                 <tbody style={styles?.tableRootBody ?? {}}>
                     <Rows 
                         columns={columns} 
-                        rows={rows} 
+                        rows={rows}
+                        styles={styles}
                         ignoreKeys={ignoreKeys} 
                         customEvents={customEvents} />
                 </tbody>

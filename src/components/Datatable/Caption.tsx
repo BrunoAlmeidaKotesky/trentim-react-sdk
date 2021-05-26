@@ -1,12 +1,12 @@
 import * as React from 'react';
 import {CSSProperties, useMemo} from 'react';
-import {IDatatableStyles} from '../../models/interfaces/IDataTable';
+
 interface CaptionProps {
     tableCaption: string;
-    styles?: Partial<IDatatableStyles>;
+    captionStyle: CSSProperties;
 }
-export function Caption({styles, tableCaption}:CaptionProps) {
-    const captionStyle:CSSProperties = useMemo(() => {
+export function Caption({captionStyle, tableCaption}:CaptionProps) {
+    const defaultCaptionStyle:CSSProperties = useMemo(() => {
         return {
             fontWeight: 600,
             fontSize: 22,
@@ -16,5 +16,5 @@ export function Caption({styles, tableCaption}:CaptionProps) {
         };
     }, []);
     
-    return(<caption style={{...captionStyle, ...styles?.caption }}>{tableCaption}</caption>);
+    return(<caption style={captionStyle ?? defaultCaptionStyle}>{tableCaption}</caption>);
 }

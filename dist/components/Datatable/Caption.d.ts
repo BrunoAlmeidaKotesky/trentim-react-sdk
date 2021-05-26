@@ -1,7 +1,7 @@
-import { IDatatableStyles } from '../../models/interfaces/IDataTable';
+import { CSSProperties } from 'react';
 interface CaptionProps {
     tableCaption: string;
-    styles?: Partial<IDatatableStyles>;
+    captionStyle: CSSProperties;
 }
-export declare function Caption({ styles, tableCaption }: CaptionProps): JSX.Element;
+export declare function Caption({ captionStyle, tableCaption }: CaptionProps): JSX.Element;
 export {};

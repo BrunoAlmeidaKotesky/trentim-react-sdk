@@ -131,10 +131,236 @@ module.exports = function (module) {
 
 /***/ }),
 
-/***/ "./src/components/Datatable/Caption.tsx":
+/***/ "./src/components/DataTable/Caption.tsx":
 /*!**********************************************!*\
-  !*** ./src/components/Datatable/Caption.tsx ***!
+  !*** ./src/components/DataTable/Caption.tsx ***!
   \**********************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(module) {
+
+(function () {
+  var enterModule = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal.enterModule : undefined;
+  enterModule && enterModule(module);
+})();
+
+var __signature__ = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal["default"].signature : function (a) {
+  return a;
+};
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Caption = void 0;
+
+var React = __webpack_require__(/*! react */ "react");
+
+var react_1 = __webpack_require__(/*! react */ "react");
+
+function Caption(_a) {
+  var captionStyle = _a.captionStyle,
+      tableCaption = _a.tableCaption;
+  var defaultCaptionStyle = react_1.useMemo(function () {
+    return {
+      fontWeight: 600,
+      fontSize: 22,
+      borderBottom: '1px solid #00000063',
+      paddingBottom: 12,
+      paddingTop: 12
+    };
+  }, []);
+  return React.createElement("caption", {
+    style: captionStyle !== null && captionStyle !== void 0 ? captionStyle : defaultCaptionStyle
+  }, tableCaption);
+}
+
+__signature__(Caption, "useMemo{defaultCaptionStyle}");
+
+exports.Caption = Caption;
+;
+
+(function () {
+  var reactHotLoader = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal.default : undefined;
+
+  if (!reactHotLoader) {
+    return;
+  }
+
+  reactHotLoader.register(Caption, "Caption", "F:\\Projetos Individuais\\ReactLibraries\\trentim-react-sdk\\src\\components\\DataTable\\Caption.tsx");
+})();
+
+;
+
+(function () {
+  var leaveModule = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal.leaveModule : undefined;
+  leaveModule && leaveModule(module);
+})();
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../node_modules/webpack/buildin/module.js */ "./node_modules/webpack/buildin/module.js")(module)))
+
+/***/ }),
+
+/***/ "./src/components/DataTable/DataTable.tsx":
+/*!************************************************!*\
+  !*** ./src/components/DataTable/DataTable.tsx ***!
+  \************************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var __signature__ = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal["default"].signature : function (a) {
+  return a;
+};
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.DataTable = void 0;
+
+var React = __webpack_require__(/*! react */ "react");
+
+var react_1 = __webpack_require__(/*! react */ "react");
+
+var Caption_1 = __webpack_require__(/*! ./Caption */ "./src/components/DataTable/Caption.tsx");
+
+var Head_1 = __webpack_require__(/*! ./Head */ "./src/components/DataTable/Head.tsx");
+
+var Rows_1 = __webpack_require__(/*! ./Rows */ "./src/components/DataTable/Rows.tsx");
+
+exports.DataTable = react_1.memo(__signature__(function (_a) {
+  var _b, _c, _d, _e;
+
+  var columns = _a.columns,
+      styles = _a.styles,
+      footer = _a.footer,
+      rows = _a.rows,
+      ignoreKeys = _a.ignoreKeys,
+      _f = _a.idName,
+      idName = _f === void 0 ? "default-table" : _f,
+      customEvents = _a.customEvents,
+      tableCaption = _a.tableCaption,
+      classes = _a.classes;
+  react_1.useEffect(function () {
+    if (rows.length > 0 && columns.length > 0) {
+      var firstRowKeys = Object.keys(rows[0]);
+
+      if (ignoreKeys && ignoreKeys.length > 0) {
+        firstRowKeys = firstRowKeys.filter(function (k) {
+          if (!ignoreKeys.includes(k)) {
+            return k;
+          }
+        });
+      }
+
+      var tableHeaderVals = columns.map(function (h) {
+        return h.keyName;
+      });
+      if (firstRowKeys.length !== tableHeaderVals.length) console.error('The number of table header does not match the array values');
+    }
+  }, [rows, columns, ignoreKeys]);
+  return React.createElement("div", {
+    style: (_b = styles === null || styles === void 0 ? void 0 : styles.tableContainer) !== null && _b !== void 0 ? _b : {},
+    className: classes ? classes === null || classes === void 0 ? void 0 : classes.container : "table-row"
+  }, React.createElement("table", {
+    style: (_c = styles === null || styles === void 0 ? void 0 : styles.rootTable) !== null && _c !== void 0 ? _c : {},
+    className: idName
+  }, tableCaption && React.createElement(Caption_1.Caption, {
+    captionStyle: (_d = styles === null || styles === void 0 ? void 0 : styles.captionStyle) !== null && _d !== void 0 ? _d : null,
+    tableCaption: tableCaption
+  }), React.createElement(Head_1.HeadColumns, {
+    columns: columns,
+    styles: styles
+  }), React.createElement("tbody", {
+    style: (_e = styles === null || styles === void 0 ? void 0 : styles.tableRootBody) !== null && _e !== void 0 ? _e : {}
+  }, React.createElement(Rows_1.Rows, {
+    columns: columns,
+    rows: rows,
+    styles: styles,
+    ignoreKeys: ignoreKeys,
+    customEvents: customEvents
+  })), footer && React.createElement(React.Fragment, null, footer)));
+}, "useEffect{}"));
+
+/***/ }),
+
+/***/ "./src/components/DataTable/Head.tsx":
+/*!*******************************************!*\
+  !*** ./src/components/DataTable/Head.tsx ***!
+  \*******************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(module) {
+
+(function () {
+  var enterModule = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal.enterModule : undefined;
+  enterModule && enterModule(module);
+})();
+
+var __signature__ = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal["default"].signature : function (a) {
+  return a;
+};
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.HeadColumns = void 0;
+
+var React = __webpack_require__(/*! react */ "react");
+
+function HeadColumns(_a) {
+  var _b, _c;
+
+  var columns = _a.columns,
+      styles = _a.styles;
+  return React.createElement("thead", {
+    style: (_b = styles === null || styles === void 0 ? void 0 : styles.tableHeaderContainer) !== null && _b !== void 0 ? _b : {}
+  }, React.createElement("tr", {
+    style: (_c = styles === null || styles === void 0 ? void 0 : styles.tableHeaderRows) !== null && _c !== void 0 ? _c : {}
+  }, columns === null || columns === void 0 ? void 0 : columns.map(function (h) {
+    var _a, _b;
+
+    return React.createElement("th", {
+      style: (_a = styles === null || styles === void 0 ? void 0 : styles.tableHeader) !== null && _a !== void 0 ? _a : {},
+      key: h.keyName + "_x0h"
+    }, (_b = h === null || h === void 0 ? void 0 : h.title) !== null && _b !== void 0 ? _b : '');
+  })));
+}
+
+exports.HeadColumns = HeadColumns;
+;
+
+(function () {
+  var reactHotLoader = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal.default : undefined;
+
+  if (!reactHotLoader) {
+    return;
+  }
+
+  reactHotLoader.register(HeadColumns, "HeadColumns", "F:\\Projetos Individuais\\ReactLibraries\\trentim-react-sdk\\src\\components\\DataTable\\Head.tsx");
+})();
+
+;
+
+(function () {
+  var leaveModule = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal.leaveModule : undefined;
+  leaveModule && leaveModule(module);
+})();
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../node_modules/webpack/buildin/module.js */ "./node_modules/webpack/buildin/module.js")(module)))
+
+/***/ }),
+
+/***/ "./src/components/DataTable/Rows.tsx":
+/*!*******************************************!*\
+  !*** ./src/components/DataTable/Rows.tsx ***!
+  \*******************************************/
 /*! no static exports found */
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
@@ -170,226 +396,6 @@ var __assign = this && this.__assign || function () {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.Caption = void 0;
-
-var React = __webpack_require__(/*! react */ "react");
-
-var react_1 = __webpack_require__(/*! react */ "react");
-
-function Caption(_a) {
-  var styles = _a.styles,
-      tableCaption = _a.tableCaption;
-  var captionStyle = react_1.useMemo(function () {
-    return {
-      fontWeight: 600,
-      fontSize: 22,
-      borderBottom: '1px solid #00000063',
-      paddingBottom: 12,
-      paddingTop: 12
-    };
-  }, []);
-  return React.createElement("caption", {
-    style: __assign(__assign({}, captionStyle), styles === null || styles === void 0 ? void 0 : styles.caption)
-  }, tableCaption);
-}
-
-__signature__(Caption, "useMemo{captionStyle}");
-
-exports.Caption = Caption;
-;
-
-(function () {
-  var reactHotLoader = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal.default : undefined;
-
-  if (!reactHotLoader) {
-    return;
-  }
-
-  reactHotLoader.register(__assign, "__assign", "C:\\Users\\Bruno\\OneDrive\\\xC1rea de Trabalho\\Projects\\trentim-react-sdk\\src\\components\\Datatable\\Caption.tsx");
-  reactHotLoader.register(Caption, "Caption", "C:\\Users\\Bruno\\OneDrive\\\xC1rea de Trabalho\\Projects\\trentim-react-sdk\\src\\components\\Datatable\\Caption.tsx");
-})();
-
-;
-
-(function () {
-  var leaveModule = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal.leaveModule : undefined;
-  leaveModule && leaveModule(module);
-})();
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../node_modules/webpack/buildin/module.js */ "./node_modules/webpack/buildin/module.js")(module)))
-
-/***/ }),
-
-/***/ "./src/components/Datatable/Datatable.tsx":
-/*!************************************************!*\
-  !*** ./src/components/Datatable/Datatable.tsx ***!
-  \************************************************/
-/*! no static exports found */
-/*! all exports used */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var __signature__ = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal["default"].signature : function (a) {
-  return a;
-};
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.Datatable = void 0;
-
-var React = __webpack_require__(/*! react */ "react");
-
-var react_1 = __webpack_require__(/*! react */ "react");
-
-var Caption_1 = __webpack_require__(/*! ./Caption */ "./src/components/Datatable/Caption.tsx");
-
-var Head_1 = __webpack_require__(/*! ./Head */ "./src/components/Datatable/Head.tsx");
-
-var Rows_1 = __webpack_require__(/*! ./Rows */ "./src/components/Datatable/Rows.tsx");
-
-exports.Datatable = react_1.memo(__signature__(function (_a) {
-  var _b, _c, _d;
-
-  var columns = _a.columns,
-      styles = _a.styles,
-      footer = _a.footer,
-      rows = _a.rows,
-      ignoreKeys = _a.ignoreKeys,
-      _e = _a.idName,
-      idName = _e === void 0 ? "nf-table" : _e,
-      customEvents = _a.customEvents,
-      tableCaption = _a.tableCaption,
-      classes = _a.classes;
-  react_1.useEffect(function () {
-    if (rows.length > 0 && columns.length > 0) {
-      var firstRowKeys = Object.keys(rows[0]);
-
-      if (ignoreKeys && ignoreKeys.length > 0) {
-        firstRowKeys = firstRowKeys.filter(function (k) {
-          if (!ignoreKeys.includes(k)) {
-            return k;
-          }
-        });
-      }
-
-      var tableHeaderVals = columns.map(function (h) {
-        return h.keyName;
-      });
-      if (firstRowKeys.length !== tableHeaderVals.length) console.error('The number of table header does not match the array values');
-    }
-  }, [rows, columns, ignoreKeys]);
-  return React.createElement("div", {
-    style: (_b = styles === null || styles === void 0 ? void 0 : styles.tableContainer) !== null && _b !== void 0 ? _b : {},
-    className: classes ? classes === null || classes === void 0 ? void 0 : classes.container : "table-row"
-  }, React.createElement("table", {
-    style: (_c = styles === null || styles === void 0 ? void 0 : styles.rootTable) !== null && _c !== void 0 ? _c : {},
-    className: idName
-  }, tableCaption && React.createElement(Caption_1.Caption, {
-    styles: styles,
-    tableCaption: tableCaption
-  }), React.createElement(Head_1.HeadColumns, {
-    columns: columns,
-    styles: styles
-  }), React.createElement("tbody", {
-    style: (_d = styles === null || styles === void 0 ? void 0 : styles.tableRootBody) !== null && _d !== void 0 ? _d : {}
-  }, React.createElement(Rows_1.Rows, {
-    columns: columns,
-    rows: rows,
-    ignoreKeys: ignoreKeys,
-    customEvents: customEvents
-  })), footer && React.createElement(React.Fragment, null, footer)));
-}, "useEffect{}"));
-
-/***/ }),
-
-/***/ "./src/components/Datatable/Head.tsx":
-/*!*******************************************!*\
-  !*** ./src/components/Datatable/Head.tsx ***!
-  \*******************************************/
-/*! no static exports found */
-/*! all exports used */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(module) {
-
-(function () {
-  var enterModule = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal.enterModule : undefined;
-  enterModule && enterModule(module);
-})();
-
-var __signature__ = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal["default"].signature : function (a) {
-  return a;
-};
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.HeadColumns = void 0;
-
-var React = __webpack_require__(/*! react */ "react");
-
-function HeadColumns(_a) {
-  var columns = _a.columns,
-      styles = _a.styles;
-  return React.createElement("thead", null, React.createElement("tr", null, columns === null || columns === void 0 ? void 0 : columns.map(function (h) {
-    var _a, _b;
-
-    return React.createElement("th", {
-      style: (_a = styles === null || styles === void 0 ? void 0 : styles.tableHeader) !== null && _a !== void 0 ? _a : {},
-      key: h.keyName + "_x0h"
-    }, (_b = h === null || h === void 0 ? void 0 : h.title) !== null && _b !== void 0 ? _b : '');
-  })));
-}
-
-exports.HeadColumns = HeadColumns;
-;
-
-(function () {
-  var reactHotLoader = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal.default : undefined;
-
-  if (!reactHotLoader) {
-    return;
-  }
-
-  reactHotLoader.register(HeadColumns, "HeadColumns", "C:\\Users\\Bruno\\OneDrive\\\xC1rea de Trabalho\\Projects\\trentim-react-sdk\\src\\components\\Datatable\\Head.tsx");
-})();
-
-;
-
-(function () {
-  var leaveModule = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal.leaveModule : undefined;
-  leaveModule && leaveModule(module);
-})();
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../node_modules/webpack/buildin/module.js */ "./node_modules/webpack/buildin/module.js")(module)))
-
-/***/ }),
-
-/***/ "./src/components/Datatable/Rows.tsx":
-/*!*******************************************!*\
-  !*** ./src/components/Datatable/Rows.tsx ***!
-  \*******************************************/
-/*! no static exports found */
-/*! all exports used */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(module) {
-
-(function () {
-  var enterModule = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal.enterModule : undefined;
-  enterModule && enterModule(module);
-})();
-
-var __signature__ = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal["default"].signature : function (a) {
-  return a;
-};
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
 exports.Rows = void 0;
 
 var React = __webpack_require__(/*! react */ "react");
@@ -400,10 +406,61 @@ function Rows(_a) {
   var ignoreKeys = _a.ignoreKeys,
       rows = _a.rows,
       columns = _a.columns,
-      customEvents = _a.customEvents;
+      customEvents = _a.customEvents,
+      styles = _a.styles;
   var tdRef = react_1.useRef(null);
+  var tableRowStyle = react_1.useCallback(function (currentIdx) {
+    var _a, _b, _c;
+
+    if ((_a = styles === null || styles === void 0 ? void 0 : styles.tableBodyRow) === null || _a === void 0 ? void 0 : _a.style) {
+      var _d = styles.tableBodyRow,
+          style = _d.style,
+          specficRow = _d.specficRow;
+      if (specficRow === null || specficRow === void 0 ? void 0 : specficRow.positions.includes(currentIdx)) return specficRow.style;
+      return style;
+    } else if ((_c = (_b = styles === null || styles === void 0 ? void 0 : styles.tableBodyRow) === null || _b === void 0 ? void 0 : _b.specficRow) === null || _c === void 0 ? void 0 : _c.style) {
+      var specficRow = styles.tableBodyRow.specficRow;
+      if (specficRow === null || specficRow === void 0 ? void 0 : specficRow.positions.includes(currentIdx)) return specficRow.style;
+      return null;
+    }
+
+    return null;
+  }, [styles]);
+  var tableCellStyle = react_1.useCallback(function (key, idx) {
+    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q;
+
+    var useSpecificStyle = ((_b = (_a = styles === null || styles === void 0 ? void 0 : styles.tableCell) === null || _a === void 0 ? void 0 : _a.specificCells) === null || _b === void 0 ? void 0 : _b.style) ? true : false;
+    var isEqualKey = (_d = (_c = styles === null || styles === void 0 ? void 0 : styles.tableCell) === null || _c === void 0 ? void 0 : _c.specificCells) === null || _d === void 0 ? void 0 : _d.keys.includes(key);
+    var positions = ((_g = (_f = (_e = styles === null || styles === void 0 ? void 0 : styles.tableCell) === null || _e === void 0 ? void 0 : _e.specificCells) === null || _f === void 0 ? void 0 : _f.positions) === null || _g === void 0 ? void 0 : _g.length) > 0 ? (_j = (_h = styles === null || styles === void 0 ? void 0 : styles.tableCell) === null || _h === void 0 ? void 0 : _h.specificCells) === null || _j === void 0 ? void 0 : _j.positions : [];
+    if ((_k = styles === null || styles === void 0 ? void 0 : styles.tableCell) === null || _k === void 0 ? void 0 : _k.style) return (_l = styles === null || styles === void 0 ? void 0 : styles.tableCell) === null || _l === void 0 ? void 0 : _l.style;
+
+    if (useSpecificStyle) {
+      if (isEqualKey) {
+        if ((positions === null || positions === void 0 ? void 0 : positions.length) > 0) {
+          if (positions.includes(idx)) return (_o = (_m = styles === null || styles === void 0 ? void 0 : styles.tableCell) === null || _m === void 0 ? void 0 : _m.specificCells) === null || _o === void 0 ? void 0 : _o.style;
+          return null;
+        }
+
+        return (_q = (_p = styles === null || styles === void 0 ? void 0 : styles.tableCell) === null || _p === void 0 ? void 0 : _p.specificCells) === null || _q === void 0 ? void 0 : _q.style;
+      }
+    }
+
+    return null;
+  }, [styles]);
   return React.createElement(React.Fragment, null, rows === null || rows === void 0 ? void 0 : rows.map(function (row, idx) {
-    var rowEntries = Object.entries(row);
+    var colKeys = Object.values(columns).map(function (i) {
+      return i.keyName;
+    });
+    var _rows = {};
+    colKeys.forEach(function (name) {
+      var _a;
+
+      if (Object.prototype.hasOwnProperty.call(row, name)) {
+        var element = row[name];
+        _rows = __assign(__assign({}, _rows), (_a = {}, _a[name] = element, _a));
+      }
+    });
+    var rowEntries = Object.entries(_rows);
 
     if (ignoreKeys && ignoreKeys.length > 0) {
       rowEntries = rowEntries.filter(function (_a) {
@@ -415,14 +472,25 @@ function Rows(_a) {
       });
     }
 
+    var rowsToRender = rowEntries.map(function (_a) {
+      var rowKey = _a[0],
+          rowValue = _a[1];
+      var keyName = colKeys.find(function (n) {
+        return n === rowKey;
+      });
+      return [keyName, rowValue];
+    }); //console.log(rowEntries, columns);
+
     return React.createElement("tr", {
+      style: tableRowStyle(idx),
       key: idx.toString()
-    }, rowEntries.map(function (_a, idx2) {
+    }, rowsToRender.map(function (_a, idx2) {
       var _b, _c;
 
       var key = _a[0],
           val = _a[1];
       return React.createElement("td", {
+        style: tableCellStyle(key, idx),
         key: (_b = key === null || key === void 0 ? void 0 : key.toString()) !== null && _b !== void 0 ? _b : idx2,
         "data-label": (_c = columns[idx2]) === null || _c === void 0 ? void 0 : _c.title,
         onClick: function onClick() {
@@ -438,7 +506,7 @@ function Rows(_a) {
   }));
 }
 
-__signature__(Rows, "useRef{tdRef}");
+__signature__(Rows, "useRef{tdRef}\nuseCallback{tableRowStyle}\nuseCallback{tableCellStyle}");
 
 exports.Rows = Rows;
 ;
@@ -450,7 +518,8 @@ exports.Rows = Rows;
     return;
   }
 
-  reactHotLoader.register(Rows, "Rows", "C:\\Users\\Bruno\\OneDrive\\\xC1rea de Trabalho\\Projects\\trentim-react-sdk\\src\\components\\Datatable\\Rows.tsx");
+  reactHotLoader.register(__assign, "__assign", "F:\\Projetos Individuais\\ReactLibraries\\trentim-react-sdk\\src\\components\\DataTable\\Rows.tsx");
+  reactHotLoader.register(Rows, "Rows", "F:\\Projetos Individuais\\ReactLibraries\\trentim-react-sdk\\src\\components\\DataTable\\Rows.tsx");
 })();
 
 ;
@@ -574,7 +643,7 @@ exports.CacheHandler = CacheHandler;
     return;
   }
 
-  reactHotLoader.register(CacheHandler, "CacheHandler", "C:\\Users\\Bruno\\OneDrive\\\xC1rea de Trabalho\\Projects\\trentim-react-sdk\\src\\helpers\\CacheHandler.ts");
+  reactHotLoader.register(CacheHandler, "CacheHandler", "F:\\Projetos Individuais\\ReactLibraries\\trentim-react-sdk\\src\\helpers\\CacheHandler.ts");
 })();
 
 ;
@@ -929,9 +998,9 @@ exports.FileUtils = FileUtils;
     return;
   }
 
-  reactHotLoader.register(__awaiter, "__awaiter", "C:\\Users\\Bruno\\OneDrive\\\xC1rea de Trabalho\\Projects\\trentim-react-sdk\\src\\helpers\\FileUtils.ts");
-  reactHotLoader.register(__generator, "__generator", "C:\\Users\\Bruno\\OneDrive\\\xC1rea de Trabalho\\Projects\\trentim-react-sdk\\src\\helpers\\FileUtils.ts");
-  reactHotLoader.register(FileUtils, "FileUtils", "C:\\Users\\Bruno\\OneDrive\\\xC1rea de Trabalho\\Projects\\trentim-react-sdk\\src\\helpers\\FileUtils.ts");
+  reactHotLoader.register(__awaiter, "__awaiter", "F:\\Projetos Individuais\\ReactLibraries\\trentim-react-sdk\\src\\helpers\\FileUtils.ts");
+  reactHotLoader.register(__generator, "__generator", "F:\\Projetos Individuais\\ReactLibraries\\trentim-react-sdk\\src\\helpers\\FileUtils.ts");
+  reactHotLoader.register(FileUtils, "FileUtils", "F:\\Projetos Individuais\\ReactLibraries\\trentim-react-sdk\\src\\helpers\\FileUtils.ts");
 })();
 
 ;
@@ -1044,7 +1113,7 @@ exports.WebpartHeight = WebpartHeight;
     return;
   }
 
-  reactHotLoader.register(WebpartHeight, "WebpartHeight", "C:\\Users\\Bruno\\OneDrive\\\xC1rea de Trabalho\\Projects\\trentim-react-sdk\\src\\helpers\\WebpartHeight.ts");
+  reactHotLoader.register(WebpartHeight, "WebpartHeight", "F:\\Projetos Individuais\\ReactLibraries\\trentim-react-sdk\\src\\helpers\\WebpartHeight.ts");
 })();
 
 ;
@@ -1139,8 +1208,8 @@ __exportStar(__webpack_require__(/*! ../models/interfaces/index */ "./src/models
     return;
   }
 
-  reactHotLoader.register(__createBinding, "__createBinding", "C:\\Users\\Bruno\\OneDrive\\\xC1rea de Trabalho\\Projects\\trentim-react-sdk\\src\\helpers\\index.ts");
-  reactHotLoader.register(__exportStar, "__exportStar", "C:\\Users\\Bruno\\OneDrive\\\xC1rea de Trabalho\\Projects\\trentim-react-sdk\\src\\helpers\\index.ts");
+  reactHotLoader.register(__createBinding, "__createBinding", "F:\\Projetos Individuais\\ReactLibraries\\trentim-react-sdk\\src\\helpers\\index.ts");
+  reactHotLoader.register(__exportStar, "__exportStar", "F:\\Projetos Individuais\\ReactLibraries\\trentim-react-sdk\\src\\helpers\\index.ts");
 })();
 
 ;
@@ -1208,7 +1277,7 @@ exports.useDebouncer = useDebouncer;
     return;
   }
 
-  reactHotLoader.register(useDebouncer, "useDebouncer", "C:\\Users\\Bruno\\OneDrive\\\xC1rea de Trabalho\\Projects\\trentim-react-sdk\\src\\hooks\\useDebounce.ts");
+  reactHotLoader.register(useDebouncer, "useDebouncer", "F:\\Projetos Individuais\\ReactLibraries\\trentim-react-sdk\\src\\hooks\\useDebounce.ts");
 })();
 
 ;
@@ -1239,16 +1308,7 @@ var __signature__ = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoader
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.useDebouncer = exports.WebpartHeight = exports.FileUtils = exports.CacheHandler = exports.Datatable = void 0;
-
-var Datatable_1 = __webpack_require__(/*! ./components/Datatable/Datatable */ "./src/components/Datatable/Datatable.tsx");
-
-Object.defineProperty(exports, "Datatable", {
-  enumerable: true,
-  get: function get() {
-    return Datatable_1.Datatable;
-  }
-});
+exports.DataTable = exports.useDebouncer = exports.WebpartHeight = exports.FileUtils = exports.CacheHandler = void 0;
 
 var index_1 = __webpack_require__(/*! ./helpers/index */ "./src/helpers/index.ts");
 
@@ -1277,6 +1337,15 @@ Object.defineProperty(exports, "useDebouncer", {
   enumerable: true,
   get: function get() {
     return useDebounce_1.useDebouncer;
+  }
+});
+
+var DataTable_1 = __webpack_require__(/*! ./components/DataTable/DataTable */ "./src/components/DataTable/DataTable.tsx");
+
+Object.defineProperty(exports, "DataTable", {
+  enumerable: true,
+  get: function get() {
+    return DataTable_1.DataTable;
   }
 });
 
@@ -1356,7 +1425,7 @@ exports.ConvertionOptions = ConvertionOptions;
     return;
   }
 
-  reactHotLoader.register(ConvertionOptions, "ConvertionOptions", "C:\\Users\\Bruno\\OneDrive\\\xC1rea de Trabalho\\Projects\\trentim-react-sdk\\src\\models\\ConverterOptions.ts");
+  reactHotLoader.register(ConvertionOptions, "ConvertionOptions", "F:\\Projetos Individuais\\ReactLibraries\\trentim-react-sdk\\src\\models\\ConverterOptions.ts");
 })();
 
 ;
@@ -1513,8 +1582,8 @@ __exportStar(__webpack_require__(/*! ./IMimeConverter */ "./src/models/interface
     return;
   }
 
-  reactHotLoader.register(__createBinding, "__createBinding", "C:\\Users\\Bruno\\OneDrive\\\xC1rea de Trabalho\\Projects\\trentim-react-sdk\\src\\models\\interfaces\\index.ts");
-  reactHotLoader.register(__exportStar, "__exportStar", "C:\\Users\\Bruno\\OneDrive\\\xC1rea de Trabalho\\Projects\\trentim-react-sdk\\src\\models\\interfaces\\index.ts");
+  reactHotLoader.register(__createBinding, "__createBinding", "F:\\Projetos Individuais\\ReactLibraries\\trentim-react-sdk\\src\\models\\interfaces\\index.ts");
+  reactHotLoader.register(__exportStar, "__exportStar", "F:\\Projetos Individuais\\ReactLibraries\\trentim-react-sdk\\src\\models\\interfaces\\index.ts");
 })();
 
 ;
@@ -1535,7 +1604,7 @@ __exportStar(__webpack_require__(/*! ./IMimeConverter */ "./src/models/interface
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\Users\Bruno\OneDrive\Área de Trabalho\Projects\trentim-react-sdk\src\index.tsx */"./src/index.tsx");
+module.exports = __webpack_require__(/*! F:\Projetos Individuais\ReactLibraries\trentim-react-sdk\src\index.tsx */"./src/index.tsx");
 
 
 /***/ }),
