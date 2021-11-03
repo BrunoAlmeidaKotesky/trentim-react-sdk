@@ -2,6 +2,7 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { useState } from "react";
 import { DataTable } from '../src/components/DataTable/DataTable';
+import { VideoPreview } from '../src/components/VideoPreview/VideoPreview';
 
 declare const module: any;
 let hmrUpdate: undefined | (() => void);
@@ -23,7 +24,8 @@ const Demo = (): JSX.Element => {
         borderRadius: '40px',
         border: '2px solid rgba(95,95,95,0.56)'
       }}>
-      <DataTable 
+      <DataTable
+        type={'div'}
         columns={[{ keyName: 'name', title: 'Name' }, {keyName: 'age', title: 'Age'}, {keyName: 'desc', title: 'Description'}]}
         styles={{
           tableBodyRow: {
@@ -47,6 +49,7 @@ const Demo = (): JSX.Element => {
           {age: 88, name: 'Rodney', ignoreMe: true},
         ]} />
       </div>
+       <VideoPreview/>
     </div>
   </div>);
 };

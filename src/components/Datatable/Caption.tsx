@@ -4,8 +4,9 @@ import {CSSProperties, useMemo} from 'react';
 interface CaptionProps {
     tableCaption: string;
     captionStyle: CSSProperties;
+    type: 'div'|'table';
 }
-export function Caption({captionStyle, tableCaption}:CaptionProps) {
+export function Caption({captionStyle, tableCaption, type}:CaptionProps) {
     const defaultCaptionStyle:CSSProperties = useMemo(() => {
         return {
             fontWeight: 600,
@@ -16,5 +17,7 @@ export function Caption({captionStyle, tableCaption}:CaptionProps) {
         };
     }, []);
     
-    return(<caption style={captionStyle ?? defaultCaptionStyle}>{tableCaption}</caption>);
+    return(
+        type === 'table' ? <caption style={captionStyle ?? defaultCaptionStyle}>{tableCaption}</caption> : 
+        type === 'div' ? <div style={{display: 'table-caption', ...captionStyle ?? {}}}>{tableCaption}</div> : null);
 }

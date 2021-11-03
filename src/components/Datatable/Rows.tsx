@@ -4,15 +4,16 @@ import { IDatableColumns, ITableCustomEvents } from '../../models/interfaces/IDa
 import { IBodyStyles } from '../../models/interfaces/IDatatableStyles';
 
 interface RowProps<T extends object> {
+    type: 'div'|'table'
     rows: T[];
     columns: IDatableColumns[];
     ignoreKeys: string[];
     customEvents: ITableCustomEvents<T>[];
     styles?: Partial<IBodyStyles>;
 }
-
-export function Rows<T extends object>({ignoreKeys, rows, columns, customEvents, styles}:RowProps<T>) {
+export function Rows<T extends object>({ignoreKeys, rows, columns, customEvents, styles, type}:RowProps<T>) {
     const tdRef = useRef<HTMLTableRowElement>(null);
+
     const tableRowStyle = useCallback((currentIdx?: number) => {
         if(styles?.tableBodyRow?.style) {
             const {style, specficRow} = styles.tableBodyRow;
@@ -72,28 +73,56 @@ export function Rows<T extends object>({ignoreKeys, rows, columns, customEvents,
         const keyName = colKeys.find(n => n === rowKey);
         return [keyName, rowValue];
      });
-     //console.log(rowEntries, columns);
-     return (
-        <tr style={tableRowStyle(idx)} key={idx.toString()}>
-        {rowsToRender.map(([key, val], idx2) => {
-          return (
-          <td 
-            style={tableCellStyle(key, idx)}
-            key={key?.toString() ?? idx2}
-            data-label={columns[idx2]?.title} 
-            onClick={() => {
-                /** Events for custom JSX.Elements provided on the columns*/
-                if(customEvents && customEvents?.length > 0) {
-                    customEvents.map(ev => {
-                        if(ev?.eventName && ev?.objectKey === key)
-                            ev?.onEventAction(row, tdRef?.current!);
-                    })
-                }
-            }} 
-            >{val ?? ''}
-         </td>)
-        })}
-        </tr>)
+     switch (type) {
+        case 'div': {
+            return (
+            <div style={{display: 'table-row', ...tableRowStyle(idx)}}>
+            {rowsToRender.map(([key, val], idx2) => {
+            return (
+                <div 
+                  style={{display: 'table-cell', ...tableCellStyle(key, idx)}}
+                  key={key?.toString() ?? idx2}
+                  data-label={columns[idx2]?.title} 
+                  onClick={() => {
+                      /** Events for custom JSX.Elements provided on the columns*/
+                      if(customEvents && customEvents?.length > 0) {
+                          customEvents.map(ev => {
+                              if(ev?.eventName && ev?.objectKey === key)
+                                  ev?.onEventAction(row, tdRef?.current!);
+                          })
+                      }
+                  }} 
+                  >{val ?? ''}
+               </div>)
+            })}
+            </div>
+            );
+        }
+        case 'table': {
+            return (
+            <tr style={tableRowStyle(idx)} key={idx.toString()}>
+            {rowsToRender.map(([key, val], idx2) => {
+              return (
+              <td 
+                style={tableCellStyle(key, idx)}
+                key={key?.toString() ?? idx2}
+                data-label={columns[idx2]?.title} 
+                onClick={() => {
+                    /** Events for custom JSX.Elements provided on the columns*/
+                    if(customEvents && customEvents?.length > 0) {
+                        customEvents.map(ev => {
+                            if(ev?.eventName && ev?.objectKey === key)
+                                ev?.onEventAction(row, tdRef?.current!);
+                        })
+                    }
+                }} 
+                >{val ?? ''}
+             </td>)
+            })}
+            </tr>)
+        }
+        default: return null;
+     }
     })}
     </>);
 }
