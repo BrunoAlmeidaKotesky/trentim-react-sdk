@@ -32,8 +32,8 @@ export declare class FileUtils {
     private fileNameValidator;
     /**
      * Takes any `Blob` object or inherited objects from this interface and convert it to a base64 string.
-     * @param blob - Any Blob object, such as `File` and many Others
-     * @returns A promise of the base64 string
+     * @param blob - Any Blob object, such as `File` and other inherited objects from this interface.
+     * @returns A promise of the base64 string.
      */
     blobToBase64: (blob: Blob) => Promise<string>;
     private checkIfHasMime;

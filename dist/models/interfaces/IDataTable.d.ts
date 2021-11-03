@@ -9,9 +9,13 @@ export interface IDatableColumns {
 export interface ITableCustomEvents<T extends any> {
     eventName: string;
     objectKey: string;
-    onEventAction: (event: T, rowRef?: HTMLTableRowElement) => void;
+    onEventAction: (event: T, rowRef?: HTMLTableRowElement | HTMLDivElement) => void;
 }
 export interface IDatatableProps<T> {
+    /**The type of tags to render all the datatable elements, it's preferable to use div, since it can also be integrated with virtualization
+     * @default div
+     */
+    type: 'table' | 'div';
     /**São os table headers, devem possuir exatamente os mesmos nome de objetos utilizados nas linhas */
     columns: IDatableColumns[];
     styles?: Partial<IDatatableStyles>;

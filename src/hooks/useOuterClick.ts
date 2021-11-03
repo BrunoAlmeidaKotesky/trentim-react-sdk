@@ -1,7 +1,6 @@
-import { useEffect, useRef, MutableRefObject } from "react";
+import { useEffect, useRef } from "react";
 
-type RefObj<T = any> =  React.MutableRefObject<any>;
-export function useOuterClick(callback: (ev?: PointerEvent) => any, cancelableCb?: (ev: PointerEvent) => boolean): RefObj {
+export function useOuterClick(callback: (ev?: PointerEvent) => any, cancelableCb?: (ev: PointerEvent) => boolean) {
     const callbackRef = useRef<Function>(); // initialize mutable ref, which stores callback
     const innerRef = useRef<any>(); // initializereturned to client, who marks "border" element
 

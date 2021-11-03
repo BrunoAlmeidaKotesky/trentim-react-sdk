@@ -151,6 +151,22 @@ var __signature__ = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoader
   return a;
 };
 
+var __assign = this && this.__assign || function () {
+  __assign = Object.assign || function (t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+      s = arguments[i];
+
+      for (var p in s) {
+        if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+      }
+    }
+
+    return t;
+  };
+
+  return __assign.apply(this, arguments);
+};
+
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -162,7 +178,8 @@ var react_1 = __webpack_require__(/*! react */ "react");
 
 function Caption(_a) {
   var captionStyle = _a.captionStyle,
-      tableCaption = _a.tableCaption;
+      tableCaption = _a.tableCaption,
+      type = _a.type;
   var defaultCaptionStyle = react_1.useMemo(function () {
     return {
       fontWeight: 600,
@@ -172,9 +189,13 @@ function Caption(_a) {
       paddingTop: 12
     };
   }, []);
-  return React.createElement("caption", {
+  return type === 'table' ? React.createElement("caption", {
     style: captionStyle !== null && captionStyle !== void 0 ? captionStyle : defaultCaptionStyle
-  }, tableCaption);
+  }, tableCaption) : type === 'div' ? React.createElement("div", {
+    style: __assign({
+      display: 'table-caption'
+    }, captionStyle !== null && captionStyle !== void 0 ? captionStyle : {})
+  }, tableCaption) : null;
 }
 
 __signature__(Caption, "useMemo{defaultCaptionStyle}");
@@ -189,6 +210,7 @@ exports.Caption = Caption;
     return;
   }
 
+  reactHotLoader.register(__assign, "__assign", "F:\\Projetos Individuais\\ReactLibraries\\trentim-react-sdk\\src\\components\\DataTable\\Caption.tsx");
   reactHotLoader.register(Caption, "Caption", "F:\\Projetos Individuais\\ReactLibraries\\trentim-react-sdk\\src\\components\\DataTable\\Caption.tsx");
 })();
 
@@ -211,10 +233,31 @@ exports.Caption = Caption;
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
+/* WEBPACK VAR INJECTION */(function(module) {
 
+(function () {
+  var enterModule = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal.enterModule : undefined;
+  enterModule && enterModule(module);
+})();
 
 var __signature__ = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal["default"].signature : function (a) {
   return a;
+};
+
+var __assign = this && this.__assign || function () {
+  __assign = Object.assign || function (t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+      s = arguments[i];
+
+      for (var p in s) {
+        if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+      }
+    }
+
+    return t;
+  };
+
+  return __assign.apply(this, arguments);
 };
 
 Object.defineProperty(exports, "__esModule", {
@@ -233,18 +276,20 @@ var Head_1 = __webpack_require__(/*! ./Head */ "./src/components/DataTable/Head.
 var Rows_1 = __webpack_require__(/*! ./Rows */ "./src/components/DataTable/Rows.tsx");
 
 exports.DataTable = react_1.memo(__signature__(function (_a) {
-  var _b, _c, _d, _e;
+  var _b, _c, _d, _e, _f, _g, _h, _j;
 
   var columns = _a.columns,
       styles = _a.styles,
       footer = _a.footer,
       rows = _a.rows,
       ignoreKeys = _a.ignoreKeys,
-      _f = _a.idName,
-      idName = _f === void 0 ? "default-table" : _f,
+      _k = _a.idName,
+      idName = _k === void 0 ? "default-table" : _k,
       customEvents = _a.customEvents,
       tableCaption = _a.tableCaption,
-      classes = _a.classes;
+      classes = _a.classes,
+      type = _a.type;
+  var parentRef = react_1.useRef(null);
   react_1.useEffect(function () {
     if (rows.length > 0 && columns.length > 0) {
       var firstRowKeys = Object.keys(rows[0]);
@@ -263,28 +308,105 @@ exports.DataTable = react_1.memo(__signature__(function (_a) {
       if (firstRowKeys.length !== tableHeaderVals.length) console.error('The number of table header does not match the array values');
     }
   }, [rows, columns, ignoreKeys]);
+
+  switch (type) {
+    case 'div':
+      {
+        return React.createElement(TableContainer, {
+          tableContainer: (_b = styles === null || styles === void 0 ? void 0 : styles.tableContainer) !== null && _b !== void 0 ? _b : {},
+          containerClass: classes ? classes === null || classes === void 0 ? void 0 : classes.container : "datatable-container"
+        }, React.createElement("div", {
+          style: __assign({
+            display: 'table'
+          }, (_c = styles === null || styles === void 0 ? void 0 : styles.rootTable) !== null && _c !== void 0 ? _c : {})
+        }, tableCaption && React.createElement(Caption_1.Caption, {
+          type: 'div',
+          captionStyle: (_d = styles === null || styles === void 0 ? void 0 : styles.captionStyle) !== null && _d !== void 0 ? _d : null,
+          tableCaption: tableCaption
+        }), React.createElement(Head_1.HeadColumns, {
+          type: 'div',
+          columns: columns,
+          styles: styles
+        }), React.createElement("div", {
+          ref: parentRef,
+          style: __assign({
+            display: 'table-row-group',
+            height: '120px',
+            overflow: 'auto'
+          }, (_e = styles === null || styles === void 0 ? void 0 : styles.tableRootBody) !== null && _e !== void 0 ? _e : {})
+        }, React.createElement(Rows_1.Rows, {
+          type: 'div',
+          columns: columns,
+          rows: rows,
+          styles: styles,
+          ignoreKeys: ignoreKeys,
+          customEvents: customEvents
+        }))));
+      }
+
+    case 'table':
+      {
+        return React.createElement(TableContainer, {
+          tableContainer: (_f = styles === null || styles === void 0 ? void 0 : styles.tableContainer) !== null && _f !== void 0 ? _f : {},
+          containerClass: classes ? classes === null || classes === void 0 ? void 0 : classes.container : "datatable-container"
+        }, React.createElement("table", {
+          style: (_g = styles === null || styles === void 0 ? void 0 : styles.rootTable) !== null && _g !== void 0 ? _g : {},
+          className: idName
+        }, tableCaption && React.createElement(Caption_1.Caption, {
+          type: 'table',
+          captionStyle: (_h = styles === null || styles === void 0 ? void 0 : styles.captionStyle) !== null && _h !== void 0 ? _h : null,
+          tableCaption: tableCaption
+        }), React.createElement(Head_1.HeadColumns, {
+          type: 'table',
+          columns: columns,
+          styles: styles
+        }), React.createElement("tbody", {
+          style: (_j = styles === null || styles === void 0 ? void 0 : styles.tableRootBody) !== null && _j !== void 0 ? _j : {}
+        }, React.createElement(Rows_1.Rows, {
+          type: 'table',
+          columns: columns,
+          rows: rows,
+          styles: styles,
+          ignoreKeys: ignoreKeys,
+          customEvents: customEvents
+        })), footer && React.createElement(React.Fragment, null, footer)));
+      }
+
+    default:
+      return null;
+  }
+}, "useRef{parentRef}\nuseEffect{}"));
+
+var TableContainer = function TableContainer(_a) {
+  var tableContainer = _a.tableContainer,
+      containerClass = _a.containerClass,
+      children = _a.children;
   return React.createElement("div", {
-    style: (_b = styles === null || styles === void 0 ? void 0 : styles.tableContainer) !== null && _b !== void 0 ? _b : {},
-    className: classes ? classes === null || classes === void 0 ? void 0 : classes.container : "table-row"
-  }, React.createElement("table", {
-    style: (_c = styles === null || styles === void 0 ? void 0 : styles.rootTable) !== null && _c !== void 0 ? _c : {},
-    className: idName
-  }, tableCaption && React.createElement(Caption_1.Caption, {
-    captionStyle: (_d = styles === null || styles === void 0 ? void 0 : styles.captionStyle) !== null && _d !== void 0 ? _d : null,
-    tableCaption: tableCaption
-  }), React.createElement(Head_1.HeadColumns, {
-    columns: columns,
-    styles: styles
-  }), React.createElement("tbody", {
-    style: (_e = styles === null || styles === void 0 ? void 0 : styles.tableRootBody) !== null && _e !== void 0 ? _e : {}
-  }, React.createElement(Rows_1.Rows, {
-    columns: columns,
-    rows: rows,
-    styles: styles,
-    ignoreKeys: ignoreKeys,
-    customEvents: customEvents
-  })), footer && React.createElement(React.Fragment, null, footer)));
-}, "useEffect{}"));
+    style: tableContainer !== null && tableContainer !== void 0 ? tableContainer : {},
+    className: containerClass !== null && containerClass !== void 0 ? containerClass : "table-row"
+  }, children);
+};
+
+;
+
+(function () {
+  var reactHotLoader = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal.default : undefined;
+
+  if (!reactHotLoader) {
+    return;
+  }
+
+  reactHotLoader.register(__assign, "__assign", "F:\\Projetos Individuais\\ReactLibraries\\trentim-react-sdk\\src\\components\\DataTable\\DataTable.tsx");
+  reactHotLoader.register(TableContainer, "TableContainer", "F:\\Projetos Individuais\\ReactLibraries\\trentim-react-sdk\\src\\components\\DataTable\\DataTable.tsx");
+})();
+
+;
+
+(function () {
+  var leaveModule = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal.leaveModule : undefined;
+  leaveModule && leaveModule(module);
+})();
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../node_modules/webpack/buildin/module.js */ "./node_modules/webpack/buildin/module.js")(module)))
 
 /***/ }),
 
@@ -308,6 +430,22 @@ var __signature__ = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoader
   return a;
 };
 
+var __assign = this && this.__assign || function () {
+  __assign = Object.assign || function (t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+      s = arguments[i];
+
+      for (var p in s) {
+        if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+      }
+    }
+
+    return t;
+  };
+
+  return __assign.apply(this, arguments);
+};
+
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -316,22 +454,54 @@ exports.HeadColumns = void 0;
 var React = __webpack_require__(/*! react */ "react");
 
 function HeadColumns(_a) {
-  var _b, _c;
+  var _b, _c, _d, _e;
 
   var columns = _a.columns,
-      styles = _a.styles;
-  return React.createElement("thead", {
-    style: (_b = styles === null || styles === void 0 ? void 0 : styles.tableHeaderContainer) !== null && _b !== void 0 ? _b : {}
-  }, React.createElement("tr", {
-    style: (_c = styles === null || styles === void 0 ? void 0 : styles.tableHeaderRows) !== null && _c !== void 0 ? _c : {}
-  }, columns === null || columns === void 0 ? void 0 : columns.map(function (h) {
-    var _a, _b;
+      styles = _a.styles,
+      type = _a.type;
 
-    return React.createElement("th", {
-      style: (_a = styles === null || styles === void 0 ? void 0 : styles.tableHeader) !== null && _a !== void 0 ? _a : {},
-      key: h.keyName + "_x0h"
-    }, (_b = h === null || h === void 0 ? void 0 : h.title) !== null && _b !== void 0 ? _b : '');
-  })));
+  switch (type) {
+    case 'table':
+      {
+        return React.createElement("thead", {
+          style: (_b = styles === null || styles === void 0 ? void 0 : styles.tableHeaderContainer) !== null && _b !== void 0 ? _b : {}
+        }, React.createElement("tr", {
+          style: (_c = styles === null || styles === void 0 ? void 0 : styles.tableHeaderRows) !== null && _c !== void 0 ? _c : {}
+        }, columns === null || columns === void 0 ? void 0 : columns.map(function (h) {
+          var _a, _b;
+
+          return React.createElement("th", {
+            style: (_a = styles === null || styles === void 0 ? void 0 : styles.tableHeader) !== null && _a !== void 0 ? _a : {},
+            key: h.keyName + "_x0h"
+          }, (_b = h === null || h === void 0 ? void 0 : h.title) !== null && _b !== void 0 ? _b : '');
+        })));
+      }
+
+    case 'div':
+      {
+        return React.createElement("div", {
+          style: __assign({
+            display: 'table-header-group'
+          }, (_d = styles === null || styles === void 0 ? void 0 : styles.tableHeaderContainer) !== null && _d !== void 0 ? _d : {})
+        }, React.createElement("div", {
+          style: __assign({
+            display: 'table-row'
+          }, (_e = styles === null || styles === void 0 ? void 0 : styles.tableHeaderRows) !== null && _e !== void 0 ? _e : {})
+        }, columns === null || columns === void 0 ? void 0 : columns.map(function (h) {
+          var _a, _b;
+
+          return React.createElement("div", {
+            style: __assign({
+              display: 'table-cell'
+            }, (_a = styles === null || styles === void 0 ? void 0 : styles.tableHeader) !== null && _a !== void 0 ? _a : {}),
+            key: h.keyName + "_x0h"
+          }, (_b = h === null || h === void 0 ? void 0 : h.title) !== null && _b !== void 0 ? _b : '');
+        })));
+      }
+
+    default:
+      return null;
+  }
 }
 
 exports.HeadColumns = HeadColumns;
@@ -344,6 +514,7 @@ exports.HeadColumns = HeadColumns;
     return;
   }
 
+  reactHotLoader.register(__assign, "__assign", "F:\\Projetos Individuais\\ReactLibraries\\trentim-react-sdk\\src\\components\\DataTable\\Head.tsx");
   reactHotLoader.register(HeadColumns, "HeadColumns", "F:\\Projetos Individuais\\ReactLibraries\\trentim-react-sdk\\src\\components\\DataTable\\Head.tsx");
 })();
 
@@ -407,7 +578,8 @@ function Rows(_a) {
       rows = _a.rows,
       columns = _a.columns,
       customEvents = _a.customEvents,
-      styles = _a.styles;
+      styles = _a.styles,
+      type = _a.type;
   var tdRef = react_1.useRef(null);
   var tableRowStyle = react_1.useCallback(function (currentIdx) {
     var _a, _b, _c;
@@ -479,30 +651,67 @@ function Rows(_a) {
         return n === rowKey;
       });
       return [keyName, rowValue];
-    }); //console.log(rowEntries, columns);
+    });
 
-    return React.createElement("tr", {
-      style: tableRowStyle(idx),
-      key: idx.toString()
-    }, rowsToRender.map(function (_a, idx2) {
-      var _b, _c;
+    switch (type) {
+      case 'div':
+        {
+          return React.createElement("div", {
+            style: __assign({
+              display: 'table-row'
+            }, tableRowStyle(idx))
+          }, rowsToRender.map(function (_a, idx2) {
+            var _b, _c;
 
-      var key = _a[0],
-          val = _a[1];
-      return React.createElement("td", {
-        style: tableCellStyle(key, idx),
-        key: (_b = key === null || key === void 0 ? void 0 : key.toString()) !== null && _b !== void 0 ? _b : idx2,
-        "data-label": (_c = columns[idx2]) === null || _c === void 0 ? void 0 : _c.title,
-        onClick: function onClick() {
-          /** Events for custom JSX.Elements provided on the columns*/
-          if (customEvents && (customEvents === null || customEvents === void 0 ? void 0 : customEvents.length) > 0) {
-            customEvents.map(function (ev) {
-              if ((ev === null || ev === void 0 ? void 0 : ev.eventName) && (ev === null || ev === void 0 ? void 0 : ev.objectKey) === key) ev === null || ev === void 0 ? void 0 : ev.onEventAction(row, tdRef === null || tdRef === void 0 ? void 0 : tdRef.current);
-            });
-          }
+            var key = _a[0],
+                val = _a[1];
+            return React.createElement("div", {
+              style: __assign({
+                display: 'table-cell'
+              }, tableCellStyle(key, idx)),
+              key: (_b = key === null || key === void 0 ? void 0 : key.toString()) !== null && _b !== void 0 ? _b : idx2,
+              "data-label": (_c = columns[idx2]) === null || _c === void 0 ? void 0 : _c.title,
+              onClick: function onClick() {
+                /** Events for custom JSX.Elements provided on the columns*/
+                if (customEvents && (customEvents === null || customEvents === void 0 ? void 0 : customEvents.length) > 0) {
+                  customEvents.map(function (ev) {
+                    if ((ev === null || ev === void 0 ? void 0 : ev.eventName) && (ev === null || ev === void 0 ? void 0 : ev.objectKey) === key) ev === null || ev === void 0 ? void 0 : ev.onEventAction(row, tdRef === null || tdRef === void 0 ? void 0 : tdRef.current);
+                  });
+                }
+              }
+            }, val !== null && val !== void 0 ? val : '');
+          }));
         }
-      }, val !== null && val !== void 0 ? val : '');
-    }));
+
+      case 'table':
+        {
+          return React.createElement("tr", {
+            style: tableRowStyle(idx),
+            key: idx.toString()
+          }, rowsToRender.map(function (_a, idx2) {
+            var _b, _c;
+
+            var key = _a[0],
+                val = _a[1];
+            return React.createElement("td", {
+              style: tableCellStyle(key, idx),
+              key: (_b = key === null || key === void 0 ? void 0 : key.toString()) !== null && _b !== void 0 ? _b : idx2,
+              "data-label": (_c = columns[idx2]) === null || _c === void 0 ? void 0 : _c.title,
+              onClick: function onClick() {
+                /** Events for custom JSX.Elements provided on the columns*/
+                if (customEvents && (customEvents === null || customEvents === void 0 ? void 0 : customEvents.length) > 0) {
+                  customEvents.map(function (ev) {
+                    if ((ev === null || ev === void 0 ? void 0 : ev.eventName) && (ev === null || ev === void 0 ? void 0 : ev.objectKey) === key) ev === null || ev === void 0 ? void 0 : ev.onEventAction(row, tdRef === null || tdRef === void 0 ? void 0 : tdRef.current);
+                  });
+                }
+              }
+            }, val !== null && val !== void 0 ? val : '');
+          }));
+        }
+
+      default:
+        return null;
+    }
   }));
 }
 
@@ -833,8 +1042,8 @@ function () {
     this.mime = mime;
     /**
      * Takes any `Blob` object or inherited objects from this interface and convert it to a base64 string.
-     * @param blob - Any Blob object, such as `File` and many Others
-     * @returns A promise of the base64 string
+     * @param blob - Any Blob object, such as `File` and other inherited objects from this interface.
+     * @returns A promise of the base64 string.
      */
 
     this.blobToBase64 = function (blob) {
@@ -1222,6 +1431,73 @@ __exportStar(__webpack_require__(/*! ../models/interfaces/index */ "./src/models
 
 /***/ }),
 
+/***/ "./src/hooks/index.ts":
+/*!****************************!*\
+  !*** ./src/hooks/index.ts ***!
+  \****************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var __signature__ = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal["default"].signature : function (a) {
+  return a;
+};
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.usePrevious = exports.useOuterClick = exports.useEscape = exports.useDebounce = exports.useWindowSize = void 0;
+
+var useWindowSize_1 = __webpack_require__(/*! ./useWindowSize */ "./src/hooks/useWindowSize.ts");
+
+Object.defineProperty(exports, "useWindowSize", {
+  enumerable: true,
+  get: function get() {
+    return useWindowSize_1.useWindowSize;
+  }
+});
+
+var useDebounce_1 = __webpack_require__(/*! ./useDebounce */ "./src/hooks/useDebounce.ts");
+
+Object.defineProperty(exports, "useDebounce", {
+  enumerable: true,
+  get: function get() {
+    return useDebounce_1.useDebounce;
+  }
+});
+
+var useEscape_1 = __webpack_require__(/*! ./useEscape */ "./src/hooks/useEscape.ts");
+
+Object.defineProperty(exports, "useEscape", {
+  enumerable: true,
+  get: function get() {
+    return useEscape_1.useEscape;
+  }
+});
+
+var useOuterClick_1 = __webpack_require__(/*! ./useOuterClick */ "./src/hooks/useOuterClick.ts");
+
+Object.defineProperty(exports, "useOuterClick", {
+  enumerable: true,
+  get: function get() {
+    return useOuterClick_1.useOuterClick;
+  }
+});
+
+var usePrevious_1 = __webpack_require__(/*! ./usePrevious */ "./src/hooks/usePrevious.ts");
+
+Object.defineProperty(exports, "usePrevious", {
+  enumerable: true,
+  get: function get() {
+    return usePrevious_1.usePrevious;
+  }
+});
+
+/***/ }),
+
 /***/ "./src/hooks/useDebounce.ts":
 /*!**********************************!*\
   !*** ./src/hooks/useDebounce.ts ***!
@@ -1245,11 +1521,11 @@ var __signature__ = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoader
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.useDebouncer = void 0;
+exports.useDebounce = void 0;
 
 var react_1 = __webpack_require__(/*! react */ "react");
 
-function useDebouncer(value, delay) {
+function useDebounce(value, delay) {
   var _a = react_1.useState(value),
       debouncedValue = _a[0],
       setDebouncedValue = _a[1];
@@ -1265,9 +1541,9 @@ function useDebouncer(value, delay) {
   return debouncedValue;
 }
 
-__signature__(useDebouncer, "useState{_a(value)}\nuseEffect{}");
+__signature__(useDebounce, "useState{_a(value)}\nuseEffect{}");
 
-exports.useDebouncer = useDebouncer;
+exports.useDebounce = useDebounce;
 ;
 
 (function () {
@@ -1277,7 +1553,304 @@ exports.useDebouncer = useDebouncer;
     return;
   }
 
-  reactHotLoader.register(useDebouncer, "useDebouncer", "F:\\Projetos Individuais\\ReactLibraries\\trentim-react-sdk\\src\\hooks\\useDebounce.ts");
+  reactHotLoader.register(useDebounce, "useDebounce", "F:\\Projetos Individuais\\ReactLibraries\\trentim-react-sdk\\src\\hooks\\useDebounce.ts");
+})();
+
+;
+
+(function () {
+  var leaveModule = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal.leaveModule : undefined;
+  leaveModule && leaveModule(module);
+})();
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../node_modules/webpack/buildin/module.js */ "./node_modules/webpack/buildin/module.js")(module)))
+
+/***/ }),
+
+/***/ "./src/hooks/useEscape.ts":
+/*!********************************!*\
+  !*** ./src/hooks/useEscape.ts ***!
+  \********************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(module) {
+
+(function () {
+  var enterModule = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal.enterModule : undefined;
+  enterModule && enterModule(module);
+})();
+
+var __signature__ = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal["default"].signature : function (a) {
+  return a;
+};
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.useEscape = void 0;
+
+var react_1 = __webpack_require__(/*! react */ "react");
+
+function useEscape(onEscape) {
+  react_1.useEffect(function () {
+    var handleEsc = function handleEsc(event) {
+      var key = (event === null || event === void 0 ? void 0 : event.key) || (event === null || event === void 0 ? void 0 : event.keyCode);
+      if (key === 27 || key === "Escape") onEscape();
+    }; //@ts-ignore
+
+
+    window.addEventListener('keydown', handleEsc);
+    return function () {
+      //@ts-ignore
+      window.removeEventListener('keydown', handleEsc);
+    };
+  }, []);
+}
+
+__signature__(useEscape, "useEffect{}");
+
+exports.useEscape = useEscape;
+;
+
+(function () {
+  var reactHotLoader = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal.default : undefined;
+
+  if (!reactHotLoader) {
+    return;
+  }
+
+  reactHotLoader.register(useEscape, "useEscape", "F:\\Projetos Individuais\\ReactLibraries\\trentim-react-sdk\\src\\hooks\\useEscape.ts");
+})();
+
+;
+
+(function () {
+  var leaveModule = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal.leaveModule : undefined;
+  leaveModule && leaveModule(module);
+})();
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../node_modules/webpack/buildin/module.js */ "./node_modules/webpack/buildin/module.js")(module)))
+
+/***/ }),
+
+/***/ "./src/hooks/useOuterClick.ts":
+/*!************************************!*\
+  !*** ./src/hooks/useOuterClick.ts ***!
+  \************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(module) {
+
+(function () {
+  var enterModule = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal.enterModule : undefined;
+  enterModule && enterModule(module);
+})();
+
+var __signature__ = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal["default"].signature : function (a) {
+  return a;
+};
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.useOuterClick = void 0;
+
+var react_1 = __webpack_require__(/*! react */ "react");
+
+function useOuterClick(callback, cancelableCb) {
+  var callbackRef = react_1.useRef(); // initialize mutable ref, which stores callback
+
+  var innerRef = react_1.useRef(); // initializereturned to client, who marks "border" element
+  // update cb on each render, so second useEffect has access to current value 
+
+  react_1.useEffect(function () {
+    callbackRef.current = callback;
+  });
+  react_1.useEffect(function () {
+    function handleClick(e) {
+      var _a;
+
+      if ((innerRef === null || innerRef === void 0 ? void 0 : innerRef.current) && (callbackRef === null || callbackRef === void 0 ? void 0 : callbackRef.current) && !((_a = innerRef === null || innerRef === void 0 ? void 0 : innerRef.current) === null || _a === void 0 ? void 0 : _a.contains(e === null || e === void 0 ? void 0 : e.target))) {
+        if (!cancelableCb) callbackRef.current(e);else {
+          var isCancelable = cancelableCb(e);
+          if (!isCancelable) callbackRef.current(e);
+        }
+      }
+    }
+
+    document.addEventListener("click", handleClick);
+    return function () {
+      return document.removeEventListener("click", handleClick);
+    };
+  }, []); // no dependencies -> stable click listener
+
+  return innerRef; // convenience for client (doesn't need to init ref himself) 
+}
+
+__signature__(useOuterClick, "useRef{callbackRef}\nuseRef{innerRef}\nuseEffect{}\nuseEffect{}");
+
+exports.useOuterClick = useOuterClick;
+;
+
+(function () {
+  var reactHotLoader = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal.default : undefined;
+
+  if (!reactHotLoader) {
+    return;
+  }
+
+  reactHotLoader.register(useOuterClick, "useOuterClick", "F:\\Projetos Individuais\\ReactLibraries\\trentim-react-sdk\\src\\hooks\\useOuterClick.ts");
+})();
+
+;
+
+(function () {
+  var leaveModule = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal.leaveModule : undefined;
+  leaveModule && leaveModule(module);
+})();
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../node_modules/webpack/buildin/module.js */ "./node_modules/webpack/buildin/module.js")(module)))
+
+/***/ }),
+
+/***/ "./src/hooks/usePrevious.ts":
+/*!**********************************!*\
+  !*** ./src/hooks/usePrevious.ts ***!
+  \**********************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(module) {
+
+(function () {
+  var enterModule = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal.enterModule : undefined;
+  enterModule && enterModule(module);
+})();
+
+var __signature__ = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal["default"].signature : function (a) {
+  return a;
+};
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.usePrevious = void 0;
+
+var react_1 = __webpack_require__(/*! react */ "react");
+
+function usePrevious(value) {
+  var ref = react_1.useRef();
+  react_1.useEffect(function () {
+    ref.current = value;
+  }, [value]);
+  return ref.current;
+}
+
+__signature__(usePrevious, "useRef{ref}\nuseEffect{}");
+
+exports.usePrevious = usePrevious;
+;
+
+(function () {
+  var reactHotLoader = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal.default : undefined;
+
+  if (!reactHotLoader) {
+    return;
+  }
+
+  reactHotLoader.register(usePrevious, "usePrevious", "F:\\Projetos Individuais\\ReactLibraries\\trentim-react-sdk\\src\\hooks\\usePrevious.ts");
+})();
+
+;
+
+(function () {
+  var leaveModule = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal.leaveModule : undefined;
+  leaveModule && leaveModule(module);
+})();
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../node_modules/webpack/buildin/module.js */ "./node_modules/webpack/buildin/module.js")(module)))
+
+/***/ }),
+
+/***/ "./src/hooks/useWindowSize.ts":
+/*!************************************!*\
+  !*** ./src/hooks/useWindowSize.ts ***!
+  \************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(module) {
+
+(function () {
+  var enterModule = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal.enterModule : undefined;
+  enterModule && enterModule(module);
+})();
+
+var __signature__ = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal["default"].signature : function (a) {
+  return a;
+};
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.useWindowSize = void 0;
+
+var react_1 = __webpack_require__(/*! react */ "react");
+
+function useWindowSize() {
+  // Initialize state with undefined width/height so server and client renders match
+  // Learn more here: https://joshwcomeau.com/react/the-perils-of-rehydration/
+  var _a = react_1.useState({
+    width: undefined,
+    height: undefined
+  }),
+      windowSize = _a[0],
+      setWindowSize = _a[1];
+
+  react_1.useEffect(function () {
+    // Handler to call on window resize
+    function handleResize() {
+      // Set window width/height to state
+      setWindowSize({
+        width: window.innerWidth,
+        height: window.innerHeight
+      });
+    } // Add event listener
+
+
+    window.addEventListener("resize", handleResize);
+    window.addEventListener("load", handleResize); // Call handler right away so state gets updated with initial window size
+
+    handleResize(); // Remove event listener on cleanup
+
+    return function () {
+      window.removeEventListener("resize", handleResize);
+      window.removeEventListener("load", handleResize);
+    };
+  }, []); // Empty array ensures that effect is only run on mount
+
+  return windowSize;
+}
+
+__signature__(useWindowSize, "useState{_a({\r\n        width: undefined,\r\n        height: undefined,\r\n    })}\nuseEffect{}");
+
+exports.useWindowSize = useWindowSize;
+;
+
+(function () {
+  var reactHotLoader = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal.default : undefined;
+
+  if (!reactHotLoader) {
+    return;
+  }
+
+  reactHotLoader.register(useWindowSize, "useWindowSize", "F:\\Projetos Individuais\\ReactLibraries\\trentim-react-sdk\\src\\hooks\\useWindowSize.ts");
 })();
 
 ;
@@ -1299,16 +1872,40 @@ exports.useDebouncer = useDebouncer;
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
+/* WEBPACK VAR INJECTION */(function(module) {
 
+(function () {
+  var enterModule = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal.enterModule : undefined;
+  enterModule && enterModule(module);
+})();
 
 var __signature__ = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal["default"].signature : function (a) {
   return a;
 };
 
+var __createBinding = this && this.__createBinding || (Object.create ? function (o, m, k, k2) {
+  if (k2 === undefined) k2 = k;
+  Object.defineProperty(o, k2, {
+    enumerable: true,
+    get: function get() {
+      return m[k];
+    }
+  });
+} : function (o, m, k, k2) {
+  if (k2 === undefined) k2 = k;
+  o[k2] = m[k];
+});
+
+var __exportStar = this && this.__exportStar || function (m, exports) {
+  for (var p in m) {
+    if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
+  }
+};
+
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.DataTable = exports.useDebouncer = exports.WebpartHeight = exports.FileUtils = exports.CacheHandler = void 0;
+exports.DataTable = exports.WebpartHeight = exports.FileUtils = exports.CacheHandler = void 0;
 
 var index_1 = __webpack_require__(/*! ./helpers/index */ "./src/helpers/index.ts");
 
@@ -1331,14 +1928,7 @@ Object.defineProperty(exports, "WebpartHeight", {
   }
 });
 
-var useDebounce_1 = __webpack_require__(/*! ./hooks/useDebounce */ "./src/hooks/useDebounce.ts");
-
-Object.defineProperty(exports, "useDebouncer", {
-  enumerable: true,
-  get: function get() {
-    return useDebounce_1.useDebouncer;
-  }
-});
+__exportStar(__webpack_require__(/*! ./hooks/index */ "./src/hooks/index.ts"), exports);
 
 var DataTable_1 = __webpack_require__(/*! ./components/DataTable/DataTable */ "./src/components/DataTable/DataTable.tsx");
 
@@ -1348,6 +1938,26 @@ Object.defineProperty(exports, "DataTable", {
     return DataTable_1.DataTable;
   }
 });
+;
+
+(function () {
+  var reactHotLoader = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal.default : undefined;
+
+  if (!reactHotLoader) {
+    return;
+  }
+
+  reactHotLoader.register(__createBinding, "__createBinding", "F:\\Projetos Individuais\\ReactLibraries\\trentim-react-sdk\\src\\index.tsx");
+  reactHotLoader.register(__exportStar, "__exportStar", "F:\\Projetos Individuais\\ReactLibraries\\trentim-react-sdk\\src\\index.tsx");
+})();
+
+;
+
+(function () {
+  var leaveModule = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal.leaveModule : undefined;
+  leaveModule && leaveModule(module);
+})();
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../node_modules/webpack/buildin/module.js */ "./node_modules/webpack/buildin/module.js")(module)))
 
 /***/ }),
 
