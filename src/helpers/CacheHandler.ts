@@ -5,16 +5,17 @@ import { ICacheHandler, ICacheOptions, ICacheResponse } from "../models/interfac
 interface IDepencyJson extends Omit<JSON, 'readonly [Symbol.toStringTag]: string'> {};
 export class CacheHandler implements ICacheHandler {
     constructor(private _json?:IDepencyJson){}
+    private stringify = this?._json?.stringify ? this._json.stringify : JSON.stringify;
+    private parse = this?._json?.parse ? this._json?.parse : JSON.parse;
 
     public setCache<T>(key: string, object: T, { type }: ICacheOptions) {
         const createdDate = new Date();
         const requestedAt = createdDate.toISOString();
         const expireDate = this.setRefreshDate(createdDate);
         const cacheValue: ICacheResponse<T> = { value: object, expireDate, requestedAt };
-        const stringify = this?._json ? this?._json?.stringify : JSON.stringify;
         if (type === 'local')
-            localStorage.setItem(key, stringify(cacheValue));
-        else sessionStorage.setItem(key, stringify(cacheValue));
+            localStorage.setItem(key, this.stringify(cacheValue));
+        else sessionStorage.setItem(key, this.stringify(cacheValue));
     }
 
     public getCache<T>(key: string, { type }: ICacheOptions): ICacheResponse<T> {
@@ -34,7 +35,7 @@ export class CacheHandler implements ICacheHandler {
 
     private parseCache<T>(key: string) {
         try {
-            const parsedValue: ICacheResponse<T> = this?._json ? this?._json?.parse(key) : JSON.parse(key);
+            const parsedValue: ICacheResponse<T> = this.parse(key);
             const { value, expireDate, requestedAt } = parsedValue;
             return { value, expireDate, requestedAt };
         } catch {

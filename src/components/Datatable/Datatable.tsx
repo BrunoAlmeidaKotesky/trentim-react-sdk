@@ -16,7 +16,8 @@ export const DataTable = memo(
   customEvents,
   tableCaption,
   classes,
-  type
+  type,
+  onRowClick
 }: 
 IDatatableProps<T>) => {
     const parentRef = useRef<HTMLTableRowElement|HTMLDivElement>(null);
@@ -58,7 +59,8 @@ IDatatableProps<T>) => {
                             rows={rows}
                             styles={styles}
                             ignoreKeys={ignoreKeys} 
-                            customEvents={customEvents} />
+                            customEvents={customEvents}
+                            onRowClick={onRowClick} />
                     </div>
                 </div>
             </TableContainer>

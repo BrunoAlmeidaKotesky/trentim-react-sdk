@@ -10,8 +10,9 @@ interface RowProps<T extends object> {
     ignoreKeys: string[];
     customEvents: ITableCustomEvents<T>[];
     styles?: Partial<IBodyStyles>;
+    onRowClick?: (item?: T, ev?: React.MouseEvent<HTMLElement, MouseEvent>) => any;
 }
-export function Rows<T extends object>({ignoreKeys, rows, columns, customEvents, styles, type}:RowProps<T>) {
+export function Rows<T extends object>({ignoreKeys, rows, columns, customEvents, styles, type, onRowClick}: RowProps<T>) {
     const tdRef = useRef<HTMLTableRowElement>(null);
 
     const tableRowStyle = useCallback((currentIdx?: number) => {
@@ -76,7 +77,10 @@ export function Rows<T extends object>({ignoreKeys, rows, columns, customEvents,
      switch (type) {
         case 'div': {
             return (
-            <div style={{display: 'table-row', ...tableRowStyle(idx)}}>
+            <div onClick={(ev) => {
+                if(onRowClick)
+                    onRowClick(row, ev);
+            }} style={{display: 'table-row', ...tableRowStyle(idx)}}>
             {rowsToRender.map(([key, val], idx2) => {
             return (
                 <div 
@@ -100,8 +104,11 @@ export function Rows<T extends object>({ignoreKeys, rows, columns, customEvents,
         }
         case 'table': {
             return (
-            <tr style={tableRowStyle(idx)} key={idx.toString()}>
-            {rowsToRender.map(([key, val], idx2) => {
+            <tr onClick={(ev) => {
+                if(onRowClick)
+                    onRowClick(row, ev);
+            }} style={tableRowStyle(idx)} key={idx.toString()}>
+            {rowsToRender?.map(([key, val], idx2) => {
               return (
               <td 
                 style={tableCellStyle(key, idx)}

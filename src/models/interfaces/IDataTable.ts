@@ -32,4 +32,6 @@ export interface IDatatableProps<T> {
     ref?: HTMLTableRowElement;
     customEvents?: ITableCustomEvents<T>[];
     tableCaption?: string;
+    /**An event that can be triggered when the table row element is clicked*/
+    onRowClick?: (item?: T, ev?: React.MouseEvent<HTMLElement, MouseEvent>) => any;
 }
