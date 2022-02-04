@@ -33,8 +33,7 @@
     ]
   },
   "files": [ 
-    "src/index.tsx",
-    "src/helpers/*"
+    "src/index.tsx"
   ],
   "exclude": ["node_modules"],
   "compileOnSave": false

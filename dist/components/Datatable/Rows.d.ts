@@ -1,3 +1,4 @@
+import * as React from 'react';
 import { IDatableColumns, ITableCustomEvents } from '../../models/interfaces/IDataTable';
 import { IBodyStyles } from '../../models/interfaces/IDatatableStyles';
 interface RowProps<T extends object> {
@@ -7,6 +8,7 @@ interface RowProps<T extends object> {
     ignoreKeys: string[];
     customEvents: ITableCustomEvents<T>[];
     styles?: Partial<IBodyStyles>;
+    onRowClick?: (item?: T, ev?: React.MouseEvent<HTMLElement, MouseEvent>) => any;
 }
-export declare function Rows<T extends object>({ ignoreKeys, rows, columns, customEvents, styles, type }: RowProps<T>): JSX.Element;
+export declare function Rows<T extends object>({ ignoreKeys, rows, columns, customEvents, styles, type, onRowClick }: RowProps<T>): JSX.Element;
 export {};

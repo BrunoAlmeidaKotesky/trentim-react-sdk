@@ -7,6 +7,8 @@ interface IDepencyJson extends Omit<JSON, 'readonly [Symbol.toStringTag]: string
 export declare class CacheHandler implements ICacheHandler {
     private _json?;
     constructor(_json?: IDepencyJson);
+    private stringify;
+    private parse;
     setCache<T>(key: string, object: T, { type }: ICacheOptions): void;
     getCache<T>(key: string, { type }: ICacheOptions): ICacheResponse<T>;
     private parseCache;

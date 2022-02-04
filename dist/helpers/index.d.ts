@@ -1,4 +1,4 @@
 export { CacheHandler } from './CacheHandler';
 export { FileUtils } from './FileUtils';
-export { WebpartHeight } from './WebpartHeight';
+export { WebpartAddons } from './WebpartAddons';
 export * from '../models/interfaces/index';
