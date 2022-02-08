@@ -1,6 +1,6 @@
 {
   "name": "trentim-react-sdk",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "About",
   "repository": {
     "type": "git",
@@ -40,6 +40,7 @@
   "author": "",
   "license": "MIT",
   "peerDependencies": {
+    "@fluentui/react": "8.52.3",
     "react": "^16.0.0",
     "react-dom": "^16.0.0"
   },
@@ -144,6 +145,7 @@
     "output": "./coverage/junit.xml"
   },
   "dependencies": {
+    "@fluentui/react": "8.52.3",
     "rimraf": "^3.0.2"
   }
 }
