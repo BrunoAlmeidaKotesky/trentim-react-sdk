@@ -1,6 +1,5 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import { useState } from "react";
 import { DataTable } from '../src/components/DataTable/DataTable';
 import { InfoCard } from '../src/components/Card/InfoCard';
 
@@ -8,7 +7,7 @@ declare const module: any;
 let hmrUpdate: undefined | (() => void);
 
 const Demo = (): JSX.Element => {
-  const [hotRefreshCounter, setHotRefreshCounter] = useState<number>(0);
+  const [hotRefreshCounter, setHotRefreshCounter] = React.useState<number>(0);
   hmrUpdate = () => setHotRefreshCounter(hotRefreshCounter + 1);
   return (
     <div style={{
