@@ -12,6 +12,7 @@
     "declarationDir": "./dist/",
     "sourceMap": true,
     "sourceRoot": "./dist",
+    "allowSyntheticDefaultImports": true,
     "module": "commonjs",
     "target": "es5",
     "jsx": "react",
