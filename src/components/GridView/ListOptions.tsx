@@ -1,8 +1,9 @@
-import React, { CSSProperties } from 'react';
+import * as React from 'react';
+import { CSSProperties } from 'react';
 import { DefaultButton, PrimaryButton, TextField } from '@fluentui/react'
 import { IListOptionsProps } from '../../models/interfaces/IGridView';
 
-export const ListOptions = React.memo((props: IListOptionsProps = {enableFilter: true, enableSearch: true, customButtons: []}) => {
+export const ListOptions = (props: IListOptionsProps = {enableFilter: true, enableSearch: true, customButtons: []}) => {
     const defaultStyles: Record<string, CSSProperties> = {
         container: {
             display: 'flex',
@@ -29,4 +30,4 @@ export const ListOptions = React.memo((props: IListOptionsProps = {enableFilter:
         <DefaultButton 
             onClick={ _ => ''} styles={{label: {fontSize: 14}}} iconProps={{iconName: 'Filter'}} />}
     </div>);
-});
+}

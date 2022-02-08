@@ -4,10 +4,16 @@ import type { IColumn, IDetailsListProps, IGroup } from "@fluentui/react/lib/Det
 export interface IFileInfo {
     key: string;
     name: string;
-    value: string;
-    iconName: string;
+    /**Any Extra value to hold on that object */
+    value?: any;
+    iconUrl: string;
     fileType: string;
 };
+
+export interface INode extends IRow {
+    items?: IRow[];
+    children?: INode[];
+}
 
 export interface IRow {
     [key: string]: any;
@@ -16,9 +22,9 @@ export interface IRow {
 
 export interface IGridListProps {
     detailsListProps?: IDetailsListProps;
-    listOptions: Omit<IListOptionsProps, 'onSearchItems'>;
-    listType: 'folder' | 'list';
+    headerOptions: Omit<IListOptionsProps, 'onSearchItem'>;
     groups?: IGroup[];
+    listType: 'folder' | 'list' | 'file';
     columns: IColumn[];
     rows: IRow[];
 }
@@ -31,7 +37,5 @@ export interface IListOptionsProps {
     enableCardView?: boolean;
     searchKey?: string;
     onSearchItem?: (searchText: string, key: keyof IRow) => void;
-    /**The group by keys array order depends on the position of the key.*/
-    groupByKeys?: string[];
     customButtons?: CustomButtons;
 }

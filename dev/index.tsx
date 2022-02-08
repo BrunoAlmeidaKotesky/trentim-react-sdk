@@ -1,11 +1,59 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
+import { initializeIcons, loadTheme } from '@fluentui/react';
 import { DataTable } from '../src/components/DataTable/DataTable';
 import { InfoCard } from '../src/components/Card/InfoCard';
+import { GridView } from '../src/components/GridView/GridView';
+import NodeGrid from '../src/components/GridView/NodeGrid';
+import { nodeItem } from './constants';
 
 declare const module: any;
 let hmrUpdate: undefined | (() => void);
 
+loadTheme({
+  defaultFontStyle: { fontFamily: 'Roboto', fontWeight: 'regular' },
+  fonts: {
+    small: {
+      fontSize: '12px',
+    },
+    medium: {
+      fontSize: '16px',
+    },
+    large: {
+      fontSize: '20px',
+    },
+    xLarge: {
+      fontSize: '24px',
+    },
+  },
+  palette: {
+    themePrimary: '#27d6f2',
+    themeLighterAlt: '#f6fdfe',
+    themeLighter: '#dbf8fd',
+    themeLight: '#bcf3fb',
+    themeTertiary: '#7be7f7',
+    themeSecondary: '#40dcf4',
+    themeDarkAlt: '#23c2da',
+    themeDark: '#1da3b8',
+    themeDarker: '#167888',
+    neutralLighterAlt: '#f8f8f8',
+    neutralLighter: '#f4f4f4',
+    neutralLight: '#eaeaea',
+    neutralQuaternaryAlt: '#dadada',
+    neutralQuaternary: '#d0d0d0',
+    neutralTertiaryAlt: '#c8c8c8',
+    neutralTertiary: '#c2c2c2',
+    neutralSecondary: '#858585',
+    neutralPrimaryAlt: '#4b4b4b',
+    neutralPrimary: '#333',
+    neutralDark: '#272727',
+    black: '#1d1d1d',
+    white: '#fff',
+  },
+});
+
+
+initializeIcons();
 const Demo = (): JSX.Element => {
   const [hotRefreshCounter, setHotRefreshCounter] = React.useState<number>(0);
   hmrUpdate = () => setHotRefreshCounter(hotRefreshCounter + 1);
@@ -49,8 +97,8 @@ const Demo = (): JSX.Element => {
               { age: 88, name: 'Rodney', ignoreMe: true },
             ]} />
         </div>
-        <div style={{margin: '0 auto', width: '80%', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', columnGap: 8}}>
-            {[123, 265, 343, 475].map(i => 
+        <div style={{ margin: '0 auto', width: '80%', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', columnGap: 8 }}>
+          {[123, 265, 343, 475].map(i =>
             <InfoCard
               cardTitle='Aquisição do Pacote de Relatórios para Power BI' cardSubtitle={i.toString()}
               circleIndicator={{ title: 'Status', color: '#06ad51' }}
@@ -62,6 +110,23 @@ const Demo = (): JSX.Element => {
                 ]
               }} />)}
         </div>
+        <div>
+          <GridView
+            headerOptions={{
+              enableFilter: true, enableCardView: true,
+              enableSearch: true, enableGroupBy: true,
+              searchKey: 'name'
+            }}
+            columns={[{ key: 'responsavel', minWidth: 120, name: 'Responsável', fieldName: 'responsavel' }]}
+            rows={[
+              { file: { fileType: 'xlsx', iconUrl: 'https://static2.sharepointonline.com/files/fabric/assets/item-types/16/one.svg', key: 'fileType', name: 'Arquivo.xlsx' }, responsavel: 'José da Silva' },
+              { file: { fileType: 'xlsx', iconUrl: 'https://static2.sharepointonline.com/files/fabric/assets/item-types/16/one.svg', key: 'fileType', name: 'Arquivo2.xlsx' }, responsavel: 'José da Silva' },
+              { file: { fileType: 'xlsx', iconUrl: 'https://static2.sharepointonline.com/files/fabric/assets/item-types/16/one.svg', key: 'fileType', name: 'Arquivo.xlsx' }, responsavel: 'José da Silva' },
+            ]}
+            listType="file"
+          />
+        </div>
+        <NodeGrid nodes={nodeItem} />
       </div>
     </div>);
 };
