@@ -943,6 +943,469 @@ exports.Rows = Rows;
 
 /***/ }),
 
+/***/ "./src/components/GridView/GridView.tsx":
+/*!**********************************************!*\
+  !*** ./src/components/GridView/GridView.tsx ***!
+  \**********************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(module) {
+
+(function () {
+  var enterModule = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal.enterModule : undefined;
+  enterModule && enterModule(module);
+})();
+
+var __signature__ = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal["default"].signature : function (a) {
+  return a;
+};
+
+var __assign = this && this.__assign || function () {
+  __assign = Object.assign || function (t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+      s = arguments[i];
+
+      for (var p in s) {
+        if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+      }
+    }
+
+    return t;
+  };
+
+  return __assign.apply(this, arguments);
+};
+
+var __spreadArray = this && this.__spreadArray || function (to, from, pack) {
+  if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+    if (ar || !(i in from)) {
+      if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+      ar[i] = from[i];
+    }
+  }
+  return to.concat(ar || Array.prototype.slice.call(from));
+};
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.GridView = exports.GridContainerContext = void 0;
+
+var React = __webpack_require__(/*! react */ "react");
+
+var react_1 = __webpack_require__(/*! react */ "react");
+
+var DetailsList_1 = __webpack_require__(/*! @fluentui/react/lib/DetailsList */ "@fluentui/react/lib/DetailsList");
+
+var Sticky_1 = __webpack_require__(/*! @fluentui/react/lib/Sticky */ "@fluentui/react/lib/Sticky");
+
+var Styling_1 = __webpack_require__(/*! @fluentui/react/lib/Styling */ "@fluentui/react/lib/Styling");
+
+var ListOptions_1 = __webpack_require__(/*! ./ListOptions */ "./src/components/GridView/ListOptions.tsx");
+
+exports.GridContainerContext = (0, react_1.createContext)({});
+
+var GridView = function GridView(props) {
+  var _a, _b, _c, _d, _e;
+
+  var classNames = (0, Styling_1.mergeStyleSets)({
+    fileIconHeaderIcon: {
+      padding: 0,
+      fontSize: '16px'
+    },
+    fileIconCell: {
+      textAlign: 'center',
+      selectors: {
+        '&:before': {
+          content: '.',
+          display: 'inline-block',
+          verticalAlign: 'middle',
+          height: '100%',
+          width: '0px',
+          visibility: 'hidden'
+        }
+      }
+    },
+    fileIconImg: {
+      verticalAlign: 'middle',
+      maxHeight: '16px',
+      maxWidth: '16px'
+    },
+    controlWrapper: {
+      display: 'flex',
+      flexWrap: 'wrap'
+    },
+    exampleToggle: {
+      display: 'inline-block',
+      marginBottom: '10px',
+      marginRight: '30px'
+    },
+    selectionDetails: {
+      marginBottom: '20px'
+    }
+  });
+
+  var _f = (0, react_1.useState)(props === null || props === void 0 ? void 0 : props.columns),
+      cols = _f[0],
+      setCols = _f[1];
+
+  var _g = (0, react_1.useState)(props === null || props === void 0 ? void 0 : props.rows),
+      allItems = _g[0],
+      setAllItems = _g[1];
+
+  var _h = (0, react_1.useState)((_a = props === null || props === void 0 ? void 0 : props.rows) !== null && _a !== void 0 ? _a : []),
+      actualRows = _h[0],
+      setActualRows = _h[1];
+
+  var _j = (0, react_1.useState)(props === null || props === void 0 ? void 0 : props.groups),
+      groups = _j[0],
+      setGroups = _j[1];
+
+  (0, react_1.useEffect)(function () {
+    setAllItems(props === null || props === void 0 ? void 0 : props.rows);
+  }, [(_b = props === null || props === void 0 ? void 0 : props.rows) === null || _b === void 0 ? void 0 : _b.length]);
+  (0, react_1.useEffect)(function () {
+    if (props.listType === 'file' || props.listType === 'folder') setCols(__spreadArray([{
+      key: 'fileType',
+      name: 'File Type',
+      className: classNames.fileIconCell,
+      iconClassName: classNames.fileIconHeaderIcon,
+      ariaLabel: 'Column operations for File type, Press to sort on File type',
+      iconName: 'Page',
+      isIconOnly: true,
+      fieldName: 'name',
+      minWidth: 16,
+      maxWidth: 16,
+      onColumnClick: onColumnClick,
+      onRender: function onRender(item) {
+        var _a, _b;
+
+        return React.createElement("img", {
+          src: (_a = item === null || item === void 0 ? void 0 : item.file) === null || _a === void 0 ? void 0 : _a.iconUrl,
+          className: classNames.fileIconImg,
+          alt: "".concat((_b = item === null || item === void 0 ? void 0 : item.file) === null || _b === void 0 ? void 0 : _b.fileType, " file icon")
+        });
+      }
+    }, {
+      key: 'name',
+      name: 'Nome',
+      fieldName: 'name',
+      minWidth: 210,
+      maxWidth: 350,
+      isRowHeader: true,
+      isResizable: true,
+      isSorted: true,
+      isSortedDescending: false,
+      sortAscendingAriaLabel: 'Sorted A to Z',
+      sortDescendingAriaLabel: 'Sorted Z to A',
+      onColumnClick: onColumnClick,
+      onRender: function onRender(item) {
+        var _a;
+
+        return React.createElement("span", null, (_a = item === null || item === void 0 ? void 0 : item.file) === null || _a === void 0 ? void 0 : _a.name);
+      },
+      data: 'string',
+      isPadded: true
+    }], cols, true));else setCols(props === null || props === void 0 ? void 0 : props.columns);
+  }, [props === null || props === void 0 ? void 0 : props.listType]);
+  (0, react_1.useEffect)(function () {
+    if ((props === null || props === void 0 ? void 0 : props.listType) === 'folder' && (props === null || props === void 0 ? void 0 : props.rowsAsNode)) {
+      var nodes = props.rowsAsNode;
+      var items = [];
+      var groups_1 = [];
+      processNodes(nodes, groups_1, items, 0);
+      console.log("Items P\xF3s Recurs\xE3o ", items, "Grupos p\xF3s recurs\xE3o ", groups_1);
+      setActualRows(items);
+      setGroups(groups_1);
+    }
+  }, [props === null || props === void 0 ? void 0 : props.rowsAsNode, props === null || props === void 0 ? void 0 : props.listType]);
+  /**TO-DO: Implement this method to work with `INode[]` */
+
+  var onColumnClick = function onColumnClick(_, column) {
+    if (props === null || props === void 0 ? void 0 : props.rowsAsNode) return;
+    var newColumns = cols.slice();
+    var currColumn = newColumns.filter(function (currCol) {
+      return column.key === currCol.key;
+    })[0];
+    newColumns.forEach(function (newCol) {
+      if (newCol === currColumn) {
+        currColumn.isSortedDescending = !currColumn.isSortedDescending;
+        currColumn.isSorted = true;
+      } else {
+        newCol.isSorted = false;
+        newCol.isSortedDescending = true;
+      }
+    });
+    var newItems = copyAndSort(actualRows, currColumn === null || currColumn === void 0 ? void 0 : currColumn.fieldName, currColumn === null || currColumn === void 0 ? void 0 : currColumn.isSortedDescending);
+    setCols(newColumns);
+    setActualRows(newItems);
+  };
+
+  function copyAndSort(items, columnKey, isSortedDescending) {
+    var key = columnKey;
+    return items.slice(0).sort(function (a, b) {
+      return (isSortedDescending ? a[key] < b[key] : a[key] > b[key]) ? 1 : -1;
+    });
+  }
+
+  var processNodes = function processNodes(nodeItems, groups, items, level) {
+    // end of recursion
+    if (!nodeItems || !(nodeItems === null || nodeItems === void 0 ? void 0 : nodeItems.length)) return; // processing current level of the tree
+
+    nodeItems.forEach(function (nodeItem) {
+      var _a;
+
+      var newGroup = {
+        key: nodeItem.key,
+        name: nodeItem.title,
+        startIndex: items === null || items === void 0 ? void 0 : items.length,
+        count: 0,
+        children: [],
+        level: level,
+        data: nodeItem // storing initial INode instance in the group's data
+
+      };
+      groups.push(newGroup);
+
+      if ((nodeItem === null || nodeItem === void 0 ? void 0 : nodeItem.items) && ((_a = nodeItem === null || nodeItem === void 0 ? void 0 : nodeItem.items) === null || _a === void 0 ? void 0 : _a.length)) {
+        // adding items to the flat array
+        items.push.apply(items, nodeItem === null || nodeItem === void 0 ? void 0 : nodeItem.items);
+      } // processing child nodes
+
+
+      processNodes(nodeItem.children, newGroup.children, items, level + 1); // current group count is a sum of group's leaf items and leaf items in all child nodes
+
+      newGroup.count = (items === null || items === void 0 ? void 0 : items.length) - newGroup.startIndex;
+    });
+  };
+
+  return React.createElement("div", null, React.createElement(ListOptions_1.ListOptions, __assign({
+    onSearchItem: function onSearchItem(text, key) {
+      var filteredRows = text ? allItems === null || allItems === void 0 ? void 0 : allItems.filter(function (item) {
+        var _a;
+
+        var isKeyInsideFileObj = (_a = Object.keys(item === null || item === void 0 ? void 0 : item.file)) === null || _a === void 0 ? void 0 : _a.includes(key);
+        var itemValue = isKeyInsideFileObj ? item === null || item === void 0 ? void 0 : item.file[key] : item === null || item === void 0 ? void 0 : item[key];
+        console.log(key, itemValue);
+        return itemValue === null || itemValue === void 0 ? void 0 : itemValue.toLowerCase().includes(text.toLowerCase());
+      }) : allItems;
+      setActualRows(filteredRows);
+    }
+  }, props === null || props === void 0 ? void 0 : props.headerOptions)), React.createElement("div", {
+    "data-is-scrollable": "true",
+    style: {
+      position: 'relative',
+      zIndex: 0
+    }
+  }, React.createElement(DetailsList_1.DetailsList, __assign({}, props === null || props === void 0 ? void 0 : props.detailsListProps, {
+    items: actualRows,
+    columns: cols,
+    groups: groups,
+    groupProps: {
+      isAllGroupsCollapsed: (props === null || props === void 0 ? void 0 : props.groups) ? ((_c = props === null || props === void 0 ? void 0 : props.groups.filter(function (gr) {
+        return !(gr === null || gr === void 0 ? void 0 : gr.isCollapsed);
+      })) === null || _c === void 0 ? void 0 : _c.length) === 0 : true,
+      collapseAllVisibility: DetailsList_1.CollapseAllVisibility.visible,
+      onRenderHeader: function onRenderHeader(props, defaultRender) {
+        if (!props.group.name) return React.createElement(React.Fragment, null);
+        return defaultRender(props);
+      }
+    },
+    layoutMode: DetailsList_1.DetailsListLayoutMode.fixedColumns,
+    isHeaderVisible: true,
+    onRenderDetailsHeader: function onRenderDetailsHeader(headerProps, defaultRender) {
+      return React.createElement(Sticky_1.Sticky, {
+        stickyPosition: Sticky_1.StickyPositionType.Header,
+        stickyBackgroundColor: "transparent"
+      }, React.createElement("div", null, defaultRender(headerProps)));
+    },
+    checkboxVisibility: (_e = (_d = props === null || props === void 0 ? void 0 : props.detailsListProps) === null || _d === void 0 ? void 0 : _d.checkboxVisibility) !== null && _e !== void 0 ? _e : DetailsList_1.CheckboxVisibility.hidden
+  }))));
+};
+
+exports.GridView = GridView;
+;
+
+(function () {
+  var reactHotLoader = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal.default : undefined;
+
+  if (!reactHotLoader) {
+    return;
+  }
+
+  reactHotLoader.register(__assign, "__assign", "F:\\Projetos Individuais\\ReactLibraries\\trentim-react-sdk\\src\\components\\GridView\\GridView.tsx");
+  reactHotLoader.register(__spreadArray, "__spreadArray", "F:\\Projetos Individuais\\ReactLibraries\\trentim-react-sdk\\src\\components\\GridView\\GridView.tsx");
+  reactHotLoader.register(GridView, "GridView", "F:\\Projetos Individuais\\ReactLibraries\\trentim-react-sdk\\src\\components\\GridView\\GridView.tsx");
+})();
+
+;
+
+(function () {
+  var leaveModule = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal.leaveModule : undefined;
+  leaveModule && leaveModule(module);
+})();
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../node_modules/webpack/buildin/module.js */ "./node_modules/webpack/buildin/module.js")(module)))
+
+/***/ }),
+
+/***/ "./src/components/GridView/ListOptions.tsx":
+/*!*************************************************!*\
+  !*** ./src/components/GridView/ListOptions.tsx ***!
+  \*************************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(module) {
+
+(function () {
+  var enterModule = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal.enterModule : undefined;
+  enterModule && enterModule(module);
+})();
+
+var __signature__ = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal["default"].signature : function (a) {
+  return a;
+};
+
+var __assign = this && this.__assign || function () {
+  __assign = Object.assign || function (t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+      s = arguments[i];
+
+      for (var p in s) {
+        if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+      }
+    }
+
+    return t;
+  };
+
+  return __assign.apply(this, arguments);
+};
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.ListOptions = void 0;
+
+var React = __webpack_require__(/*! react */ "react");
+
+var react_1 = __webpack_require__(/*! @fluentui/react */ "@fluentui/react");
+
+var ListOptions = function ListOptions(props) {
+  var _a, _b;
+
+  if (props === void 0) {
+    props = {
+      enableFilter: true,
+      enableSearch: true,
+      customButtons: []
+    };
+  }
+
+  var defaultStyles = {
+    container: {
+      display: 'flex',
+      flexDirection: 'row',
+      gap: 4,
+      justifyContent: 'end',
+      margin: '8px 0'
+    }
+  };
+  return React.createElement("div", {
+    "data-class-name": "grid-view-header-container",
+    style: defaultStyles.container
+  }, React.createElement(react_1.DefaultButton, {
+    onClick: function onClick(_) {
+      return '';
+    },
+    styles: {
+      label: {
+        fontSize: 14
+      }
+    },
+    iconProps: {
+      iconName: 'GroupList'
+    }
+  }), React.createElement(react_1.DefaultButton, {
+    onClick: function onClick(_) {
+      return '';
+    },
+    styles: {
+      label: {
+        fontSize: 14
+      }
+    },
+    iconProps: {
+      iconName: 'ViewList'
+    }
+  }), ((_a = props === null || props === void 0 ? void 0 : props.customButtons) === null || _a === void 0 ? void 0 : _a.length) > 0 && ((_b = props === null || props === void 0 ? void 0 : props.customButtons) === null || _b === void 0 ? void 0 : _b.map(function (b) {
+    return React.createElement(react_1.PrimaryButton, __assign({
+      className: b === null || b === void 0 ? void 0 : b.className,
+      styles: {
+        label: {
+          fontSize: 14
+        }
+      }
+    }, b === null || b === void 0 ? void 0 : b.props), b === null || b === void 0 ? void 0 : b.text);
+  })), (props === null || props === void 0 ? void 0 : props.enableSearch) && (props === null || props === void 0 ? void 0 : props.searchKey) && React.createElement(react_1.TextField, {
+    onChange: function onChange(_, newValue) {
+      return props === null || props === void 0 ? void 0 : props.onSearchItem(newValue, props === null || props === void 0 ? void 0 : props.searchKey);
+    },
+    iconProps: {
+      iconName: 'Search'
+    },
+    styles: {
+      root: {
+        width: 320
+      },
+      icon: {
+        color: '[theme: themePrimary, default: #0078D4]'
+      }
+    }
+  }), (props === null || props === void 0 ? void 0 : props.enableFilter) && React.createElement(react_1.DefaultButton, {
+    onClick: function onClick(_) {
+      return '';
+    },
+    styles: {
+      label: {
+        fontSize: 14
+      }
+    },
+    iconProps: {
+      iconName: 'Filter'
+    }
+  }));
+};
+
+exports.ListOptions = ListOptions;
+;
+
+(function () {
+  var reactHotLoader = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal.default : undefined;
+
+  if (!reactHotLoader) {
+    return;
+  }
+
+  reactHotLoader.register(__assign, "__assign", "F:\\Projetos Individuais\\ReactLibraries\\trentim-react-sdk\\src\\components\\GridView\\ListOptions.tsx");
+  reactHotLoader.register(ListOptions, "ListOptions", "F:\\Projetos Individuais\\ReactLibraries\\trentim-react-sdk\\src\\components\\GridView\\ListOptions.tsx");
+})();
+
+;
+
+(function () {
+  var leaveModule = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal.leaveModule : undefined;
+  leaveModule && leaveModule(module);
+})();
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../node_modules/webpack/buildin/module.js */ "./node_modules/webpack/buildin/module.js")(module)))
+
+/***/ }),
+
 /***/ "./src/helpers/CacheHandler.ts":
 /*!*************************************!*\
   !*** ./src/helpers/CacheHandler.ts ***!
@@ -2119,7 +2582,7 @@ var __exportStar = this && this.__exportStar || function (m, exports) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.InfoCard = exports.DataTable = exports.WebpartAddons = exports.FileUtils = exports.CacheHandler = void 0;
+exports.GridView = exports.InfoCard = exports.DataTable = exports.WebpartAddons = exports.FileUtils = exports.CacheHandler = void 0;
 
 var index_1 = __webpack_require__(/*! ./helpers/index */ "./src/helpers/index.ts");
 
@@ -2159,6 +2622,15 @@ Object.defineProperty(exports, "InfoCard", {
   enumerable: true,
   get: function get() {
     return InfoCard_1.InfoCard;
+  }
+});
+
+var GridView_1 = __webpack_require__(/*! ./components/GridView/GridView */ "./src/components/GridView/GridView.tsx");
+
+Object.defineProperty(exports, "GridView", {
+  enumerable: true,
+  get: function get() {
+    return GridView_1.GridView;
   }
 });
 ;
@@ -2442,6 +2914,18 @@ module.exports = __webpack_require__(/*! F:\Projetos Individuais\ReactLibraries\
 
 /***/ }),
 
+/***/ "@fluentui/react":
+/*!**********************************!*\
+  !*** external "@fluentui/react" ***!
+  \**********************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports) {
+
+module.exports = require("@fluentui/react");
+
+/***/ }),
+
 /***/ "@fluentui/react/lib/Button":
 /*!*********************************************!*\
   !*** external "@fluentui/react/lib/Button" ***!
@@ -2451,6 +2935,42 @@ module.exports = __webpack_require__(/*! F:\Projetos Individuais\ReactLibraries\
 /***/ (function(module, exports) {
 
 module.exports = require("@fluentui/react/lib/Button");
+
+/***/ }),
+
+/***/ "@fluentui/react/lib/DetailsList":
+/*!**************************************************!*\
+  !*** external "@fluentui/react/lib/DetailsList" ***!
+  \**************************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports) {
+
+module.exports = require("@fluentui/react/lib/DetailsList");
+
+/***/ }),
+
+/***/ "@fluentui/react/lib/Sticky":
+/*!*********************************************!*\
+  !*** external "@fluentui/react/lib/Sticky" ***!
+  \*********************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports) {
+
+module.exports = require("@fluentui/react/lib/Sticky");
+
+/***/ }),
+
+/***/ "@fluentui/react/lib/Styling":
+/*!**********************************************!*\
+  !*** external "@fluentui/react/lib/Styling" ***!
+  \**********************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports) {
+
+module.exports = require("@fluentui/react/lib/Styling");
 
 /***/ }),
 
