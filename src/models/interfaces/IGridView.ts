@@ -26,7 +26,9 @@ export interface IGridListProps {
     groups?: IGroup[];
     listType: 'folder' | 'list' | 'file';
     columns: IColumn[];
-    rows: IRow[];
+    rows?: IRow[];
+    /**If set, the columns will be displayed as tree view*/
+    rowsAsNode?: INode[];
 }
 
 type CustomButtons = {props: IButtonProps, position?: number, className?: string, text: string}[];

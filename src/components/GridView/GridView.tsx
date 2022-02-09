@@ -1,9 +1,8 @@
 import * as React from 'react';
 import { createContext, useState, useEffect } from 'react';
-import { CheckboxVisibility, CollapseAllVisibility, DetailsList, DetailsListLayoutMode, IColumn, IDetailsHeaderProps, IGroup } from '@fluentui/react/lib/DetailsList';
+import { CheckboxVisibility, CollapseAllVisibility, DetailsList, DetailsListLayoutMode, IColumn, IGroup } from '@fluentui/react/lib/DetailsList';
 import { Sticky, StickyPositionType } from '@fluentui/react/lib/Sticky';
 import { mergeStyleSets } from '@fluentui/react/lib/Styling';
-import { IRenderFunction } from '@fluentui/react/lib/Utilities';
 import { IGridListProps, INode, IRow } from '../../models/interfaces/IGridView';
 import { ListOptions } from './ListOptions';
 
@@ -30,7 +29,7 @@ export const GridView = (props: IGridListProps) => {
         fileIconImg: {
             verticalAlign: 'middle',
             maxHeight: '16px',
-            maxWidth: '16px',
+            maxWidth: '16px', 
         },
         controlWrapper: {
             display: 'flex',
@@ -48,34 +47,13 @@ export const GridView = (props: IGridListProps) => {
 
     const [cols, setCols] = useState(props?.columns);
     const [allItems, setAllItems] = useState(props?.rows);
-    const [actualRows, setActualRows] = useState(props?.rows);
+    const [actualRows, setActualRows] = useState(props?.rows ?? []);
+    const [groups, setGroups] = useState(props?.groups);
 
     useEffect(() => { setAllItems(props?.rows) }, [props?.rows?.length]);
 
-    const onColumnClick = (_: unknown, column: IColumn): void => {
-        const newColumns: IColumn[] = cols.slice();
-        const currColumn: IColumn = newColumns.filter(currCol => column.key === currCol.key)[0];
-        newColumns.forEach((newCol: IColumn) => {
-            if (newCol === currColumn) {
-                currColumn.isSortedDescending = !currColumn.isSortedDescending;
-                currColumn.isSorted = true;
-            } else {
-                newCol.isSorted = false;
-                newCol.isSortedDescending = true;
-            }
-        });
-        const newItems = _copyAndSort(actualRows, currColumn.fieldName!, currColumn.isSortedDescending);
-        setCols(newColumns);
-        setActualRows(newItems);
-    };
-
-    function _copyAndSort<T>(items: T[], columnKey: string, isSortedDescending?: boolean): T[] {
-        const key = columnKey as keyof T;
-        return items.slice(0).sort((a: T, b: T) => ((isSortedDescending ? a[key] < b[key] : a[key] > b[key]) ? 1 : -1));
-    }
-
     useEffect(() => {
-        if (props.listType === 'file')
+        if (props.listType === 'file' || props.listType === 'folder')
             setCols([{
                 key: 'fileType',
                 name: 'File Type',
@@ -110,13 +88,41 @@ export const GridView = (props: IGridListProps) => {
         else setCols(props?.columns);
     }, [props?.listType]);
 
-    const onRenderDetailsHeader: IRenderFunction<IDetailsHeaderProps> = (headerProps, defaultRender) => {
-        return (
-            <Sticky stickyPosition={StickyPositionType.Header} stickyBackgroundColor="transparent">
-                <div>{defaultRender!(headerProps)}</div>
-            </Sticky>
-        );
+    useEffect(() => {
+        if(props?.listType === 'folder' && props?.rowsAsNode) {
+            const nodes = props.rowsAsNode;
+            const items: IRow[] = [];
+            const groups: IGroup[] = [];
+            processNodes(nodes, groups, items, 0);
+            console.log(`Items Pós Recursão `, items, `Grupos pós recursão `, groups);
+            setActualRows(items);
+            setGroups(groups);
+        }
+    }, [props?.rowsAsNode, props?.listType]);
+    /**TO-DO: Implement this method to work with `INode[]` */
+    const onColumnClick = (_: unknown, column: IColumn): void => {
+        if(props?.rowsAsNode)
+            return; 
+        const newColumns: IColumn[] = cols.slice();
+        const currColumn: IColumn = newColumns.filter(currCol => column.key === currCol.key)[0];
+        newColumns.forEach((newCol: IColumn) => {
+            if (newCol === currColumn) {
+                currColumn.isSortedDescending = !currColumn.isSortedDescending;
+                currColumn.isSorted = true;
+            } else {
+                newCol.isSorted = false;
+                newCol.isSortedDescending = true;
+            }
+        });
+        const newItems = copyAndSort(actualRows, currColumn?.fieldName!, currColumn?.isSortedDescending);
+        setCols(newColumns);
+        setActualRows(newItems);
     };
+
+    function copyAndSort<T>(items: T[], columnKey: string, isSortedDescending?: boolean): T[] {
+        const key = columnKey as keyof T;
+        return items.slice(0).sort((a: T, b: T) => ((isSortedDescending ? a[key] < b[key] : a[key] > b[key]) ? 1 : -1));
+    }
 
     const processNodes = (nodeItems: INode[] | undefined, groups: IGroup[], items: IRow[], level: number): void => {
         // end of recursion
@@ -127,7 +133,7 @@ export const GridView = (props: IGridListProps) => {
             const newGroup: IGroup = {
                 key: nodeItem.key,
                 name: nodeItem.title,
-                startIndex: items.length,
+                startIndex: items?.length,
                 count: 0,
                 children: [],
                 level: level, // level is incremented on each call of the recursion
@@ -135,16 +141,16 @@ export const GridView = (props: IGridListProps) => {
             };
 
             groups.push(newGroup);
-            if (nodeItem.items && nodeItem.items.length) {
+            if (nodeItem?.items && nodeItem?.items?.length) {
 
                 // adding items to the flat array
-                items.push(...nodeItem.items);
+                items.push(...nodeItem?.items);
             }
 
             // processing child nodes
             processNodes(nodeItem.children, newGroup.children!, items, level + 1);
             // current group count is a sum of group's leaf items and leaf items in all child nodes
-            newGroup.count = items.length - newGroup.startIndex;
+            newGroup.count = items?.length - newGroup.startIndex;
         });
     }
 
@@ -162,24 +168,23 @@ export const GridView = (props: IGridListProps) => {
             }} {...props?.headerOptions} />
             <div data-is-scrollable="true" style={{ position: 'relative', zIndex: 0 }}>
                 <DetailsList
-                    {...props?.detailsListProps, {
-                        items: actualRows,
-                        columns: cols,
-                        groups: props.groups,
-                        groupProps: {
-                            isAllGroupsCollapsed: props?.groups ? props?.groups.filter(gr => !gr?.isCollapsed)?.length === 0 : true,
-                            collapseAllVisibility: CollapseAllVisibility.visible,
-                            onRenderHeader: (props, defaultRender) => {
-                                if (!props.group!.name)
-                                    return <></>;
-                                return defaultRender(props);
-                            }
-                        },
-                        layoutMode: DetailsListLayoutMode.fixedColumns,
-                        onRenderDetailsHeader: onRenderDetailsHeader,
-                        isHeaderVisible: true,
-                        checkboxVisibility: props?.detailsListProps?.checkboxVisibility ?? CheckboxVisibility.hidden,
+                    {...props?.detailsListProps}
+                    items={actualRows} columns={cols} groups={groups}
+                    groupProps={{
+                        isAllGroupsCollapsed: props?.groups ? props?.groups.filter(gr => !gr?.isCollapsed)?.length === 0 : true,
+                        collapseAllVisibility: CollapseAllVisibility.visible,
+                        onRenderHeader: (props, defaultRender) => {
+                            if (!props.group!.name)
+                                return <></>;
+                            return defaultRender(props);
+                        }
                     }}
+                    layoutMode={DetailsListLayoutMode.fixedColumns} isHeaderVisible={true}
+                    onRenderDetailsHeader={(headerProps, defaultRender) => (
+                        <Sticky stickyPosition={StickyPositionType.Header} stickyBackgroundColor="transparent">
+                            <div>{defaultRender!(headerProps)}</div>
+                        </Sticky>)}
+                    checkboxVisibility={props?.detailsListProps?.checkboxVisibility ?? CheckboxVisibility.hidden}
                 />
             </div>
         </div>

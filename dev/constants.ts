@@ -9,36 +9,53 @@ export const nodeItem: INode[] = [
                 key: 'code',
                 title: 'Subpasta de Documentos',
                 items: [
-                    {
+                    {   
                         key: 'file',
-                        title: 'Relatorio XYZ_XPTO',
-                        status: 'Revisão',
+                        file: { fileType: 'xlsx', iconUrl: 'https://static2.sharepointonline.com/files/fabric/assets/item-types/16/one.svg', key: 'fileType', name: 'Arquivo.xlsx' }, 
+                        responsavel: 'José da Silva' 
                     },
-                    {
+                    {   
                         key: 'file',
-                        title: 'Apresentacao GHI',
-                        status: 'Validação',
+                        file: { fileType: 'xlsx', iconUrl: 'https://static2.sharepointonline.com/files/fabric/assets/item-types/16/one.svg', key: 'fileType', name: 'Arquivo2.xlsx' }, 
+                        responsavel: 'José da Silva' 
                     },
-                    {
+                    {   
                         key: 'file',
-                        title: 'Máquina ABC_DEF',
-                        status: 'Completo',
-                    }
+                        file: { fileType: 'xlsx', iconUrl: 'https://static2.sharepointonline.com/files/fabric/assets/item-types/16/one.svg', key: 'fileType', name: 'Arquivo.xlsx' }, 
+                        responsavel: 'José da Silva' 
+                    },
                 ]
             },
             {
                 key: 'code',
-                title: 'Subpasta de Documentos',
-                items: [
+                title: 'Subpasta de Documentos 2',
+                children: [
                     {
-                        key: 'scss',
-                        title: 'WebPart.module.scss',
-                        status: 'Revisão',
-                    }, {
-                        key: 'ts',
-                        title: 'WebPart.ts',
-                        status: 'Validação',
-                    }]
+                        key: 'code',
+                        title: 'Documentos CLT',
+                        items: [
+                            {   
+                                key: 'file',
+                                file: { fileType: 'xlsx', iconUrl: 'https://static2.sharepointonline.com/files/fabric/assets/item-types/16/one.svg', key: 'fileType', name: 'Nested.xlsx' }, 
+                                responsavel: 'Pessoa 3' 
+                            }
+                        ]
+                    },
+                    {
+                        items: [
+                            {   
+                                key: 'code',
+                                file: { fileType: 'xlsx', iconUrl: 'https://static2.sharepointonline.com/files/fabric/assets/item-types/16/one.svg', key: 'fileType', name: 'Demo.xlsx' }, 
+                                responsavel: 'Pessoa 1' 
+                            },
+                            {   
+                                key: 'code',
+                                file: { fileType: 'xlsx', iconUrl: 'https://static2.sharepointonline.com/files/fabric/assets/item-types/16/one.svg', key: 'fileType', name: 'Teste.xlsx' }, 
+                                responsavel: 'Pessoa 2' 
+                            }
+                        ],
+                    }
+                ]
             }]
     },
     {

@@ -4,7 +4,6 @@ import { initializeIcons, loadTheme } from '@fluentui/react';
 import { DataTable } from '../src/components/DataTable/DataTable';
 import { InfoCard } from '../src/components/Card/InfoCard';
 import { GridView } from '../src/components/GridView/GridView';
-import NodeGrid from '../src/components/GridView/NodeGrid';
 import { nodeItem } from './constants';
 
 declare const module: any;
@@ -59,7 +58,7 @@ const Demo = (): JSX.Element => {
   hmrUpdate = () => setHotRefreshCounter(hotRefreshCounter + 1);
   return (
     <div style={{
-      width: '100vw', height: '100vh',
+      width: '100%', height: '100vh',
       backgroundColor: '#85FFBD',
       backgroundImage: 'linear-gradient(45deg, #85FFBD 0%, #FFFB7D 100%)'
     }}>
@@ -118,15 +117,10 @@ const Demo = (): JSX.Element => {
               searchKey: 'name'
             }}
             columns={[{ key: 'responsavel', minWidth: 120, name: 'Responsável', fieldName: 'responsavel' }]}
-            rows={[
-              { file: { fileType: 'xlsx', iconUrl: 'https://static2.sharepointonline.com/files/fabric/assets/item-types/16/one.svg', key: 'fileType', name: 'Arquivo.xlsx' }, responsavel: 'José da Silva' },
-              { file: { fileType: 'xlsx', iconUrl: 'https://static2.sharepointonline.com/files/fabric/assets/item-types/16/one.svg', key: 'fileType', name: 'Arquivo2.xlsx' }, responsavel: 'José da Silva' },
-              { file: { fileType: 'xlsx', iconUrl: 'https://static2.sharepointonline.com/files/fabric/assets/item-types/16/one.svg', key: 'fileType', name: 'Arquivo.xlsx' }, responsavel: 'José da Silva' },
-            ]}
-            listType="file"
+            rowsAsNode={nodeItem}
+            listType="folder"
           />
         </div>
-        <NodeGrid nodes={nodeItem} />
       </div>
     </div>);
 };
