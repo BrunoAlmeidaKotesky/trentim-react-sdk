@@ -51,7 +51,6 @@ export const GridView = (props: IGridListProps<any>) => {
     const [actualRows, setActualRows] = useState(props?.rows ?? []);
     const [groups, setGroups] = useState(props?.groups);
 
-    useEffect(() => { setAllItems(props?.rows) }, [props?.rows?.length]);
     useEffect(() => {
         if (props?.columns?.length) {
             const columns = props?.columns;
@@ -110,6 +109,11 @@ export const GridView = (props: IGridListProps<any>) => {
             }, ...cols]);
         else setCols(props?.columns);
     }, [props?.listType]);
+
+    useEffect(() => { 
+        setActualRows(props?.rows); 
+        setAllItems(props?.rows) 
+    }, [props?.rows?.length]);
 
     useEffect(() => {
         if (props?.listType === 'folder' && props?.rowsAsNode) {
@@ -203,8 +207,8 @@ export const GridView = (props: IGridListProps<any>) => {
                     }}
                     layoutMode={DetailsListLayoutMode.fixedColumns} isHeaderVisible={true}
                     onRenderDetailsHeader={(headerProps, defaultRender) => (
-                        <Sticky stickyPosition={StickyPositionType.Header} stickyBackgroundColor="transparent">
-                            <div>{defaultRender!(headerProps)}</div>
+                        <Sticky key={headerProps?.key} stickyPosition={StickyPositionType.Header} stickyBackgroundColor="transparent">
+                            <div key={headerProps?.key}>{defaultRender!(headerProps)}</div>
                         </Sticky>)}
                     checkboxVisibility={props?.detailsListProps?.checkboxVisibility ?? CheckboxVisibility.hidden}
                 />

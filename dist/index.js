@@ -1067,9 +1067,6 @@ var GridView = function GridView(props) {
       setGroups = _j[1];
 
   (0, react_1.useEffect)(function () {
-    setAllItems(props === null || props === void 0 ? void 0 : props.rows);
-  }, [(_b = props === null || props === void 0 ? void 0 : props.rows) === null || _b === void 0 ? void 0 : _b.length]);
-  (0, react_1.useEffect)(function () {
     var _a;
 
     if ((_a = props === null || props === void 0 ? void 0 : props.columns) === null || _a === void 0 ? void 0 : _a.length) {
@@ -1144,6 +1141,10 @@ var GridView = function GridView(props) {
       isPadded: true
     }], cols, true));else setCols(props === null || props === void 0 ? void 0 : props.columns);
   }, [props === null || props === void 0 ? void 0 : props.listType]);
+  (0, react_1.useEffect)(function () {
+    setActualRows(props === null || props === void 0 ? void 0 : props.rows);
+    setAllItems(props === null || props === void 0 ? void 0 : props.rows);
+  }, [(_b = props === null || props === void 0 ? void 0 : props.rows) === null || _b === void 0 ? void 0 : _b.length]);
   (0, react_1.useEffect)(function () {
     if ((props === null || props === void 0 ? void 0 : props.listType) === 'folder' && (props === null || props === void 0 ? void 0 : props.rowsAsNode)) {
       var nodes = props.rowsAsNode;
@@ -1250,9 +1251,12 @@ var GridView = function GridView(props) {
     isHeaderVisible: true,
     onRenderDetailsHeader: function onRenderDetailsHeader(headerProps, defaultRender) {
       return React.createElement(Sticky_1.Sticky, {
+        key: headerProps === null || headerProps === void 0 ? void 0 : headerProps.key,
         stickyPosition: Sticky_1.StickyPositionType.Header,
         stickyBackgroundColor: "transparent"
-      }, React.createElement("div", null, defaultRender(headerProps)));
+      }, React.createElement("div", {
+        key: headerProps === null || headerProps === void 0 ? void 0 : headerProps.key
+      }, defaultRender(headerProps)));
     },
     checkboxVisibility: (_e = (_d = props === null || props === void 0 ? void 0 : props.detailsListProps) === null || _d === void 0 ? void 0 : _d.checkboxVisibility) !== null && _e !== void 0 ? _e : DetailsList_1.CheckboxVisibility.hidden
   }))));
