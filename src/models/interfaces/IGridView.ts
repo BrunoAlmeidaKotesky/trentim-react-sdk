@@ -38,9 +38,10 @@ interface IDateConvertionOptions {
     formatOptions?: Intl.DateTimeFormatOptions;
 }
 
+type IConfigurabeHeader = Omit<IListOptionsProps, 'onSearchItem' |'setIsFilterPanelOpen' | 'onNotifyFilterChange'>;
 export interface IGridListProps<T extends any> {
     detailsListProps?: IDetailsListProps;
-    headerOptions: Omit<IListOptionsProps, 'onSearchItem'|'setIsFilterPanelOpen'>;
+    headerOptions: IConfigurabeHeader;
     groups?: IGroup[];
     listType: 'folder' | 'list' | 'file';
     columns: TColumn<T>[];

@@ -119,7 +119,10 @@ export const GridView = (props: IGridListProps<any>) => {
 
     const panelConfig: IPanelFilterProps = {
         isOpen: isFilterPanelOpen,
-        onApply: () => { return },
+        onApply: (selectedItems) => {
+            //filter the rows according to the selected items, where the key is the rootItemKey
+            console.info(`Ainda não implementado`, selectedItems);
+        },
         onCancel: () => setIsFilterPanel(false),
         onClose: () => setIsFilterPanel(false),
         //The available filters are the ones that are defined in the `columns` prop, and the options are the rows that are defined in the `rows` prop according to the key
