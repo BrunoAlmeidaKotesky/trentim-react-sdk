@@ -1006,6 +1006,8 @@ var Styling_1 = __webpack_require__(/*! @fluentui/react/lib/Styling */ "@fluentu
 
 var ListOptions_1 = __webpack_require__(/*! ./ListOptions */ "./src/components/GridView/ListOptions.tsx");
 
+var Utils_1 = __webpack_require__(/*! ../../helpers/Utils */ "./src/helpers/Utils.ts");
+
 exports.GridContainerContext = (0, react_1.createContext)({});
 
 var GridView = function GridView(props) {
@@ -1068,6 +1070,37 @@ var GridView = function GridView(props) {
     setAllItems(props === null || props === void 0 ? void 0 : props.rows);
   }, [(_b = props === null || props === void 0 ? void 0 : props.rows) === null || _b === void 0 ? void 0 : _b.length]);
   (0, react_1.useEffect)(function () {
+    var _a;
+
+    if ((_a = props === null || props === void 0 ? void 0 : props.columns) === null || _a === void 0 ? void 0 : _a.length) {
+      var columns = props === null || props === void 0 ? void 0 : props.columns;
+      var convertedColumns = columns.map(function (c) {
+        var _a, _b, _c;
+
+        if (((_a = c === null || c === void 0 ? void 0 : c.key) === null || _a === void 0 ? void 0 : _a.includes('.')) || ((_b = c === null || c === void 0 ? void 0 : c.fieldName) === null || _b === void 0 ? void 0 : _b.includes('.'))) {
+          c.onRender = function (item, _2) {
+            var _a, _b;
+
+            var fieldValue = (_b = Utils_1.Utils.findObjectByPath(item, (_a = c === null || c === void 0 ? void 0 : c.fieldName) === null || _a === void 0 ? void 0 : _a.split('.'))) !== null && _b !== void 0 ? _b : '-';
+            return React.createElement("span", null, fieldValue);
+          };
+
+          return c;
+        } else if ((_c = c === null || c === void 0 ? void 0 : c.dateConvertionOptions) === null || _c === void 0 ? void 0 : _c.shouldConvertToLocaleString) {
+          c.onRender = function (item, _2) {
+            var _a, _b, _c;
+
+            var fieldValue = Utils_1.Utils.convertIsoToLocaleString(item[(_a = c === null || c === void 0 ? void 0 : c.fieldName) !== null && _a !== void 0 ? _a : c === null || c === void 0 ? void 0 : c.key], (_b = c === null || c === void 0 ? void 0 : c.dateConvertionOptions) === null || _b === void 0 ? void 0 : _b.locales, (_c = c === null || c === void 0 ? void 0 : c.dateConvertionOptions) === null || _c === void 0 ? void 0 : _c.formatOptions);
+            return React.createElement("span", null, fieldValue);
+          };
+        }
+
+        return c;
+      });
+      setCols(convertedColumns);
+    }
+  }, [props === null || props === void 0 ? void 0 : props.columns]);
+  (0, react_1.useEffect)(function () {
     if (props.listType === 'file' || props.listType === 'folder') setCols(__spreadArray([{
       key: 'fileType',
       name: 'File Type',
@@ -1117,7 +1150,6 @@ var GridView = function GridView(props) {
       var items = [];
       var groups_1 = [];
       processNodes(nodes, groups_1, items, 0);
-      console.log("Items P\xF3s Recurs\xE3o ", items, "Grupos p\xF3s recurs\xE3o ", groups_1);
       setActualRows(items);
       setGroups(groups_1);
     }
@@ -1187,7 +1219,7 @@ var GridView = function GridView(props) {
       var filteredRows = text ? allItems === null || allItems === void 0 ? void 0 : allItems.filter(function (item) {
         var _a;
 
-        var isKeyInsideFileObj = (_a = Object.keys(item === null || item === void 0 ? void 0 : item.file)) === null || _a === void 0 ? void 0 : _a.includes(key);
+        var isKeyInsideFileObj = (item === null || item === void 0 ? void 0 : item.file) ? (_a = Object.keys(item === null || item === void 0 ? void 0 : item.file)) === null || _a === void 0 ? void 0 : _a.includes(key) : false;
         var itemValue = isKeyInsideFileObj ? item === null || item === void 0 ? void 0 : item.file[key] : item === null || item === void 0 ? void 0 : item[key];
         console.log(key, itemValue);
         return itemValue === null || itemValue === void 0 ? void 0 : itemValue.toLowerCase().includes(text.toLowerCase());
@@ -1874,6 +1906,97 @@ exports.FileUtils = FileUtils;
   reactHotLoader.register(__awaiter, "__awaiter", "F:\\Projetos Individuais\\ReactLibraries\\trentim-react-sdk\\src\\helpers\\FileUtils.ts");
   reactHotLoader.register(__generator, "__generator", "F:\\Projetos Individuais\\ReactLibraries\\trentim-react-sdk\\src\\helpers\\FileUtils.ts");
   reactHotLoader.register(FileUtils, "FileUtils", "F:\\Projetos Individuais\\ReactLibraries\\trentim-react-sdk\\src\\helpers\\FileUtils.ts");
+})();
+
+;
+
+(function () {
+  var leaveModule = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal.leaveModule : undefined;
+  leaveModule && leaveModule(module);
+})();
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../node_modules/webpack/buildin/module.js */ "./node_modules/webpack/buildin/module.js")(module)))
+
+/***/ }),
+
+/***/ "./src/helpers/Utils.ts":
+/*!******************************!*\
+  !*** ./src/helpers/Utils.ts ***!
+  \******************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(module) {
+
+(function () {
+  var enterModule = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal.enterModule : undefined;
+  enterModule && enterModule(module);
+})();
+
+var __signature__ = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal["default"].signature : function (a) {
+  return a;
+};
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Utils = void 0;
+
+var Utils =
+/** @class */
+function () {
+  function Utils() {}
+
+  Utils.findObjectByPath = function (objectIn, path) {
+    var _a;
+
+    try {
+      var obj = objectIn;
+
+      for (var i = 0; i <= path.length - 1; i++) {
+        var item = path[i];
+        obj = obj[item];
+      }
+
+      return (_a = obj) !== null && _a !== void 0 ? _a : null;
+    } catch (e) {
+      return null;
+    }
+  };
+
+  Utils.convertIsoToLocaleString = function (date, locales, formatOptions) {
+    var _a;
+
+    if (locales === void 0) {
+      locales = 'pt-BR';
+    }
+
+    if (formatOptions === void 0) {
+      formatOptions = undefined;
+    } //First check if the string can be converted to a date object.
+
+
+    if (!(new Date(date) instanceof Date) && isNaN((_a = new Date(date)) === null || _a === void 0 ? void 0 : _a.getTime())) return date;
+    var isIsoDate = /\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?Z/.test(date);
+    if (!isIsoDate) return date;
+    return new Intl.DateTimeFormat(locales, formatOptions).format(new Date(date));
+  };
+
+  return Utils;
+}();
+
+exports.Utils = Utils;
+;
+
+(function () {
+  var reactHotLoader = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal.default : undefined;
+
+  if (!reactHotLoader) {
+    return;
+  }
+
+  reactHotLoader.register(Utils, "Utils", "F:\\Projetos Individuais\\ReactLibraries\\trentim-react-sdk\\src\\helpers\\Utils.ts");
 })();
 
 ;

@@ -20,12 +20,30 @@ export interface IRow {
     file?: IFileInfo;
 }
 
-export interface IGridListProps {
+export type TColumn<T> = IColumn & {
+    /**If the desired value is from an nested object, provide the value with dots. 
+     * @example "file.name" will get the value from the file object.
+    */
+    key: keyof T;
+    /**If the desired value is from an nested object, provide the value with dots. 
+     * @example "file.name" will get the value from the file object.
+    */
+    fieldName?: keyof T;
+    dateConvertionOptions?: IDateConvertionOptions;
+}
+
+interface IDateConvertionOptions {
+    shouldConvertToLocaleString?: boolean;
+    locales?: string | string[];
+    formatOptions?: Intl.DateTimeFormatOptions;
+}
+
+export interface IGridListProps<T extends any> {
     detailsListProps?: IDetailsListProps;
     headerOptions: Omit<IListOptionsProps, 'onSearchItem'>;
     groups?: IGroup[];
     listType: 'folder' | 'list' | 'file';
-    columns: IColumn[];
+    columns: TColumn<T>[];
     rows?: IRow[];
     /**If set, the columns will be displayed as tree view*/
     rowsAsNode?: INode[];

@@ -4,7 +4,7 @@ import { initializeIcons, loadTheme } from '@fluentui/react';
 import { DataTable } from '../src/components/DataTable/DataTable';
 import { InfoCard } from '../src/components/Card/InfoCard';
 import { GridView } from '../src/components/GridView/GridView';
-import { nodeItem } from './constants';
+import { nodeItem, simpleRow } from './constants';
 
 declare const module: any;
 let hmrUpdate: undefined | (() => void);
@@ -120,6 +120,26 @@ const Demo = (): JSX.Element => {
             rowsAsNode={nodeItem}
             listType="folder"
           />
+        </div>
+        <div>
+          <GridView 
+            headerOptions={{
+              enableSearch: true, enableFilter: true, enableGroupBy: true,
+              searchKey: 'Title',
+              customButtons: [{text: 'Upload', props: {
+                onClick: () => console.log('Clicked')
+              }}]
+            }}
+            listType="list"
+            rows={simpleRow}
+            columns={[
+              {key: 'Title', name: 'Nome Do Projeto', fieldName: 'Title', minWidth: 100, maxWidth: 200, isResizable: true},
+              {key: 'NumeroPI', name: 'PI', fieldName: 'NumeroPI', minWidth: 100, maxWidth: 200, isResizable: true},
+              {key: 'Status', name: 'Status', fieldName: 'Status', minWidth: 100, maxWidth: 200, isResizable: true},
+              {key: 'GerenteProjeto.Title', name: 'Gerente do Projeto', fieldName: 'GerenteProjeto.Title', minWidth: 100, maxWidth: 200, isResizable: true},
+              {key: 'DonoProjeto.Title', name: 'Dono do Projeto', fieldName: 'DonoProjeto.Title', minWidth: 100, maxWidth: 200, isResizable: true},
+              {key: 'DataInicio', name: 'Data Início', fieldName: 'DataInicio', minWidth: 100, maxWidth: 200, isResizable: true, dateConvertionOptions: {shouldConvertToLocaleString: true}},
+            ]}/>
         </div>
       </div>
     </div>);

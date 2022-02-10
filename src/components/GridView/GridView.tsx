@@ -5,9 +5,10 @@ import { Sticky, StickyPositionType } from '@fluentui/react/lib/Sticky';
 import { mergeStyleSets } from '@fluentui/react/lib/Styling';
 import { IGridListProps, INode, IRow } from '../../models/interfaces/IGridView';
 import { ListOptions } from './ListOptions';
+import { Utils } from '../../helpers/Utils';
 
 export const GridContainerContext = createContext({});
-export const GridView = (props: IGridListProps) => {
+export const GridView = (props: IGridListProps<any>) => {
     const classNames = mergeStyleSets({
         fileIconHeaderIcon: {
             padding: 0,
@@ -29,7 +30,7 @@ export const GridView = (props: IGridListProps) => {
         fileIconImg: {
             verticalAlign: 'middle',
             maxHeight: '16px',
-            maxWidth: '16px', 
+            maxWidth: '16px',
         },
         controlWrapper: {
             display: 'flex',
@@ -51,6 +52,28 @@ export const GridView = (props: IGridListProps) => {
     const [groups, setGroups] = useState(props?.groups);
 
     useEffect(() => { setAllItems(props?.rows) }, [props?.rows?.length]);
+    useEffect(() => {
+        if (props?.columns?.length) {
+            const columns = props?.columns;
+            const convertedColumns = columns.map(c => {
+                if (c?.key?.includes('.') || c?.fieldName?.includes('.')) {
+                    c.onRender = (item, _2) => {
+                        const fieldValue = Utils.findObjectByPath(item, c?.fieldName?.split('.')) as any ?? '-';
+                        return <span>{fieldValue}</span>;
+                    }
+
+                    return c;
+                } else if(c?.dateConvertionOptions?.shouldConvertToLocaleString) {
+                    c.onRender = (item, _2) => {
+                        const fieldValue = Utils.convertIsoToLocaleString(item[c?.fieldName ?? c?.key], c?.dateConvertionOptions?.locales, c?.dateConvertionOptions?.formatOptions);
+                        return <span>{fieldValue}</span>;
+                    }
+                }
+                return c;
+            })
+            setCols(convertedColumns);
+        }
+    }, [props?.columns]);
 
     useEffect(() => {
         if (props.listType === 'file' || props.listType === 'folder')
@@ -89,20 +112,19 @@ export const GridView = (props: IGridListProps) => {
     }, [props?.listType]);
 
     useEffect(() => {
-        if(props?.listType === 'folder' && props?.rowsAsNode) {
+        if (props?.listType === 'folder' && props?.rowsAsNode) {
             const nodes = props.rowsAsNode;
             const items: IRow[] = [];
             const groups: IGroup[] = [];
             processNodes(nodes, groups, items, 0);
-            console.log(`Items Pós Recursão `, items, `Grupos pós recursão `, groups);
             setActualRows(items);
             setGroups(groups);
         }
     }, [props?.rowsAsNode, props?.listType]);
     /**TO-DO: Implement this method to work with `INode[]` */
     const onColumnClick = (_: unknown, column: IColumn): void => {
-        if(props?.rowsAsNode)
-            return; 
+        if (props?.rowsAsNode)
+            return;
         const newColumns: IColumn[] = cols.slice();
         const currColumn: IColumn = newColumns.filter(currCol => column.key === currCol.key)[0];
         newColumns.forEach((newCol: IColumn) => {
@@ -159,7 +181,7 @@ export const GridView = (props: IGridListProps) => {
             <ListOptions onSearchItem={(text, key) => {
                 const filteredRows = text ?
                     allItems?.filter(item => {
-                        const isKeyInsideFileObj = Object.keys(item?.file)?.includes(key as unknown as string);
+                        const isKeyInsideFileObj = item?.file ? Object.keys(item?.file)?.includes(key as unknown as string) : false;
                         const itemValue: string = isKeyInsideFileObj ? item?.file[key] : item?.[key];
                         console.log(key, itemValue)
                         return itemValue?.toLowerCase().includes(text.toLowerCase());
