@@ -132,6 +132,7 @@ const Demo = (): JSX.Element => {
             }}
             listType="list"
             rows={simpleRow}
+            onRowClick={(i) => console.log(i)}
             columns={[
               {key: 'Title', name: 'Nome Do Projeto', fieldName: 'Title', minWidth: 100, maxWidth: 200, isResizable: true},
               {key: 'NumeroPI', name: 'PI', fieldName: 'NumeroPI', minWidth: 100, maxWidth: 200, isResizable: true},

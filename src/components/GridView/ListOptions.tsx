@@ -1,9 +1,11 @@
 import * as React from 'react';
 import { CSSProperties } from 'react';
 import { DefaultButton, PrimaryButton, TextField } from '@fluentui/react'
-import { IListOptionsProps } from '../../models/interfaces/IGridView';
+import {ListOptionsContext} from './GridView';
 
-export const ListOptions = (props: IListOptionsProps = {enableFilter: true, enableSearch: true, customButtons: []}) => {
+export const ListOptions = () => {
+    const {customButtons, enableFilter, enableSearch, searchKey, onSearchItem, setIsFilterPanelOpen} = React.useContext(ListOptionsContext);
+
     const defaultStyles: Record<string, CSSProperties> = {
         container: {
             display: 'flex',
@@ -20,14 +22,14 @@ export const ListOptions = (props: IListOptionsProps = {enableFilter: true, enab
             onClick={ _ => ''} styles={{label: {fontSize: 14}}} iconProps={{iconName: 'GroupList'}} />
         <DefaultButton 
             onClick={ _ => ''} styles={{label: {fontSize: 14}}} iconProps={{iconName: 'ViewList'}} />
-        {props?.customButtons?.length > 0 && props?.customButtons?.map(b => 
+        {customButtons?.length > 0 && customButtons?.map(b => 
         <PrimaryButton className={b?.className} styles={{label: {fontSize: 14}}} {...b?.props}>{b?.text}</PrimaryButton>)}
-        {(props?.enableSearch && props?.searchKey) && 
+        {(enableSearch && searchKey) && 
         <TextField 
-            onChange={(_, newValue) => props?.onSearchItem(newValue, props?.searchKey)}
+            onChange={(_, newValue) => onSearchItem(newValue, searchKey)}
             iconProps={{iconName: 'Search'}} styles={{root: {width: 320}, icon: {color: '[theme: themePrimary, default: #0078D4]'}}} />}
-        {props?.enableFilter && 
+        {enableFilter && 
         <DefaultButton 
-            onClick={ _ => ''} styles={{label: {fontSize: 14}}} iconProps={{iconName: 'Filter'}} />}
+            onClick={_ => setIsFilterPanelOpen(true)} styles={{label: {fontSize: 14}}} iconProps={{iconName: 'Filter'}} />}
     </div>);
 }

@@ -1,55 +1,22 @@
 import * as React from 'react';
 import { createContext, useState, useEffect } from 'react';
+import { classNames } from './styles';
 import { CheckboxVisibility, CollapseAllVisibility, DetailsList, DetailsListLayoutMode, IColumn, IGroup } from '@fluentui/react/lib/DetailsList';
 import { Sticky, StickyPositionType } from '@fluentui/react/lib/Sticky';
-import { mergeStyleSets } from '@fluentui/react/lib/Styling';
-import { IGridListProps, INode, IRow } from '../../models/interfaces/IGridView';
+import { IGridListProps, IListOptionsProps, IRow } from '../../models/interfaces/IGridView';
+import { PanelFilter } from './PanelFilter';
+import { IPanelFilterProps } from '../../models/interfaces/IPanelFilter';
 import { ListOptions } from './ListOptions';
 import { Utils } from '../../helpers/Utils';
 
-export const GridContainerContext = createContext({});
+export const ListOptionsContext = createContext<IListOptionsProps>({ enableFilter: true, enableSearch: true, customButtons: [], setIsFilterPanelOpen: undefined });
+export const FilterPaneContext = createContext<IPanelFilterProps>({ isOpen: false, onApply: undefined, availableFilters: [], onCancel: undefined, onClose: undefined, panelTitle: '' });
 export const GridView = (props: IGridListProps<any>) => {
-    const classNames = mergeStyleSets({
-        fileIconHeaderIcon: {
-            padding: 0,
-            fontSize: '16px',
-        },
-        fileIconCell: {
-            textAlign: 'center',
-            selectors: {
-                '&:before': {
-                    content: '.',
-                    display: 'inline-block',
-                    verticalAlign: 'middle',
-                    height: '100%',
-                    width: '0px',
-                    visibility: 'hidden',
-                },
-            },
-        },
-        fileIconImg: {
-            verticalAlign: 'middle',
-            maxHeight: '16px',
-            maxWidth: '16px',
-        },
-        controlWrapper: {
-            display: 'flex',
-            flexWrap: 'wrap',
-        },
-        exampleToggle: {
-            display: 'inline-block',
-            marginBottom: '10px',
-            marginRight: '30px',
-        },
-        selectionDetails: {
-            marginBottom: '20px',
-        },
-    });
-
     const [cols, setCols] = useState(props?.columns);
     const [allItems, setAllItems] = useState(props?.rows);
     const [actualRows, setActualRows] = useState(props?.rows ?? []);
     const [groups, setGroups] = useState(props?.groups);
+    const [isFilterPanelOpen, setIsFilterPanel] = useState(false);
 
     useEffect(() => {
         if (props?.columns?.length) {
@@ -62,7 +29,7 @@ export const GridView = (props: IGridListProps<any>) => {
                     }
 
                     return c;
-                } else if(c?.dateConvertionOptions?.shouldConvertToLocaleString) {
+                } else if (c?.dateConvertionOptions?.shouldConvertToLocaleString) {
                     c.onRender = (item, _2) => {
                         const fieldValue = Utils.convertIsoToLocaleString(item[c?.fieldName ?? c?.key], c?.dateConvertionOptions?.locales, c?.dateConvertionOptions?.formatOptions);
                         return <span>{fieldValue}</span>;
@@ -110,9 +77,9 @@ export const GridView = (props: IGridListProps<any>) => {
         else setCols(props?.columns);
     }, [props?.listType]);
 
-    useEffect(() => { 
-        setActualRows(props?.rows); 
-        setAllItems(props?.rows) 
+    useEffect(() => {
+        setActualRows(props?.rows);
+        setAllItems(props?.rows)
     }, [props?.rows?.length]);
 
     useEffect(() => {
@@ -120,7 +87,7 @@ export const GridView = (props: IGridListProps<any>) => {
             const nodes = props.rowsAsNode;
             const items: IRow[] = [];
             const groups: IGroup[] = [];
-            processNodes(nodes, groups, items, 0);
+            Utils.processNodes(nodes, groups, items, 0);
             setActualRows(items);
             setGroups(groups);
         }
@@ -140,79 +107,81 @@ export const GridView = (props: IGridListProps<any>) => {
                 newCol.isSortedDescending = true;
             }
         });
-        const newItems = copyAndSort(actualRows, currColumn?.fieldName!, currColumn?.isSortedDescending);
+        const newItems = Utils.copyAndSort(actualRows, currColumn?.fieldName!, currColumn?.isSortedDescending);
         setCols(newColumns);
         setActualRows(newItems);
     };
 
-    function copyAndSort<T>(items: T[], columnKey: string, isSortedDescending?: boolean): T[] {
-        const key = columnKey as keyof T;
-        return items.slice(0).sort((a: T, b: T) => ((isSortedDescending ? a[key] < b[key] : a[key] > b[key]) ? 1 : -1));
+    const onRowClick = (item: IRow) => {
+        if (props?.onRowClick)
+            props?.onRowClick(item);
     }
 
-    const processNodes = (nodeItems: INode[] | undefined, groups: IGroup[], items: IRow[], level: number): void => {
-        // end of recursion
-        if (!nodeItems || !nodeItems?.length)
-            return;
-        // processing current level of the tree
-        nodeItems.forEach(nodeItem => {
-            const newGroup: IGroup = {
-                key: nodeItem.key,
-                name: nodeItem.title,
-                startIndex: items?.length,
-                count: 0,
-                children: [],
-                level: level, // level is incremented on each call of the recursion
-                data: nodeItem // storing initial INode instance in the group's data
-            };
-
-            groups.push(newGroup);
-            if (nodeItem?.items && nodeItem?.items?.length) {
-
-                // adding items to the flat array
-                items.push(...nodeItem?.items);
+    const panelConfig: IPanelFilterProps = {
+        isOpen: isFilterPanelOpen,
+        onApply: () => { return },
+        onCancel: () => setIsFilterPanel(false),
+        onClose: () => setIsFilterPanel(false),
+        //The available filters are the ones that are defined in the `columns` prop, and the options are the rows that are defined in the `rows` prop according to the key
+        availableFilters: cols?.map(c => {
+            return {
+                key: c?.key,
+                options: allItems?.filter(d => d)?.map((data, idx) => {
+                    return {
+                        key: idx + "_" + c?.key,
+                        text: data?.[c?.key ?? c?.fieldName ?? c?.key]?.toString(),
+                        data
+                    }
+                }),
+                enableMultiple: true,
+                name: c?.name
             }
-
-            // processing child nodes
-            processNodes(nodeItem.children, newGroup.children!, items, level + 1);
-            // current group count is a sum of group's leaf items and leaf items in all child nodes
-            newGroup.count = items?.length - newGroup.startIndex;
-        });
+        }),
+        panelTitle: props?.filterPanelTitle ?? 'Filtrar',
     }
 
     return (
-        <div>
-            <ListOptions onSearchItem={(text, key) => {
-                const filteredRows = text ?
-                    allItems?.filter(item => {
-                        const isKeyInsideFileObj = item?.file ? Object.keys(item?.file)?.includes(key as unknown as string) : false;
-                        const itemValue: string = isKeyInsideFileObj ? item?.file[key] : item?.[key];
-                        console.log(key, itemValue)
-                        return itemValue?.toLowerCase().includes(text.toLowerCase());
-                    }) : allItems;
-                setActualRows(filteredRows);
-            }} {...props?.headerOptions} />
-            <div data-is-scrollable="true" style={{ position: 'relative', zIndex: 0 }}>
-                <DetailsList
-                    {...props?.detailsListProps}
-                    items={actualRows} columns={cols} groups={groups}
-                    groupProps={{
-                        isAllGroupsCollapsed: props?.groups ? props?.groups.filter(gr => !gr?.isCollapsed)?.length === 0 : true,
-                        collapseAllVisibility: CollapseAllVisibility.visible,
-                        onRenderHeader: (props, defaultRender) => {
-                            if (!props.group!.name)
-                                return <></>;
-                            return defaultRender(props);
-                        }
-                    }}
-                    layoutMode={DetailsListLayoutMode.fixedColumns} isHeaderVisible={true}
-                    onRenderDetailsHeader={(headerProps, defaultRender) => (
-                        <Sticky key={headerProps?.key} stickyPosition={StickyPositionType.Header} stickyBackgroundColor="transparent">
-                            <div key={headerProps?.key}>{defaultRender!(headerProps)}</div>
-                        </Sticky>)}
-                    checkboxVisibility={props?.detailsListProps?.checkboxVisibility ?? CheckboxVisibility.hidden}
-                />
-            </div>
-        </div>
-    );
+        <FilterPaneContext.Provider value={panelConfig}>
+            <ListOptionsContext.Provider value={{
+                onSearchItem: (text, key) => {
+                    const filteredRows = text ?
+                        allItems?.filter(item => {
+                            const isKeyInsideFileObj = item?.file ? Object.keys(item?.file)?.includes(key as unknown as string) : false;
+                            const itemValue: string = isKeyInsideFileObj ? item?.file[key] : item?.[key];
+                            console.log(key, itemValue)
+                            return itemValue?.toLowerCase().includes(text.toLowerCase());
+                        }) : allItems;
+                    setActualRows(filteredRows);
+                },
+                setIsFilterPanelOpen: (value) => { setIsFilterPanel(value); console.log(value) },
+                ...props?.headerOptions
+            }}>
+                <div>
+                    <ListOptions />
+                    <div data-is-scrollable="true" style={{ position: 'relative', zIndex: 0 }}>
+                        <DetailsList
+                            {...props?.detailsListProps}
+                            onRenderRow={(p, defaultRender) => <div onClick={() => onRowClick(p?.item)}>{defaultRender({ ...p, styles: { root: { cursor: props?.onRowClick ? 'pointer' : 'default' } } })}</div>}
+                            items={actualRows} columns={cols} groups={groups}
+                            groupProps={{
+                                isAllGroupsCollapsed: props?.groups ? props?.groups.filter(gr => !gr?.isCollapsed)?.length === 0 : true,
+                                collapseAllVisibility: CollapseAllVisibility.visible,
+                                onRenderHeader: (props, defaultRender) => {
+                                    if (!props.group!.name)
+                                        return <></>;
+                                    return defaultRender(props);
+                                }
+                            }}
+                            layoutMode={DetailsListLayoutMode.fixedColumns} isHeaderVisible={true}
+                            onRenderDetailsHeader={(headerProps, defaultRender) => (
+                                <Sticky key={headerProps?.key} stickyPosition={StickyPositionType.Header} stickyBackgroundColor="transparent">
+                                    <div key={headerProps?.key}>{defaultRender!(headerProps)}</div>
+                                </Sticky>)}
+                            checkboxVisibility={props?.detailsListProps?.checkboxVisibility ?? CheckboxVisibility.hidden}
+                        />
+                    </div>
+                    {isFilterPanelOpen && <PanelFilter />}
+                </div>
+            </ListOptionsContext.Provider>
+        </FilterPaneContext.Provider>);
 }

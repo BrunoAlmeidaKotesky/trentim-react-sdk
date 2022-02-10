@@ -1,3 +1,5 @@
+import { IGroup } from "@fluentui/react/lib/DetailsList";
+import { INode, IRow } from "../models/interfaces/IGridView";
 
 export class Utils {
 
@@ -22,5 +24,40 @@ export class Utils {
         if (!isIsoDate)
             return date;
         return new Intl.DateTimeFormat(locales, formatOptions).format(new Date(date));
+    }
+
+    public static processNodes(nodeItems: INode[] | undefined, groups: IGroup[], items: IRow[], level: number): void {
+        // end of recursion
+        if (!nodeItems || !nodeItems?.length)
+            return;
+        // processing current level of the tree
+        nodeItems.forEach(nodeItem => {
+            const newGroup: IGroup = {
+                key: nodeItem.key,
+                name: nodeItem.title,
+                startIndex: items?.length,
+                count: 0,
+                children: [],
+                level: level, // level is incremented on each call of the recursion
+                data: nodeItem // storing initial INode instance in the group's data
+            };
+
+            groups.push(newGroup);
+            if (nodeItem?.items && nodeItem?.items?.length) {
+
+                // adding items to the flat array
+                items.push(...nodeItem?.items);
+            }
+
+            // processing child nodes
+            Utils.processNodes(nodeItem.children, newGroup.children!, items, level + 1);
+            // current group count is a sum of group's leaf items and leaf items in all child nodes
+            newGroup.count = items?.length - newGroup.startIndex;
+        });
+    }
+
+    public static copyAndSort<T>(items: T[], columnKey: string, isSortedDescending?: boolean): T[] {
+        const key = columnKey as keyof T;
+        return items.slice(0).sort((a: T, b: T) => ((isSortedDescending ? a[key] < b[key] : a[key] > b[key]) ? 1 : -1));
     }
 }
