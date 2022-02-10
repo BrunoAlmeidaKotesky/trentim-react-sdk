@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { lazy, useContext, useMemo, Suspense, useState } from 'react';
-import { FilterPaneContext } from './GridView';
+import { FilterPaneContext } from './Contexts';
 import type { IDropdownOption } from '@fluentui/react';
 import type { IRow } from '../../models/interfaces/IGridView';
 import type { FilterOption, SelectedItemsMap } from '../../models/interfaces/IPanelFilter';

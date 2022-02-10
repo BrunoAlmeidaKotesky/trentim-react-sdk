@@ -32,15 +32,19 @@ interface IDateConvertionOptions {
     locales?: string | string[];
     formatOptions?: Intl.DateTimeFormatOptions;
 }
+declare type IConfigurabeHeader = Omit<IListOptionsProps, 'onSearchItem' | 'setIsFilterPanelOpen' | 'onNotifyFilterChange'>;
 export interface IGridListProps<T extends any> {
     detailsListProps?: IDetailsListProps;
-    headerOptions: Omit<IListOptionsProps, 'onSearchItem'>;
+    headerOptions: IConfigurabeHeader;
     groups?: IGroup[];
     listType: 'folder' | 'list' | 'file';
     columns: TColumn<T>[];
     rows?: IRow[];
     /**If set, the columns will be displayed as tree view*/
     rowsAsNode?: INode[];
+    /** */
+    onRowClick?: (row: IRow) => void;
+    filterPanelTitle?: string;
 }
 declare type CustomButtons = {
     props: IButtonProps;
@@ -55,6 +59,7 @@ export interface IListOptionsProps {
     enableCardView?: boolean;
     searchKey?: string;
     onSearchItem?: (searchText: string, key: keyof IRow) => void;
+    setIsFilterPanelOpen: (isOpen: boolean) => void;
     customButtons?: CustomButtons;
 }
 export {};

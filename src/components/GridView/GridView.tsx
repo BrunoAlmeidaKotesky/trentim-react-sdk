@@ -1,16 +1,15 @@
 import * as React from 'react';
-import { createContext, useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
+import {FilterPaneContext, ListOptionsContext} from './Contexts';
 import { classNames } from './styles';
 import { CheckboxVisibility, CollapseAllVisibility, DetailsList, DetailsListLayoutMode, IColumn, IGroup } from '@fluentui/react/lib/DetailsList';
 import { Sticky, StickyPositionType } from '@fluentui/react/lib/Sticky';
-import { IGridListProps, IListOptionsProps, IRow } from '../../models/interfaces/IGridView';
+import { IGridListProps, IRow } from '../../models/interfaces/IGridView';
 import { PanelFilter } from './PanelFilter';
 import { IPanelFilterProps } from '../../models/interfaces/IPanelFilter';
 import { ListOptions } from './ListOptions';
 import { Utils } from '../../helpers/Utils';
 
-export const ListOptionsContext = createContext<IListOptionsProps>({ enableFilter: true, enableSearch: true, customButtons: [], setIsFilterPanelOpen: undefined });
-export const FilterPaneContext = createContext<IPanelFilterProps>({ isOpen: false, onApply: undefined, availableFilters: [], onCancel: undefined, onClose: undefined, panelTitle: '' });
 export const GridView = (props: IGridListProps<any>) => {
     const [cols, setCols] = useState(props?.columns);
     const [allItems, setAllItems] = useState(props?.rows);

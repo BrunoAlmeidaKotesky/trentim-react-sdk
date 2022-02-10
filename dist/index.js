@@ -943,6 +943,45 @@ exports.Rows = Rows;
 
 /***/ }),
 
+/***/ "./src/components/GridView/Contexts.ts":
+/*!*********************************************!*\
+  !*** ./src/components/GridView/Contexts.ts ***!
+  \*********************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var __signature__ = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal["default"].signature : function (a) {
+  return a;
+};
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.FilterPaneContext = exports.ListOptionsContext = void 0;
+
+var react_1 = __webpack_require__(/*! react */ "react");
+
+exports.ListOptionsContext = (0, react_1.createContext)({
+  enableFilter: true,
+  enableSearch: true,
+  customButtons: [],
+  setIsFilterPanelOpen: undefined
+});
+exports.FilterPaneContext = (0, react_1.createContext)({
+  isOpen: false,
+  onApply: undefined,
+  availableFilters: [],
+  onCancel: undefined,
+  onClose: undefined,
+  panelTitle: ''
+});
+
+/***/ }),
+
 /***/ "./src/components/GridView/GridView.tsx":
 /*!**********************************************!*\
   !*** ./src/components/GridView/GridView.tsx ***!
@@ -992,79 +1031,48 @@ var __spreadArray = this && this.__spreadArray || function (to, from, pack) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.GridView = exports.GridContainerContext = void 0;
+exports.GridView = void 0;
 
 var React = __webpack_require__(/*! react */ "react");
 
 var react_1 = __webpack_require__(/*! react */ "react");
 
+var Contexts_1 = __webpack_require__(/*! ./Contexts */ "./src/components/GridView/Contexts.ts");
+
+var styles_1 = __webpack_require__(/*! ./styles */ "./src/components/GridView/styles.ts");
+
 var DetailsList_1 = __webpack_require__(/*! @fluentui/react/lib/DetailsList */ "@fluentui/react/lib/DetailsList");
 
 var Sticky_1 = __webpack_require__(/*! @fluentui/react/lib/Sticky */ "@fluentui/react/lib/Sticky");
 
-var Styling_1 = __webpack_require__(/*! @fluentui/react/lib/Styling */ "@fluentui/react/lib/Styling");
+var PanelFilter_1 = __webpack_require__(/*! ./PanelFilter */ "./src/components/GridView/PanelFilter.tsx");
 
 var ListOptions_1 = __webpack_require__(/*! ./ListOptions */ "./src/components/GridView/ListOptions.tsx");
 
 var Utils_1 = __webpack_require__(/*! ../../helpers/Utils */ "./src/helpers/Utils.ts");
 
-exports.GridContainerContext = (0, react_1.createContext)({});
-
 var GridView = function GridView(props) {
-  var _a, _b, _c, _d, _e;
+  var _a, _b, _c, _d, _e, _f;
 
-  var classNames = (0, Styling_1.mergeStyleSets)({
-    fileIconHeaderIcon: {
-      padding: 0,
-      fontSize: '16px'
-    },
-    fileIconCell: {
-      textAlign: 'center',
-      selectors: {
-        '&:before': {
-          content: '.',
-          display: 'inline-block',
-          verticalAlign: 'middle',
-          height: '100%',
-          width: '0px',
-          visibility: 'hidden'
-        }
-      }
-    },
-    fileIconImg: {
-      verticalAlign: 'middle',
-      maxHeight: '16px',
-      maxWidth: '16px'
-    },
-    controlWrapper: {
-      display: 'flex',
-      flexWrap: 'wrap'
-    },
-    exampleToggle: {
-      display: 'inline-block',
-      marginBottom: '10px',
-      marginRight: '30px'
-    },
-    selectionDetails: {
-      marginBottom: '20px'
-    }
-  });
+  var _g = (0, react_1.useState)(props === null || props === void 0 ? void 0 : props.columns),
+      cols = _g[0],
+      setCols = _g[1];
 
-  var _f = (0, react_1.useState)(props === null || props === void 0 ? void 0 : props.columns),
-      cols = _f[0],
-      setCols = _f[1];
+  var _h = (0, react_1.useState)(props === null || props === void 0 ? void 0 : props.rows),
+      allItems = _h[0],
+      setAllItems = _h[1];
 
-  var _g = (0, react_1.useState)(props === null || props === void 0 ? void 0 : props.rows),
-      allItems = _g[0],
-      setAllItems = _g[1];
+  var _j = (0, react_1.useState)((_a = props === null || props === void 0 ? void 0 : props.rows) !== null && _a !== void 0 ? _a : []),
+      actualRows = _j[0],
+      setActualRows = _j[1];
 
-  var _h = (0, react_1.useState)((_a = props === null || props === void 0 ? void 0 : props.rows) !== null && _a !== void 0 ? _a : []),
-      actualRows = _h[0],
-      setActualRows = _h[1];
+  var _k = (0, react_1.useState)(props === null || props === void 0 ? void 0 : props.groups),
+      groups = _k[0],
+      setGroups = _k[1];
 
-  var _j = (0, react_1.useState)(props === null || props === void 0 ? void 0 : props.groups),
-      groups = _j[0],
-      setGroups = _j[1];
+  var _l = (0, react_1.useState)(false),
+      isFilterPanelOpen = _l[0],
+      setIsFilterPanel = _l[1];
 
   (0, react_1.useEffect)(function () {
     var _a;
@@ -1101,8 +1109,8 @@ var GridView = function GridView(props) {
     if (props.listType === 'file' || props.listType === 'folder') setCols(__spreadArray([{
       key: 'fileType',
       name: 'File Type',
-      className: classNames.fileIconCell,
-      iconClassName: classNames.fileIconHeaderIcon,
+      className: styles_1.classNames.fileIconCell,
+      iconClassName: styles_1.classNames.fileIconHeaderIcon,
       ariaLabel: 'Column operations for File type, Press to sort on File type',
       iconName: 'Page',
       isIconOnly: true,
@@ -1115,7 +1123,7 @@ var GridView = function GridView(props) {
 
         return React.createElement("img", {
           src: (_a = item === null || item === void 0 ? void 0 : item.file) === null || _a === void 0 ? void 0 : _a.iconUrl,
-          className: classNames.fileIconImg,
+          className: styles_1.classNames.fileIconImg,
           alt: "".concat((_b = item === null || item === void 0 ? void 0 : item.file) === null || _b === void 0 ? void 0 : _b.fileType, " file icon")
         });
       }
@@ -1150,7 +1158,7 @@ var GridView = function GridView(props) {
       var nodes = props.rowsAsNode;
       var items = [];
       var groups_1 = [];
-      processNodes(nodes, groups_1, items, 0);
+      Utils_1.Utils.processNodes(nodes, groups_1, items, 0);
       setActualRows(items);
       setGroups(groups_1);
     }
@@ -1172,75 +1180,97 @@ var GridView = function GridView(props) {
         newCol.isSortedDescending = true;
       }
     });
-    var newItems = copyAndSort(actualRows, currColumn === null || currColumn === void 0 ? void 0 : currColumn.fieldName, currColumn === null || currColumn === void 0 ? void 0 : currColumn.isSortedDescending);
+    var newItems = Utils_1.Utils.copyAndSort(actualRows, currColumn === null || currColumn === void 0 ? void 0 : currColumn.fieldName, currColumn === null || currColumn === void 0 ? void 0 : currColumn.isSortedDescending);
     setCols(newColumns);
     setActualRows(newItems);
   };
 
-  function copyAndSort(items, columnKey, isSortedDescending) {
-    var key = columnKey;
-    return items.slice(0).sort(function (a, b) {
-      return (isSortedDescending ? a[key] < b[key] : a[key] > b[key]) ? 1 : -1;
-    });
-  }
-
-  var processNodes = function processNodes(nodeItems, groups, items, level) {
-    // end of recursion
-    if (!nodeItems || !(nodeItems === null || nodeItems === void 0 ? void 0 : nodeItems.length)) return; // processing current level of the tree
-
-    nodeItems.forEach(function (nodeItem) {
-      var _a;
-
-      var newGroup = {
-        key: nodeItem.key,
-        name: nodeItem.title,
-        startIndex: items === null || items === void 0 ? void 0 : items.length,
-        count: 0,
-        children: [],
-        level: level,
-        data: nodeItem // storing initial INode instance in the group's data
-
-      };
-      groups.push(newGroup);
-
-      if ((nodeItem === null || nodeItem === void 0 ? void 0 : nodeItem.items) && ((_a = nodeItem === null || nodeItem === void 0 ? void 0 : nodeItem.items) === null || _a === void 0 ? void 0 : _a.length)) {
-        // adding items to the flat array
-        items.push.apply(items, nodeItem === null || nodeItem === void 0 ? void 0 : nodeItem.items);
-      } // processing child nodes
-
-
-      processNodes(nodeItem.children, newGroup.children, items, level + 1); // current group count is a sum of group's leaf items and leaf items in all child nodes
-
-      newGroup.count = (items === null || items === void 0 ? void 0 : items.length) - newGroup.startIndex;
-    });
+  var onRowClick = function onRowClick(item) {
+    if (props === null || props === void 0 ? void 0 : props.onRowClick) props === null || props === void 0 ? void 0 : props.onRowClick(item);
   };
 
-  return React.createElement("div", null, React.createElement(ListOptions_1.ListOptions, __assign({
-    onSearchItem: function onSearchItem(text, key) {
-      var filteredRows = text ? allItems === null || allItems === void 0 ? void 0 : allItems.filter(function (item) {
-        var _a;
+  var panelConfig = {
+    isOpen: isFilterPanelOpen,
+    onApply: function onApply(selectedItems) {
+      //filter the rows according to the selected items, where the key is the rootItemKey
+      console.info("Ainda n\xE3o implementado", selectedItems);
+    },
+    onCancel: function onCancel() {
+      return setIsFilterPanel(false);
+    },
+    onClose: function onClose() {
+      return setIsFilterPanel(false);
+    },
+    //The available filters are the ones that are defined in the `columns` prop, and the options are the rows that are defined in the `rows` prop according to the key
+    availableFilters: cols === null || cols === void 0 ? void 0 : cols.map(function (c) {
+      var _a;
 
-        var isKeyInsideFileObj = (item === null || item === void 0 ? void 0 : item.file) ? (_a = Object.keys(item === null || item === void 0 ? void 0 : item.file)) === null || _a === void 0 ? void 0 : _a.includes(key) : false;
-        var itemValue = isKeyInsideFileObj ? item === null || item === void 0 ? void 0 : item.file[key] : item === null || item === void 0 ? void 0 : item[key];
-        console.log(key, itemValue);
-        return itemValue === null || itemValue === void 0 ? void 0 : itemValue.toLowerCase().includes(text.toLowerCase());
-      }) : allItems;
-      setActualRows(filteredRows);
-    }
-  }, props === null || props === void 0 ? void 0 : props.headerOptions)), React.createElement("div", {
+      return {
+        key: c === null || c === void 0 ? void 0 : c.key,
+        options: (_a = allItems === null || allItems === void 0 ? void 0 : allItems.filter(function (d) {
+          return d;
+        })) === null || _a === void 0 ? void 0 : _a.map(function (data, idx) {
+          var _a, _b, _c;
+
+          return {
+            key: idx + "_" + (c === null || c === void 0 ? void 0 : c.key),
+            text: (_c = data === null || data === void 0 ? void 0 : data[(_b = (_a = c === null || c === void 0 ? void 0 : c.key) !== null && _a !== void 0 ? _a : c === null || c === void 0 ? void 0 : c.fieldName) !== null && _b !== void 0 ? _b : c === null || c === void 0 ? void 0 : c.key]) === null || _c === void 0 ? void 0 : _c.toString(),
+            data: data
+          };
+        }),
+        enableMultiple: true,
+        name: c === null || c === void 0 ? void 0 : c.name
+      };
+    }),
+    panelTitle: (_c = props === null || props === void 0 ? void 0 : props.filterPanelTitle) !== null && _c !== void 0 ? _c : 'Filtrar'
+  };
+  return React.createElement(Contexts_1.FilterPaneContext.Provider, {
+    value: panelConfig
+  }, React.createElement(Contexts_1.ListOptionsContext.Provider, {
+    value: __assign({
+      onSearchItem: function onSearchItem(text, key) {
+        var filteredRows = text ? allItems === null || allItems === void 0 ? void 0 : allItems.filter(function (item) {
+          var _a;
+
+          var isKeyInsideFileObj = (item === null || item === void 0 ? void 0 : item.file) ? (_a = Object.keys(item === null || item === void 0 ? void 0 : item.file)) === null || _a === void 0 ? void 0 : _a.includes(key) : false;
+          var itemValue = isKeyInsideFileObj ? item === null || item === void 0 ? void 0 : item.file[key] : item === null || item === void 0 ? void 0 : item[key];
+          console.log(key, itemValue);
+          return itemValue === null || itemValue === void 0 ? void 0 : itemValue.toLowerCase().includes(text.toLowerCase());
+        }) : allItems;
+        setActualRows(filteredRows);
+      },
+      setIsFilterPanelOpen: function setIsFilterPanelOpen(value) {
+        setIsFilterPanel(value);
+        console.log(value);
+      }
+    }, props === null || props === void 0 ? void 0 : props.headerOptions)
+  }, React.createElement("div", null, React.createElement(ListOptions_1.ListOptions, null), React.createElement("div", {
     "data-is-scrollable": "true",
     style: {
       position: 'relative',
       zIndex: 0
     }
   }, React.createElement(DetailsList_1.DetailsList, __assign({}, props === null || props === void 0 ? void 0 : props.detailsListProps, {
+    onRenderRow: function onRenderRow(p, defaultRender) {
+      return React.createElement("div", {
+        onClick: function onClick() {
+          return onRowClick(p === null || p === void 0 ? void 0 : p.item);
+        }
+      }, defaultRender(__assign(__assign({}, p), {
+        styles: {
+          root: {
+            cursor: (props === null || props === void 0 ? void 0 : props.onRowClick) ? 'pointer' : 'default'
+          }
+        }
+      })));
+    },
     items: actualRows,
     columns: cols,
     groups: groups,
     groupProps: {
-      isAllGroupsCollapsed: (props === null || props === void 0 ? void 0 : props.groups) ? ((_c = props === null || props === void 0 ? void 0 : props.groups.filter(function (gr) {
+      isAllGroupsCollapsed: (props === null || props === void 0 ? void 0 : props.groups) ? ((_d = props === null || props === void 0 ? void 0 : props.groups.filter(function (gr) {
         return !(gr === null || gr === void 0 ? void 0 : gr.isCollapsed);
-      })) === null || _c === void 0 ? void 0 : _c.length) === 0 : true,
+      })) === null || _d === void 0 ? void 0 : _d.length) === 0 : true,
       collapseAllVisibility: DetailsList_1.CollapseAllVisibility.visible,
       onRenderHeader: function onRenderHeader(props, defaultRender) {
         if (!props.group.name) return React.createElement(React.Fragment, null);
@@ -1258,8 +1288,8 @@ var GridView = function GridView(props) {
         key: headerProps === null || headerProps === void 0 ? void 0 : headerProps.key
       }, defaultRender(headerProps)));
     },
-    checkboxVisibility: (_e = (_d = props === null || props === void 0 ? void 0 : props.detailsListProps) === null || _d === void 0 ? void 0 : _d.checkboxVisibility) !== null && _e !== void 0 ? _e : DetailsList_1.CheckboxVisibility.hidden
-  }))));
+    checkboxVisibility: (_f = (_e = props === null || props === void 0 ? void 0 : props.detailsListProps) === null || _e === void 0 ? void 0 : _e.checkboxVisibility) !== null && _f !== void 0 ? _f : DetailsList_1.CheckboxVisibility.hidden
+  }))), isFilterPanelOpen && React.createElement(PanelFilter_1.PanelFilter, null))));
 };
 
 exports.GridView = GridView;
@@ -1332,16 +1362,16 @@ var React = __webpack_require__(/*! react */ "react");
 
 var react_1 = __webpack_require__(/*! @fluentui/react */ "@fluentui/react");
 
-var ListOptions = function ListOptions(props) {
-  var _a, _b;
+var Contexts_1 = __webpack_require__(/*! ./Contexts */ "./src/components/GridView/Contexts.ts");
 
-  if (props === void 0) {
-    props = {
-      enableFilter: true,
-      enableSearch: true,
-      customButtons: []
-    };
-  }
+var ListOptions = function ListOptions() {
+  var _a = React.useContext(Contexts_1.ListOptionsContext),
+      customButtons = _a.customButtons,
+      enableFilter = _a.enableFilter,
+      enableSearch = _a.enableSearch,
+      searchKey = _a.searchKey,
+      onSearchItem = _a.onSearchItem,
+      setIsFilterPanelOpen = _a.setIsFilterPanelOpen;
 
   var defaultStyles = {
     container: {
@@ -1379,7 +1409,7 @@ var ListOptions = function ListOptions(props) {
     iconProps: {
       iconName: 'ViewList'
     }
-  }), ((_a = props === null || props === void 0 ? void 0 : props.customButtons) === null || _a === void 0 ? void 0 : _a.length) > 0 && ((_b = props === null || props === void 0 ? void 0 : props.customButtons) === null || _b === void 0 ? void 0 : _b.map(function (b) {
+  }), (customButtons === null || customButtons === void 0 ? void 0 : customButtons.length) > 0 && (customButtons === null || customButtons === void 0 ? void 0 : customButtons.map(function (b) {
     return React.createElement(react_1.PrimaryButton, __assign({
       className: b === null || b === void 0 ? void 0 : b.className,
       styles: {
@@ -1388,9 +1418,9 @@ var ListOptions = function ListOptions(props) {
         }
       }
     }, b === null || b === void 0 ? void 0 : b.props), b === null || b === void 0 ? void 0 : b.text);
-  })), (props === null || props === void 0 ? void 0 : props.enableSearch) && (props === null || props === void 0 ? void 0 : props.searchKey) && React.createElement(react_1.TextField, {
+  })), enableSearch && searchKey && React.createElement(react_1.TextField, {
     onChange: function onChange(_, newValue) {
-      return props === null || props === void 0 ? void 0 : props.onSearchItem(newValue, props === null || props === void 0 ? void 0 : props.searchKey);
+      return onSearchItem(newValue, searchKey);
     },
     iconProps: {
       iconName: 'Search'
@@ -1403,9 +1433,9 @@ var ListOptions = function ListOptions(props) {
         color: '[theme: themePrimary, default: #0078D4]'
       }
     }
-  }), (props === null || props === void 0 ? void 0 : props.enableFilter) && React.createElement(react_1.DefaultButton, {
+  }), enableFilter && React.createElement(react_1.DefaultButton, {
     onClick: function onClick(_) {
-      return '';
+      return setIsFilterPanelOpen(true);
     },
     styles: {
       label: {
@@ -1417,6 +1447,8 @@ var ListOptions = function ListOptions(props) {
     }
   }));
 };
+
+__signature__(ListOptions, "useContext{_a}");
 
 exports.ListOptions = ListOptions;
 ;
@@ -1439,6 +1471,221 @@ exports.ListOptions = ListOptions;
   leaveModule && leaveModule(module);
 })();
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../node_modules/webpack/buildin/module.js */ "./node_modules/webpack/buildin/module.js")(module)))
+
+/***/ }),
+
+/***/ "./src/components/GridView/PanelFilter.tsx":
+/*!*************************************************!*\
+  !*** ./src/components/GridView/PanelFilter.tsx ***!
+  \*************************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var __signature__ = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal["default"].signature : function (a) {
+  return a;
+};
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.PanelFilter = void 0;
+
+var React = __webpack_require__(/*! react */ "react");
+
+var react_1 = __webpack_require__(/*! react */ "react");
+
+var Contexts_1 = __webpack_require__(/*! ./Contexts */ "./src/components/GridView/Contexts.ts");
+
+exports.PanelFilter = React.memo(function () {
+  var _a = (0, react_1.useState)(new Map()),
+      actualFilteredValues = _a[0],
+      setActualFilteredValues = _a[1];
+
+  var _b = (0, react_1.useContext)(Contexts_1.FilterPaneContext),
+      isOpen = _b.isOpen,
+      onClose = _b.onClose,
+      availableFilters = _b.availableFilters,
+      panelTitle = _b.panelTitle,
+      onCancel = _b.onCancel,
+      onApply = _b.onApply;
+
+  var _c = (0, react_1.useMemo)(function () {
+    var Panel = (0, react_1.lazy)(function () {
+      return Promise.resolve().then(function () {
+        return __webpack_require__(/*! @fluentui/react/lib/Panel */ "@fluentui/react/lib/Panel");
+      }).then(function (_a) {
+        var Panel = _a.Panel;
+        return {
+          "default": Panel
+        };
+      });
+    });
+    var DropDown = (0, react_1.lazy)(function () {
+      return Promise.resolve().then(function () {
+        return __webpack_require__(/*! @fluentui/react/lib/Dropdown */ "@fluentui/react/lib/Dropdown");
+      }).then(function (_a) {
+        var Dropdown = _a.Dropdown;
+        return {
+          "default": Dropdown
+        };
+      });
+    });
+    var PrimaryButton = (0, react_1.lazy)(function () {
+      return Promise.resolve().then(function () {
+        return __webpack_require__(/*! @fluentui/react/lib/Button */ "@fluentui/react/lib/Button");
+      }).then(function (_a) {
+        var PrimaryButton = _a.PrimaryButton;
+        return {
+          "default": PrimaryButton
+        };
+      });
+    });
+    var DefaultButton = (0, react_1.lazy)(function () {
+      return Promise.resolve().then(function () {
+        return __webpack_require__(/*! @fluentui/react/lib/Button */ "@fluentui/react/lib/Button");
+      }).then(function (_a) {
+        var DefaultButton = _a.DefaultButton;
+        return {
+          "default": DefaultButton
+        };
+      });
+    });
+    return [Panel, DropDown, PrimaryButton, DefaultButton];
+  }, []),
+      FluentPanel = _c[0],
+      Dropdown = _c[1],
+      PrimaryButton = _c[2],
+      DefaultButton = _c[3];
+
+  var _onChange = function onChange(rootItemKey, option) {
+    //If the current option is selected and is not already on the actualFilteredValues map, add it
+    //else if the current option is not select and all the other options are not select too, remove the key from the map
+    var copyMap = new Map(actualFilteredValues);
+
+    if (option.selected && !copyMap.has(option === null || option === void 0 ? void 0 : option.key)) {
+      copyMap.set(option.key, {
+        rootItemKey: rootItemKey,
+        itemKey: option.key,
+        data: option === null || option === void 0 ? void 0 : option.data,
+        text: option === null || option === void 0 ? void 0 : option.text
+      });
+    } else if (!option.selected && copyMap.has(option === null || option === void 0 ? void 0 : option.key)) {
+      copyMap["delete"](option === null || option === void 0 ? void 0 : option.key);
+    }
+
+    setActualFilteredValues(copyMap);
+  };
+
+  if (!isOpen) return null;
+  return React.createElement(react_1.Suspense, {
+    fallback: React.createElement("div", null, "...")
+  }, React.createElement(FluentPanel, {
+    onRenderFooter: function onRenderFooter(_) {
+      return React.createElement("div", null, React.createElement(PrimaryButton, {
+        onClick: function onClick() {
+          return onApply(actualFilteredValues);
+        },
+        styles: {
+          root: {
+            marginRight: 8
+          }
+        }
+      }, "Aplicar"), React.createElement(DefaultButton, {
+        onClick: onCancel
+      }, "Cancelar"));
+    },
+    isFooterAtBottom: true,
+    onDismiss: onClose,
+    isOpen: isOpen
+  }, React.createElement("h2", null, panelTitle), availableFilters === null || availableFilters === void 0 ? void 0 : availableFilters.map(function (filter) {
+    var _a;
+
+    var options = (_a = filter === null || filter === void 0 ? void 0 : filter.options) === null || _a === void 0 ? void 0 : _a.map(function (_a) {
+      var key = _a.key,
+          text = _a.text,
+          data = _a.data;
+      return {
+        key: key,
+        text: text,
+        data: data
+      };
+    });
+    return React.createElement(Dropdown, {
+      key: filter === null || filter === void 0 ? void 0 : filter.key,
+      options: options,
+      multiSelect: filter === null || filter === void 0 ? void 0 : filter.enableMultiple,
+      label: filter === null || filter === void 0 ? void 0 : filter.name,
+      onChange: function onChange(_, opt) {
+        return _onChange(filter === null || filter === void 0 ? void 0 : filter.key, opt);
+      }
+    });
+  })));
+});
+
+/***/ }),
+
+/***/ "./src/components/GridView/styles.ts":
+/*!*******************************************!*\
+  !*** ./src/components/GridView/styles.ts ***!
+  \*******************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var __signature__ = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal["default"].signature : function (a) {
+  return a;
+};
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.classNames = void 0;
+
+var Styling_1 = __webpack_require__(/*! @fluentui/react/lib/Styling */ "@fluentui/react/lib/Styling");
+
+exports.classNames = (0, Styling_1.mergeStyleSets)({
+  fileIconHeaderIcon: {
+    padding: 0,
+    fontSize: '16px'
+  },
+  fileIconCell: {
+    textAlign: 'center',
+    selectors: {
+      '&:before': {
+        content: '.',
+        display: 'inline-block',
+        verticalAlign: 'middle',
+        height: '100%',
+        width: '0px',
+        visibility: 'hidden'
+      }
+    }
+  },
+  fileIconImg: {
+    verticalAlign: 'middle',
+    maxHeight: '16px',
+    maxWidth: '16px'
+  },
+  controlWrapper: {
+    display: 'flex',
+    flexWrap: 'wrap'
+  },
+  exampleToggle: {
+    display: 'inline-block',
+    marginBottom: '10px',
+    marginRight: '30px'
+  },
+  selectionDetails: {
+    marginBottom: '20px'
+  }
+});
 
 /***/ }),
 
@@ -1985,6 +2232,44 @@ function () {
     var isIsoDate = /\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?Z/.test(date);
     if (!isIsoDate) return date;
     return new Intl.DateTimeFormat(locales, formatOptions).format(new Date(date));
+  };
+
+  Utils.processNodes = function (nodeItems, groups, items, level) {
+    // end of recursion
+    if (!nodeItems || !(nodeItems === null || nodeItems === void 0 ? void 0 : nodeItems.length)) return; // processing current level of the tree
+
+    nodeItems.forEach(function (nodeItem) {
+      var _a;
+
+      var newGroup = {
+        key: nodeItem.key,
+        name: nodeItem.title,
+        startIndex: items === null || items === void 0 ? void 0 : items.length,
+        count: 0,
+        children: [],
+        level: level,
+        data: nodeItem // storing initial INode instance in the group's data
+
+      };
+      groups.push(newGroup);
+
+      if ((nodeItem === null || nodeItem === void 0 ? void 0 : nodeItem.items) && ((_a = nodeItem === null || nodeItem === void 0 ? void 0 : nodeItem.items) === null || _a === void 0 ? void 0 : _a.length)) {
+        // adding items to the flat array
+        items.push.apply(items, nodeItem === null || nodeItem === void 0 ? void 0 : nodeItem.items);
+      } // processing child nodes
+
+
+      Utils.processNodes(nodeItem.children, newGroup.children, items, level + 1); // current group count is a sum of group's leaf items and leaf items in all child nodes
+
+      newGroup.count = (items === null || items === void 0 ? void 0 : items.length) - newGroup.startIndex;
+    });
+  };
+
+  Utils.copyAndSort = function (items, columnKey, isSortedDescending) {
+    var key = columnKey;
+    return items.slice(0).sort(function (a, b) {
+      return (isSortedDescending ? a[key] < b[key] : a[key] > b[key]) ? 1 : -1;
+    });
   };
 
   return Utils;
@@ -3074,6 +3359,30 @@ module.exports = require("@fluentui/react/lib/Button");
 /***/ (function(module, exports) {
 
 module.exports = require("@fluentui/react/lib/DetailsList");
+
+/***/ }),
+
+/***/ "@fluentui/react/lib/Dropdown":
+/*!***********************************************!*\
+  !*** external "@fluentui/react/lib/Dropdown" ***!
+  \***********************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports) {
+
+module.exports = require("@fluentui/react/lib/Dropdown");
+
+/***/ }),
+
+/***/ "@fluentui/react/lib/Panel":
+/*!********************************************!*\
+  !*** external "@fluentui/react/lib/Panel" ***!
+  \********************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports) {
+
+module.exports = require("@fluentui/react/lib/Panel");
 
 /***/ }),
 
