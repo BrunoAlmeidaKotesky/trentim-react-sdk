@@ -13,7 +13,7 @@
   "scripts": {
     "install-deps": "yarn install && yarn sync-file-deps && yarn install",
     "install-check-deps": "yarn install --check-files && yarn sync-file-deps",
-    "start": "webpack-dev-server --config webpack.dev.config.js --devtool eval --progress --inline --hot --content-base dev/public --open --host localhost --port 3200 ",
+    "start": "webpack-dev-server --config webpack.dev.config.js --progress --inline --hot --content-base dev/public --open --host localhost --port 3200 ",
     "start-at": "webpack-dev-server --config webpack.dev.config.js --devtool eval --progress --inline --hot --content-base dev/public --open --host localhost --port",
     "lint": "tslint './src/**/*.ts*' --format stylish --force",
     "build-analyze": "set NODE_ENV=production && webpack --config webpack.dist.analyze.config.js",

@@ -1,7 +1,7 @@
 import { IRow } from "./IGridView";
 
 export type FilterOption = {key: string | number, text: string, data?: IRow, selected?: boolean;};
-interface IAvailableFitlers {
+export interface IAvailableFitlers {
     key: string;
     name: string;
     options: FilterOption[];

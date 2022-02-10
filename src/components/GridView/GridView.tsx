@@ -6,13 +6,13 @@ import { CheckboxVisibility, CollapseAllVisibility, DetailsList, DetailsListLayo
 import { Sticky, StickyPositionType } from '@fluentui/react/lib/Sticky';
 import { IGridListProps, IRow } from '../../models/interfaces/IGridView';
 import { PanelFilter } from './PanelFilter';
-import { IPanelFilterProps } from '../../models/interfaces/IPanelFilter';
+import { IAvailableFitlers, IPanelFilterProps } from '../../models/interfaces/IPanelFilter';
 import { ListOptions } from './ListOptions';
 import { Utils } from '../../helpers/Utils';
 
 export const GridView = (props: IGridListProps<any>) => {
     const [cols, setCols] = useState(props?.columns);
-    const [allItems, setAllItems] = useState(props?.rows);
+    const [allRows, setAllRows] = useState(props?.rows);
     const [actualRows, setActualRows] = useState(props?.rows ?? []);
     const [groups, setGroups] = useState(props?.groups);
     const [isFilterPanelOpen, setIsFilterPanel] = useState(false);
@@ -78,7 +78,7 @@ export const GridView = (props: IGridListProps<any>) => {
 
     useEffect(() => {
         setActualRows(props?.rows);
-        setAllItems(props?.rows)
+        setAllRows(props?.rows)
     }, [props?.rows?.length]);
 
     useEffect(() => {
@@ -116,29 +116,69 @@ export const GridView = (props: IGridListProps<any>) => {
             props?.onRowClick(item);
     }
 
-    const panelConfig: IPanelFilterProps = {
-        isOpen: isFilterPanelOpen,
-        onApply: (selectedItems) => {
-            //filter the rows according to the selected items, where the key is the rootItemKey
-            console.info(`Ainda não implementado`, selectedItems);
-        },
-        onCancel: () => setIsFilterPanel(false),
-        onClose: () => setIsFilterPanel(false),
-        //The available filters are the ones that are defined in the `columns` prop, and the options are the rows that are defined in the `rows` prop according to the key
-        availableFilters: cols?.map(c => {
-            return {
-                key: c?.key,
-                options: allItems?.filter(d => d)?.map((data, idx) => {
+    const buildFilters = (): IAvailableFitlers[] => {
+        const filters: IAvailableFitlers[] = [];
+        for (let index = 0; index < cols.length; index++) {
+            const c = cols[index];
+            const validRows = allRows?.every(r => r[c?.fieldName ?? c?.key]);
+            if(validRows) {
+                const options = allRows?.filter(d => d)?.map((data, idx) => {
                     return {
                         key: idx + "_" + c?.key,
                         text: data?.[c?.key ?? c?.fieldName ?? c?.key]?.toString(),
                         data
-                    }
-                }),
-                enableMultiple: true,
-                name: c?.name
+                    };
+                });
+                //Remove duplicates from options checking if the text repeats.
+                // const uniqueOptions = options?.filter((obj, pos, arr) => {
+                //     return arr.map(mapObj => mapObj?.text).indexOf(obj?.text) === pos;
+                // });               
+
+                filters.push({
+                    key: c?.key,
+                    options,
+                    enableMultiple: true,
+                    name: c?.name
+                });
             }
-        }),
+        }
+        //Remove repeated values from filters, cehcking if the text inside the options is repeated
+        
+
+        return filters;
+    }
+
+    const panelConfig: IPanelFilterProps = {
+        isOpen: isFilterPanelOpen,
+        onApply: (selectedItems) => {
+            //filter the rows according to the selected items, where the key is the rootItemKey
+            const newFilteredRows: IRow[] = [];
+            for (let idx = 0; idx < allRows?.length; idx++) {
+                const row = allRows[idx];
+                for (const [key, value] of Object.entries(row)) {
+                    let stringfiedMapValue = null;
+                    try {
+                        stringfiedMapValue = JSON.stringify(selectedItems.get(`${idx}_${key}`)?.text);
+                    } catch (e) {
+                        console.error(`Error while stringifying the value of the map: ${e}`);
+                    }
+                    if(stringfiedMapValue === JSON.stringify(value)) {
+                        //Only push if the row is not already in the newFilteredRows
+                        if (!newFilteredRows.some(r => r?.Id === row?.Id)) {
+                            newFilteredRows.push(row);
+                            continue;
+                        }
+                    }
+                }
+            }
+            if(newFilteredRows.length > 0)
+                setActualRows(newFilteredRows);
+            else setActualRows(allRows);
+        },
+        onCancel: () => { setIsFilterPanel(false); setActualRows(allRows); },
+        onClose: () => setIsFilterPanel(false),
+        //The available filters are the ones that are defined in the `columns` prop, and the options are the rows that are defined in the `rows` prop according to the key
+        availableFilters: buildFilters(),
         panelTitle: props?.filterPanelTitle ?? 'Filtrar',
     }
 
@@ -147,15 +187,15 @@ export const GridView = (props: IGridListProps<any>) => {
             <ListOptionsContext.Provider value={{
                 onSearchItem: (text, key) => {
                     const filteredRows = text ?
-                        allItems?.filter(item => {
+                        allRows?.filter(item => {
                             const isKeyInsideFileObj = item?.file ? Object.keys(item?.file)?.includes(key as unknown as string) : false;
                             const itemValue: string = isKeyInsideFileObj ? item?.file[key] : item?.[key];
                             console.log(key, itemValue)
                             return itemValue?.toLowerCase().includes(text.toLowerCase());
-                        }) : allItems;
+                        }) : allRows;
                     setActualRows(filteredRows);
                 },
-                setIsFilterPanelOpen: (value) => { setIsFilterPanel(value); console.log(value) },
+                setIsFilterPanelOpen: (value) => { setIsFilterPanel(value); },
                 ...props?.headerOptions
             }}>
                 <div>
