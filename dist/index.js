@@ -1054,60 +1054,6 @@ var __assign = this && this.__assign || function () {
   return __assign.apply(this, arguments);
 };
 
-var __read = this && this.__read || function (o, n) {
-  var m = typeof Symbol === "function" && o[Symbol.iterator];
-  if (!m) return o;
-  var i = m.call(o),
-      r,
-      ar = [],
-      e;
-
-  try {
-    while ((n === void 0 || n-- > 0) && !(r = i.next()).done) {
-      ar.push(r.value);
-    }
-  } catch (error) {
-    e = {
-      error: error
-    };
-  } finally {
-    try {
-      if (r && !r.done && (m = i["return"])) m.call(i);
-    } finally {
-      if (e) throw e.error;
-    }
-  }
-
-  return ar;
-};
-
-var __spreadArray = this && this.__spreadArray || function (to, from, pack) {
-  if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
-    if (ar || !(i in from)) {
-      if (!ar) ar = Array.prototype.slice.call(from, 0, i);
-      ar[i] = from[i];
-    }
-  }
-  return to.concat(ar || Array.prototype.slice.call(from));
-};
-
-var __values = this && this.__values || function (o) {
-  var s = typeof Symbol === "function" && Symbol.iterator,
-      m = s && o[s],
-      i = 0;
-  if (m) return m.call(o);
-  if (o && typeof o.length === "number") return {
-    next: function next() {
-      if (o && i >= o.length) o = void 0;
-      return {
-        value: o && o[i++],
-        done: !o
-      };
-    }
-  };
-  throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
-};
-
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -1115,11 +1061,9 @@ exports.GridView = void 0;
 
 var React = __webpack_require__(/*! react */ "react");
 
-var react_1 = __webpack_require__(/*! react */ "react");
+var useGridController_1 = __webpack_require__(/*! ./useGridController */ "./src/components/GridView/useGridController.tsx");
 
 var Contexts_1 = __webpack_require__(/*! ./Contexts */ "./src/components/GridView/Contexts.ts");
-
-var styles_1 = __webpack_require__(/*! ./styles */ "./src/components/GridView/styles.ts");
 
 var DetailsList_1 = __webpack_require__(/*! @fluentui/react/lib/DetailsList */ "@fluentui/react/lib/DetailsList");
 
@@ -1129,264 +1073,22 @@ var PanelFilter_1 = __webpack_require__(/*! ./PanelFilter */ "./src/components/G
 
 var ListOptions_1 = __webpack_require__(/*! ./ListOptions */ "./src/components/GridView/ListOptions.tsx");
 
-var Utils_1 = __webpack_require__(/*! ../../helpers/Utils */ "./src/helpers/Utils.ts");
-
 var GridView = function GridView(props) {
-  var _a, _b, _c, _d, _e, _f;
+  var _a, _b, _c;
 
-  var _g = __read((0, react_1.useState)(props === null || props === void 0 ? void 0 : props.columns), 2),
-      cols = _g[0],
-      setCols = _g[1];
+  var _d = (0, useGridController_1.useGridController)(props),
+      state = _d.state,
+      handlers = _d.handlers;
 
-  var _h = __read((0, react_1.useState)(props === null || props === void 0 ? void 0 : props.rows), 2),
-      allRows = _h[0],
-      setAllRows = _h[1];
-
-  var _j = __read((0, react_1.useState)((_a = props === null || props === void 0 ? void 0 : props.rows) !== null && _a !== void 0 ? _a : []), 2),
-      actualRows = _j[0],
-      setActualRows = _j[1];
-
-  var _k = __read((0, react_1.useState)(props === null || props === void 0 ? void 0 : props.groups), 2),
-      groups = _k[0],
-      setGroups = _k[1];
-
-  var _l = __read((0, react_1.useState)(false), 2),
-      isFilterPanelOpen = _l[0],
-      setIsFilterPanel = _l[1];
-
-  (0, react_1.useEffect)(function () {
-    var _a;
-
-    if ((_a = props === null || props === void 0 ? void 0 : props.columns) === null || _a === void 0 ? void 0 : _a.length) {
-      var columns = props === null || props === void 0 ? void 0 : props.columns;
-      var convertedColumns = columns.map(function (c) {
-        var _a, _b, _c;
-
-        if (((_a = c === null || c === void 0 ? void 0 : c.key) === null || _a === void 0 ? void 0 : _a.includes('.')) || ((_b = c === null || c === void 0 ? void 0 : c.fieldName) === null || _b === void 0 ? void 0 : _b.includes('.'))) {
-          c.onRender = function (item, _2) {
-            var _a, _b;
-
-            var fieldValue = (_b = Utils_1.Utils.findObjectByPath(item, (_a = c === null || c === void 0 ? void 0 : c.fieldName) === null || _a === void 0 ? void 0 : _a.split('.'))) !== null && _b !== void 0 ? _b : '-';
-            return React.createElement("span", null, fieldValue);
-          };
-
-          return c;
-        } else if ((_c = c === null || c === void 0 ? void 0 : c.dateConvertionOptions) === null || _c === void 0 ? void 0 : _c.shouldConvertToLocaleString) {
-          c.onRender = function (item, _2) {
-            var _a, _b, _c;
-
-            var fieldValue = Utils_1.Utils.convertIsoToLocaleString(item[(_a = c === null || c === void 0 ? void 0 : c.fieldName) !== null && _a !== void 0 ? _a : c === null || c === void 0 ? void 0 : c.key], (_b = c === null || c === void 0 ? void 0 : c.dateConvertionOptions) === null || _b === void 0 ? void 0 : _b.locales, (_c = c === null || c === void 0 ? void 0 : c.dateConvertionOptions) === null || _c === void 0 ? void 0 : _c.formatOptions);
-            return React.createElement("span", null, fieldValue);
-          };
-        }
-
-        return c;
-      });
-      setCols(convertedColumns);
-    }
-  }, [props === null || props === void 0 ? void 0 : props.columns]);
-  (0, react_1.useEffect)(function () {
-    if (props.listType === 'file' || props.listType === 'folder') setCols(__spreadArray([{
-      key: 'fileType',
-      name: 'File Type',
-      className: styles_1.classNames.fileIconCell,
-      iconClassName: styles_1.classNames.fileIconHeaderIcon,
-      ariaLabel: 'Column operations for File type, Press to sort on File type',
-      iconName: 'Page',
-      isIconOnly: true,
-      fieldName: 'name',
-      minWidth: 16,
-      maxWidth: 16,
-      onColumnClick: onColumnClick,
-      onRender: function onRender(item) {
-        var _a, _b;
-
-        return React.createElement("img", {
-          src: (_a = item === null || item === void 0 ? void 0 : item.file) === null || _a === void 0 ? void 0 : _a.iconUrl,
-          className: styles_1.classNames.fileIconImg,
-          alt: "".concat((_b = item === null || item === void 0 ? void 0 : item.file) === null || _b === void 0 ? void 0 : _b.fileType, " file icon")
-        });
-      }
-    }, {
-      key: 'name',
-      name: 'Nome',
-      fieldName: 'name',
-      minWidth: 210,
-      maxWidth: 350,
-      isRowHeader: true,
-      isResizable: true,
-      isSorted: true,
-      isSortedDescending: false,
-      sortAscendingAriaLabel: 'Sorted A to Z',
-      sortDescendingAriaLabel: 'Sorted Z to A',
-      onColumnClick: onColumnClick,
-      onRender: function onRender(item) {
-        var _a;
-
-        return React.createElement("span", null, (_a = item === null || item === void 0 ? void 0 : item.file) === null || _a === void 0 ? void 0 : _a.name);
-      },
-      data: 'string',
-      isPadded: true
-    }], __read(cols), false));else setCols(props === null || props === void 0 ? void 0 : props.columns);
-  }, [props === null || props === void 0 ? void 0 : props.listType]);
-  (0, react_1.useEffect)(function () {
-    setActualRows(props === null || props === void 0 ? void 0 : props.rows);
-    setAllRows(props === null || props === void 0 ? void 0 : props.rows);
-  }, [(_b = props === null || props === void 0 ? void 0 : props.rows) === null || _b === void 0 ? void 0 : _b.length]);
-  (0, react_1.useEffect)(function () {
-    if ((props === null || props === void 0 ? void 0 : props.listType) === 'folder' && (props === null || props === void 0 ? void 0 : props.rowsAsNode)) {
-      var nodes = props.rowsAsNode;
-      var items = [];
-      var groups_1 = [];
-      Utils_1.Utils.processNodes(nodes, groups_1, items, 0);
-      setActualRows(items);
-      setGroups(groups_1);
-    }
-  }, [props === null || props === void 0 ? void 0 : props.rowsAsNode, props === null || props === void 0 ? void 0 : props.listType]);
-  /**TO-DO: Implement this method to work with `INode[]` */
-
-  var onColumnClick = function onColumnClick(_, column) {
-    if (props === null || props === void 0 ? void 0 : props.rowsAsNode) return;
-    var newColumns = cols.slice();
-    var currColumn = newColumns.filter(function (currCol) {
-      return column.key === currCol.key;
-    })[0];
-    newColumns.forEach(function (newCol) {
-      if (newCol === currColumn) {
-        currColumn.isSortedDescending = !currColumn.isSortedDescending;
-        currColumn.isSorted = true;
-      } else {
-        newCol.isSorted = false;
-        newCol.isSortedDescending = true;
-      }
-    });
-    var newItems = Utils_1.Utils.copyAndSort(actualRows, currColumn === null || currColumn === void 0 ? void 0 : currColumn.fieldName, currColumn === null || currColumn === void 0 ? void 0 : currColumn.isSortedDescending);
-    setCols(newColumns);
-    setActualRows(newItems);
-  };
-
-  var onRowClick = function onRowClick(item) {
-    if (props === null || props === void 0 ? void 0 : props.onRowClick) props === null || props === void 0 ? void 0 : props.onRowClick(item);
-  };
-
-  var buildFilters = function buildFilters() {
-    var _a;
-
-    var filters = [];
-
-    var _loop_1 = function _loop_1(index) {
-      var c = cols[index];
-      var validRows = allRows === null || allRows === void 0 ? void 0 : allRows.every(function (r) {
-        var _a;
-
-        return r[(_a = c === null || c === void 0 ? void 0 : c.fieldName) !== null && _a !== void 0 ? _a : c === null || c === void 0 ? void 0 : c.key];
-      });
-
-      if (validRows) {
-        var options = (_a = allRows === null || allRows === void 0 ? void 0 : allRows.filter(function (d) {
-          return d;
-        })) === null || _a === void 0 ? void 0 : _a.map(function (data, idx) {
-          var _a, _b, _c;
-
-          return {
-            key: idx + "_" + (c === null || c === void 0 ? void 0 : c.key),
-            text: (_c = data === null || data === void 0 ? void 0 : data[(_b = (_a = c === null || c === void 0 ? void 0 : c.key) !== null && _a !== void 0 ? _a : c === null || c === void 0 ? void 0 : c.fieldName) !== null && _b !== void 0 ? _b : c === null || c === void 0 ? void 0 : c.key]) === null || _c === void 0 ? void 0 : _c.toString(),
-            data: data
-          };
-        }); //Remove duplicates from options checking if the text repeats.
-
-        var uniqueOptions = options === null || options === void 0 ? void 0 : options.filter(function (obj, pos, arr) {
-          return arr.map(function (mapObj) {
-            return mapObj === null || mapObj === void 0 ? void 0 : mapObj.text;
-          }).indexOf(obj === null || obj === void 0 ? void 0 : obj.text) === pos;
-        });
-        filters.push({
-          key: c === null || c === void 0 ? void 0 : c.key,
-          options: uniqueOptions,
-          enableMultiple: true,
-          name: c === null || c === void 0 ? void 0 : c.name
-        });
-      }
-    };
-
-    for (var index = 0; index < cols.length; index++) {
-      _loop_1(index);
-    } //Remove repeated values from filters, cehcking if the text inside the options is repeated
-
-
-    return filters;
-  };
-
-  var panelConfig = {
-    isOpen: isFilterPanelOpen,
-    onApply: function onApply(selectedItems) {
-      //filter the rows according to the selected items, where the key is the rootItemKey
-      var andFilterAggregation = [];
-      var orFilterAggregation = [];
-
-      var _loop_2 = function _loop_2(idx) {
-        var e_1, _a;
-
-        var row = allRows[idx];
-
-        var _loop_3 = function _loop_3(key, _) {
-          var sameKeyFromMap = __spreadArray([], __read(selectedItems), false).filter(function (s) {
-            var k = s[0];
-            return k.split("_")[1] === key;
-          });
-
-          if ((sameKeyFromMap === null || sameKeyFromMap === void 0 ? void 0 : sameKeyFromMap.length) > 0) {
-            sameKeyFromMap.forEach(function (_, idx) {
-              var isSameValue = sameKeyFromMap[idx][1]['data'][key] === row[key];
-
-              if (isSameValue && !andFilterAggregation.map(function (r) {
-                return r === null || r === void 0 ? void 0 : r.Id;
-              }).includes(row === null || row === void 0 ? void 0 : row.Id)) {
-                andFilterAggregation = __spreadArray(__spreadArray([], __read(andFilterAggregation), false), [row], false);
-              }
-            });
-          }
-        };
-
-        try {
-          for (var _b = (e_1 = void 0, __values(Object.entries(row))), _c = _b.next(); !_c.done; _c = _b.next()) {
-            var _d = __read(_c.value, 2),
-                key = _d[0],
-                _ = _d[1];
-
-            _loop_3(key, _);
-          }
-        } catch (e_1_1) {
-          e_1 = {
-            error: e_1_1
-          };
-        } finally {
-          try {
-            if (_c && !_c.done && (_a = _b["return"])) _a.call(_b);
-          } finally {
-            if (e_1) throw e_1.error;
-          }
-        }
-      };
-
-      for (var idx = 0; idx < (allRows === null || allRows === void 0 ? void 0 : allRows.length); idx++) {
-        _loop_2(idx);
-      }
-
-      console.log(andFilterAggregation, orFilterAggregation);
-      if (andFilterAggregation.length > 0) setActualRows(andFilterAggregation);else setActualRows(allRows);
-    },
-    onCancel: function onCancel() {
-      setIsFilterPanel(false);
-      setActualRows(allRows);
-    },
-    onClose: function onClose() {
-      return setIsFilterPanel(false);
-    },
-    //The available filters are the ones that are defined in the `columns` prop, and the options are the rows that are defined in the `rows` prop according to the key
-    availableFilters: buildFilters(),
-    panelTitle: (_c = props === null || props === void 0 ? void 0 : props.filterPanelTitle) !== null && _c !== void 0 ? _c : 'Filtrar'
-  };
+  var actualRows = state.actualRows,
+      allRows = state.allRows,
+      cols = state.cols,
+      groups = state.groups,
+      isFilterPanelOpen = state.isFilterPanelOpen,
+      panelConfig = state.panelConfig;
+  var onRowClick = handlers.onRowClick,
+      setActualRows = handlers.setActualRows,
+      setIsFilterPanel = handlers.setIsFilterPanel;
   return React.createElement(Contexts_1.FilterPaneContext.Provider, {
     value: panelConfig
   }, React.createElement(Contexts_1.ListOptionsContext.Provider, {
@@ -1430,9 +1132,9 @@ var GridView = function GridView(props) {
     columns: cols,
     groups: groups,
     groupProps: {
-      isAllGroupsCollapsed: (props === null || props === void 0 ? void 0 : props.groups) ? ((_d = props === null || props === void 0 ? void 0 : props.groups.filter(function (gr) {
+      isAllGroupsCollapsed: (props === null || props === void 0 ? void 0 : props.groups) ? ((_a = props === null || props === void 0 ? void 0 : props.groups.filter(function (gr) {
         return !(gr === null || gr === void 0 ? void 0 : gr.isCollapsed);
-      })) === null || _d === void 0 ? void 0 : _d.length) === 0 : true,
+      })) === null || _a === void 0 ? void 0 : _a.length) === 0 : true,
       collapseAllVisibility: DetailsList_1.CollapseAllVisibility.visible,
       onRenderHeader: function onRenderHeader(props, defaultRender) {
         if (!props.group.name) return React.createElement(React.Fragment, null);
@@ -1450,7 +1152,7 @@ var GridView = function GridView(props) {
         key: headerProps === null || headerProps === void 0 ? void 0 : headerProps.key
       }, defaultRender(headerProps)));
     },
-    checkboxVisibility: (_f = (_e = props === null || props === void 0 ? void 0 : props.detailsListProps) === null || _e === void 0 ? void 0 : _e.checkboxVisibility) !== null && _f !== void 0 ? _f : DetailsList_1.CheckboxVisibility.hidden
+    checkboxVisibility: (_c = (_b = props === null || props === void 0 ? void 0 : props.detailsListProps) === null || _b === void 0 ? void 0 : _b.checkboxVisibility) !== null && _c !== void 0 ? _c : DetailsList_1.CheckboxVisibility.hidden
   }))), isFilterPanelOpen && React.createElement(PanelFilter_1.PanelFilter, null))));
 };
 
@@ -1465,9 +1167,6 @@ exports.GridView = GridView;
   }
 
   reactHotLoader.register(__assign, "__assign", "F:\\Projetos Individuais\\ReactLibraries\\trentim-react-sdk\\src\\components\\GridView\\GridView.tsx");
-  reactHotLoader.register(__read, "__read", "F:\\Projetos Individuais\\ReactLibraries\\trentim-react-sdk\\src\\components\\GridView\\GridView.tsx");
-  reactHotLoader.register(__spreadArray, "__spreadArray", "F:\\Projetos Individuais\\ReactLibraries\\trentim-react-sdk\\src\\components\\GridView\\GridView.tsx");
-  reactHotLoader.register(__values, "__values", "F:\\Projetos Individuais\\ReactLibraries\\trentim-react-sdk\\src\\components\\GridView\\GridView.tsx");
   reactHotLoader.register(GridView, "GridView", "F:\\Projetos Individuais\\ReactLibraries\\trentim-react-sdk\\src\\components\\GridView\\GridView.tsx");
 })();
 
@@ -1901,6 +1600,405 @@ exports.classNames = (0, Styling_1.mergeStyleSets)({
     marginBottom: '20px'
   }
 });
+
+/***/ }),
+
+/***/ "./src/components/GridView/useGridController.tsx":
+/*!*******************************************************!*\
+  !*** ./src/components/GridView/useGridController.tsx ***!
+  \*******************************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(module) {
+
+(function () {
+  var enterModule = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal.enterModule : undefined;
+  enterModule && enterModule(module);
+})();
+
+var __signature__ = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal["default"].signature : function (a) {
+  return a;
+};
+
+var __read = this && this.__read || function (o, n) {
+  var m = typeof Symbol === "function" && o[Symbol.iterator];
+  if (!m) return o;
+  var i = m.call(o),
+      r,
+      ar = [],
+      e;
+
+  try {
+    while ((n === void 0 || n-- > 0) && !(r = i.next()).done) {
+      ar.push(r.value);
+    }
+  } catch (error) {
+    e = {
+      error: error
+    };
+  } finally {
+    try {
+      if (r && !r.done && (m = i["return"])) m.call(i);
+    } finally {
+      if (e) throw e.error;
+    }
+  }
+
+  return ar;
+};
+
+var __spreadArray = this && this.__spreadArray || function (to, from, pack) {
+  if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+    if (ar || !(i in from)) {
+      if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+      ar[i] = from[i];
+    }
+  }
+  return to.concat(ar || Array.prototype.slice.call(from));
+};
+
+var __values = this && this.__values || function (o) {
+  var s = typeof Symbol === "function" && Symbol.iterator,
+      m = s && o[s],
+      i = 0;
+  if (m) return m.call(o);
+  if (o && typeof o.length === "number") return {
+    next: function next() {
+      if (o && i >= o.length) o = void 0;
+      return {
+        value: o && o[i++],
+        done: !o
+      };
+    }
+  };
+  throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
+};
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.useGridController = void 0;
+
+var React = __webpack_require__(/*! react */ "react");
+
+var react_1 = __webpack_require__(/*! react */ "react");
+
+var styles_1 = __webpack_require__(/*! ./styles */ "./src/components/GridView/styles.ts");
+
+var Utils_1 = __webpack_require__(/*! ../../helpers/Utils */ "./src/helpers/Utils.ts");
+
+function useGridController(props) {
+  var _a, _b, _c;
+
+  var _d = __read((0, react_1.useState)(props === null || props === void 0 ? void 0 : props.columns), 2),
+      cols = _d[0],
+      setCols = _d[1];
+
+  var _e = __read((0, react_1.useState)(props === null || props === void 0 ? void 0 : props.rows), 2),
+      allRows = _e[0],
+      setAllRows = _e[1];
+
+  var _f = __read((0, react_1.useState)((_a = props === null || props === void 0 ? void 0 : props.rows) !== null && _a !== void 0 ? _a : []), 2),
+      actualRows = _f[0],
+      setActualRows = _f[1];
+
+  var _g = __read((0, react_1.useState)([]), 2),
+      currentFilteredRows = _g[0],
+      setCurFilteredRows = _g[1];
+
+  var _h = __read((0, react_1.useState)(props === null || props === void 0 ? void 0 : props.groups), 2),
+      groups = _h[0],
+      setGroups = _h[1];
+
+  var _j = __read((0, react_1.useState)(false), 2),
+      isFilterPanelOpen = _j[0],
+      setIsFilterPanel = _j[1]; //Effects
+
+
+  (0, react_1.useEffect)(function () {
+    var _a;
+
+    if ((_a = props === null || props === void 0 ? void 0 : props.columns) === null || _a === void 0 ? void 0 : _a.length) {
+      var columns = props === null || props === void 0 ? void 0 : props.columns;
+      var convertedColumns = columns.map(function (c) {
+        var _a, _b, _c;
+
+        if (((_a = c === null || c === void 0 ? void 0 : c.key) === null || _a === void 0 ? void 0 : _a.includes('.')) || ((_b = c === null || c === void 0 ? void 0 : c.fieldName) === null || _b === void 0 ? void 0 : _b.includes('.'))) {
+          c.onRender = function (item, _2) {
+            var _a, _b;
+
+            var fieldValue = (_b = Utils_1.Utils.findObjectByPath(item, (_a = c === null || c === void 0 ? void 0 : c.fieldName) === null || _a === void 0 ? void 0 : _a.split('.'))) !== null && _b !== void 0 ? _b : '-';
+            return React.createElement("span", null, fieldValue);
+          };
+
+          return c;
+        } else if ((_c = c === null || c === void 0 ? void 0 : c.dateConvertionOptions) === null || _c === void 0 ? void 0 : _c.shouldConvertToLocaleString) {
+          c.onRender = function (item, _2) {
+            var _a, _b, _c;
+
+            var fieldValue = Utils_1.Utils.convertIsoToLocaleString(item[(_a = c === null || c === void 0 ? void 0 : c.fieldName) !== null && _a !== void 0 ? _a : c === null || c === void 0 ? void 0 : c.key], (_b = c === null || c === void 0 ? void 0 : c.dateConvertionOptions) === null || _b === void 0 ? void 0 : _b.locales, (_c = c === null || c === void 0 ? void 0 : c.dateConvertionOptions) === null || _c === void 0 ? void 0 : _c.formatOptions);
+            return React.createElement("span", null, fieldValue);
+          };
+        }
+
+        return c;
+      });
+      setCols(convertedColumns);
+    }
+  }, [props === null || props === void 0 ? void 0 : props.columns]);
+  (0, react_1.useEffect)(function () {
+    if (props.listType === 'file' || props.listType === 'folder') setCols(__spreadArray([{
+      key: 'fileType',
+      name: 'File Type',
+      className: styles_1.classNames.fileIconCell,
+      iconClassName: styles_1.classNames.fileIconHeaderIcon,
+      ariaLabel: 'Column operations for File type, Press to sort on File type',
+      iconName: 'Page',
+      isIconOnly: true,
+      fieldName: 'name',
+      minWidth: 16,
+      maxWidth: 16,
+      onColumnClick: onColumnClick,
+      onRender: function onRender(item) {
+        var _a, _b;
+
+        return React.createElement("img", {
+          src: (_a = item === null || item === void 0 ? void 0 : item.file) === null || _a === void 0 ? void 0 : _a.iconUrl,
+          className: styles_1.classNames.fileIconImg,
+          alt: "".concat((_b = item === null || item === void 0 ? void 0 : item.file) === null || _b === void 0 ? void 0 : _b.fileType, " file icon")
+        });
+      }
+    }, {
+      key: 'name',
+      name: 'Nome',
+      fieldName: 'name',
+      minWidth: 210,
+      maxWidth: 350,
+      isRowHeader: true,
+      isResizable: true,
+      isSorted: true,
+      isSortedDescending: false,
+      sortAscendingAriaLabel: 'Sorted A to Z',
+      sortDescendingAriaLabel: 'Sorted Z to A',
+      onColumnClick: onColumnClick,
+      onRender: function onRender(item) {
+        var _a;
+
+        return React.createElement("span", null, (_a = item === null || item === void 0 ? void 0 : item.file) === null || _a === void 0 ? void 0 : _a.name);
+      },
+      data: 'string',
+      isPadded: true
+    }], __read(cols), false));else setCols(props === null || props === void 0 ? void 0 : props.columns);
+  }, [props === null || props === void 0 ? void 0 : props.listType]);
+  (0, react_1.useEffect)(function () {
+    setActualRows(props === null || props === void 0 ? void 0 : props.rows);
+    setAllRows(props === null || props === void 0 ? void 0 : props.rows);
+  }, [(_b = props === null || props === void 0 ? void 0 : props.rows) === null || _b === void 0 ? void 0 : _b.length]);
+  (0, react_1.useEffect)(function () {
+    if ((props === null || props === void 0 ? void 0 : props.listType) === 'folder' && (props === null || props === void 0 ? void 0 : props.rowsAsNode)) {
+      var nodes = props.rowsAsNode;
+      var items = [];
+      var groups_1 = [];
+      Utils_1.Utils.processNodes(nodes, groups_1, items, 0);
+      setActualRows(items);
+      setGroups(groups_1);
+    }
+  }, [props === null || props === void 0 ? void 0 : props.rowsAsNode, props === null || props === void 0 ? void 0 : props.listType]);
+  /**TO-DO: Implement this method to work with `INode[]` */
+
+  var onColumnClick = function onColumnClick(_, column) {
+    if (props === null || props === void 0 ? void 0 : props.rowsAsNode) return;
+    var newColumns = cols.slice();
+    var currColumn = newColumns.filter(function (currCol) {
+      return column.key === currCol.key;
+    })[0];
+    newColumns.forEach(function (newCol) {
+      if (newCol === currColumn) {
+        currColumn.isSortedDescending = !currColumn.isSortedDescending;
+        currColumn.isSorted = true;
+      } else {
+        newCol.isSorted = false;
+        newCol.isSortedDescending = true;
+      }
+    });
+    var newItems = Utils_1.Utils.copyAndSort(actualRows, currColumn === null || currColumn === void 0 ? void 0 : currColumn.fieldName, currColumn === null || currColumn === void 0 ? void 0 : currColumn.isSortedDescending);
+    setCols(newColumns);
+    setActualRows(newItems);
+  };
+
+  var onRowClick = function onRowClick(item) {
+    if (props === null || props === void 0 ? void 0 : props.onRowClick) props === null || props === void 0 ? void 0 : props.onRowClick(item);
+  };
+
+  var buildFilters = function buildFilters() {
+    var _a;
+
+    var filters = [];
+
+    var _loop_1 = function _loop_1(index) {
+      var c = cols[index];
+      var validRows = allRows === null || allRows === void 0 ? void 0 : allRows.every(function (r) {
+        var _a;
+
+        return r[(_a = c === null || c === void 0 ? void 0 : c.fieldName) !== null && _a !== void 0 ? _a : c === null || c === void 0 ? void 0 : c.key];
+      });
+
+      if (validRows) {
+        var options = (_a = allRows === null || allRows === void 0 ? void 0 : allRows.filter(function (d) {
+          return d;
+        })) === null || _a === void 0 ? void 0 : _a.map(function (data, idx) {
+          var _a, _b, _c;
+
+          return {
+            key: idx + "_" + (c === null || c === void 0 ? void 0 : c.key),
+            text: (_c = data === null || data === void 0 ? void 0 : data[(_b = (_a = c === null || c === void 0 ? void 0 : c.key) !== null && _a !== void 0 ? _a : c === null || c === void 0 ? void 0 : c.fieldName) !== null && _b !== void 0 ? _b : c === null || c === void 0 ? void 0 : c.key]) === null || _c === void 0 ? void 0 : _c.toString(),
+            data: data
+          };
+        }); //Remove duplicates from options checking if the text repeats.
+
+        var uniqueOptions = options === null || options === void 0 ? void 0 : options.filter(function (obj, pos, arr) {
+          return arr.map(function (mapObj) {
+            return mapObj === null || mapObj === void 0 ? void 0 : mapObj.text;
+          }).indexOf(obj === null || obj === void 0 ? void 0 : obj.text) === pos;
+        });
+        filters.push({
+          key: c === null || c === void 0 ? void 0 : c.key,
+          options: uniqueOptions,
+          enableMultiple: true,
+          name: c === null || c === void 0 ? void 0 : c.name
+        });
+      }
+    };
+
+    for (var index = 0; index < cols.length; index++) {
+      _loop_1(index);
+    }
+
+    return filters;
+  };
+
+  var panelConfig = {
+    isOpen: isFilterPanelOpen,
+    onApply: function onApply(selectedItems) {
+      //filter the rows according to the selected items, where the key is the rootItemKey
+      var andFilterAggregation = currentFilteredRows;
+
+      var _loop_2 = function _loop_2(idx) {
+        var e_1, _a;
+
+        var row = allRows[idx];
+
+        var _loop_3 = function _loop_3(key, _) {
+          var sameKeyFromMap = __spreadArray([], __read(selectedItems), false).filter(function (s) {
+            var k = s[0];
+            return k.split("_")[1] === key;
+          });
+
+          if ((sameKeyFromMap === null || sameKeyFromMap === void 0 ? void 0 : sameKeyFromMap.length) > 0) {
+            sameKeyFromMap.forEach(function (_, idx) {
+              var isSameValue = sameKeyFromMap[idx][1]['data'][key] === row[key];
+
+              if (isSameValue && !andFilterAggregation.map(function (r) {
+                return r === null || r === void 0 ? void 0 : r.Id;
+              }).includes(row === null || row === void 0 ? void 0 : row.Id)) {
+                andFilterAggregation = __spreadArray(__spreadArray([], __read(andFilterAggregation), false), [row], false);
+              }
+            });
+          }
+        };
+
+        try {
+          for (var _b = (e_1 = void 0, __values(Object.entries(row))), _c = _b.next(); !_c.done; _c = _b.next()) {
+            var _d = __read(_c.value, 2),
+                key = _d[0],
+                _ = _d[1];
+
+            _loop_3(key, _);
+          }
+        } catch (e_1_1) {
+          e_1 = {
+            error: e_1_1
+          };
+        } finally {
+          try {
+            if (_c && !_c.done && (_a = _b["return"])) _a.call(_b);
+          } finally {
+            if (e_1) throw e_1.error;
+          }
+        }
+      };
+
+      for (var idx = 0; idx < (allRows === null || allRows === void 0 ? void 0 : allRows.length); idx++) {
+        _loop_2(idx);
+      }
+
+      console.log(andFilterAggregation);
+
+      if (andFilterAggregation.length > 0) {
+        setActualRows(andFilterAggregation);
+        setCurFilteredRows(andFilterAggregation);
+      } else {
+        setActualRows(allRows);
+        setCurFilteredRows([]);
+      }
+    },
+    onCancel: function onCancel() {
+      setIsFilterPanel(false);
+      setActualRows(allRows);
+      setCurFilteredRows([]);
+    },
+    onClose: function onClose() {
+      setIsFilterPanel(false);
+      setActualRows(allRows);
+      setCurFilteredRows([]);
+    },
+    //The available filters are the ones that are defined in the `columns` prop, and the options are the rows that are defined in the `rows` prop according to the key
+    availableFilters: buildFilters(),
+    panelTitle: (_c = props === null || props === void 0 ? void 0 : props.filterPanelTitle) !== null && _c !== void 0 ? _c : 'Filtrar'
+  };
+  return {
+    state: {
+      actualRows: actualRows,
+      cols: cols,
+      groups: groups,
+      panelConfig: panelConfig,
+      allRows: allRows,
+      isFilterPanelOpen: isFilterPanelOpen
+    },
+    handlers: {
+      onRowClick: onRowClick,
+      setActualRows: setActualRows,
+      setIsFilterPanel: setIsFilterPanel
+    }
+  };
+}
+
+exports.useGridController = useGridController;
+;
+
+(function () {
+  var reactHotLoader = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal.default : undefined;
+
+  if (!reactHotLoader) {
+    return;
+  }
+
+  reactHotLoader.register(__read, "__read", "F:\\Projetos Individuais\\ReactLibraries\\trentim-react-sdk\\src\\components\\GridView\\useGridController.tsx");
+  reactHotLoader.register(__spreadArray, "__spreadArray", "F:\\Projetos Individuais\\ReactLibraries\\trentim-react-sdk\\src\\components\\GridView\\useGridController.tsx");
+  reactHotLoader.register(__values, "__values", "F:\\Projetos Individuais\\ReactLibraries\\trentim-react-sdk\\src\\components\\GridView\\useGridController.tsx");
+  reactHotLoader.register(useGridController, "useGridController", "F:\\Projetos Individuais\\ReactLibraries\\trentim-react-sdk\\src\\components\\GridView\\useGridController.tsx");
+})();
+
+;
+
+(function () {
+  var leaveModule = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal.leaveModule : undefined;
+  leaveModule && leaveModule(module);
+})();
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../node_modules/webpack/buildin/module.js */ "./node_modules/webpack/buildin/module.js")(module)))
 
 /***/ }),
 
