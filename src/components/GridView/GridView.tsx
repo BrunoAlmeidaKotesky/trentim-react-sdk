@@ -6,7 +6,7 @@ import { CheckboxVisibility, CollapseAllVisibility, DetailsList, DetailsListLayo
 import { Sticky, StickyPositionType } from '@fluentui/react/lib/Sticky';
 import { IGridListProps, IRow } from '../../models/interfaces/IGridView';
 import { PanelFilter } from './PanelFilter';
-import { IAvailableFitlers, IPanelFilterProps } from '../../models/interfaces/IPanelFilter';
+import { FilterOption, IAvailableFitlers, IPanelFilterProps } from '../../models/interfaces/IPanelFilter';
 import { ListOptions } from './ListOptions';
 import { Utils } from '../../helpers/Utils';
 
@@ -122,7 +122,7 @@ export const GridView = (props: IGridListProps<any>) => {
             const c = cols[index];
             const validRows = allRows?.every(r => r[c?.fieldName ?? c?.key]);
             if(validRows) {
-                const options = allRows?.filter(d => d)?.map((data, idx) => {
+                const options: FilterOption[] = allRows?.filter(d => d)?.map((data, idx) => {
                     return {
                         key: idx + "_" + c?.key,
                         text: data?.[c?.key ?? c?.fieldName ?? c?.key]?.toString(),
@@ -130,13 +130,13 @@ export const GridView = (props: IGridListProps<any>) => {
                     };
                 });
                 //Remove duplicates from options checking if the text repeats.
-                // const uniqueOptions = options?.filter((obj, pos, arr) => {
-                //     return arr.map(mapObj => mapObj?.text).indexOf(obj?.text) === pos;
-                // });               
+                const uniqueOptions = options?.filter((obj, pos, arr) => {
+                    return arr.map(mapObj => mapObj?.text).indexOf(obj?.text) === pos;
+                });               
 
                 filters.push({
                     key: c?.key,
-                    options,
+                    options: uniqueOptions,
                     enableMultiple: true,
                     name: c?.name
                 });
@@ -152,27 +152,30 @@ export const GridView = (props: IGridListProps<any>) => {
         isOpen: isFilterPanelOpen,
         onApply: (selectedItems) => {
             //filter the rows according to the selected items, where the key is the rootItemKey
-            const newFilteredRows: IRow[] = [];
+            let andFilterAggregation: IRow[] = [];
+            let orFilterAggregation: IRow[] = [];
             for (let idx = 0; idx < allRows?.length; idx++) {
                 const row = allRows[idx];
-                for (const [key, value] of Object.entries(row)) {
-                    let stringfiedMapValue = null;
-                    try {
-                        stringfiedMapValue = JSON.stringify(selectedItems.get(`${idx}_${key}`)?.text);
-                    } catch (e) {
-                        console.error(`Error while stringifying the value of the map: ${e}`);
-                    }
-                    if(stringfiedMapValue === JSON.stringify(value)) {
-                        //Only push if the row is not already in the newFilteredRows
-                        if (!newFilteredRows.some(r => r?.Id === row?.Id)) {
-                            newFilteredRows.push(row);
-                            continue;
-                        }
+                for (const [key, _] of Object.entries(row)) {
+                    
+                    const sameKeyFromMap = [...selectedItems].filter((s) => {
+                        const k = s[0];
+                        return k.split("_")[1] === key;
+                    });
+                    if (sameKeyFromMap?.length > 0) {
+                        sameKeyFromMap.forEach((_, idx) => {
+                            const isSameValue = sameKeyFromMap[idx][1]['data'][key] === row[key];
+                            if(isSameValue && !andFilterAggregation.map(r => r?.Id).includes(row?.Id)) {
+                                andFilterAggregation =  [...andFilterAggregation, row];
+                            }
+                        });
+                        
                     }
                 }
             }
-            if(newFilteredRows.length > 0)
-                setActualRows(newFilteredRows);
+            console.log(andFilterAggregation, orFilterAggregation);
+            if(andFilterAggregation.length > 0)
+                setActualRows(andFilterAggregation);
             else setActualRows(allRows);
         },
         onCancel: () => { setIsFilterPanel(false); setActualRows(allRows); },

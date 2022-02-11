@@ -761,6 +761,33 @@ var __assign = this && this.__assign || function () {
   return __assign.apply(this, arguments);
 };
 
+var __read = this && this.__read || function (o, n) {
+  var m = typeof Symbol === "function" && o[Symbol.iterator];
+  if (!m) return o;
+  var i = m.call(o),
+      r,
+      ar = [],
+      e;
+
+  try {
+    while ((n === void 0 || n-- > 0) && !(r = i.next()).done) {
+      ar.push(r.value);
+    }
+  } catch (error) {
+    e = {
+      error: error
+    };
+  } finally {
+    try {
+      if (r && !r.done && (m = i["return"])) m.call(i);
+    } finally {
+      if (e) throw e.error;
+    }
+  }
+
+  return ar;
+};
+
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -834,7 +861,9 @@ function Rows(_a) {
 
     if (ignoreKeys && ignoreKeys.length > 0) {
       rowEntries = rowEntries.filter(function (_a) {
-        var k = _a[0]; //@ts-ignore
+        var _b = __read(_a, 1),
+            k = _b[0]; //@ts-ignore
+
 
         if (!ignoreKeys.includes(k)) {
           return k;
@@ -843,8 +872,10 @@ function Rows(_a) {
     }
 
     var rowsToRender = rowEntries.map(function (_a) {
-      var rowKey = _a[0],
-          rowValue = _a[1];
+      var _b = __read(_a, 2),
+          rowKey = _b[0],
+          rowValue = _b[1];
+
       var keyName = colKeys.find(function (n) {
         return n === rowKey;
       });
@@ -864,8 +895,10 @@ function Rows(_a) {
           }, rowsToRender.map(function (_a, idx2) {
             var _b, _c;
 
-            var key = _a[0],
-                val = _a[1];
+            var _d = __read(_a, 2),
+                key = _d[0],
+                val = _d[1];
+
             return React.createElement("div", {
               style: __assign({
                 display: 'table-cell'
@@ -895,8 +928,10 @@ function Rows(_a) {
           }, rowsToRender === null || rowsToRender === void 0 ? void 0 : rowsToRender.map(function (_a, idx2) {
             var _b, _c;
 
-            var key = _a[0],
-                val = _a[1];
+            var _d = __read(_a, 2),
+                key = _d[0],
+                val = _d[1];
+
             return React.createElement("td", {
               style: tableCellStyle(key, idx),
               key: (_b = key === null || key === void 0 ? void 0 : key.toString()) !== null && _b !== void 0 ? _b : idx2,
@@ -930,6 +965,7 @@ exports.Rows = Rows;
   }
 
   reactHotLoader.register(__assign, "__assign", "F:\\Projetos Individuais\\ReactLibraries\\trentim-react-sdk\\src\\components\\DataTable\\Rows.tsx");
+  reactHotLoader.register(__read, "__read", "F:\\Projetos Individuais\\ReactLibraries\\trentim-react-sdk\\src\\components\\DataTable\\Rows.tsx");
   reactHotLoader.register(Rows, "Rows", "F:\\Projetos Individuais\\ReactLibraries\\trentim-react-sdk\\src\\components\\DataTable\\Rows.tsx");
 })();
 
@@ -1018,6 +1054,33 @@ var __assign = this && this.__assign || function () {
   return __assign.apply(this, arguments);
 };
 
+var __read = this && this.__read || function (o, n) {
+  var m = typeof Symbol === "function" && o[Symbol.iterator];
+  if (!m) return o;
+  var i = m.call(o),
+      r,
+      ar = [],
+      e;
+
+  try {
+    while ((n === void 0 || n-- > 0) && !(r = i.next()).done) {
+      ar.push(r.value);
+    }
+  } catch (error) {
+    e = {
+      error: error
+    };
+  } finally {
+    try {
+      if (r && !r.done && (m = i["return"])) m.call(i);
+    } finally {
+      if (e) throw e.error;
+    }
+  }
+
+  return ar;
+};
+
 var __spreadArray = this && this.__spreadArray || function (to, from, pack) {
   if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
     if (ar || !(i in from)) {
@@ -1026,6 +1089,23 @@ var __spreadArray = this && this.__spreadArray || function (to, from, pack) {
     }
   }
   return to.concat(ar || Array.prototype.slice.call(from));
+};
+
+var __values = this && this.__values || function (o) {
+  var s = typeof Symbol === "function" && Symbol.iterator,
+      m = s && o[s],
+      i = 0;
+  if (m) return m.call(o);
+  if (o && typeof o.length === "number") return {
+    next: function next() {
+      if (o && i >= o.length) o = void 0;
+      return {
+        value: o && o[i++],
+        done: !o
+      };
+    }
+  };
+  throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
 };
 
 Object.defineProperty(exports, "__esModule", {
@@ -1054,23 +1134,23 @@ var Utils_1 = __webpack_require__(/*! ../../helpers/Utils */ "./src/helpers/Util
 var GridView = function GridView(props) {
   var _a, _b, _c, _d, _e, _f;
 
-  var _g = (0, react_1.useState)(props === null || props === void 0 ? void 0 : props.columns),
+  var _g = __read((0, react_1.useState)(props === null || props === void 0 ? void 0 : props.columns), 2),
       cols = _g[0],
       setCols = _g[1];
 
-  var _h = (0, react_1.useState)(props === null || props === void 0 ? void 0 : props.rows),
-      allItems = _h[0],
-      setAllItems = _h[1];
+  var _h = __read((0, react_1.useState)(props === null || props === void 0 ? void 0 : props.rows), 2),
+      allRows = _h[0],
+      setAllRows = _h[1];
 
-  var _j = (0, react_1.useState)((_a = props === null || props === void 0 ? void 0 : props.rows) !== null && _a !== void 0 ? _a : []),
+  var _j = __read((0, react_1.useState)((_a = props === null || props === void 0 ? void 0 : props.rows) !== null && _a !== void 0 ? _a : []), 2),
       actualRows = _j[0],
       setActualRows = _j[1];
 
-  var _k = (0, react_1.useState)(props === null || props === void 0 ? void 0 : props.groups),
+  var _k = __read((0, react_1.useState)(props === null || props === void 0 ? void 0 : props.groups), 2),
       groups = _k[0],
       setGroups = _k[1];
 
-  var _l = (0, react_1.useState)(false),
+  var _l = __read((0, react_1.useState)(false), 2),
       isFilterPanelOpen = _l[0],
       setIsFilterPanel = _l[1];
 
@@ -1147,11 +1227,11 @@ var GridView = function GridView(props) {
       },
       data: 'string',
       isPadded: true
-    }], cols, true));else setCols(props === null || props === void 0 ? void 0 : props.columns);
+    }], __read(cols), false));else setCols(props === null || props === void 0 ? void 0 : props.columns);
   }, [props === null || props === void 0 ? void 0 : props.listType]);
   (0, react_1.useEffect)(function () {
     setActualRows(props === null || props === void 0 ? void 0 : props.rows);
-    setAllItems(props === null || props === void 0 ? void 0 : props.rows);
+    setAllRows(props === null || props === void 0 ? void 0 : props.rows);
   }, [(_b = props === null || props === void 0 ? void 0 : props.rows) === null || _b === void 0 ? void 0 : _b.length]);
   (0, react_1.useEffect)(function () {
     if ((props === null || props === void 0 ? void 0 : props.listType) === 'folder' && (props === null || props === void 0 ? void 0 : props.rowsAsNode)) {
@@ -1189,25 +1269,21 @@ var GridView = function GridView(props) {
     if (props === null || props === void 0 ? void 0 : props.onRowClick) props === null || props === void 0 ? void 0 : props.onRowClick(item);
   };
 
-  var panelConfig = {
-    isOpen: isFilterPanelOpen,
-    onApply: function onApply(selectedItems) {
-      //filter the rows according to the selected items, where the key is the rootItemKey
-      console.info("Ainda n\xE3o implementado", selectedItems);
-    },
-    onCancel: function onCancel() {
-      return setIsFilterPanel(false);
-    },
-    onClose: function onClose() {
-      return setIsFilterPanel(false);
-    },
-    //The available filters are the ones that are defined in the `columns` prop, and the options are the rows that are defined in the `rows` prop according to the key
-    availableFilters: cols === null || cols === void 0 ? void 0 : cols.map(function (c) {
-      var _a;
+  var buildFilters = function buildFilters() {
+    var _a;
 
-      return {
-        key: c === null || c === void 0 ? void 0 : c.key,
-        options: (_a = allItems === null || allItems === void 0 ? void 0 : allItems.filter(function (d) {
+    var filters = [];
+
+    var _loop_1 = function _loop_1(index) {
+      var c = cols[index];
+      var validRows = allRows === null || allRows === void 0 ? void 0 : allRows.every(function (r) {
+        var _a;
+
+        return r[(_a = c === null || c === void 0 ? void 0 : c.fieldName) !== null && _a !== void 0 ? _a : c === null || c === void 0 ? void 0 : c.key];
+      });
+
+      if (validRows) {
+        var options = (_a = allRows === null || allRows === void 0 ? void 0 : allRows.filter(function (d) {
           return d;
         })) === null || _a === void 0 ? void 0 : _a.map(function (data, idx) {
           var _a, _b, _c;
@@ -1217,11 +1293,98 @@ var GridView = function GridView(props) {
             text: (_c = data === null || data === void 0 ? void 0 : data[(_b = (_a = c === null || c === void 0 ? void 0 : c.key) !== null && _a !== void 0 ? _a : c === null || c === void 0 ? void 0 : c.fieldName) !== null && _b !== void 0 ? _b : c === null || c === void 0 ? void 0 : c.key]) === null || _c === void 0 ? void 0 : _c.toString(),
             data: data
           };
-        }),
-        enableMultiple: true,
-        name: c === null || c === void 0 ? void 0 : c.name
+        }); //Remove duplicates from options checking if the text repeats.
+
+        var uniqueOptions = options === null || options === void 0 ? void 0 : options.filter(function (obj, pos, arr) {
+          return arr.map(function (mapObj) {
+            return mapObj === null || mapObj === void 0 ? void 0 : mapObj.text;
+          }).indexOf(obj === null || obj === void 0 ? void 0 : obj.text) === pos;
+        });
+        filters.push({
+          key: c === null || c === void 0 ? void 0 : c.key,
+          options: uniqueOptions,
+          enableMultiple: true,
+          name: c === null || c === void 0 ? void 0 : c.name
+        });
+      }
+    };
+
+    for (var index = 0; index < cols.length; index++) {
+      _loop_1(index);
+    } //Remove repeated values from filters, cehcking if the text inside the options is repeated
+
+
+    return filters;
+  };
+
+  var panelConfig = {
+    isOpen: isFilterPanelOpen,
+    onApply: function onApply(selectedItems) {
+      //filter the rows according to the selected items, where the key is the rootItemKey
+      var andFilterAggregation = [];
+      var orFilterAggregation = [];
+
+      var _loop_2 = function _loop_2(idx) {
+        var e_1, _a;
+
+        var row = allRows[idx];
+
+        var _loop_3 = function _loop_3(key, _) {
+          var sameKeyFromMap = __spreadArray([], __read(selectedItems), false).filter(function (s) {
+            var k = s[0];
+            return k.split("_")[1] === key;
+          });
+
+          if ((sameKeyFromMap === null || sameKeyFromMap === void 0 ? void 0 : sameKeyFromMap.length) > 0) {
+            sameKeyFromMap.forEach(function (_, idx) {
+              var isSameValue = sameKeyFromMap[idx][1]['data'][key] === row[key];
+
+              if (isSameValue && !andFilterAggregation.map(function (r) {
+                return r === null || r === void 0 ? void 0 : r.Id;
+              }).includes(row === null || row === void 0 ? void 0 : row.Id)) {
+                andFilterAggregation = __spreadArray(__spreadArray([], __read(andFilterAggregation), false), [row], false);
+              }
+            });
+          }
+        };
+
+        try {
+          for (var _b = (e_1 = void 0, __values(Object.entries(row))), _c = _b.next(); !_c.done; _c = _b.next()) {
+            var _d = __read(_c.value, 2),
+                key = _d[0],
+                _ = _d[1];
+
+            _loop_3(key, _);
+          }
+        } catch (e_1_1) {
+          e_1 = {
+            error: e_1_1
+          };
+        } finally {
+          try {
+            if (_c && !_c.done && (_a = _b["return"])) _a.call(_b);
+          } finally {
+            if (e_1) throw e_1.error;
+          }
+        }
       };
-    }),
+
+      for (var idx = 0; idx < (allRows === null || allRows === void 0 ? void 0 : allRows.length); idx++) {
+        _loop_2(idx);
+      }
+
+      console.log(andFilterAggregation, orFilterAggregation);
+      if (andFilterAggregation.length > 0) setActualRows(andFilterAggregation);else setActualRows(allRows);
+    },
+    onCancel: function onCancel() {
+      setIsFilterPanel(false);
+      setActualRows(allRows);
+    },
+    onClose: function onClose() {
+      return setIsFilterPanel(false);
+    },
+    //The available filters are the ones that are defined in the `columns` prop, and the options are the rows that are defined in the `rows` prop according to the key
+    availableFilters: buildFilters(),
     panelTitle: (_c = props === null || props === void 0 ? void 0 : props.filterPanelTitle) !== null && _c !== void 0 ? _c : 'Filtrar'
   };
   return React.createElement(Contexts_1.FilterPaneContext.Provider, {
@@ -1229,19 +1392,18 @@ var GridView = function GridView(props) {
   }, React.createElement(Contexts_1.ListOptionsContext.Provider, {
     value: __assign({
       onSearchItem: function onSearchItem(text, key) {
-        var filteredRows = text ? allItems === null || allItems === void 0 ? void 0 : allItems.filter(function (item) {
+        var filteredRows = text ? allRows === null || allRows === void 0 ? void 0 : allRows.filter(function (item) {
           var _a;
 
           var isKeyInsideFileObj = (item === null || item === void 0 ? void 0 : item.file) ? (_a = Object.keys(item === null || item === void 0 ? void 0 : item.file)) === null || _a === void 0 ? void 0 : _a.includes(key) : false;
           var itemValue = isKeyInsideFileObj ? item === null || item === void 0 ? void 0 : item.file[key] : item === null || item === void 0 ? void 0 : item[key];
           console.log(key, itemValue);
           return itemValue === null || itemValue === void 0 ? void 0 : itemValue.toLowerCase().includes(text.toLowerCase());
-        }) : allItems;
+        }) : allRows;
         setActualRows(filteredRows);
       },
       setIsFilterPanelOpen: function setIsFilterPanelOpen(value) {
         setIsFilterPanel(value);
-        console.log(value);
       }
     }, props === null || props === void 0 ? void 0 : props.headerOptions)
   }, React.createElement("div", null, React.createElement(ListOptions_1.ListOptions, null), React.createElement("div", {
@@ -1303,7 +1465,9 @@ exports.GridView = GridView;
   }
 
   reactHotLoader.register(__assign, "__assign", "F:\\Projetos Individuais\\ReactLibraries\\trentim-react-sdk\\src\\components\\GridView\\GridView.tsx");
+  reactHotLoader.register(__read, "__read", "F:\\Projetos Individuais\\ReactLibraries\\trentim-react-sdk\\src\\components\\GridView\\GridView.tsx");
   reactHotLoader.register(__spreadArray, "__spreadArray", "F:\\Projetos Individuais\\ReactLibraries\\trentim-react-sdk\\src\\components\\GridView\\GridView.tsx");
+  reactHotLoader.register(__values, "__values", "F:\\Projetos Individuais\\ReactLibraries\\trentim-react-sdk\\src\\components\\GridView\\GridView.tsx");
   reactHotLoader.register(GridView, "GridView", "F:\\Projetos Individuais\\ReactLibraries\\trentim-react-sdk\\src\\components\\GridView\\GridView.tsx");
 })();
 
@@ -1483,10 +1647,42 @@ exports.ListOptions = ListOptions;
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
+/* WEBPACK VAR INJECTION */(function(module) {
 
+(function () {
+  var enterModule = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal.enterModule : undefined;
+  enterModule && enterModule(module);
+})();
 
 var __signature__ = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal["default"].signature : function (a) {
   return a;
+};
+
+var __read = this && this.__read || function (o, n) {
+  var m = typeof Symbol === "function" && o[Symbol.iterator];
+  if (!m) return o;
+  var i = m.call(o),
+      r,
+      ar = [],
+      e;
+
+  try {
+    while ((n === void 0 || n-- > 0) && !(r = i.next()).done) {
+      ar.push(r.value);
+    }
+  } catch (error) {
+    e = {
+      error: error
+    };
+  } finally {
+    try {
+      if (r && !r.done && (m = i["return"])) m.call(i);
+    } finally {
+      if (e) throw e.error;
+    }
+  }
+
+  return ar;
 };
 
 Object.defineProperty(exports, "__esModule", {
@@ -1501,7 +1697,7 @@ var react_1 = __webpack_require__(/*! react */ "react");
 var Contexts_1 = __webpack_require__(/*! ./Contexts */ "./src/components/GridView/Contexts.ts");
 
 exports.PanelFilter = React.memo(function () {
-  var _a = (0, react_1.useState)(new Map()),
+  var _a = __read((0, react_1.useState)(new Map()), 2),
       actualFilteredValues = _a[0],
       setActualFilteredValues = _a[1];
 
@@ -1513,7 +1709,7 @@ exports.PanelFilter = React.memo(function () {
       onCancel = _b.onCancel,
       onApply = _b.onApply;
 
-  var _c = (0, react_1.useMemo)(function () {
+  var _c = __read((0, react_1.useMemo)(function () {
     var Panel = (0, react_1.lazy)(function () {
       return Promise.resolve().then(function () {
         return __webpack_require__(/*! @fluentui/react/lib/Panel */ "@fluentui/react/lib/Panel");
@@ -1555,7 +1751,7 @@ exports.PanelFilter = React.memo(function () {
       });
     });
     return [Panel, DropDown, PrimaryButton, DefaultButton];
-  }, []),
+  }, []), 4),
       FluentPanel = _c[0],
       Dropdown = _c[1],
       PrimaryButton = _c[2],
@@ -1625,6 +1821,25 @@ exports.PanelFilter = React.memo(function () {
     });
   })));
 });
+;
+
+(function () {
+  var reactHotLoader = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal.default : undefined;
+
+  if (!reactHotLoader) {
+    return;
+  }
+
+  reactHotLoader.register(__read, "__read", "F:\\Projetos Individuais\\ReactLibraries\\trentim-react-sdk\\src\\components\\GridView\\PanelFilter.tsx");
+})();
+
+;
+
+(function () {
+  var leaveModule = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal.leaveModule : undefined;
+  leaveModule && leaveModule(module);
+})();
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../node_modules/webpack/buildin/module.js */ "./node_modules/webpack/buildin/module.js")(module)))
 
 /***/ }),
 
@@ -2189,6 +2404,43 @@ var __signature__ = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoader
   return a;
 };
 
+var __read = this && this.__read || function (o, n) {
+  var m = typeof Symbol === "function" && o[Symbol.iterator];
+  if (!m) return o;
+  var i = m.call(o),
+      r,
+      ar = [],
+      e;
+
+  try {
+    while ((n === void 0 || n-- > 0) && !(r = i.next()).done) {
+      ar.push(r.value);
+    }
+  } catch (error) {
+    e = {
+      error: error
+    };
+  } finally {
+    try {
+      if (r && !r.done && (m = i["return"])) m.call(i);
+    } finally {
+      if (e) throw e.error;
+    }
+  }
+
+  return ar;
+};
+
+var __spreadArray = this && this.__spreadArray || function (to, from, pack) {
+  if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+    if (ar || !(i in from)) {
+      if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+      ar[i] = from[i];
+    }
+  }
+  return to.concat(ar || Array.prototype.slice.call(from));
+};
+
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -2255,7 +2507,7 @@ function () {
 
       if ((nodeItem === null || nodeItem === void 0 ? void 0 : nodeItem.items) && ((_a = nodeItem === null || nodeItem === void 0 ? void 0 : nodeItem.items) === null || _a === void 0 ? void 0 : _a.length)) {
         // adding items to the flat array
-        items.push.apply(items, nodeItem === null || nodeItem === void 0 ? void 0 : nodeItem.items);
+        items.push.apply(items, __spreadArray([], __read(nodeItem === null || nodeItem === void 0 ? void 0 : nodeItem.items), false));
       } // processing child nodes
 
 
@@ -2285,6 +2537,8 @@ exports.Utils = Utils;
     return;
   }
 
+  reactHotLoader.register(__read, "__read", "F:\\Projetos Individuais\\ReactLibraries\\trentim-react-sdk\\src\\helpers\\Utils.ts");
+  reactHotLoader.register(__spreadArray, "__spreadArray", "F:\\Projetos Individuais\\ReactLibraries\\trentim-react-sdk\\src\\helpers\\Utils.ts");
   reactHotLoader.register(Utils, "Utils", "F:\\Projetos Individuais\\ReactLibraries\\trentim-react-sdk\\src\\helpers\\Utils.ts");
 })();
 
@@ -2617,6 +2871,33 @@ var __signature__ = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoader
   return a;
 };
 
+var __read = this && this.__read || function (o, n) {
+  var m = typeof Symbol === "function" && o[Symbol.iterator];
+  if (!m) return o;
+  var i = m.call(o),
+      r,
+      ar = [],
+      e;
+
+  try {
+    while ((n === void 0 || n-- > 0) && !(r = i.next()).done) {
+      ar.push(r.value);
+    }
+  } catch (error) {
+    e = {
+      error: error
+    };
+  } finally {
+    try {
+      if (r && !r.done && (m = i["return"])) m.call(i);
+    } finally {
+      if (e) throw e.error;
+    }
+  }
+
+  return ar;
+};
+
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -2625,7 +2906,7 @@ exports.useDebounce = void 0;
 var react_1 = __webpack_require__(/*! react */ "react");
 
 function useDebounce(value, delay) {
-  var _a = (0, react_1.useState)(value),
+  var _a = __read((0, react_1.useState)(value), 2),
       debouncedValue = _a[0],
       setDebouncedValue = _a[1];
 
@@ -2650,6 +2931,7 @@ exports.useDebounce = useDebounce;
     return;
   }
 
+  reactHotLoader.register(__read, "__read", "F:\\Projetos Individuais\\ReactLibraries\\trentim-react-sdk\\src\\hooks\\useDebounce.ts");
   reactHotLoader.register(useDebounce, "useDebounce", "F:\\Projetos Individuais\\ReactLibraries\\trentim-react-sdk\\src\\hooks\\useDebounce.ts");
 })();
 
@@ -2887,6 +3169,33 @@ var __signature__ = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoader
   return a;
 };
 
+var __read = this && this.__read || function (o, n) {
+  var m = typeof Symbol === "function" && o[Symbol.iterator];
+  if (!m) return o;
+  var i = m.call(o),
+      r,
+      ar = [],
+      e;
+
+  try {
+    while ((n === void 0 || n-- > 0) && !(r = i.next()).done) {
+      ar.push(r.value);
+    }
+  } catch (error) {
+    e = {
+      error: error
+    };
+  } finally {
+    try {
+      if (r && !r.done && (m = i["return"])) m.call(i);
+    } finally {
+      if (e) throw e.error;
+    }
+  }
+
+  return ar;
+};
+
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -2897,10 +3206,10 @@ var react_1 = __webpack_require__(/*! react */ "react");
 function useWindowSize() {
   // Initialize state with undefined width/height so server and client renders match
   // Learn more here: https://joshwcomeau.com/react/the-perils-of-rehydration/
-  var _a = (0, react_1.useState)({
+  var _a = __read((0, react_1.useState)({
     width: undefined,
     height: undefined
-  }),
+  }), 2),
       windowSize = _a[0],
       setWindowSize = _a[1];
 
@@ -2939,6 +3248,7 @@ exports.useWindowSize = useWindowSize;
     return;
   }
 
+  reactHotLoader.register(__read, "__read", "F:\\Projetos Individuais\\ReactLibraries\\trentim-react-sdk\\src\\hooks\\useWindowSize.ts");
   reactHotLoader.register(useWindowSize, "useWindowSize", "F:\\Projetos Individuais\\ReactLibraries\\trentim-react-sdk\\src\\hooks\\useWindowSize.ts");
 })();
 

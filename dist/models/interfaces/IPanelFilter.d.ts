@@ -5,7 +5,7 @@ export declare type FilterOption = {
     data?: IRow;
     selected?: boolean;
 };
-interface IAvailableFitlers {
+export interface IAvailableFitlers {
     key: string;
     name: string;
     options: FilterOption[];
@@ -26,4 +26,3 @@ export declare type SelectedItemsMap = Map<string, {
     data: IRow;
     text: string;
 }>;
-export {};

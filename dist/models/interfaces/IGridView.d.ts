@@ -14,6 +14,8 @@ export interface INode extends IRow {
 }
 export interface IRow {
     [key: string]: any;
+    /**It's required that the row object contains an unique identifier*/
+    Id?: number | string;
     file?: IFileInfo;
 }
 export declare type TColumn<T> = IColumn & {

@@ -1,8 +1,6 @@
 import * as React from 'react';
 import { lazy, useContext, useMemo, Suspense, useState } from 'react';
 import { FilterPaneContext } from './Contexts';
-import type { IDropdownOption } from '@fluentui/react';
-import type { IRow } from '../../models/interfaces/IGridView';
 import type { FilterOption, SelectedItemsMap } from '../../models/interfaces/IPanelFilter';
 
 export const PanelFilter = React.memo(() => {
@@ -44,7 +42,7 @@ export const PanelFilter = React.memo(() => {
                 onDismiss={onClose} isOpen={isOpen}>
                 <h2>{panelTitle}</h2>
                 {availableFilters?.map(filter => {
-                    const options = filter?.options?.map<IDropdownOption<IRow>>(({ key, text, data }) => {
+                    const options = filter?.options?.map<FilterOption>(({ key, text, data }) => {
                         return {
                             key,
                             text,
