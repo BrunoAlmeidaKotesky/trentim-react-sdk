@@ -2,7 +2,7 @@ import * as React from 'react';
 import { IButtonStyles, PrimaryButton } from '@fluentui/react/lib/Button';
 import { memo, useRef } from 'react';
 
-interface IUploadButton {
+export interface IUploadButton {
     accepts: string[];
     onChange: (file: File[]) => void;
     buttonLabel: string;
