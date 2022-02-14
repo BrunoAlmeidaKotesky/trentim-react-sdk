@@ -2002,6 +2002,71 @@ exports.useGridController = useGridController;
 
 /***/ }),
 
+/***/ "./src/components/UploadButton/UploadButton.tsx":
+/*!******************************************************!*\
+  !*** ./src/components/UploadButton/UploadButton.tsx ***!
+  \******************************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var __signature__ = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal["default"].signature : function (a) {
+  return a;
+};
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.UploadButton = void 0;
+
+var React = __webpack_require__(/*! react */ "react");
+
+var Button_1 = __webpack_require__(/*! @fluentui/react/lib/Button */ "@fluentui/react/lib/Button");
+
+var react_1 = __webpack_require__(/*! react */ "react");
+
+exports.UploadButton = (0, react_1.memo)(function (_a) {
+  var accepts = _a.accepts,
+      onChange = _a.onChange,
+      buttonLabel = _a.buttonLabel,
+      buttonIconName = _a.buttonIconName,
+      styles = _a.styles;
+  var hiddenInput = (0, react_1.useRef)(null);
+
+  var handleClick = function handleClick(_) {
+    hiddenInput.current.click();
+  };
+
+  var handleChange = function handleChange(event) {
+    var fileUploaded = Array.from(event.target.files);
+    onChange(fileUploaded);
+    event.target.value = null;
+  };
+
+  return React.createElement(React.Fragment, null, React.createElement(Button_1.PrimaryButton, {
+    styles: styles,
+    iconProps: buttonIconName ? {
+      iconName: buttonIconName
+    } : {},
+    text: buttonLabel,
+    onClick: handleClick
+  }, buttonLabel), React.createElement("input", {
+    "data-is-focusable": "false",
+    style: {
+      display: 'none'
+    },
+    ref: hiddenInput,
+    accept: accepts === null || accepts === void 0 ? void 0 : accepts.join(','),
+    type: "file",
+    onChange: handleChange
+  }));
+});
+
+/***/ }),
+
 /***/ "./src/helpers/CacheHandler.ts":
 /*!*************************************!*\
   !*** ./src/helpers/CacheHandler.ts ***!
@@ -3402,7 +3467,7 @@ var __exportStar = this && this.__exportStar || function (m, exports) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.GridView = exports.InfoCard = exports.DataTable = exports.WebpartAddons = exports.FileUtils = exports.CacheHandler = void 0;
+exports.UploadButton = exports.GridView = exports.InfoCard = exports.DataTable = exports.WebpartAddons = exports.FileUtils = exports.CacheHandler = void 0;
 
 var index_1 = __webpack_require__(/*! ./helpers/index */ "./src/helpers/index.ts");
 
@@ -3451,6 +3516,15 @@ Object.defineProperty(exports, "GridView", {
   enumerable: true,
   get: function get() {
     return GridView_1.GridView;
+  }
+});
+
+var UploadButton_1 = __webpack_require__(/*! ./components/UploadButton/UploadButton */ "./src/components/UploadButton/UploadButton.tsx");
+
+Object.defineProperty(exports, "UploadButton", {
+  enumerable: true,
+  get: function get() {
+    return UploadButton_1.UploadButton;
   }
 });
 ;

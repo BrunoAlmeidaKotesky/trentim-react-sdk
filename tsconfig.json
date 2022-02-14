@@ -5,7 +5,8 @@
       "es2015.promise",
       "es2016",
       "es6",
-      "dom"
+      "dom",
+      "dom.iterable",
     ],
     "outDir": "./dist/",
     "declaration": true,
