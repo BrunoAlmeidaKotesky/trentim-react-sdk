@@ -5,7 +5,7 @@ const nodeExternals = require('webpack-node-externals');
 
 const package_ = JSON.parse(fs.readFileSync('./package.json', 'utf8'));
 const loaders = require('./webpack.loaders');
-const plugins = require('./webpack.plugins');
+const {plugins} = require('./webpack.plugins');
 
 const config = {
   mode: "development",          // distribute it without minification
@@ -19,6 +19,9 @@ const config = {
   optimization: {
     // help: https://webpack.js.org/guides/tree-shaking/
     usedExports: true,  // true to remove the dead code,
+    moduleIds: 'named',
+    minimizer: [plugins[0]]
+
   },
   devtool: "source-map",        // help: https://webpack.js.org/configuration/devtool/
   output: {
@@ -42,9 +45,7 @@ const config = {
   module: {
     rules: loaders.module.rules,
   },
-  plugins: [
-    new webpack.NamedModulesPlugin(), // prints more readable module names in the browser console on HMR updates
-  ].concat(plugins.plugins),
+  plugins,
 };
 
 module.exports = config;

@@ -31,6 +31,7 @@ export const UploadButton = memo(({ accepts, onChange, buttonLabel, buttonIconNa
         <input
             data-is-focusable="false"
             style={{ display: 'none' }}
+            multiple
             ref={hiddenInput}
             accept={accepts?.join(',')}
             type="file"

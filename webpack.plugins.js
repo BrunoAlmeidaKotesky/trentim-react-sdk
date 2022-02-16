@@ -1,12 +1,36 @@
 const webpack = require('webpack');
 const CircularDependencyPlugin = require('circular-dependency-plugin')
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = {
   plugins: [
 
     // new webpack.IgnorePlugin(/\/something$/),            // Ignore something
     // new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/), // Ignore Moment's locale
-
+    new webpack.optimize.OccurrenceOrderPlugin(),
+    new UglifyJsPlugin({
+      cache: true,
+      parallel: true,
+      uglifyOptions: {
+        compress: false,
+        ecma: 6,
+        mangle: true,
+        warnings: false, // Suppress uglification warnings
+        pure_getters: true,
+        unsafe: true,
+        unsafe_comps: true,
+        screw_ie8: true,
+        conditionals: true,
+        unused: true,
+        comparisons: true,
+        sequences: true,
+        dead_code: true,
+        evaluate: true,
+        if_return: true,
+        join_vars: true
+      },
+      sourceMap: true
+    }),
     new CircularDependencyPlugin({
       // `onStart` is called before the cycle detection starts
       onStart({compilation}) {
