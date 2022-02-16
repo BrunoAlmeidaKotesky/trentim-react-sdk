@@ -8,7 +8,7 @@ const loaders = require('./webpack.loaders');
 const {plugins} = require('./webpack.plugins');
 
 const config = {
-  mode: "development",          // distribute it without minification
+  mode: "production",          // distribute it without minification
   target: "web",
   entry: [
     // do not load babel-polyfill here, the application should load the polyfills!
