@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { IDatableColumns, ITableCustomEvents } from '../../models/interfaces/IDataTable';
-import { IBodyStyles } from '../../models/interfaces/IDatatableStyles';
+import type { IDatableColumns, ITableCustomEvents } from '../../models/interfaces/IDataTable';
+import type { IBodyStyles } from '../../models/interfaces/IDatatableStyles';
 interface RowProps<T extends object> {
     type: 'div' | 'table';
     rows: T[];

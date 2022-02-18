@@ -1,4 +1,4 @@
-import { IMimeConverter } from "../models/interfaces/IMimeConverter";
+import type { IMimeConverter } from "../models/interfaces/IMimeConverter";
 export declare class ConvertionOptions {
     private blob;
     private byteArrays;

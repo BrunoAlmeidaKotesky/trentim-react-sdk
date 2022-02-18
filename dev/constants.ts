@@ -1,4 +1,4 @@
-import { INode } from "../src/models/interfaces/IGridView";
+import type { INode } from "../src/models/interfaces/IGridView";
 
 export const nodeItem: INode[] = [
     {

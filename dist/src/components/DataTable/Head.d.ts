@@ -1,5 +1,5 @@
-import { IDatableColumns } from '../../models/interfaces/IDataTable';
-import { IHeaderStyles } from '../../models/interfaces/IDatatableStyles';
+import type { IDatableColumns } from '../../models/interfaces/IDataTable';
+import type { IHeaderStyles } from '../../models/interfaces/IDatatableStyles';
 interface HeadColumnsProps {
     type: 'div' | 'table';
     columns: IDatableColumns[];

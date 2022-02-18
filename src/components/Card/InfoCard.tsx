@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { PrimaryButton } from '@fluentui/react/lib/Button';
-import { IInfoCardProps } from '../../models/interfaces/IInfoCardProps';
+import type { IInfoCardProps } from '../../models/interfaces/IInfoCardProps';
 import { CSSProperties } from 'react';
 
 export const InfoCard = React.memo((props: IInfoCardProps) => {

@@ -1,5 +1,5 @@
-import { IGroup } from "@fluentui/react/lib/DetailsList";
-import { INode, IRow } from "../models/interfaces/IGridView";
+import type { IGroup } from "@fluentui/react/lib/DetailsList";
+import type { INode, IRow } from "../models/interfaces/IGridView";
 
 export class Utils {
 

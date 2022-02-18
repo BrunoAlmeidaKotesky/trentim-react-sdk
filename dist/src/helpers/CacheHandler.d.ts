@@ -1,4 +1,4 @@
-import { ICacheHandler, ICacheOptions, ICacheResponse } from "../models/interfaces/ICacheHandler";
+import type { ICacheHandler, ICacheOptions, ICacheResponse } from "../models/interfaces/ICacheHandler";
 /**
  * The same interface from `JSON`, but it can also be from some other JSON parser libraries, such as npm module `flatted` for allowing circular objects.
  */

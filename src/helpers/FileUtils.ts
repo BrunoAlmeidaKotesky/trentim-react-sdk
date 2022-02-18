@@ -1,6 +1,6 @@
-import { ConvertionOptions } from "../models/ConverterOptions";
-import { IFileInfo } from "../models/interfaces/IFileInfo";
-import { IMimeConverter } from "../models/interfaces/IMimeConverter";
+import { ConvertionOptions } from "./ConverterOptions";
+import type { IFileInfo } from "../models/interfaces/IFileInfo";
+import type { IMimeConverter } from "../models/interfaces/IMimeConverter";
 
 export class FileUtils {
 

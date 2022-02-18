@@ -1,5 +1,4 @@
-import { IMimeConverter } from "../models/interfaces/IMimeConverter";
-
+import type { IMimeConverter } from "../models/interfaces/IMimeConverter";
 
 export class ConvertionOptions {
     constructor(private blob:Blob, private byteArrays:Uint8Array[], private mimeType: string, private mimeUtils?: IMimeConverter){}

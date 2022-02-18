@@ -3,7 +3,7 @@ import { useGridController } from './useGridController';
 import { FilterPaneContext, ListOptionsContext } from './Contexts';
 import { CheckboxVisibility, CollapseAllVisibility, DetailsList, DetailsListLayoutMode } from '@fluentui/react/lib/DetailsList';
 import { Sticky, StickyPositionType } from '@fluentui/react/lib/Sticky';
-import { IGridListProps } from '../../models/interfaces/IGridView';
+import type { IGridListProps } from '../../models/interfaces/IGridView';
 import { PanelFilter } from './PanelFilter';
 import { ListOptions } from './ListOptions';
 
