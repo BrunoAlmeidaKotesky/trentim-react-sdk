@@ -72,7 +72,13 @@ const config = {
       umdNamedDefine: true,
     },
   resolve: {
-    alias: {},
+    alias: {
+      //Include alias with @ for src/helpers, src/components, src/hooks and src/models
+      "@helpers": path.resolve(__dirname, 'src/helpers'),
+      "@components": path.resolve(__dirname, 'src/components'),
+      "@hooks": path.resolve(__dirname, 'src/hooks'),
+      "@models": path.resolve(__dirname, 'src/models')
+    },
     extensions: [".webpack.js", ".web.js", ".ts", ".tsx", ".js", ".jsx"]
   },
   node: {

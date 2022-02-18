@@ -2,7 +2,6 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { initializeIcons, loadTheme } from '@fluentui/react';
 import { DataTable } from '../src/components/DataTable/DataTable';
-import { InfoCard } from '../src/components/Card/InfoCard';
 import { GridView } from '../src/components/GridView/GridView';
 import { nodeItem, simpleRow } from './constants';
 
@@ -95,19 +94,6 @@ const Demo = (): JSX.Element => {
               { age: 75, name: 'Mario', ignoreMe: true },
               { age: 88, name: 'Rodney', ignoreMe: true },
             ]} />
-        </div>
-        <div style={{ margin: '0 auto', width: '80%', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', columnGap: 8 }}>
-          {[123, 265, 343, 475].map(i =>
-            <InfoCard
-              cardTitle='Aquisição do Pacote de Relatórios para Power BI' cardSubtitle={i.toString()}
-              circleIndicator={{ title: 'Status', color: '#06ad51' }}
-              cardRightColInformation={{
-                values: [
-                  { title: 'Guarapuava', style: { fontSize: 16, marginBottom: 4, fontWeight: 600 } },
-                  { title: 'José da Silva', style: { fontSize: 16, opacity: 0.8, marginBottom: 4 } },
-                  { title: '10/10/2021', style: { fontSize: 16, opacity: 0.8, marginTop: 'auto' } }
-                ]
-              }} />)}
         </div>
         <div>
           <GridView
