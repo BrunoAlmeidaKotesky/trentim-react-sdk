@@ -34,7 +34,22 @@
     "types": [
       "node",
       "jest"
-    ]
+    ],
+    "baseUrl": ".",
+    "paths": {
+      "@models/*": [
+        "src/models/*"
+      ],
+      "@helpers/*": [
+        "src/helpers/*"
+      ],
+      "@components/*": [
+        "src/components/*"
+      ],
+      "@hooks/*": [
+        "src/hooks/*"
+      ],
+    }
   },
   "exclude": ["node_modules"],
   "compileOnSave": false,
