@@ -58,6 +58,6 @@
     "./src/helpers/index.ts",
     "./src/hooks/index.ts",
     "./src/models/index.ts",
-    "./src/components/IFrame.tsx",
+    "src/components/IFrame/IFrame.tsx",
   ]
 }
