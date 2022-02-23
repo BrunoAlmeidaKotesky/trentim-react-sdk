@@ -55,6 +55,7 @@
   "compileOnSave": false,
   "files": [
     "./src/components/index.ts",
+    "./src/components/test.ts",
     "./src/helpers/index.ts",
     "./src/hooks/index.ts",
     "./src/models/index.ts"
