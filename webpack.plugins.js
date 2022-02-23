@@ -1,6 +1,7 @@
 const webpack = require('webpack');
 const CircularDependencyPlugin = require('circular-dependency-plugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 
 module.exports = {
   plugins: [
@@ -31,6 +32,7 @@ module.exports = {
       },
       sourceMap: true
     }),
+    new CleanWebpackPlugin(),
     new CircularDependencyPlugin({
       // `onStart` is called before the cycle detection starts
       onStart({compilation}) {

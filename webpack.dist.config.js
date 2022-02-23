@@ -20,24 +20,24 @@ const getModuleNames = root => fs.readdirSync(root, { withFileTypes: true })
 
 const moduleNames = getModuleNames('./src');
 
+const singleModules = [path.resolve(__dirname, 'src/index.tsx')];
+const multipleModule = (
+  // Multiple module exports of the /src/<Module name>/index.ts
+  moduleNames
+    .reduce((acc, entry) => {
+      acc[entry] = `./src/${entry}`;
+      return acc;
+    }, {})
+)
+
+multipleModule.test = './src/components/test.ts';
+console.log(multipleModule);
+
+
 const config = {
   mode: "production",          // distribute it without minification
   target: "web",
-  entry: isSingleModule
-    ? (
-      // Classic export of the /src/index.ts
-      [
-        path.resolve(__dirname, 'src/index.tsx')
-      ]
-    )
-    : (
-      // Multiple module exports of the /src/<Module name>/index.ts
-      moduleNames
-        .reduce((acc, entry) => {
-          acc[entry] = `./src/${entry}`;
-          return acc;
-        }, {})
-    ),
+  entry: isSingleModule ? singleModules : multipleModule,
   externals:
     thisPackageBelongsToMonorepo
       ? [                  // exclude all dependencies from the bundle
@@ -59,7 +59,7 @@ const config = {
       // Classic export of the /src/index.ts
       path: path.resolve(__dirname, 'dist'),
       filename: 'index.js',
-      publicPath: '/dist/',
+      publicPath: 'auto',
       library: package_.name,
       libraryTarget: 'umd',
       umdNamedDefine: true
@@ -68,8 +68,10 @@ const config = {
       // Multiple module exports of the /src/<Module name>/index.ts
       filename: '[name]/index.js',
       path: __dirname + '/dist',
+      chunkFilename: '[name].index.js',
+      publicPath: 'auto',
       libraryTarget: 'umd',
-      umdNamedDefine: true,
+      umdNamedDefine: true
     },
   resolve: {
     alias: {
