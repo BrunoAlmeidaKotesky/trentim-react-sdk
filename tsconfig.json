@@ -57,5 +57,14 @@
   "exclude": [
     "node_modules"
   ],
-  "compileOnSave": false
+  "compileOnSave": false,
+  "files": [
+    "./src/components/DataTable/index.ts",
+    "./src/components/GridView/index.ts",
+    "./src/components/IFrame/index.ts",
+    "./src/components/UploadButton/index.ts",
+    "./src/helpers/index.ts",
+    "./src/hooks/index.ts",
+    "./src/models/index.ts"
+  ]
 }

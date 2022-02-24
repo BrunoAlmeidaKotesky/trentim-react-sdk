@@ -23,19 +23,25 @@ if (isMultiModule) {
   const moduleNames = getModuleNames('./src');
 
   tsConfigJson.files =
-    moduleNames
-      .map(moduleName => {
-        const indexFilename = `./src/${moduleName}/index.ts`;
-        //if the module is components, acess each folder from components and add it's index.ts
-        if (moduleName === 'components') {
-          const subModuleNames = getModuleNames(`./src/${moduleName}`);
-          return subModuleNames.map(subModuleName => `./src/${moduleName}/${subModuleName}/index.ts`);
+    Object.values(moduleNames
+    //Create the module types array acessing and files from src that contais index.ts or index.tsx and build it's types
+      .reduce((acc, entry) => {
+        if (entry === 'components') {
+          //Acess each folder from components and add it's index.ts to acc
+          const subModuleNames = getModuleNames(`./src/${entry}`);
+          subModuleNames.forEach(subModuleName => {
+            const modulePath = `./src/${entry}/${subModuleName}/index.ts`;
+            if (fs.existsSync(modulePath)) acc[subModuleName] = modulePath;
+            if (fs.existsSync(modulePath + 'x')) acc[subModuleName] = modulePath + 'x';
+          });
         }
-        if (fs.existsSync(indexFilename)) return indexFilename;
-        if (fs.existsSync(indexFilename + 'x')) return indexFilename + 'x';
-        return null;
-      })
-      .filter(Boolean);
+        else {
+          const modulePath = `./src/${entry}/index.ts`;
+          if (fs.existsSync(modulePath)) acc[entry] = modulePath;
+          if (fs.existsSync(modulePath + 'x')) acc[entry] = modulePath + 'x';
+        }
+        return acc;
+      }, {}))
 }
 
 fs.writeFileSync('./tsconfig.json', JSON.stringify(tsConfigJson, null, 2));
