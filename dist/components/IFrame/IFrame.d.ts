@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 export declare type IBaseFrame = React.ComponentPropsWithRef<'iframe'> & {
     refOpt?: {
         refCallback: (ref: HTMLIFrameElement) => void;

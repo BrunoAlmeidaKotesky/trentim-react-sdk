@@ -1,4 +1,5 @@
-import React, { Suspense, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import * as React from 'react';
+import { Suspense, useEffect, useLayoutEffect, useRef, useState }  from 'react';
 
 export type IBaseFrame = React.ComponentPropsWithRef<'iframe'> & {
     refOpt?: {

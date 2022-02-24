@@ -62,7 +62,6 @@ const config = {
       // Multiple module exports of the /src/<Module name>/index.ts
       filename: '[name]/index.js',
       path: __dirname + '/dist',
-      chunkFilename: '[name].index.js',
       publicPath: ASSET_PATH,
       libraryTarget: 'umd',
       umdNamedDefine: true
