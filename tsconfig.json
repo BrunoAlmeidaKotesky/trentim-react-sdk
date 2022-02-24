@@ -6,7 +6,7 @@
       "es2016",
       "es6",
       "dom",
-      "dom.iterable",
+      "dom.iterable"
     ],
     "outDir": "./dist/",
     "declaration": true,
@@ -49,13 +49,17 @@
       "@hooks/*": [
         "src/hooks/*"
       ],
+      "@test/test.ts": [
+        "src/components/test.ts"
+      ]
     }
   },
-  "exclude": ["node_modules"],
+  "exclude": [
+    "node_modules"
+  ],
   "compileOnSave": false,
   "files": [
     "./src/components/index.ts",
-    "./src/components/test.ts",
     "./src/helpers/index.ts",
     "./src/hooks/index.ts",
     "./src/models/index.ts"

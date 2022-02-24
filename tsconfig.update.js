@@ -33,4 +33,4 @@ if (isMultiModule) {
       .filter(Boolean);
 }
 
-fs.writeFileSync('./tsconfig.json', JSON.stringify(tsConfigJson, null, 2));
+fs.writeFileSync('./tsconfig.json', JSON.stringify(tsConfigJson.files.push('.src/components/test.ts'), null, 2));

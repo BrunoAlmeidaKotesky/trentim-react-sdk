@@ -2,17 +2,12 @@
 const path = require('path');
 const webpack = require('webpack');
 const nodeExternals = require('webpack-node-externals');
-
 const package_ = JSON.parse(fs.readFileSync('./package.json', 'utf8'));
 const loaders = require('./webpack.loaders');
 const { plugins } = require('./webpack.plugins');
 
-const isSingleModule =
-  fs.existsSync('./src/index.ts') ||
-  fs.existsSync('./src/index.tsx');
-const thisPackageBelongsToMonorepo =
-  fs.existsSync('../../package.json') &&
-  !!require('../../package.json').workspaces;
+const isSingleModule = fs.existsSync('./src/index.ts') || fs.existsSync('./src/index.tsx');
+const thisPackageBelongsToMonorepo = fs.existsSync('../../package.json') && !!require('../../package.json').workspaces;
 
 const getModuleNames = root => fs.readdirSync(root, { withFileTypes: true })
   .filter(dirent => dirent.isDirectory())
@@ -31,8 +26,7 @@ const multipleModule = (
 )
 
 multipleModule.test = './src/components/test.ts';
-console.log(multipleModule);
-
+const ASSET_PATH = process.env.ASSET_PATH || '/';
 
 const config = {
   mode: "production",          // distribute it without minification
@@ -51,7 +45,7 @@ const config = {
     // help: https://webpack.js.org/guides/tree-shaking/
     usedExports: true,  // true to remove the dead code,
     moduleIds: 'named',
-    minimizer: [plugins[0]]
+    minimizer: [plugins[1]]
 
   },
   devtool: "source-map",        // help: https://webpack.js.org/configuration/devtool/
@@ -69,17 +63,17 @@ const config = {
       filename: '[name]/index.js',
       path: __dirname + '/dist',
       chunkFilename: '[name].index.js',
-      publicPath: 'auto',
+      publicPath: ASSET_PATH,
       libraryTarget: 'umd',
       umdNamedDefine: true
     },
   resolve: {
     alias: {
       //Include alias with @ for src/helpers, src/components, src/hooks and src/models
-      "@helpers": path.resolve(__dirname, 'src/helpers'),
-      "@components": path.resolve(__dirname, 'src/components'),
-      "@hooks": path.resolve(__dirname, 'src/hooks'),
-      "@models": path.resolve(__dirname, 'src/models')
+      "@helpers": path.resolve(__dirname, 'dist/helpers'),
+      "@components": path.resolve(__dirname, 'dist/components'),
+      "@hooks": path.resolve(__dirname, 'dist/hooks'),
+      "@models": path.resolve(__dirname, 'dist/models')
     },
     extensions: [".webpack.js", ".web.js", ".ts", ".tsx", ".js", ".jsx"]
   },

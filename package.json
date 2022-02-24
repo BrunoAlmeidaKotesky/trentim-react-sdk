@@ -25,7 +25,7 @@
     "commit": "git add -u && git add -A && git commit --allow-empty -m",
     "commit-amend": "git add -u && git add -A && git commit --amend --allow-empty --no-edit",
     "publish-push": "yarn publish --non-interactive && git push && git push --tags",
-    "test": "jest --coverage --no-cache --runInBand",
+    "test": "jest --coverage --no-cache --runInBand --passWithNoTests",
     "test-watch": "jest --watch --verbose --runInBand",
     "sync-file-deps": "node sync-file-deps.js",
     "sync-file-deps-watch": "node sync-file-deps.js --watch",
@@ -39,8 +39,8 @@
   "license": "MIT",
   "peerDependencies": {
     "@fluentui/react": "8.52.3",
-    "react": "^16.0.0",
-    "react-dom": "^16.0.0"
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.1.2",
@@ -87,6 +87,7 @@
     "less-loader": "^4.1.0",
     "mime-types": "^2.1.30",
     "node-sass": "^7.0.0",
+    "nodemon": "^2.0.15",
     "postcss-cli": "^4.1.0",
     "postcss-flexbugs-fixes": "3.2.0",
     "postcss-loader": "^2.1.6",
