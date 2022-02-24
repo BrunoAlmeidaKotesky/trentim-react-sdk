@@ -26,6 +26,11 @@ if (isMultiModule) {
     moduleNames
       .map(moduleName => {
         const indexFilename = `./src/${moduleName}/index.ts`;
+        //if the module is components, acess each folder from components and add it's index.ts
+        if (moduleName === 'components') {
+          const subModuleNames = getModuleNames(`./src/${moduleName}`);
+          return subModuleNames.map(subModuleName => `./src/${moduleName}/${subModuleName}/index.ts`);
+        }
         if (fs.existsSync(indexFilename)) return indexFilename;
         if (fs.existsSync(indexFilename + 'x')) return indexFilename + 'x';
         return null;
@@ -33,4 +38,4 @@ if (isMultiModule) {
       .filter(Boolean);
 }
 
-fs.writeFileSync('./tsconfig.json', JSON.stringify(tsConfigJson.files.push('.src/components/test.ts'), null, 2));
+fs.writeFileSync('./tsconfig.json', JSON.stringify(tsConfigJson, null, 2));

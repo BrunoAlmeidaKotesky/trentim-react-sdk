@@ -20,12 +20,18 @@ const multipleModule = (
   // Multiple module exports of the /src/<Module name>/index.ts
   moduleNames
     .reduce((acc, entry) => {
-      acc[entry] = `./src/${entry}`;
+      if (entry === 'components') {
+        //Acess each folder from components and add it's index.ts to acc
+        const subModuleNames = getModuleNames(`./src/${entry}`);
+        subModuleNames.forEach(subModuleName => {
+          acc[subModuleName] = `./src/${entry}/${subModuleName}/index.ts`;
+        });
+      }
+      else acc[entry] = `./src/${entry}`;
       return acc;
     }, {})
 )
 
-multipleModule.test = './src/components/test.ts';
 const ASSET_PATH = process.env.ASSET_PATH || '/';
 
 const config = {
@@ -50,14 +56,14 @@ const config = {
   },
   devtool: "source-map",        // help: https://webpack.js.org/configuration/devtool/
   output: isSingleModule ? {
-      // Classic export of the /src/index.ts
-      path: path.resolve(__dirname, 'dist'),
-      filename: 'index.js',
-      publicPath: 'auto',
-      library: package_.name,
-      libraryTarget: 'umd',
-      umdNamedDefine: true
-    }
+    // Classic export of the /src/index.ts
+    path: path.resolve(__dirname, 'dist'),
+    filename: 'index.js',
+    publicPath: 'auto',
+    library: package_.name,
+    libraryTarget: 'umd',
+    umdNamedDefine: true
+  }
     : {
       // Multiple module exports of the /src/<Module name>/index.ts
       filename: '[name]/index.js',
