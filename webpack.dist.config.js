@@ -20,14 +20,14 @@ const multipleModule = (
   // Multiple module exports of the /src/<Module name>/index.ts
   moduleNames
     .reduce((acc, entry) => {
-      if (entry === 'components') {
-        //Acess each folder from components and add it's index.ts to acc
-        const subModuleNames = getModuleNames(`./src/${entry}`);
-        subModuleNames.forEach(subModuleName => {
-          acc[subModuleName] = `./src/${entry}/${subModuleName}/index.ts`;
-        });
-      }
-      else acc[entry] = `./src/${entry}`;
+      // if (entry === 'components') {
+      //   //Acess each folder from components and add it's index.ts to acc
+      //   const subModuleNames = getModuleNames(`./src/${entry}`);
+      //   subModuleNames.forEach(subModuleName => {
+      //     acc[subModuleName] = `./src/${entry}/${subModuleName}/index.ts`;
+      //   });
+      // }
+      acc[entry] = `./src/${entry}`;
       return acc;
     }, {})
 )

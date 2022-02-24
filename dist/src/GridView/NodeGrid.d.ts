@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { IGroup } from '@fluentui/react/lib/DetailsList';
-import type { INode, IRow } from '../../models/interfaces/IGridView';
+import type { INode, IRow } from '../models/interfaces/IGridView';
 export interface IOuifrGroupedDetailsListState {
     groups?: IGroup[];
     items?: IRow[];

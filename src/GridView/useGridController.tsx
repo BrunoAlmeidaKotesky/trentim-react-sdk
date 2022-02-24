@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { classNames } from './styles';
-import type { IGridListProps, IRow } from '../../models/interfaces/IGridView';
-import { Utils } from '../../helpers/Utils';
-import type { FilterOption, IAvailableFitlers, IPanelFilterProps } from '../../models/interfaces/IPanelFilter';
+import type { IGridListProps, IRow } from '../models/interfaces/IGridView';
+import { Utils } from '../helpers/Utils';
+import type { FilterOption, IAvailableFitlers, IPanelFilterProps } from '../models/interfaces/IPanelFilter';
 import type { IColumn, IGroup } from '@fluentui/react/lib/DetailsList';
 
 export function useGridController(props: IGridListProps<any>) {

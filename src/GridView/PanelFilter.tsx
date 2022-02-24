@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { lazy, useContext, useMemo, Suspense, useState } from 'react';
 import { FilterPaneContext } from './Contexts';
-import type { FilterOption, SelectedItemsMap } from '../../models/interfaces/IPanelFilter';
+import type { FilterOption, SelectedItemsMap } from '../models/interfaces/IPanelFilter';
 
 function PanelFilter() {
     const [actualFilteredValues, setActualFilteredValues] = useState<SelectedItemsMap>(new Map());

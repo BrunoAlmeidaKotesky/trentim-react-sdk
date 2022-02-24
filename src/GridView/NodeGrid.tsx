@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { DetailsList, IGroup, IColumn, CollapseAllVisibility, IDetailsGroupDividerProps } from '@fluentui/react/lib/DetailsList';
 import { IRenderFunction } from '@fluentui/react/lib/Utilities';
-import type { INode, IRow } from '../../models/interfaces/IGridView';
+import type { INode, IRow } from '../models/interfaces/IGridView';
 
 export interface IOuifrGroupedDetailsListState {
     groups?: IGroup[];

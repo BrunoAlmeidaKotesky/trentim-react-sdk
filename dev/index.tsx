@@ -1,8 +1,8 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { initializeIcons, loadTheme } from '@fluentui/react';
-import { DataTable } from '../src/components/DataTable/DataTable';
-import { GridView } from '../src/components/GridView/GridView';
+import { DataTable } from '../src/DataTable/DataTable';
+import { GridView } from '../src/GridView/GridView';
 import { nodeItem, simpleRow } from './constants';
 
 declare const module: any;

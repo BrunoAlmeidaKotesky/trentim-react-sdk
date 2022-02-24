@@ -1,6 +1,6 @@
 {
   "name": "trentim-react-sdk",
-  "version": "0.4.7",
+  "version": "0.4.6",
   "description": "About",
   "repository": {
     "type": "git",
@@ -19,7 +19,7 @@
     "build-analyze": "set NODE_ENV=production && webpack --config webpack.dist.analyze.config.js",
     "build": "set NODE_ENV=production && rm -rf ./dist; yarn run build-ts-declarations && webpack --config webpack.dist.config.js",
     "build-watch": "rm -rf ./dist; yarn run build-ts-declarations && webpack --watch --config webpack.dist.config.js",
-    "build-ts-declarations": "node tsconfig.update.js && tsc && cd dist/ && find . -name \\*.js -delete && cd ..",
+    "build-ts-declarations": "tsc && cd dist/ && find . -name \\*.js -delete && cd ..",
     "storybook": "start-storybook -p 9200",
     "storybook-at": "start-storybook -p",
     "commit": "git add -u && git add -A && git commit --allow-empty -m",

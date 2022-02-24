@@ -1,4 +1,5 @@
 const autoprefixer = require('autoprefixer');
+const path = require('path');
 
 module.exports = {
   module: {
@@ -166,41 +167,9 @@ module.exports = {
       },
       {
         test: /\.(tsx|ts)$/,
-        use: [
-          //Do not validate if the types are correct
-
-          {
-            loader: 'ts-loader'
-          //   options: {
-          //     transpileOnly: true,
-          //     compilerOptions: {
-          //       "outDir": "./dist/",
-          //       "declaration": true,
-          //       "declarationDir": "./dist/",
-          //       "sourceMap": true,
-          //       "sourceRoot": "./dist",
-          //       "allowSyntheticDefaultImports": true,
-          //       "module": "commonjs",
-          //       "target": "es5",
-          //       "inlineSourceMap": false,
-          //       "jsx": "react",
-          //       "allowJs": false,
-          //       "skipLibCheck": true,
-          //       "noErrorTruncation": true,
-          //       "noImplicitAny": false,
-          //       "forceConsistentCasingInFileNames": true,
-          //       "noImplicitReturns": false,
-          //       "noImplicitThis": true,
-          //       "strictNullChecks": false,
-          //       "strict": false,
-          //       "suppressImplicitAnyIndexErrors": true,
-          //       "noUnusedLocals": true,
-          //       "noUnusedParameters": true,
-          //       "downlevelIteration": true
-          //     }
-          //   }
-           }
-        ]
+        use:  'ts-loader',
+        exclude: /node_modules/,
+        include: [path.resolve(__dirname, 'src')],
       }
     ]
   }
