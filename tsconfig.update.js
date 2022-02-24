@@ -27,13 +27,15 @@ if (isMultiModule) {
     //Create the module types array acessing and files from src that contais index.ts or index.tsx and build it's types
       .reduce((acc, entry) => {
         if (entry === 'components') {
-          //Acess each folder from components and add it's index.ts to acc
-          const subModuleNames = getModuleNames(`./src/${entry}`);
-          subModuleNames.forEach(subModuleName => {
-            const modulePath = `./src/${entry}/${subModuleName}/index.ts`;
-            if (fs.existsSync(modulePath)) acc[subModuleName] = modulePath;
-            if (fs.existsSync(modulePath + 'x')) acc[subModuleName] = modulePath + 'x';
-          });
+          // //Acess each folder from components and add it's index.ts to acc
+          // const subModuleNames = getModuleNames(`./src/${entry}`);
+          // subModuleNames.forEach(subModuleName => {
+          //   const modulePath = `./src/${entry}/${subModuleName}/index.ts`;
+          //   if (fs.existsSync(modulePath)) acc[subModuleName] = modulePath.replace(`/${entry}`, '');
+          //   if (fs.existsSync(modulePath + 'x')) acc[subModuleName] = modulePath.replace(`/${entry}`, '') + 'x';
+          // });
+          const modulePath = `./src/${entry}/index.d.ts`;
+          acc[entry] = modulePath
         }
         else {
           const modulePath = `./src/${entry}/index.ts`;

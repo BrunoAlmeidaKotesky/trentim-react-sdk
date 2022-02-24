@@ -3,7 +3,7 @@ import { lazy, useContext, useMemo, Suspense, useState } from 'react';
 import { FilterPaneContext } from './Contexts';
 import type { FilterOption, SelectedItemsMap } from '../../models/interfaces/IPanelFilter';
 
-export const PanelFilter = React.memo(() => {
+function PanelFilter() {
     const [actualFilteredValues, setActualFilteredValues] = useState<SelectedItemsMap>(new Map());
     const { isOpen, onClose, availableFilters, panelTitle, onCancel, onApply} = useContext(FilterPaneContext);
     const [FluentPanel, Dropdown, PrimaryButton, DefaultButton] = useMemo(() => {
@@ -33,10 +33,14 @@ export const PanelFilter = React.memo(() => {
         <Suspense fallback={<div>...</div>}>
             <FluentPanel 
                 onRenderFooter={_ => (<div>
-                    <PrimaryButton onClick={() => onApply(actualFilteredValues)} styles={{root: {marginRight: 8}}}>
-                        Aplicar
-                    </PrimaryButton>
-                    <DefaultButton onClick={onCancel}>Cancelar</DefaultButton>
+                    <Suspense fallback={'...'}>
+                        <PrimaryButton onClick={() => onApply(actualFilteredValues)} styles={{root: {marginRight: 8}}}>
+                            Aplicar
+                        </PrimaryButton>
+                    </Suspense>
+                    <Suspense fallback={'...'}>
+                        <DefaultButton onClick={onCancel}>Cancelar</DefaultButton>
+                    </Suspense>
                   </div>)}
                 isFooterAtBottom={true}
                 onDismiss={onClose} isOpen={isOpen}>
@@ -49,14 +53,16 @@ export const PanelFilter = React.memo(() => {
                             data
                         };
                     });
-                    return (
+                    return (<Suspense fallback={'...'}>
                         <Dropdown
                             key={filter?.key} options={options}
                             multiSelect={filter?.enableMultiple} label={filter?.name}
                             onChange={(_, opt) => onChange(filter?.key, opt)} />
-                    )
+                    </Suspense>);
                 })}
             </FluentPanel>
         </Suspense>
     );
-});
+}
+
+export default React.memo(PanelFilter);

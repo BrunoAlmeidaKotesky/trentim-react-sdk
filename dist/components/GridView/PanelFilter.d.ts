@@ -1,2 +1,4 @@
 import * as React from 'react';
-export declare const PanelFilter: React.MemoExoticComponent<() => JSX.Element>;
+declare function PanelFilter(): JSX.Element;
+declare const _default: React.MemoExoticComponent<typeof PanelFilter>;
+export default _default;
