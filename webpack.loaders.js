@@ -13,8 +13,7 @@ module.exports = {
         // typescript loader
         test: /\.(tsx|ts)$/,
         use: [
-          'babel-loader',
-          'ts-loader',
+          'babel-loader'
         ],
       },
       {	// css loader
@@ -165,6 +164,44 @@ module.exports = {
       {
         test: /\.svg$/, loader: 'svg-inline-loader'
       },
+      {
+        test: /\.(tsx|ts)$/,
+        use: [
+          //Do not validate if the types are correct
+
+          {
+            loader: 'ts-loader'
+          //   options: {
+          //     transpileOnly: true,
+          //     compilerOptions: {
+          //       "outDir": "./dist/",
+          //       "declaration": true,
+          //       "declarationDir": "./dist/",
+          //       "sourceMap": true,
+          //       "sourceRoot": "./dist",
+          //       "allowSyntheticDefaultImports": true,
+          //       "module": "commonjs",
+          //       "target": "es5",
+          //       "inlineSourceMap": false,
+          //       "jsx": "react",
+          //       "allowJs": false,
+          //       "skipLibCheck": true,
+          //       "noErrorTruncation": true,
+          //       "noImplicitAny": false,
+          //       "forceConsistentCasingInFileNames": true,
+          //       "noImplicitReturns": false,
+          //       "noImplicitThis": true,
+          //       "strictNullChecks": false,
+          //       "strict": false,
+          //       "suppressImplicitAnyIndexErrors": true,
+          //       "noUnusedLocals": true,
+          //       "noUnusedParameters": true,
+          //       "downlevelIteration": true
+          //     }
+          //   }
+           }
+        ]
+      }
     ]
   }
 };

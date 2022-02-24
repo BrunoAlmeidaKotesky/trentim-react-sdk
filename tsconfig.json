@@ -21,7 +21,7 @@
     "allowJs": false,
     "skipLibCheck": true,
     "noErrorTruncation": true,
-    "noImplicitAny": true,
+    "noImplicitAny": false,
     "forceConsistentCasingInFileNames": true,
     "noImplicitReturns": false,
     "noImplicitThis": true,
@@ -54,11 +54,5 @@
   "exclude": [
     "node_modules"
   ],
-  "compileOnSave": false,
-  "files": [
-    "./src/components/index.d.ts",
-    "./src/helpers/index.ts",
-    "./src/hooks/index.ts",
-    "./src/models/index.ts"
-  ]
+  "compileOnSave": false
 }
