@@ -50,8 +50,9 @@ function IFrameImplementation(props: IBaseFrame) {
         if (iFrameRef?.current) {
             props?.refChanged?.(iFrameRef);
             props.ref = iFrameRef;
+            console.log('ref changed', iFrameRef?.current);
         }
-    }, [iFrameRef]);
+    }, [iFrameRef?.current]);
 
 
     const { title } = props;
