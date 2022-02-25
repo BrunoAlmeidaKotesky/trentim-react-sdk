@@ -52,7 +52,7 @@ function IFrameImplementation(props: IBaseFrame) {
             props.ref = iFrameRef;
             console.log('ref changed', iFrameRef?.current);
         }
-    }, [iFrameRef?.current]);
+    }, [iFrameRef?.current?.contentDocument?.body]);
 
 
     const { title } = props;
