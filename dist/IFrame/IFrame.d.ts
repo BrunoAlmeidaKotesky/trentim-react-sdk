@@ -1,7 +1,7 @@
 import * as React from 'react';
 export declare type IBaseFrame = React.ComponentPropsWithRef<'iframe'> & {
     refDepencyList?: React.DependencyList;
-    refChanged?: (ref?: React.MutableRefObject<HTMLIFrameElement>) => void;
+    refChanged?: (ref?: HTMLIFrameElement) => void;
 };
 export declare type IFrameProps = IBaseFrame & {
     fallback?: JSX.Element;

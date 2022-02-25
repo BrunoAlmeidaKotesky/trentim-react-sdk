@@ -3,7 +3,7 @@ import { Suspense, useEffect, useLayoutEffect, useRef, useState }  from 'react';
 
 export type IBaseFrame = React.ComponentPropsWithRef<'iframe'> & {
     refDepencyList?: React.DependencyList;
-    refChanged?: (ref?:  React.MutableRefObject<HTMLIFrameElement>) => void;
+    refChanged?: (ref?:  HTMLIFrameElement) => void;
 }
 
 export type IFrameProps = IBaseFrame & {
@@ -23,12 +23,13 @@ export function IFrame(props: IFrameProps) {
 }
 
 function IFrameImplementation(props: IBaseFrame) {
+    const [v, setValue] = useState(0); // integer state
     const awaiter = useRef<null | {
         promise: null | Promise<void>;
         resolve: () => void;
         reject: () => void;
     }>(null);
-    const iFrameRef = useRef<HTMLIFrameElement>(null);
+    
     const [_, triggerLoad] = useState(false)
     if (awaiter.current?.promise) {
         throw awaiter.current.promise;
@@ -47,18 +48,14 @@ function IFrameImplementation(props: IBaseFrame) {
     }, []);
 
     useEffect(() => {
-        if (iFrameRef?.current) {
-            props?.refChanged?.(iFrameRef);
-            props.ref = iFrameRef;
-        }
-    }, [iFrameRef?.current, props?.refDepencyList]);
-
+        setValue(v + 1);
+    }, props?.refDepencyList);
 
     const { title } = props;
     return (
         <iframe
             {...props}
-            ref={iFrameRef}
+            ref={ref => props?.refChanged?.(ref)}
             title={title}
             onLoad={(e) => {
                 // @ts-ignore
