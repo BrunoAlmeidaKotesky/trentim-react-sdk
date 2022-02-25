@@ -3,7 +3,7 @@ import { Suspense, useEffect, useLayoutEffect, useRef, useState }  from 'react';
 
 export type IBaseFrame = React.ComponentPropsWithRef<'iframe'> & {
     refDepencyList?: React.DependencyList;
-    refChanged?: (ref?:  HTMLIFrameElement) => void;
+    refChanged?: (ref?:  React.MutableRefObject<HTMLIFrameElement>) => void;
 }
 
 export type IFrameProps = IBaseFrame & {
@@ -14,22 +14,22 @@ export type IFrameProps = IBaseFrame & {
 /**https://gist.github.com/threepointone/e73a87f7bbbebc78cf71744469ec5a15*/
 export function IFrame(props: IFrameProps) {
     const { fallback, ...rest } = props;
+    console.log(props?.ref);
 
     return (
         <Suspense fallback={fallback || 'loading...'}>
-            <IFrameImplementation {...rest} />
+            <IFrameImplementation ref={props.ref} {...rest} />
         </Suspense>
     );
 }
 
 function IFrameImplementation(props: IBaseFrame) {
-    const [v, setValue] = useState(0); // integer state
     const awaiter = useRef<null | {
         promise: null | Promise<void>;
         resolve: () => void;
         reject: () => void;
     }>(null);
-    
+    const iFrameRef = useRef<HTMLIFrameElement>(null);
     const [_, triggerLoad] = useState(false)
     if (awaiter.current?.promise) {
         throw awaiter.current.promise;
@@ -48,14 +48,18 @@ function IFrameImplementation(props: IBaseFrame) {
     }, []);
 
     useEffect(() => {
-        setValue(v + 1);
-    }, props?.refDepencyList);
+        if (iFrameRef?.current) {
+            props?.refChanged?.(iFrameRef);
+            props.ref = iFrameRef;
+        }
+    }, [iFrameRef?.current, props?.refDepencyList]);
+
 
     const { title } = props;
     return (
         <iframe
             {...props}
-            ref={ref => props?.refChanged?.(ref)}
+            ref={iFrameRef}
             title={title}
             onLoad={(e) => {
                 // @ts-ignore
