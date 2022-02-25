@@ -2,11 +2,8 @@ import * as React from 'react';
 import { Suspense, useEffect, useLayoutEffect, useRef, useState }  from 'react';
 
 export type IBaseFrame = React.ComponentPropsWithRef<'iframe'> & {
-    refOpt?: {
-        refCallback: (ref: HTMLIFrameElement) => void;
-        dep?: React.DependencyList
-    }
-
+    refDepencyList?: React.DependencyList;
+    refChanged?: (ref?:  React.MutableRefObject<HTMLIFrameElement>) => void;
 }
 
 export type IFrameProps = IBaseFrame & {
@@ -16,11 +13,11 @@ export type IFrameProps = IBaseFrame & {
 
 /**https://gist.github.com/threepointone/e73a87f7bbbebc78cf71744469ec5a15*/
 export function IFrame(props: IFrameProps) {
-    const { fallback, refOpt, ...rest } = props;
+    const { fallback, ...rest } = props;
 
     return (
         <Suspense fallback={fallback || 'loading...'}>
-            <IFrameImplementation refOpt={refOpt} {...rest} />
+            <IFrameImplementation {...rest} />
         </Suspense>
     );
 }
@@ -50,9 +47,10 @@ function IFrameImplementation(props: IBaseFrame) {
     }, []);
 
     useEffect(() => {
-        if (iFrameRef?.current && props?.refOpt?.refCallback)
-            props?.refOpt?.refCallback(iFrameRef.current);
-    }, [iFrameRef?.current, props?.refOpt?.dep]);
+        if (iFrameRef?.current) 
+            props?.refChanged?.(iFrameRef);
+    }, [iFrameRef?.current, props?.refDepencyList]);
+
 
     const { title } = props;
     return (
