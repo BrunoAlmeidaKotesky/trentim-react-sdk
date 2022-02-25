@@ -49,7 +49,7 @@ function IFrameImplementation(props: IBaseFrame) {
     useEffect(() => {
         if (iFrameRef?.current) 
             props?.refChanged?.(iFrameRef);
-    }, [iFrameRef?.current, props?.refDepencyList]);
+    }, [iFrameRef?.current, ...props?.refDepencyList]);
 
 
     const { title } = props;
