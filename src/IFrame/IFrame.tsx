@@ -51,7 +51,7 @@ function IFrameImplementation(props: IBaseFrame) {
             props?.refChanged?.(iFrameRef);
             props.ref = iFrameRef;
         }
-    }, [iFrameRef?.current?.src]);
+    }, [iFrameRef]);
 
 
     const { title } = props;
