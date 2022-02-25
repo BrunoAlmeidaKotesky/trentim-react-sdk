@@ -51,7 +51,7 @@ function IFrameImplementation(props: IBaseFrame) {
             props?.refChanged?.(iFrameRef, 'Ref Changed: ' + iFrameRef?.current);
     }, [iFrameRef?.current]);
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         if(iFrameRef?.current)
             props.refChanged?.(iFrameRef, 'Depency List Changed: ' + props.refDepencyList);
     },  [...props?.refDepencyList]);
