@@ -3,7 +3,7 @@ import { Suspense, useEffect, useLayoutEffect, useRef, useState }  from 'react';
 
 export type IBaseFrame = React.ComponentPropsWithRef<'iframe'> & {
     refDepencyList?: React.DependencyList;
-    refChanged?: (ref?:  React.MutableRefObject<HTMLIFrameElement>) => void;
+    refChanged?: (ref?:  React.MutableRefObject<HTMLIFrameElement>, changeReason?: string) => void;
 }
 
 export type IFrameProps = IBaseFrame & {
@@ -48,12 +48,12 @@ function IFrameImplementation(props: IBaseFrame) {
 
     useEffect(() => {
         if (iFrameRef?.current) 
-            props?.refChanged?.(iFrameRef);
+            props?.refChanged?.(iFrameRef, 'Ref Changed: ' + iFrameRef?.current);
     }, [iFrameRef?.current]);
 
     useEffect(() => {
         if(iFrameRef?.current)
-            props.refChanged?.(iFrameRef);
+            props.refChanged?.(iFrameRef, 'Depency List Changed: ' + props.refDepencyList);
     },  [...props?.refDepencyList]);
 
     const { title } = props;
