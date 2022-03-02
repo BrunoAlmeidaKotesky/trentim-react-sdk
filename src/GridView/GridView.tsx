@@ -20,7 +20,6 @@ export const GridView = (props: IGridListProps<any>) => {
                         allRows?.filter(item => {
                             const isKeyInsideFileObj = item?.file ? Object.keys(item?.file)?.includes(key as unknown as string) : false;
                             const itemValue: string = isKeyInsideFileObj ? item?.file[key] : item?.[key];
-                            console.log(key, itemValue)
                             return itemValue?.toLowerCase().includes(text.toLowerCase());
                         }) : allRows;
                     setActualRows(filteredRows);

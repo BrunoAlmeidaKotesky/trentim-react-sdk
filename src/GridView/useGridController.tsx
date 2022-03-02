@@ -169,7 +169,6 @@ export function useGridController(props: IGridListProps<any>) {
                     }
                 }
             }
-            console.log(andFilterAggregation);
             if (andFilterAggregation.length > 0) {
                 setActualRows(andFilterAggregation)
                 setCurFilteredRows(andFilterAggregation);

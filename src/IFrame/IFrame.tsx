@@ -14,7 +14,6 @@ export type IFrameProps = IBaseFrame & {
 /**https://gist.github.com/threepointone/e73a87f7bbbebc78cf71744469ec5a15*/
 export function IFrame(props: IFrameProps) {
     const { fallback, ...rest } = props;
-    console.log(props?.ref);
 
     return (
         <Suspense fallback={fallback || 'loading...'}>
