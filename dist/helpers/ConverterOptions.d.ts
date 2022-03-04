@@ -4,11 +4,13 @@ export declare class ConvertionOptions {
     private byteArrays;
     private mimeType;
     private mimeUtils?;
-    constructor(blob: Blob, byteArrays: Uint8Array[], mimeType: string, mimeUtils?: IMimeConverter);
+    private fileName?;
+    constructor(blob: Blob, byteArrays: Uint8Array[], mimeType: string, mimeUtils?: IMimeConverter, fileName?: string);
     /**
      * @returns Return the coneverted value as an blob Object
      */
     getBlob(): Blob;
+    getFile(): File;
     /**
      * @returns Return an array representation of the type `Uint8Array` from the given base64 value.
      */

@@ -1,12 +1,16 @@
 import type { IMimeConverter } from "../models/interfaces/IMimeConverter";
 
 export class ConvertionOptions {
-    constructor(private blob:Blob, private byteArrays:Uint8Array[], private mimeType: string, private mimeUtils?: IMimeConverter){}
+    constructor(private blob:Blob, private byteArrays:Uint8Array[], private mimeType: string, private mimeUtils?: IMimeConverter, private fileName?: string){}
     /**
      * @returns Return the coneverted value as an blob Object
      */
     public getBlob(): Blob {
       return this.blob;
+    }
+
+    public getFile(): File {
+      return new File([this.getBlob()], this?.fileName, {type: this?.mimeType});
     }
     /**
      * @returns Return an array representation of the type `Uint8Array` from the given base64 value.

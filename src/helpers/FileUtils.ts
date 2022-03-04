@@ -1,5 +1,5 @@
 import { ConvertionOptions } from "./ConverterOptions";
-import type { IFileInfo } from "../models/interfaces/IFileInfo";
+import type { IBlobStringWritter, IFileInfo } from "../models/interfaces/IFileInfo";
 import type { IMimeConverter } from "../models/interfaces/IMimeConverter";
 
 export class FileUtils {
@@ -80,17 +80,34 @@ export class FileUtils {
    * @param blob - Any Blob object, such as `File` and other inherited objects from this interface.
    * @returns A promise of the base64 string.
    */
-  public blobToBase64 = (blob: Blob): Promise<string> => {
-    const reader = new FileReader();
-    reader.readAsDataURL(blob);
-    return new Promise(resolve => {
-      reader.onloadend = () => {
-        const b64 = reader.result as string;
-        const metarRegex = /^data:.+;base64,/
-        resolve(b64.replace(metarRegex, ''));
-      };
-    });
-  };
+   static blobToBase64 = async (blob: Blob, config?: IBlobStringWritter): Promise<string> => {
+    const readAs = config?.readAs ?? 'DataURL';
+    try {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onloadend = async () => {
+                const b64 = reader?.result as string;
+                if(!b64)
+                    reject(new Error('FileReader error'));
+                if(!config?.customCb) {
+                  const metarRegex = /^data:.+;base64,/
+                  return resolve(b64?.replace(metarRegex, ''));
+                } else {
+                  const result = await config?.customCb(b64);
+                  return resolve(result);
+                }
+            };
+            reader.onerror = (e) => reject(e);
+            if(config?.encoding)
+              reader[`readAs${readAs}`](blob);
+            else
+              reader[`readAs${readAs}`](blob, config?.encoding);
+        });
+    } catch (err) {
+        console.log(err);
+        return null;
+    }
+}
 
   private checkIfHasMime(fileName?: string): string | null {
     if (!fileName)
@@ -99,13 +116,13 @@ export class FileUtils {
     return type;
   }
 
-  public converBase64To(base64: string, fileName?: string): ConvertionOptions {
-    let type = this.checkIfHasMime(fileName);
+  public converBase64To(base64: string, fileName?: string, type?: string): ConvertionOptions {
+    type = type || this.checkIfHasMime(fileName);
     let sliceSize = 512;
-    let byteCharacters = atob(base64); //method which converts base64 to binary
+    let byteCharacters = atob(decodeURIComponent(base64));
     let byteArrays: Uint8Array[] = [];
     for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
-      let slice = byteCharacters.slice(offset, offset + sliceSize);
+      let slice = byteCharacters?.slice(offset, offset + sliceSize);
       let byteNumbers = new Array(slice.length);
       for (let i = 0; i < slice.length; i++) {
         byteNumbers[i] = slice.charCodeAt(i);
@@ -114,6 +131,6 @@ export class FileUtils {
       byteArrays.push(byteArray);
     }
     const blob = type ? new Blob(byteArrays, { type }) : new Blob(byteArrays);
-    return new ConvertionOptions(blob, byteArrays, type, this?.mime ?? undefined);
+    return new ConvertionOptions(blob, byteArrays, type, this?.mime ?? undefined, fileName);
   }
 }

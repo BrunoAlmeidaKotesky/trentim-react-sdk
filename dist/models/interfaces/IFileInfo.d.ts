@@ -6,3 +6,8 @@ export interface IFileInfo {
     /**The last modfified date of the file before being converted */
     lastModified?: number;
 }
+export interface IBlobStringWritter {
+    readAs: 'ArrayBuffer' | 'BinaryString' | 'DataURL' | 'Text';
+    customCb: (res: string | ArrayBuffer) => Promise<string>;
+    encoding?: string;
+}
