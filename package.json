@@ -144,7 +144,6 @@
     "output": "./coverage/junit.xml"
   },
   "dependencies": {
-    "@fluentui/react": "8.52.3",
-    "rimraf": "^3.0.2"
+    "@fluentui/react": "8.52.3"
   }
 }
