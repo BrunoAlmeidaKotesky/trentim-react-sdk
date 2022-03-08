@@ -48,7 +48,6 @@
     "@babel/core": "^7.11.4",
     "@babel/preset-env": "^7.1.0",
     "@babel/preset-react": "^7.0.0",
-    "@pnp/sp": "2.3.0",
     "@storybook/addon-controls": "^6.0.21",
     "@storybook/addon-essentials": "^6.0.21",
     "@storybook/addon-knobs": "^6.0.19",
@@ -147,6 +146,7 @@
     "output": "./coverage/junit.xml"
   },
   "dependencies": {
-    "@fluentui/react": "8.52.3"
+    "@fluentui/react": "8.52.3",
+    "@pnp/sp": "2.3.0"
   }
 }
