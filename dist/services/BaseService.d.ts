@@ -1,4 +1,4 @@
-import { SPRest } from '@pnp/sp';
+import type { SPRest, registerCustomRequestClientFactory } from '@pnp/sp';
 import type { IRequestClient } from "@pnp/common";
 import type { IItemAddResult, IItemUpdateResult } from "@pnp/sp/items";
 import type { IFileAddResult, IFileInfo } from '@pnp/sp/files';
@@ -7,10 +7,11 @@ import type { ISPUser } from '../models/interfaces/ISPUser';
 import type { PermissionKind } from '@pnp/sp/security';
 import type { PnpModules, IItemVersionInfo, ITypedHash, PreviousUnion, IQueryOptions } from './IBaseServiceConfig';
 export declare class BaseService {
-    injectedModules: PnpModules[];
-    private requestClientFactory?;
     sp: SPRest;
-    constructor(injectedModules: PnpModules[], requestClientFactory?: () => IRequestClient);
+    injectedModules: PnpModules[];
+    private register?;
+    private requestClientFactory?;
+    constructor(sp: SPRest, injectedModules: PnpModules[], register?: typeof registerCustomRequestClientFactory, requestClientFactory?: () => IRequestClient);
     private loadModules;
     private baseItemsSelect;
     private uniqueSelect;

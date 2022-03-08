@@ -1,5 +1,5 @@
 import { DefaultCatch } from 'catch-decorator-ts';
-import { sp, SPRest, registerCustomRequestClientFactory } from '@pnp/sp';
+import type { SPRest, registerCustomRequestClientFactory }from '@pnp/sp';
 import type {AllTypes} from './IFakeImport';
 import type { IRequestClient } from "@pnp/common";
 import type { IItemAddResult, IItemUpdateResult } from "@pnp/sp/items";
@@ -11,10 +11,9 @@ import type { PnpModules, IBaseItemKey, IItemVersionInfo, ITypedHash, PreviousUn
 
 declare const types: AllTypes;
 export class BaseService {
-    public sp: SPRest;
-    constructor(public injectedModules: PnpModules[], private requestClientFactory?: () => IRequestClient) {
-        if(this.requestClientFactory) 
-            registerCustomRequestClientFactory(this.requestClientFactory);
+    constructor(public sp: SPRest, public injectedModules: PnpModules[], private register?: typeof registerCustomRequestClientFactory, private requestClientFactory?: () => IRequestClient) {
+        if(this?.register && this.requestClientFactory)
+            this?.register(this?.requestClientFactory);
         this.loadModules(this.injectedModules).then(_ => {
             this.sp = sp.configure({ headers: { 'Origin': window.location.origin } }, window.location.origin);
         });
