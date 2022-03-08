@@ -1,15 +1,5 @@
 import { DefaultCatch } from 'catch-decorator-ts';
 import {sp} from "@pnp/sp";
-import "@pnp/sp/webs";
-import "@pnp/sp/profiles";
-import "@pnp/sp/site-groups/web";
-import "@pnp/sp/site-users/web";
-import "@pnp/sp/lists";
-import "@pnp/sp/lists/web";
-import "@pnp/sp/files";
-import "@pnp/sp/folders";
-import "@pnp/sp/items";
-import "@pnp/sp/attachments";
 import { SPRest, registerCustomRequestClientFactory, SPHttpClient } from '@pnp/sp';
 import type { IRequestClient } from "@pnp/common";
 import type { IItemAddResult, IItemUpdateResult } from "@pnp/sp/items";
@@ -42,9 +32,30 @@ class CustomSPHttpClient extends SPHttpClient {
     }
 }
 
-
 export class BaseService {
     public _sp: SPRest = sp;
+
+    public async init() {
+        await import ("@pnp/sp/webs");
+        await import ("@pnp/sp/profiles");
+        await import ("@pnp/sp/site-groups/web");
+        await import ("@pnp/sp/site-users/web");
+        await import ("@pnp/sp/lists");
+        await import ("@pnp/sp/lists/web");
+        await import ("@pnp/sp/files");
+        await import ("@pnp/sp/folders");
+        await import ("@pnp/sp/items");
+        await import ("@pnp/sp/attachments");
+        if(this.injectedModules.length > 0) {
+            for (const module of this.injectedModules)
+                try {
+                    await import(module);
+                } catch (e) {
+                    console.error("Failed to load module: " + module, e);
+                }
+        }
+    }
+
     constructor(public injectedModules: PnpModules[], private factory?: () => IRequestClient) {
         if(!this.factory)
             registerCustomRequestClientFactory(() => new CustomSPHttpClient());

@@ -1,5 +1,6 @@
 import type { ICachingOptions } from "@pnp/odata";
-export declare type PnpModules = 'attachments' | 'items' | 'lists' | 'navigation' | 'site-users' | 'site-groups' | 'webs' | 'profiles' | 'folders' | 'files' | 'lists/web' | 'site-groups/web' | 'web';
+export declare type DefaultModules = 'attachments' | 'items' | 'lists' | 'navigation' | 'site-users' | 'site-groups' | 'webs' | 'profiles' | 'folders' | 'files' | 'lists/web' | 'site-groups/web' | 'web';
+export declare type PnpModules = `@pnp/sp/${DefaultModules}`;
 export declare type ITypedHash<T> = {
     [key in keyof T]: T;
 };

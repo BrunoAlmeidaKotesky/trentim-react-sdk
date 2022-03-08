@@ -1,6 +1,6 @@
 import type { ICachingOptions } from "@pnp/odata";
 
-export type PnpModules = 
+export type DefaultModules = 
 'attachments' | 
 'items' | 
 'lists' | 
@@ -14,6 +14,8 @@ export type PnpModules =
 'lists/web' |
 'site-groups/web' |
 'web';
+
+export type PnpModules = `@pnp/sp/${DefaultModules}`;
 
 export type ITypedHash<T> = {
     [key in keyof T]: T;
