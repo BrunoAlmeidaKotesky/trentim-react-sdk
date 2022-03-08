@@ -1,3 +1,13 @@
+import "@pnp/sp/webs";
+import "@pnp/sp/profiles";
+import "@pnp/sp/site-groups/web";
+import "@pnp/sp/site-users/web";
+import "@pnp/sp/lists";
+import "@pnp/sp/lists/web";
+import "@pnp/sp/files";
+import "@pnp/sp/folders";
+import "@pnp/sp/items";
+import "@pnp/sp/attachments";
 import { SPRest } from '@pnp/sp';
 import type { IRequestClient } from "@pnp/common";
 import type { IItemAddResult, IItemUpdateResult } from "@pnp/sp/items";
@@ -11,7 +21,6 @@ export declare class BaseService {
     private factory?;
     _sp: SPRest;
     constructor(injectedModules: PnpModules[], factory?: () => IRequestClient);
-    private loadModules;
     private baseItemsSelect;
     private uniqueSelect;
     removeOData<T>(baseArr: T[]): T[];

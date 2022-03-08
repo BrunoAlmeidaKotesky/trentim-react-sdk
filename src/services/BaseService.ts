@@ -1,7 +1,16 @@
 import { DefaultCatch } from 'catch-decorator-ts';
 import {sp} from "@pnp/sp";
+import "@pnp/sp/webs";
+import "@pnp/sp/profiles";
+import "@pnp/sp/site-groups/web";
+import "@pnp/sp/site-users/web";
+import "@pnp/sp/lists";
+import "@pnp/sp/lists/web";
+import "@pnp/sp/files";
+import "@pnp/sp/folders";
+import "@pnp/sp/items";
+import "@pnp/sp/attachments";
 import { SPRest, registerCustomRequestClientFactory, SPHttpClient } from '@pnp/sp';
-import type {AllTypes} from './IFakeImport';
 import type { IRequestClient } from "@pnp/common";
 import type { IItemAddResult, IItemUpdateResult } from "@pnp/sp/items";
 import type { IFileAddResult, IFileInfo } from '@pnp/sp/files';
@@ -10,8 +19,6 @@ import type { ISPUser } from '../models/interfaces/ISPUser';
 import type { PermissionKind } from '@pnp/sp/security';
 import type { PnpModules, IBaseItemKey, IItemVersionInfo, ITypedHash, PreviousUnion, IQueryOptions } from './IBaseServiceConfig';
 import type { IFetchOptions } from "@pnp/common";
-
-declare const types: AllTypes;
 
 class CustomSPHttpClient extends SPHttpClient {
     constructor(impl?) { super(impl); }
@@ -42,21 +49,7 @@ export class BaseService {
         if(!this.factory)
             registerCustomRequestClientFactory(() => new CustomSPHttpClient());
         else registerCustomRequestClientFactory(this.factory);
-        this.loadModules(this.injectedModules).then(_ => {
-            this._sp = sp.configure({ headers: { 'Origin': window.location.origin } }, window.location.origin);
-        }).catch(err => console.error(err));
-    }
-
-    private async loadModules(injectedModules: PnpModules[]): Promise<void> {
-        await import("@pnp/sp");
-        for (const module of injectedModules) {
-            const res = await import(module);
-            if (!res) {
-                console.log(`Module ${res?.default?.name} failed to load.`);
-            }
-            if(res)
-                console.log(res);
-        }
+        this._sp = sp.configure({ headers: { 'Origin': window.location.origin } }, window.location.origin);
     }
 
     private baseItemsSelect: IBaseItemKey = ['Id', 'Title', 'Created', 'Modified'];
