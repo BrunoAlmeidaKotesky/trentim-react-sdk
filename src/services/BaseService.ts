@@ -20,6 +20,7 @@ export class BaseService {
     }
 
     private async loadModules(injectedModules: PnpModules[]): Promise<void> {
+        await import("@pnp/sp");
         for (const module of injectedModules) {
             const res = await import(module);
             if (!res) {
