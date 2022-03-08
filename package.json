@@ -39,7 +39,6 @@
   "license": "MIT",
   "peerDependencies": {
     "@fluentui/react": "8.52.3",
-    "@pnp/sp": "2.3.0",
     "react": "^16.9.0",
     "react-dom": "^16.9.0"
   },
