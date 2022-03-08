@@ -1,5 +1,6 @@
 import { DefaultCatch } from 'catch-decorator-ts';
-import type { SPRest, registerCustomRequestClientFactory }from '@pnp/sp';
+import {sp} from "@pnp/sp";
+import { SPRest, registerCustomRequestClientFactory, SPHttpClient } from '@pnp/sp';
 import type {AllTypes} from './IFakeImport';
 import type { IRequestClient } from "@pnp/common";
 import type { IItemAddResult, IItemUpdateResult } from "@pnp/sp/items";
@@ -8,14 +9,41 @@ import type { IAttachmentFileInfo } from '@pnp/sp/attachments';
 import type { ISPUser } from '../models/interfaces/ISPUser';
 import type { PermissionKind } from '@pnp/sp/security';
 import type { PnpModules, IBaseItemKey, IItemVersionInfo, ITypedHash, PreviousUnion, IQueryOptions } from './IBaseServiceConfig';
+import type { IFetchOptions } from "@pnp/common";
 
 declare const types: AllTypes;
+
+class CustomSPHttpClient extends SPHttpClient {
+    constructor(impl?) { super(impl); }
+
+    private ensureSitePageUrl(url: string) {
+        const tenantUrl = window.location.origin;
+        const sitePage = window.location.pathname;
+        if (url?.startsWith(tenantUrl) && !url?.includes(sitePage)) {
+            url = url.replace(tenantUrl, '');
+            url = `${tenantUrl}${sitePage}${url}`;
+        }
+        return url;
+    }
+
+    public fetch(url: string, options?: IFetchOptions): Promise<Response> {
+        return super.fetch(this.ensureSitePageUrl(url), options);
+    }
+
+    public fetchRaw(url: string, options?: IFetchOptions): Promise<Response> {
+        return super.fetchRaw(this.ensureSitePageUrl(url), options);
+    }
+}
+
+
 export class BaseService {
-    constructor(public sp: SPRest, public injectedModules: PnpModules[], private register?: typeof registerCustomRequestClientFactory, private requestClientFactory?: () => IRequestClient) {
-        if(this?.register && this.requestClientFactory)
-            this?.register(this?.requestClientFactory);
+    public _sp: SPRest = sp;
+    constructor(public injectedModules: PnpModules[], private factory?: () => IRequestClient) {
+        if(!this.factory)
+            registerCustomRequestClientFactory(() => new CustomSPHttpClient());
+        else registerCustomRequestClientFactory(this.factory);
         this.loadModules(this.injectedModules).then(_ => {
-            this.sp = sp.configure({ headers: { 'Origin': window.location.origin } }, window.location.origin);
+            this._sp = sp.configure({ headers: { 'Origin': window.location.origin } }, window.location.origin);
         }).catch(err => console.error(err));
     }
 
@@ -51,7 +79,7 @@ export class BaseService {
     public async getItems<T>(identifier: string, { filters = null, expand = null, cache = null, top = null, orderBy = null, getBy = 'Title' }: IQueryOptions, ...select: string[]): Promise<T[]> {
         if (!getBy)
             getBy = 'Title';
-        const lists = this.sp.web.lists[`getBy${getBy}`](identifier);
+        const lists = this._sp.web.lists[`getBy${getBy}`](identifier);
         const query = lists.items
             .expand(...expand ?? [])
             .select(...this.uniqueSelect(select) ?? [])
@@ -74,17 +102,17 @@ export class BaseService {
 
     @DefaultCatch((err) => { console.error(err); return null })
     public async saveItem<T>(listTitle: string, hash: ITypedHash<T>): Promise<IItemAddResult> {
-        return await this.sp.web.lists.getByTitle(listTitle).items.add(hash);
+        return await this._sp.web.lists.getByTitle(listTitle).items.add(hash);
     }
 
     @DefaultCatch((err) => { console.error(err); return null })
     public async updateItem<T>(listTitle: string, itemId: number, hash: ITypedHash<T>): Promise<IItemUpdateResult> {
-        return await this.sp.web.lists.getByTitle(listTitle).items.getById(itemId).update(hash);
+        return await this._sp.web.lists.getByTitle(listTitle).items.getById(itemId).update(hash);
     }
 
     @DefaultCatch((err) => { console.error(err); return null; })
     private async getItemByIdSelect(listTitle: string, getBy: 'Title' | 'Id' = 'Title', ...select: string[]) {
-        return this.sp.web.lists[`getBy${getBy}`](listTitle).items.select(...this.uniqueSelect(select)).top(9999999);
+        return this._sp.web.lists[`getBy${getBy}`](listTitle).items.select(...this.uniqueSelect(select)).top(9999999);
     }
 
     @DefaultCatch((err) => { console.error(err); return null; })
@@ -111,19 +139,19 @@ export class BaseService {
 
     @DefaultCatch((err) => console.error(err))
     public async deleteItem(listTitle: string, itemId: number) {
-        await this.sp.web.lists.getByTitle(listTitle).items.getById(itemId).delete();
+        await this._sp.web.lists.getByTitle(listTitle).items.getById(itemId).delete();
     }
 
     @DefaultCatch((err) => { console.error(err); return false; })
     public async sendAttatchments(listName: string, itemId: number, attachments: IAttachmentFileInfo[]) {
-        await this.sp.web.lists.getByTitle(listName).items.getById(itemId).attachmentFiles.addMultiple(attachments);
+        await this._sp.web.lists.getByTitle(listName).items.getById(itemId).attachmentFiles.addMultiple(attachments);
         return true;
     }
 
     @DefaultCatch((err) => console.error(err))
     public async addFileToLibrary(libraryUrl: string, folderUrl: string, content: File): Promise<IFileAddResult> {
         const chunkSize = 40960;
-        const fileAddRes = await this.sp.web.getFolderByServerRelativeUrl(libraryUrl).files.addChunked(folderUrl, content, (data) => {
+        const fileAddRes = await this._sp.web.getFolderByServerRelativeUrl(libraryUrl).files.addChunked(folderUrl, content, (data) => {
             const percent = (data.blockNumber / data.totalBlocks);
             console.log(percent);
         }, true, chunkSize);
@@ -139,7 +167,7 @@ export class BaseService {
         let realTotalPercentage: number = 0;
         files.forEach(_ => accumulatorPercent.push(0));
         const result = await Promise.allSettled(files.map((f, idx) => {
-            return this.sp.web.getFolderByServerRelativeUrl(f.libraryUrl).files.addChunked(f.name, f.content, (data) => {
+            return this._sp.web.getFolderByServerRelativeUrl(f.libraryUrl).files.addChunked(f.name, f.content, (data) => {
                 const totalBlocks = data.fileSize <= chunkSize ? 1 : data.totalBlocks;
                 const individualPercentage = (data.blockNumber / totalBlocks);
                 if (accumulatorPercent[idx] < 1)
@@ -157,13 +185,13 @@ export class BaseService {
 
     @DefaultCatch((err) => { console.error(err); return []; })
     public async getItemAttachments(listTitle: string, itemId: number) {
-        return await this.sp.web.lists.getByTitle(listTitle).items.getById(itemId).attachmentFiles.get();
+        return await this._sp.web.lists.getByTitle(listTitle).items.getById(itemId).attachmentFiles.get();
     }
 
     @DefaultCatch((err) => { console.error(err); return null; })
     public async getCurrentUser(): Promise<ISPUser> {
-        const userInfo = await this.sp.web.currentUser.get() as ISPUser;
-        const context = await this.sp.site.getContextInfo();
+        const userInfo = await this._sp.web.currentUser.get() as ISPUser;
+        const context = await this._sp.site.getContextInfo();
         const isExternal = userInfo.LoginName.includes("#ext#");
         userInfo.IsExternalUser = isExternal;
         userInfo.ProfilePic = `${context.SiteFullUrl}/_layouts/15/userphoto.aspx?accountname=${userInfo?.Email}`;
@@ -184,7 +212,7 @@ export class BaseService {
     @DefaultCatch((err) => { console.error(err); })
     public async hasItemPermission(list: string, itemId: number, opt: { getBy?: 'Id' | 'Title', permissionType: PermissionKind }) {
         const getBy = opt?.getBy || 'Id';
-        const _list = this.sp.web.lists[`getBy${getBy}`](list);
+        const _list = this._sp.web.lists[`getBy${getBy}`](list);
         const item = _list.items.getById(itemId);
         const hasPermission = await item.currentUserHasPermissions(opt.permissionType);
         return hasPermission;
