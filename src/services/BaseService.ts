@@ -16,7 +16,7 @@ export class BaseService {
             this?.register(this?.requestClientFactory);
         this.loadModules(this.injectedModules).then(_ => {
             this.sp = sp.configure({ headers: { 'Origin': window.location.origin } }, window.location.origin);
-        });
+        }).catch(err => console.error(err));
     }
 
     private async loadModules(injectedModules: PnpModules[]): Promise<void> {
@@ -25,6 +25,8 @@ export class BaseService {
             if (!res) {
                 console.log(`Module ${res?.default?.name} failed to load.`);
             }
+            if(res)
+                console.log(res);
         }
     }
 
