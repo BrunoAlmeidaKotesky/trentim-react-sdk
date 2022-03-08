@@ -1,6 +1,6 @@
 {
   "name": "trentim-react-sdk",
-  "version": "0.6.5",
+  "version": "0.7.0",
   "description": "About",
   "repository": {
     "type": "git",
@@ -40,13 +40,15 @@
   "peerDependencies": {
     "@fluentui/react": "8.52.3",
     "react": "^16.9.0",
-    "react-dom": "^16.9.0"
+    "react-dom": "^16.9.0",
+    "@pnp/sp": "2.3.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.1.2",
     "@babel/core": "^7.11.4",
     "@babel/preset-env": "^7.1.0",
     "@babel/preset-react": "^7.0.0",
+    "@pnp/sp": "2.3.0",
     "@storybook/addon-controls": "^6.0.21",
     "@storybook/addon-essentials": "^6.0.21",
     "@storybook/addon-knobs": "^6.0.19",
@@ -61,6 +63,7 @@
     "babel-jest": "^26.6.3",
     "babel-loader": "^8.1.0",
     "babel-preset-react-app": "^6.1.0",
+    "catch-decorator-ts": "^0.0.2",
     "chokidar": "^3.4.0",
     "circular-dependency-plugin": "^4.0.0",
     "clean-webpack-plugin": "^4.0.0",

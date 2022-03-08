@@ -1,12 +1,24 @@
 {
   "compilerOptions": {
+    "experimentalDecorators": true,
+    "allowJs": true,
+    "emitDecoratorMetadata": true,
     "lib": [
       "es2015",
       "es2015.promise",
       "es2016",
       "es6",
       "dom",
-      "dom.iterable"
+      "dom.iterable",
+      "es2015.collection",
+      "ES2019",
+      "es2019.Array",
+      "ES2017",
+      "ES2018",
+      "ES2020",
+      "ESNext",
+      "ESNext.Promise",
+      "ES2020.Promise"
     ],
     "outDir": "./dist/",
     "declaration": true,
@@ -18,7 +30,6 @@
     "target": "es5",
     "inlineSourceMap": false,
     "jsx": "react",
-    "allowJs": false,
     "skipLibCheck": true,
     "noErrorTruncation": true,
     "noImplicitAny": false,
