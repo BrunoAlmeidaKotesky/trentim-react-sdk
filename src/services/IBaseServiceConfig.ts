@@ -15,11 +15,7 @@ export type DefaultModules =
 'site-groups/web' |
 'web';
 
-export type PnpModules = `@pnp/sp/${DefaultModules}`;
-
-export type ITypedHash<T> = {
-    [key in keyof T]: T;
-};
+export type PnpModules = `@pnp/sp/${string}`;
 
 export type PreviousUnion<P1, P2> = { [k in (keyof P1 | keyof P2)]: k extends keyof P1 ? P1[k] : k extends keyof P2 ? P2[k] : never }
 export interface IItemVersionInfo {

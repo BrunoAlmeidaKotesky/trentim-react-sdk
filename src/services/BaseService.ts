@@ -7,7 +7,7 @@ import type { IFileAddResult, IFileInfo } from '@pnp/sp/files';
 import type { IAttachmentFileInfo } from '@pnp/sp/attachments';
 import type { ISPUser } from '../models/interfaces/ISPUser';
 import type { PermissionKind } from '@pnp/sp/security';
-import type { PnpModules, IBaseItemKey, IItemVersionInfo, ITypedHash, PreviousUnion, IQueryOptions } from './IBaseServiceConfig';
+import type { PnpModules, IBaseItemKey, IItemVersionInfo, PreviousUnion, IQueryOptions } from './IBaseServiceConfig';
 import type { IFetchOptions } from "@pnp/common";
 
 class CustomSPHttpClient extends SPHttpClient {
@@ -105,12 +105,12 @@ export class BaseService {
     }
 
     @DefaultCatch((err) => { console.error(err); return null })
-    public async saveItem<T>(listTitle: string, hash: ITypedHash<T>): Promise<IItemAddResult> {
+    public async saveItem<T>(listTitle: string, hash: T): Promise<IItemAddResult> {
         return await this._sp.web.lists.getByTitle(listTitle).items.add(hash);
     }
 
     @DefaultCatch((err) => { console.error(err); return null })
-    public async updateItem<T>(listTitle: string, itemId: number, hash: ITypedHash<T>): Promise<IItemUpdateResult> {
+    public async updateItem<T>(listTitle: string, itemId: number, hash: T): Promise<IItemUpdateResult> {
         return await this._sp.web.lists.getByTitle(listTitle).items.getById(itemId).update(hash);
     }
 

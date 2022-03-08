@@ -1,9 +1,6 @@
 import type { ICachingOptions } from "@pnp/odata";
 export declare type DefaultModules = 'attachments' | 'items' | 'lists' | 'navigation' | 'site-users' | 'site-groups' | 'webs' | 'profiles' | 'folders' | 'files' | 'lists/web' | 'site-groups/web' | 'web';
-export declare type PnpModules = `@pnp/sp/${DefaultModules}`;
-export declare type ITypedHash<T> = {
-    [key in keyof T]: T;
-};
+export declare type PnpModules = `@pnp/sp/${string}`;
 export declare type PreviousUnion<P1, P2> = {
     [k in (keyof P1 | keyof P2)]: k extends keyof P1 ? P1[k] : k extends keyof P2 ? P2[k] : never;
 };
