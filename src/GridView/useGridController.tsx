@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { classNames } from './styles';
 import type { IGridListProps, IRow } from '../models/interfaces/IGridView';
 import { Utils } from '../helpers/Utils';
-import type { FilterOption, IAvailableFitlers, IPanelFilterProps } from '../models/interfaces/IPanelFilter';
+import type { FilterOption, IAvailableFilters, IPanelFilterProps, SelectedItemsMap } from '../models/interfaces/IPanelFilter';
 import type { IColumn, IGroup } from '@fluentui/react/lib/DetailsList';
 
 export function useGridController(props: IGridListProps<any>) {
@@ -114,69 +114,92 @@ export function useGridController(props: IGridListProps<any>) {
         if (props?.onRowClick)
             props?.onRowClick(item);
     }
-
-    const buildFilters = (): IAvailableFitlers[] => {
-        const filters: IAvailableFitlers[] = [];
+    /**Generate the dropdowns of each availabe column and it's unique values */
+    const buildFilters = (): IAvailableFilters[] => {
+        const filters: IAvailableFilters[] = [];
         for (let index = 0; index < cols.length; index++) {
-            const c = cols[index];
-            const validRows = allRows?.every(r => r[c?.fieldName ?? c?.key]);
+            const col = cols[index];
+            const keys = col?.key?.split('.') ?? col.fieldName?.split('.'); 
+            const validRows = allRows?.every(r => {
+                const obj = Utils.getNestedObject<string, any>(r, keys);
+                return !!obj
+            });
             if (validRows) {
                 const options: FilterOption[] = allRows?.filter(d => d)?.map((data, idx) => {
+                    let stringObject = Utils.getNestedObject(data, keys)?.toString();
+                    if (col?.dateConvertionOptions?.shouldConvertToLocaleString)
+                        stringObject = Utils.convertIsoToLocaleString(stringObject, col?.dateConvertionOptions?.locales, col?.dateConvertionOptions?.formatOptions);
                     return {
-                        key: idx + "_" + c?.key,
-                        text: data?.[c?.key ?? c?.fieldName ?? c?.key]?.toString(),
+                        key: idx + "_" + col?.key,
+                        text: stringObject,
                         data
                     };
                 });
-                //Remove duplicates from options checking if the text repeats.
-                const uniqueOptions = options?.filter((obj, pos, arr) => {
-                    return arr.map(mapObj => mapObj?.text).indexOf(obj?.text) === pos;
-                });
+                const uniqueOptions = options?.filter((obj, pos, arr) => arr.map(mapObj => mapObj?.text).indexOf(obj?.text) === pos);
 
                 filters.push({
-                    key: c?.key,
+                    key: col?.key,
                     options: uniqueOptions,
                     enableMultiple: true,
-                    name: c?.name
+                    name: col?.name
                 });
             }
         }
-
         return filters;
+    }
+
+    const onApplyFilter: IPanelFilterProps['onApply'] = (selectedItems) => {
+        if(selectedItems.size === 0) {
+            setActualRows(allRows);
+            setCurFilteredRows([]);
+            return;
+        }
+        const mapsByKeyKind = new Map<string, SelectedItemsMap>();
+        selectedItems.forEach((_, key, map) => {
+            const keyName = key.split('_')[1];
+            const doesntHaveKey = !mapsByKeyKind.has(keyName);
+            const sameMapsList = [...map].filter(d => d[0] === key);
+            if(doesntHaveKey) {
+                mapsByKeyKind.set(keyName, new Map(sameMapsList));
+            }
+            else {
+                const thisKindMap = mapsByKeyKind.get(keyName);
+                sameMapsList.forEach(d => thisKindMap?.set(d[0], d[1]));
+            } 
+        });
+        
+        let andFilterAggregation: IRow[] = currentFilteredRows;
+        for (let idx = 0; idx < allRows?.length; idx++) {
+            const row = allRows[idx];
+            for (const [key, _] of Object.entries(row)) {
+
+                const sameKeyFromMap = [...selectedItems].filter((s) => {
+                    const k = s[0];
+                    return k.split("_")[1] === key;
+                });
+                if (sameKeyFromMap?.length > 0) {
+                    sameKeyFromMap.forEach((_, idx) => {
+                        const isSameValue = sameKeyFromMap[idx][1]['data'][key] === row[key];
+                        if (isSameValue && !andFilterAggregation.map(r => r?.Id).includes(row?.Id)) {
+                            andFilterAggregation = [...andFilterAggregation, row];
+                        }
+                    });
+
+                }
+            }
+        }
+        if (andFilterAggregation.length > 0) {
+            setActualRows(andFilterAggregation)
+            setCurFilteredRows(andFilterAggregation);
+        } else { 
+            setActualRows(allRows);
+            setCurFilteredRows([]);
+        }
     }
 
     const panelConfig: IPanelFilterProps = {
         isOpen: isFilterPanelOpen,
-        onApply: (selectedItems) => {
-            //filter the rows according to the selected items, where the key is the rootItemKey
-            let andFilterAggregation: IRow[] = currentFilteredRows;
-            for (let idx = 0; idx < allRows?.length; idx++) {
-                const row = allRows[idx];
-                for (const [key, _] of Object.entries(row)) {
-
-                    const sameKeyFromMap = [...selectedItems].filter((s) => {
-                        const k = s[0];
-                        return k.split("_")[1] === key;
-                    });
-                    if (sameKeyFromMap?.length > 0) {
-                        sameKeyFromMap.forEach((_, idx) => {
-                            const isSameValue = sameKeyFromMap[idx][1]['data'][key] === row[key];
-                            if (isSameValue && !andFilterAggregation.map(r => r?.Id).includes(row?.Id)) {
-                                andFilterAggregation = [...andFilterAggregation, row];
-                            }
-                        });
-
-                    }
-                }
-            }
-            if (andFilterAggregation.length > 0) {
-                setActualRows(andFilterAggregation)
-                setCurFilteredRows(andFilterAggregation);
-            } else { 
-                setActualRows(allRows);
-                setCurFilteredRows([]);
-            }
-        },
+        onApply: onApplyFilter,
         onCancel: () => { setIsFilterPanel(false); setActualRows(allRows); setCurFilteredRows([])},
         onClose: () =>  { setIsFilterPanel(false); setActualRows(allRows); setCurFilteredRows([])},
         //The available filters are the ones that are defined in the `columns` prop, and the options are the rows that are defined in the `rows` prop according to the key

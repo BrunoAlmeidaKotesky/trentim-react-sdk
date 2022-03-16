@@ -32,6 +32,7 @@ class CustomSPHttpClient extends SPHttpClient {
     }
 }
 
+/**@TO-DO: Document this API. */
 export class BaseService {
     public _sp: SPRest = sp;
 

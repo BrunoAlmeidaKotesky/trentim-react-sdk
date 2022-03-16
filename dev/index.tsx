@@ -5,9 +5,7 @@ import { DataTable } from '../src/DataTable/DataTable';
 import { GridView } from '../src/GridView/GridView';
 import { nodeItem, simpleRow } from './constants';
 
-declare const module: any;
 let hmrUpdate: undefined | (() => void);
-
 loadTheme({
   defaultFontStyle: { fontFamily: 'Roboto', fontWeight: 'regular' },
   fonts: {
@@ -135,8 +133,8 @@ const Demo = (): JSX.Element => {
 ReactDOM.render(<Demo />, document.getElementById('dyna-module-root'));
 
 // Todo: fixme: callbacks are not called, only page refresh is taking place.
-if (module.hot) {
-  module.hot.accept('../src', function () {
+if (module?.hot) {
+  module?.hot?.accept('../src', function () {
     console.log('Accepting the updated module under src');
     hmrUpdate && hmrUpdate();
   });

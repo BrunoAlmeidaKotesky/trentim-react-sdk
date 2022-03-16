@@ -1,7 +1,7 @@
 import { IRow } from "./IGridView";
 
 export type FilterOption = {key: string | number, text: string, data?: IRow, selected?: boolean;};
-export interface IAvailableFitlers {
+export interface IAvailableFilters {
     key: string;
     name: string;
     options: FilterOption[];
@@ -9,7 +9,7 @@ export interface IAvailableFitlers {
 }
 export interface IPanelFilterProps {
     isOpen: boolean;
-    availableFilters: IAvailableFitlers[];
+    availableFilters: IAvailableFilters[];
     onApply: (map: SelectedItemsMap) => void;
     onCancel: () => void;
     onClose: () => void;

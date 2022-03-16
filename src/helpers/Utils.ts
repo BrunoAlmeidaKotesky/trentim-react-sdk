@@ -60,4 +60,8 @@ export class Utils {
         const key = columnKey as keyof T;
         return items.slice(0).sort((a: T, b: T) => ((isSortedDescending ? a[key] < b[key] : a[key] > b[key]) ? 1 : -1));
     }
+
+    public static getNestedObject<T, V extends any>(nestedObj: any, pathArr: T[]): V  {
+        return pathArr.reduce((obj, key) => (obj && obj[key] !== 'undefined') ? obj[key] : undefined, nestedObj);
+    }
 }
