@@ -118,8 +118,9 @@ export function useGridController(props: IGridListProps<any>) {
     /**Generate the dropdowns of each availabe column and it's unique values */
     const buildFilters = (): IAvailableFilters[] => {
         const filters: IAvailableFilters[] = [];
-        for (let index = 0; index < cols.length; index++) {
-            const col = cols[index];
+        const columnsToFilter = cols.filter(c => (!props?.hiddenFilterKeys?.includes(c?.key)));
+        for (let index = 0; index < columnsToFilter.length; index++) {
+            const col = columnsToFilter[index];
             const renderAs = col?.renderFilterAs ?? 'Dropdown';
             const keys = col?.key?.split('.') ?? col.fieldName?.split('.'); 
             const validRows = allRows?.every(r => {

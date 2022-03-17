@@ -32,6 +32,7 @@ export const GridView = (props: IGridListProps<any>) => {
                     <div data-is-scrollable="true" style={{ position: 'relative', zIndex: 0 }}>
                         <DetailsList
                             {...props?.detailsListProps}
+                            onRenderItemColumn={props?.onRenderItemColumn}
                             onRenderRow={(p, defaultRender) => <div onClick={() => onRowClick(p?.item)}>{defaultRender({ ...p, styles: { root: { cursor: props?.onRowClick ? 'pointer' : 'default' } } })}</div>}
                             items={actualRows} columns={cols} groups={groups}
                             groupProps={{
