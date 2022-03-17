@@ -6,6 +6,7 @@ export interface IAvailableFilters {
     name: string;
     options: FilterOption[];
     enableMultiple: boolean;
+    renderAs: 'Dropdown' | 'SearchBox';
 }
 export interface IPanelFilterProps {
     isOpen: boolean;
@@ -14,7 +15,6 @@ export interface IPanelFilterProps {
     onCancel: () => void;
     onClose: () => void;
     panelTitle: string;
-    onNotifyFilterChange?: (map: SelectedItemsMap) => void;
 }
 
 export type SelectedItemsMap = Map<string, {rootItemKey: keyof IRow, itemKey: string | number, data: IRow, text: string}>;
