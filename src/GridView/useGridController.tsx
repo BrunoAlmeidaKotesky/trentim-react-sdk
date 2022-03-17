@@ -119,6 +119,7 @@ export function useGridController(props: IGridListProps<any>) {
         const filters: IAvailableFilters[] = [];
         for (let index = 0; index < cols.length; index++) {
             const col = cols[index];
+            const renderAs = col?.renderFilterAs ?? 'Dropdown';
             const keys = col?.key?.split('.') ?? col.fieldName?.split('.'); 
             const validRows = allRows?.every(r => {
                 const obj = Utils.getNestedObject<string, any>(r, keys);
@@ -141,7 +142,8 @@ export function useGridController(props: IGridListProps<any>) {
                     key: col?.key,
                     options: uniqueOptions,
                     enableMultiple: true,
-                    name: col?.name
+                    name: col?.name,
+                    renderAs
                 });
             }
         }
