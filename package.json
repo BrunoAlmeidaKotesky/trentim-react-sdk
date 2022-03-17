@@ -31,7 +31,7 @@
     "sync-file-deps-watch": "node sync-file-deps.js --watch",
     "sync-usages": "node sync-usages.js",
     "sync-usages-watch": "node sync-usages.js --watch",
-    "release": "yarn test && yarn run build && git add -u && git add -A && git commit --allow-empty -m \"Build changes\" && yarn version --patch && yarn run publish-push",
+    "release": "yarn test && yarn run build && git add -u && git add -A && git commit --allow-empty -m \"Build changes\" && yarn version && yarn run publish-push",
     "upgrade-release": "yarn upgrade && yarn run release"
   },
   "keywords": [],
@@ -145,7 +145,6 @@
     "output": "./coverage/junit.xml"
   },
   "dependencies": {
-    "@fluentui/react": "8.52.3",
-    "@pnp/sp": "2.3.0"
+    "@fluentui/react": "8.52.3"
   }
 }
