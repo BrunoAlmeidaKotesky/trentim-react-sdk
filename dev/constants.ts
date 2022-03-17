@@ -82,11 +82,11 @@ export const singleNodeItem: INode[] = [
 
 export const simpleRow = [{
     "GerenteProjeto": {
-        "Title": "Dev"
+        "Title": "Rodrigo"
     },
     "DonoProjeto@odata.navigationLinkUrl": "Web/Lists(guid'1aad42f6-3394-4129-8c88-7a5bd84e7e60')/Items(1)/DonoProjeto",
     "DonoProjeto": {
-        "Title": "Dev"
+        "Title": "Bruno"
     },
     "UnidadeDeNegocio@odata.navigationLinkUrl": "Web/Lists(guid'1aad42f6-3394-4129-8c88-7a5bd84e7e60')/Items(1)/UnidadeDeNegocio",
     "UnidadeDeNegocio": {
@@ -106,11 +106,11 @@ export const simpleRow = [{
 },
 {
     "GerenteProjeto": {
-        "Title": "Dev"
+        "Title": "Rodrigo"
     },
     "DonoProjeto@odata.navigationLinkUrl": "Web/Lists(guid'1aad42f6-3394-4129-8c88-7a5bd84e7e60')/Items(1)/DonoProjeto",
     "DonoProjeto": {
-        "Title": "Dev"
+        "Title": "Bruno"
     },
     "UnidadeDeNegocio@odata.navigationLinkUrl": "Web/Lists(guid'1aad42f6-3394-4129-8c88-7a5bd84e7e60')/Items(1)/UnidadeDeNegocio",
     "UnidadeDeNegocio": {
@@ -130,11 +130,11 @@ export const simpleRow = [{
 },
 {
     "GerenteProjeto": {
-        "Title": "Dev"
+        "Title": "Lucas"
     },
     "DonoProjeto@odata.navigationLinkUrl": "Web/Lists(guid'1aad42f6-3394-4129-8c88-7a5bd84e7e60')/Items(1)/DonoProjeto",
     "DonoProjeto": {
-        "Title": "Dev"
+        "Title": "Rafael"
     },
     "UnidadeDeNegocio@odata.navigationLinkUrl": "Web/Lists(guid'1aad42f6-3394-4129-8c88-7a5bd84e7e60')/Items(1)/UnidadeDeNegocio",
     "UnidadeDeNegocio": {
@@ -154,11 +154,11 @@ export const simpleRow = [{
 },
 {
     "GerenteProjeto": {
-        "Title": "Dev"
+        "Title": "George"
     },
     "DonoProjeto@odata.navigationLinkUrl": "Web/Lists(guid'1aad42f6-3394-4129-8c88-7a5bd84e7e60')/Items(1)/DonoProjeto",
     "DonoProjeto": {
-        "Title": "Dev"
+        "Title": "Daniel"
     },
     "UnidadeDeNegocio@odata.navigationLinkUrl": "Web/Lists(guid'1aad42f6-3394-4129-8c88-7a5bd84e7e60')/Items(1)/UnidadeDeNegocio",
     "UnidadeDeNegocio": {

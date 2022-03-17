@@ -64,4 +64,11 @@ export class Utils {
     public static getNestedObject<T, V extends any>(nestedObj: any, pathArr: T[]): V  {
         return pathArr.reduce((obj, key) => (obj && obj[key] !== 'undefined') ? obj[key] : undefined, nestedObj);
     }
+
+    public static getAllNestedObjectKeys(nestedObj: any): string[] {
+        return Object.keys(nestedObj).reduce((acc, key) => {
+            const value = nestedObj[key];
+            return typeof value === 'object' ? [...acc, ...Utils.getAllNestedObjectKeys(value)] : [...acc, key];
+        }, []);
+    }
 }

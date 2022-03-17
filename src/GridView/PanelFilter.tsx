@@ -1,11 +1,11 @@
 import * as React from 'react';
-import { lazy, useContext, useMemo, Suspense, useState, useRef } from 'react';
+import { lazy, useContext, useMemo, Suspense, useRef, useEffect } from 'react';
 import { FilterPaneContext } from './Contexts';
-import type { FilterOption, SelectedItemsMap } from '../models/interfaces/IPanelFilter';
+import type { FilterOption } from '../models/interfaces/IPanelFilter';
+import type { ITag } from '@fluentui/react/lib/Pickers';
 
 function PanelFilter() {
-    const [actualFilteredValues, setActualFilteredValues] = useState<SelectedItemsMap>(new Map());
-    const { isOpen, onClose, availableFilters, panelTitle, onCancel, onApply } = useContext(FilterPaneContext);
+    const { isOpen, onClose, availableFilters, panelTitle, onCancel, onApply, actualFilteredValues, setActualFilteredValues, onOpen } = useContext(FilterPaneContext);
     const [FluentPanel, Dropdown, PrimaryButton, DefaultButton, TagPicker] = useMemo(() => {
         const Panel = lazy(() => import('@fluentui/react/lib/Panel').then(({ Panel }) => ({ default: Panel })));
         const DropDown = lazy(() => import('@fluentui/react/lib/Dropdown').then(({ Dropdown }) => ({ default: Dropdown })));
@@ -16,7 +16,7 @@ function PanelFilter() {
     }, []);
     const lastAddedTag = useRef<FilterOption>(null);
 
-    const onAddToMap = (rootItemKey: string, option: FilterOption) => {
+    const onAddOrRemoveToMap = (rootItemKey: string, option: FilterOption) => {
         //If the current option is selected and is not already on the actualFilteredValues map, add it
         //else if the current option is not select and all the other options are not select too, remove the key from the map
         const copyMap = new Map(actualFilteredValues);
@@ -30,18 +30,44 @@ function PanelFilter() {
         setActualFilteredValues(copyMap);
     }
 
+    useEffect(() => { if(onOpen) onOpen();}, []);
+
     const listContainsTagList = (tag: FilterOption, tagList?: FilterOption[]) => {
         if (!tagList || !tagList.length || tagList.length === 0) 
           return false;
         return tagList.some(compareTag => compareTag?.key === tag?.key);
     };
 
+    const getDefaultDropdownSelectedKeys = () => {
+        const selectedKeys: string[] = [];
+        actualFilteredValues.forEach((_, k) => {
+            selectedKeys.push(k);
+        })
+        return selectedKeys;
+    }
+
+    const getDefaultSelectedTag = (keyToFilter: string) => {
+        const selectedTags: FilterOption[] = [];
+        actualFilteredValues.forEach((d, k) => {
+            const keyKind = k?.split('_')[1];
+            if(keyKind === keyToFilter) 
+                selectedTags.push({
+                    key: keyKind,
+                    text: d?.text,
+                    data: d?.data,
+                    selected: true,
+                    name: d?.text
+                });
+        })
+        return selectedTags as unknown as ITag[];
+    }
+
     if (!isOpen)
         return null;
     return (
         <Suspense fallback={<div>...</div>}>
             <FluentPanel 
-                onRenderFooter={_ => (<div>
+                onRenderFooter={_ => (<div style={{padding: 20}}>
                     <Suspense fallback={'...'}>
                         <PrimaryButton onClick={() => onApply(actualFilteredValues)} styles={{root: {marginRight: 8}}}>
                             Aplicar
@@ -65,15 +91,17 @@ function PanelFilter() {
                     return (<Suspense fallback={'...'}>
                         {filter.renderAs === 'Dropdown' ? 
                         <Dropdown
+                            defaultSelectedKeys={getDefaultDropdownSelectedKeys()}
                             key={filter?.key} options={options}
                             multiSelect={filter?.enableMultiple} label={filter?.name}
-                            onChange={(_, opt) => onAddToMap(filter?.key, opt)} /> :
+                            onChange={(_, opt) => onAddOrRemoveToMap(filter?.key, opt)} /> :
                         filter.renderAs === 'SearchBox' ? 
                         <div key={filter?.key + "-" + filter?.name}>
                         <label>{filter?.name}</label>
                         <TagPicker 
                             key={filter?.key}
                             getTextFromItem={item => item?.name}
+                            defaultSelectedItems={getDefaultSelectedTag(filter.key)}
                             pickerSuggestionsProps={{
                                 suggestionsHeaderText: "Sugestões",
                                 noResultsFoundText: "Nenhum resultado encontrado",
@@ -87,16 +115,14 @@ function PanelFilter() {
                                         if(copyMap.has(opt?.key as string))
                                             copyMap.delete(opt?.key as string);
                                     });
-                                } else {
-                                    if(!(tags?.map(i => i?.key).includes(lastAddedTag?.current?.key))) {
-                                        copyMap.delete(lastAddedTag?.current?.key as string);
-                                        lastAddedTag.current = null;
-                                    }
+                                } else if(!(tags?.map(i => i?.key).includes(lastAddedTag?.current?.key))) {
+                                    copyMap.delete(lastAddedTag?.current?.key as string);
+                                    lastAddedTag.current = null; 
                                 }
                                 setActualFilteredValues(copyMap);
                             }}
                             onItemSelected={(selectedItem) => {
-                                onAddToMap(filter?.key, {...selectedItem, selected: true} as unknown as FilterOption);
+                                onAddOrRemoveToMap(filter?.key, {...selectedItem, selected: true} as unknown as FilterOption);
                                 lastAddedTag.current = selectedItem as unknown as FilterOption;
                                 return selectedItem;
                             }}

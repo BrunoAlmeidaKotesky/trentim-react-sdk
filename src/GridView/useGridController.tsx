@@ -8,6 +8,7 @@ import type { IColumn, IGroup } from '@fluentui/react/lib/DetailsList';
 
 export function useGridController(props: IGridListProps<any>) {
     const [cols, setCols] = useState(props?.columns);
+    const [actualFilteredValues, setActualFilteredValues] = useState<SelectedItemsMap>(new Map());
     const [allRows, setAllRows] = useState(props?.rows);
     const [actualRows, setActualRows] = useState(props?.rows ?? []);
     const [currentFilteredRows, setCurFilteredRows] = useState<IRow[]>([]);
@@ -156,9 +157,8 @@ export function useGridController(props: IGridListProps<any>) {
             const keyName = key.split('_')[1];
             const doesntHaveKey = !mapsByKeyKind.has(keyName);
             const sameMapsList = [...map].filter(d => d[0] === key);
-            if(doesntHaveKey) {
+            if(doesntHaveKey) 
                 mapsByKeyKind.set(keyName, new Map(sameMapsList));
-            }
             else {
                 const thisKindMap = mapsByKeyKind.get(keyName);
                 sameMapsList.forEach(d => thisKindMap?.set(d[0], d[1]));
@@ -167,6 +167,7 @@ export function useGridController(props: IGridListProps<any>) {
         return mapsByKeyKind;
     }
 
+    /**Isso deve estar O log n */
     const onApplyFilter: IPanelFilterProps['onApply'] = (selectedItems) => {
         if(selectedItems.size === 0) {
             setActualRows(allRows);
@@ -174,18 +175,25 @@ export function useGridController(props: IGridListProps<any>) {
             return;
         }
         const groupedMaps = groupMaps(selectedItems);
+        const allGroupMapKeys = [...groupedMaps.keys()]?.flatMap(i => i?.split('.')) ?? [];
         
         let orFilterAggregation: IRow[] = currentFilteredRows;
         for (let idx = 0; idx < allRows?.length; idx++) {
             const row = allRows[idx];
             for (const key of Object.keys(row)) {
-                if(groupedMaps.has(key)) {
-                    const thisKeyMap = groupedMaps.get(key);
+                let realKey: string = key;
+                const isKeyValueAObject = row[key]?.constructor === Object;
+                if(isKeyValueAObject && allGroupMapKeys.includes(key)) {
+                    const keysFromObject = Utils.getAllNestedObjectKeys(row[key]);
+                    realKey = `${key}.${keysFromObject.join('.')}`;
+                }
+                if(groupedMaps.has(realKey)) {
+                    const thisKeyMap = groupedMaps.get(realKey);
                     thisKeyMap.forEach((v) => {
-                        console.log(v);
                         const currentFilteredIds = orFilterAggregation.map(r => r?.Id);
-                        const obj1 = Utils.getNestedObject(row, [v.rootItemKey]);
-                        const obj2 = Utils.getNestedObject(v.data, [v.rootItemKey]);
+                        const mapKeyWithDots = (v.rootItemKey as string)?.split('.');
+                        const obj1 = Utils.getNestedObject(row, mapKeyWithDots);
+                        const obj2 = Utils.getNestedObject(v.data, mapKeyWithDots);
                         if(!(currentFilteredIds.includes(row.Id)) && obj1 === obj2)
                             orFilterAggregation.push(row);
                     });
@@ -205,11 +213,14 @@ export function useGridController(props: IGridListProps<any>) {
     const panelConfig: IPanelFilterProps = {
         isOpen: isFilterPanelOpen,
         onApply: onApplyFilter,
-        onCancel: () => { setIsFilterPanel(false); setActualRows(allRows); setCurFilteredRows([])},
+        onCancel: () => { setIsFilterPanel(false); },
         onClose: () =>  { setIsFilterPanel(false); },
+        onOpen: () => { setCurFilteredRows([]); },
         //The available filters are the ones that are defined in the `columns` prop, and the options are the rows that are defined in the `rows` prop according to the key
         availableFilters: buildFilters(),
         panelTitle: props?.filterPanelTitle ?? 'Filtrar',
+        actualFilteredValues,
+        setActualFilteredValues
     }
 
     return {
@@ -219,12 +230,12 @@ export function useGridController(props: IGridListProps<any>) {
             groups,
             panelConfig,
             allRows,
-            isFilterPanelOpen
+            isFilterPanelOpen,
         },
         handlers: {
             onRowClick,
             setActualRows,
-            setIsFilterPanel
+            setIsFilterPanel,
         }
     }
 }
