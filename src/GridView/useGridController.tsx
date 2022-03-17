@@ -150,12 +150,7 @@ export function useGridController(props: IGridListProps<any>) {
         return filters;
     }
 
-    const onApplyFilter: IPanelFilterProps['onApply'] = (selectedItems) => {
-        if(selectedItems.size === 0) {
-            setActualRows(allRows);
-            setCurFilteredRows([]);
-            return;
-        }
+    const groupMaps = (selectedItems: SelectedItemsMap): Map<string, SelectedItemsMap> => {
         const mapsByKeyKind = new Map<string, SelectedItemsMap>();
         selectedItems.forEach((_, key, map) => {
             const keyName = key.split('_')[1];
@@ -169,41 +164,49 @@ export function useGridController(props: IGridListProps<any>) {
                 sameMapsList.forEach(d => thisKindMap?.set(d[0], d[1]));
             } 
         });
+        return mapsByKeyKind;
+    }
+
+    const onApplyFilter: IPanelFilterProps['onApply'] = (selectedItems) => {
+        if(selectedItems.size === 0) {
+            setActualRows(allRows);
+            setCurFilteredRows([]);
+            return;
+        }
+        const groupedMaps = groupMaps(selectedItems);
         
-        let andFilterAggregation: IRow[] = currentFilteredRows;
+        let orFilterAggregation: IRow[] = currentFilteredRows;
         for (let idx = 0; idx < allRows?.length; idx++) {
             const row = allRows[idx];
-            for (const [key, _] of Object.entries(row)) {
-
-                const sameKeyFromMap = [...selectedItems].filter((s) => {
-                    const k = s[0];
-                    return k.split("_")[1] === key;
-                });
-                if (sameKeyFromMap?.length > 0) {
-                    sameKeyFromMap.forEach((_, idx) => {
-                        const isSameValue = sameKeyFromMap[idx][1]['data'][key] === row[key];
-                        if (isSameValue && !andFilterAggregation.map(r => r?.Id).includes(row?.Id)) {
-                            andFilterAggregation = [...andFilterAggregation, row];
-                        }
+            for (const key of Object.keys(row)) {
+                if(groupedMaps.has(key)) {
+                    const thisKeyMap = groupedMaps.get(key);
+                    thisKeyMap.forEach((v) => {
+                        console.log(v);
+                        const currentFilteredIds = orFilterAggregation.map(r => r?.Id);
+                        const obj1 = Utils.getNestedObject(row, [v.rootItemKey]);
+                        const obj2 = Utils.getNestedObject(v.data, [v.rootItemKey]);
+                        if(!(currentFilteredIds.includes(row.Id)) && obj1 === obj2)
+                            orFilterAggregation.push(row);
                     });
-
                 }
             }
         }
-        if (andFilterAggregation.length > 0) {
-            setActualRows(andFilterAggregation)
-            setCurFilteredRows(andFilterAggregation);
+        if (orFilterAggregation.length > 0) {
+            setActualRows(orFilterAggregation)
+            setCurFilteredRows(orFilterAggregation);
         } else { 
             setActualRows(allRows);
             setCurFilteredRows([]);
         }
+        setIsFilterPanel(false);
     }
 
     const panelConfig: IPanelFilterProps = {
         isOpen: isFilterPanelOpen,
         onApply: onApplyFilter,
         onCancel: () => { setIsFilterPanel(false); setActualRows(allRows); setCurFilteredRows([])},
-        onClose: () =>  { setIsFilterPanel(false); setActualRows(allRows); setCurFilteredRows([])},
+        onClose: () =>  { setIsFilterPanel(false); },
         //The available filters are the ones that are defined in the `columns` prop, and the options are the rows that are defined in the `rows` prop according to the key
         availableFilters: buildFilters(),
         panelTitle: props?.filterPanelTitle ?? 'Filtrar',
