@@ -6,6 +6,7 @@ import type { IAttachmentFileInfo } from '@pnp/sp/attachments';
 import type { ISPUser } from '../models/interfaces/ISPUser';
 import type { PermissionKind } from '@pnp/sp/security';
 import type { PnpModules, IItemVersionInfo, PreviousUnion, IQueryOptions } from './IBaseServiceConfig';
+/**@TO-DO: Document this API. */
 export declare class BaseService {
     injectedModules: PnpModules[];
     private factory?;

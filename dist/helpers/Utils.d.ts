@@ -5,4 +5,6 @@ export declare class Utils {
     static convertIsoToLocaleString(date: string, locales?: string | string[], formatOptions?: Intl.DateTimeFormatOptions): string;
     static processNodes(nodeItems: INode[] | undefined, groups: IGroup[], items: IRow[], level: number): void;
     static copyAndSort<T>(items: T[], columnKey: string, isSortedDescending?: boolean): T[];
+    static getNestedObject<T, V extends any>(nestedObj: any, pathArr: T[]): V;
+    static getAllNestedObjectKeys(nestedObj: any): string[];
 }

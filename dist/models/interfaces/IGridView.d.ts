@@ -28,6 +28,8 @@ export declare type TColumn<T> = IColumn & {
     */
     fieldName?: keyof T;
     dateConvertionOptions?: IDateConvertionOptions;
+    /**How should the filter on the filter panel be rendered */
+    renderFilterAs?: 'Dropdown' | 'SearchBox';
 };
 interface IDateConvertionOptions {
     shouldConvertToLocaleString?: boolean;
