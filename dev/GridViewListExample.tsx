@@ -13,7 +13,7 @@ export function GridViewListExample() {
                 onClick: () => console.log('Clicked')
               }}]
             }}
-            listType="list"
+            renderAs="list"
             rows={simpleRow}
             hiddenFilterKeys={['NumeroPI']}
             onRowClick={(i) => console.log(i)}

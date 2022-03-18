@@ -81,13 +81,13 @@ function PanelFilter() {
                 onDismiss={onClose} isOpen={isOpen}>
                 <h2>{panelTitle}</h2>
                 {availableFilters?.map(filter => {
-                    const options = filter?.options?.map<FilterOption>(({ key, text, data }) => {
-                        return {
-                            key,
-                            text,
-                            data
-                        };
-                    });
+                    const options = filter?.options
+                    .filter(i => (i?.text !== null && i?.text !== undefined))
+                    .map<FilterOption>(({ key, text, data }) => ({
+                        key,
+                        text,
+                        data
+                    }));
                     return (<Suspense fallback={'...'}>
                         {filter.renderAs === 'Dropdown' ? 
                         <Dropdown

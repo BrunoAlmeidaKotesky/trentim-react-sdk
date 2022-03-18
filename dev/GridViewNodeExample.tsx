@@ -11,9 +11,12 @@ export function GridViewNodeExample() {
               enableSearch: true,
               searchKey: 'name'
             }}
-            columns={[{ key: 'responsavel', minWidth: 120, name: 'Responsável', fieldName: 'responsavel' }]}
+            hiddenFilterKeys={['file.iconUrl']}
+            columns={[
+              { key: 'responsavel', minWidth: 120, name: 'Responsável', fieldName: 'responsavel' },
+            ]}
             rowsAsNode={nodeItem}
-            listType="folder"
+            renderAs="tree" autoFileDisplay={true}
           />
         </div>
     );

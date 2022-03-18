@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-import { classNames } from './styles';
+import {classNames} from './styles';
 import type { IGridListProps, IRow } from '../models/interfaces/IGridView';
 import { Utils } from '../helpers/Utils';
 import type { FilterOption, IAvailableFilters, IPanelFilterProps, SelectedItemsMap } from '../models/interfaces/IPanelFilter';
-import type { IColumn, IGroup } from '@fluentui/react/lib/DetailsList';
+import type { IGroup } from '@fluentui/react/lib/DetailsList';
 
 export function useGridController(props: IGridListProps<any>) {
     const [cols, setCols] = useState(props?.columns);
@@ -14,6 +14,14 @@ export function useGridController(props: IGridListProps<any>) {
     const [currentFilteredRows, setCurFilteredRows] = useState<IRow[]>([]);
     const [groups, setGroups] = useState(props?.groups);
     const [isFilterPanelOpen, setIsFilterPanel] = useState(false);
+
+    useEffect(() => {
+        if(props?.autoFileDisplay) {
+            if((!props?.rowsAsNode) && props.renderAs !== 'tree') {
+                console.warn("You are using `autoFileDisplay`, but you are not using rowsAsNode. This will not work.");
+            }
+        }
+    }, [props?.autoFileDisplay, props?.rowsAsNode, props?.renderAs]);
 
     //Effects
     useEffect(() => {
@@ -40,25 +48,24 @@ export function useGridController(props: IGridListProps<any>) {
     }, [props?.columns]);
 
     useEffect(() => {
-        if (props.listType === 'file' || props.listType === 'folder')
+        if (props.renderAs === 'tree' && props?.autoFileDisplay)
             setCols([{
-                key: 'fileType',
-                name: 'File Type',
+                key: 'file.iconUrl',
+                name: 'ícone',
                 className: classNames.fileIconCell,
                 iconClassName: classNames.fileIconHeaderIcon,
                 ariaLabel: 'Column operations for File type, Press to sort on File type',
                 iconName: 'Page',
                 isIconOnly: true,
-                fieldName: 'name',
+                fieldName: 'file.iconUrl',
                 minWidth: 16,
                 maxWidth: 16,
-                onColumnClick,
                 onRender: (item: IRow) => (<img src={item?.file?.iconUrl} className={classNames.fileIconImg} alt={`${item?.file?.fileType} file icon`} />),
             },
             {
-                key: 'name',
+                key: 'file.name',
                 name: 'Nome',
-                fieldName: 'name',
+                fieldName: 'file.name',
                 minWidth: 210,
                 maxWidth: 350,
                 isRowHeader: true,
@@ -67,13 +74,12 @@ export function useGridController(props: IGridListProps<any>) {
                 isSortedDescending: false,
                 sortAscendingAriaLabel: 'Sorted A to Z',
                 sortDescendingAriaLabel: 'Sorted Z to A',
-                onColumnClick,
                 onRender: (item: IRow) => (<span>{item?.file?.name}</span>),
                 data: 'string',
                 isPadded: true,
             }, ...cols]);
         else setCols(props?.columns);
-    }, [props?.listType]);
+    }, [props?.renderAs, props?.autoFileDisplay]);
 
     useEffect(() => {
         setActualRows(props?.rows);
@@ -81,35 +87,16 @@ export function useGridController(props: IGridListProps<any>) {
     }, [props?.rows?.length]);
 
     useEffect(() => {
-        if (props?.listType === 'folder' && props?.rowsAsNode) {
+        if (props?.renderAs === 'tree' && props?.rowsAsNode) {
             const nodes = props.rowsAsNode;
             const items: IRow[] = [];
             const groups: IGroup[] = [];
             Utils.processNodes(nodes, groups, items, 0);
             setActualRows(items);
+            setAllRows(items);
             setGroups(groups);
         }
-    }, [props?.rowsAsNode, props?.listType]);
-
-    /**TO-DO: Implement this method to work with `INode[]` */
-    const onColumnClick = (_: unknown, column: IColumn): void => {
-        if (props?.rowsAsNode)
-            return;
-        const newColumns: IColumn[] = cols.slice();
-        const currColumn: IColumn = newColumns.filter(currCol => column.key === currCol.key)[0];
-        newColumns.forEach((newCol: IColumn) => {
-            if (newCol === currColumn) {
-                currColumn.isSortedDescending = !currColumn.isSortedDescending;
-                currColumn.isSorted = true;
-            } else {
-                newCol.isSorted = false;
-                newCol.isSortedDescending = true;
-            }
-        });
-        const newItems = Utils.copyAndSort(actualRows, currColumn?.fieldName!, currColumn?.isSortedDescending);
-        setCols(newColumns);
-        setActualRows(newItems);
-    };
+    }, [props?.rowsAsNode, props?.renderAs]);
 
     const onRowClick = (item: IRow) => {
         if (props?.onRowClick)
@@ -123,11 +110,11 @@ export function useGridController(props: IGridListProps<any>) {
             const col = columnsToFilter[index];
             const renderAs = col?.renderFilterAs ?? 'Dropdown';
             const keys = col?.key?.split('.') ?? col.fieldName?.split('.'); 
-            const validRows = allRows?.every(r => {
-                const obj = Utils.getNestedObject<string, any>(r, keys);
-                return !!obj
-            });
-            if (validRows) {
+            // const validRows = allRows?.every(r => {
+            //     const obj = Utils.getNestedObject<string, any>(r, keys);
+            //     return !!obj
+            // });
+            //if (validRows) {
                 const options: FilterOption[] = allRows?.filter(d => d)?.map((data, idx) => {
                     let stringObject = Utils.getNestedObject(data, keys)?.toString();
                     if (col?.dateConvertionOptions?.shouldConvertToLocaleString)
@@ -147,7 +134,7 @@ export function useGridController(props: IGridListProps<any>) {
                     name: col?.name,
                     renderAs
                 });
-            }
+            //}
         }
         return filters;
     }

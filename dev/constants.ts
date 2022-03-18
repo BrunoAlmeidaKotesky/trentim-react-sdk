@@ -2,65 +2,56 @@ import type { INode } from "../src/models/interfaces/IGridView";
 
 export const nodeItem: INode[] = [
     {
-        key: 'code',
+        key: 'file',
         title: 'Pasta de Documentos 01',
-        Id: 0,
         children: [
             {
-                key: 'code',
-                Id: 1,
+                key: 'file',
                 title: 'Subpasta de Documentos',
                 items: [
                     {
                         Id: 2,
-                        key: 'file',
                         file: { fileType: 'xlsx', iconUrl: 'https://static2.sharepointonline.com/files/fabric/assets/item-types/16/one.svg', key: 'fileType', name: 'Arquivo.xlsx' },
                         responsavel: 'José da Silva'
                     },
                     {
                         Id: 3,
-                        key: 'file',
                         file: { fileType: 'xlsx', iconUrl: 'https://static2.sharepointonline.com/files/fabric/assets/item-types/16/one.svg', key: 'fileType', name: 'Arquivo2.xlsx' },
                         responsavel: 'José da Silva'
                     },
                     {
                         Id: 4,
-                        key: 'file',
                         file: { fileType: 'xlsx', iconUrl: 'https://static2.sharepointonline.com/files/fabric/assets/item-types/16/one.svg', key: 'fileType', name: 'Arquivo.xlsx' },
                         responsavel: 'José da Silva'
                     },
                 ]
             },
             {
-                Id: 9,
-                key: 'code',
+                key: 'file',
                 title: 'Subpasta de Documentos 2',
                 children: [
                     {
-                        key: 'code',
+                        key: 'file',
                         title: 'Documentos CLT',
-                        Id: 5,
                         items: [
                             {
                                 Id: 6,
-                                key: 'file',
                                 file: { fileType: 'xlsx', iconUrl: 'https://static2.sharepointonline.com/files/fabric/assets/item-types/16/one.svg', key: 'fileType', name: 'Nested.xlsx' },
                                 responsavel: 'Pessoa 3'
                             }
                         ]
                     },
                     {
-                        Id: 9,
+                        key: 'file',
+                        title: 'Documentos CLT 2',
                         items: [
                             {
                                 Id: 7,
-                                key: 'code',
                                 file: { fileType: 'xlsx', iconUrl: 'https://static2.sharepointonline.com/files/fabric/assets/item-types/16/one.svg', key: 'fileType', name: 'Demo.xlsx' },
                                 responsavel: 'Pessoa 1'
                             },
                             {
                                 Id: 8,
-                                key: 'code',
                                 file: { fileType: 'xlsx', iconUrl: 'https://static2.sharepointonline.com/files/fabric/assets/item-types/16/one.svg', key: 'fileType', name: 'Teste.xlsx' },
                                 responsavel: 'Pessoa 2'
                             }
@@ -70,28 +61,26 @@ export const nodeItem: INode[] = [
             }]
     },
     {
-        key: 'code',
-        Id: 10,
+        key: 'file',
         title: 'Pasta de Documentos 02',
         children: [
             {
-                key: 'code',
+                key: 'file',
                 title: 'Subpasta de Documentos',
-                Id: 11,
                 items: [
                     {
                         Id: 13,
-                        key: 'file',
-                        title: 'Relatorio XYZ_XPTO',
+                        file: { fileType: 'xlsx', iconUrl: 'https://static2.sharepointonline.com/files/fabric/assets/item-types/16/one.svg', key: 'fileType', name: 'Teste.xlsx' },
                         status: 'Revisão'
                     }
                 ]
-            }]
+            }
+        ]
     }
 ]
 
 export const singleNodeItem: INode[] = [
-    { key: 'code', title: 'Pasta de Documentos 01', status: 'Único', children: [], Id: 0 }
+    { key: 'code', title: 'Pasta de Documentos 01', children: [] }
 ];
 
 export const simpleRow = [{

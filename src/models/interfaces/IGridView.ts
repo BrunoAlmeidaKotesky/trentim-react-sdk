@@ -1,9 +1,22 @@
 import { IButtonProps } from "@fluentui/react/lib/Button";
 import type { IColumn, IDetailsListProps, IGroup } from "@fluentui/react/lib/DetailsList";
-export interface INode extends IRow {
+
+type Children = INode & {key: string, title: string};
+export interface INode {
+    key: string;
+    title: string;
     items?: IRow[];
-    children?: INode[];
+    children?: Children[];
 }
+
+export interface IFileInfo {
+    key: string;
+    name: string;
+    /**Any Extra value to hold on that object */
+    value?: any;
+    iconUrl: string;
+    fileType: string;
+};
 
 /**It should represent any object with primitive data types. 
  * Please use the `Id` property to uniquely identify the object, it helps to avoid duplicates and correctly apply the filter.
@@ -13,6 +26,8 @@ export interface IRow {
     /**It's recommended that the row object contains an unique identifier*/
     Id: number | string;
     /**If you are rendering the `GridView` as an tree view, you can use this property to display an additional column, automatically showing the file icon types. */
+    file?: IFileInfo;
+    
 }
 
 export type TColumn<T> = IColumn & {
@@ -44,7 +59,11 @@ export interface IGridListProps<T extends any> {
     /**Configure the header behavior, such as to enable filter and other functionalities. */
     headerOptions: IConfigurabeHeader;
     groups?: IGroup[];
-    listType: 'folder' | 'list' | 'file';
+    renderAs: 'tree' | 'list';
+    /**If you set tis property to `true`, on your `rowAsNode` interface, the `items` property which is an 
+     * `IRow[]`, you need to provide a `file` property for each row, of the type `IFileInfo`, otherwise it won't work.
+     * You can also do this render by yourself, changing the `onRender` of your `columns` */
+    autoFileDisplay?: boolean;
     /**The column model to be applied to the list.  
      * It extends the Microsoft `@fluent-ui` `IColumn` interface.
      * 
@@ -97,6 +116,7 @@ export interface IListOptionsProps {
      * on the `props`.
     * @defaultvalue `[]`*/
     customButtons?: CustomButtons;
+    /**The order of the default buttons. */
     defaultButtonsOrder?: {
         group: number;
         search: number;
