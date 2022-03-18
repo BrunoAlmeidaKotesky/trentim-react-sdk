@@ -80,7 +80,7 @@ function PanelFilter() {
                 isFooterAtBottom={true}
                 onDismiss={onClose} isOpen={isOpen}>
                 <h2>{panelTitle}</h2>
-                {availableFilters?.map(filter => {
+                {availableFilters?.map((filter, idx) => {
                     const options = filter?.options
                     .filter(i => (i?.text !== null && i?.text !== undefined))
                     .map<FilterOption>(({ key, text, data }) => ({
@@ -92,14 +92,14 @@ function PanelFilter() {
                         {filter.renderAs === 'Dropdown' ? 
                         <Dropdown
                             defaultSelectedKeys={getDefaultDropdownSelectedKeys()}
-                            key={filter?.key} options={options}
+                            key={filter?.key + "-" + idx} options={options}
                             multiSelect={filter?.enableMultiple} label={filter?.name}
                             onChange={(_, opt) => onAddOrRemoveToMap(filter?.key, opt)} /> :
                         filter.renderAs === 'SearchBox' ? 
-                        <div key={filter?.key + "-" + filter?.name}>
+                        <div key={filter?.key + "-" + filter?.name + "-" + idx}>
                         <label>{filter?.name}</label>
                         <TagPicker 
-                            key={filter?.key}
+                            key={filter?.key + "-" + idx}
                             getTextFromItem={item => item?.name}
                             defaultSelectedItems={getDefaultSelectedTag(filter.key)}
                             pickerSuggestionsProps={{

@@ -65,10 +65,25 @@ export class Utils {
         return pathArr.reduce((obj, key) => (obj && obj[key] !== 'undefined') ? obj[key] : undefined, nestedObj);
     }
 
-    public static getAllNestedObjectKeys(nestedObj: any): string[] {
+    public static getAllNestedObjectKeys(nestedObj: Record<any, any>): string[] {
         return Object.keys(nestedObj).reduce((acc, key) => {
             const value = nestedObj[key];
             return typeof value === 'object' ? [...acc, ...Utils.getAllNestedObjectKeys(value)] : [...acc, key];
         }, []);
     }
+
+    public static getDeepKeys(obj: Record<any, any>): string[] {
+        let keys: string[] = [];
+        for(let key in obj) {
+            keys.push(key);
+            if(typeof obj[key] === "object") {
+                let subkeys = Utils.getDeepKeys(obj[key]);
+                keys = keys.concat(subkeys.map(function(subkey) {
+                    return key + "." + subkey;
+                }));
+            }
+        }
+        return keys;
+    }
+    
 }

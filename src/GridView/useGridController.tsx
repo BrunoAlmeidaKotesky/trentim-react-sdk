@@ -110,31 +110,25 @@ export function useGridController(props: IGridListProps<any>) {
             const col = columnsToFilter[index];
             const renderAs = col?.renderFilterAs ?? 'Dropdown';
             const keys = col?.key?.split('.') ?? col.fieldName?.split('.'); 
-            // const validRows = allRows?.every(r => {
-            //     const obj = Utils.getNestedObject<string, any>(r, keys);
-            //     return !!obj
-            // });
-            //if (validRows) {
-                const options: FilterOption[] = allRows?.filter(d => d)?.map((data, idx) => {
-                    let stringObject = Utils.getNestedObject(data, keys)?.toString();
-                    if (col?.dateConvertionOptions?.shouldConvertToLocaleString)
-                        stringObject = Utils.convertIsoToLocaleString(stringObject, col?.dateConvertionOptions?.locales, col?.dateConvertionOptions?.formatOptions);
-                    return {
-                        key: idx + "_" + col?.key,
-                        text: stringObject,
-                        data
-                    };
-                });
-                const uniqueOptions = options?.filter((obj, pos, arr) => arr.map(mapObj => mapObj?.text).indexOf(obj?.text) === pos);
+            const options: FilterOption[] = allRows?.filter(d => d)?.map((data, idx) => {
+                let stringObject = Utils.getNestedObject(data, keys)?.toString();
+                if (col?.dateConvertionOptions?.shouldConvertToLocaleString)
+                    stringObject = Utils.convertIsoToLocaleString(stringObject, col?.dateConvertionOptions?.locales, col?.dateConvertionOptions?.formatOptions);
+                return {
+                    key: idx + "_" + col?.key,
+                    text: stringObject,
+                    data
+                };
+            });
+            const uniqueOptions = options?.filter((obj, pos, arr) => arr.map(mapObj => mapObj?.text).indexOf(obj?.text) === pos);
 
-                filters.push({
-                    key: col?.key,
-                    options: uniqueOptions,
-                    enableMultiple: true,
-                    name: col?.name,
-                    renderAs
-                });
-            //}
+            filters.push({
+                key: col?.key,
+                options: uniqueOptions,
+                enableMultiple: true,
+                name: col?.name,
+                renderAs
+            });
         }
         return filters;
     }
@@ -163,26 +157,24 @@ export function useGridController(props: IGridListProps<any>) {
             return;
         }
         const groupedMaps = groupMaps(selectedItems);
-        const allGroupMapKeys = [...groupedMaps.keys()]?.flatMap(i => i?.split('.')) ?? [];
-        
+        //const allGroupMapKeys = [...groupedMaps.keys()]?.flatMap(i => i?.split('.')) ?? [];
+        const onlyNecessaryKeysToVerify = cols.filter(c => groupedMaps.has(c?.key)).map(c => c?.key);
         let orFilterAggregation: IRow[] = currentFilteredRows;
         for (let idx = 0; idx < allRows?.length; idx++) {
             const row = allRows[idx];
-            for (const key of Object.keys(row)) {
+            const deepKey = Utils.getDeepKeys(row);
+            const filteredKeys = onlyNecessaryKeysToVerify.filter(k => deepKey.includes(k));
+            for (const key of filteredKeys) {
                 let realKey: string = key;
-                const isKeyValueAObject = row[key]?.constructor === Object;
-                if(isKeyValueAObject && allGroupMapKeys.includes(key)) {
-                    const keysFromObject = Utils.getAllNestedObjectKeys(row[key]);
-                    realKey = `${key}.${keysFromObject.join('.')}`;
-                }
+                const valueFromKey = Utils.getNestedObject(row, key?.split('.'));
+                if(valueFromKey === undefined ||valueFromKey === null) continue;
                 if(groupedMaps.has(realKey)) {
                     const thisKeyMap = groupedMaps.get(realKey);
                     thisKeyMap.forEach((v) => {
                         const currentFilteredIds = orFilterAggregation.map(r => r?.Id);
                         const mapKeyWithDots = (v.rootItemKey as string)?.split('.');
-                        const obj1 = Utils.getNestedObject(row, mapKeyWithDots);
-                        const obj2 = Utils.getNestedObject(v.data, mapKeyWithDots);
-                        if(!(currentFilteredIds.includes(row.Id)) && obj1 === obj2)
+                        const valueFromMap = Utils.getNestedObject(v.data, mapKeyWithDots);
+                        if(!(currentFilteredIds.includes(row.Id)) && valueFromKey === valueFromMap)
                             orFilterAggregation.push(row);
                     });
                 }
