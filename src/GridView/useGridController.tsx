@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 import {classNames} from './styles';
-import type { IGridListProps, IRow } from '../models/interfaces/IGridView';
+import type { IGridListProps, IListOptionsProps, IRow } from '../models/interfaces/IGridView';
 import { Utils } from '../helpers/Utils';
 import type { FilterOption, IAvailableFilters, IPanelFilterProps, SelectedItemsMap } from '../models/interfaces/IPanelFilter';
 import type { IGroup } from '@fluentui/react/lib/DetailsList';
@@ -30,7 +30,7 @@ export function useGridController(props: IGridListProps<any>) {
             const convertedColumns = columns.map(c => {
                 if (c?.key?.includes('.') || c?.fieldName?.includes('.')) {
                     c.onRender = (item, _2) => {
-                        const fieldValue = Utils.findObjectByPath(item, c?.fieldName?.split('.')) as any ?? '-';
+                        const fieldValue: string = Utils.getNestedObject(item, c?.fieldName?.split('.'));
                         return <span>{fieldValue}</span>;
                     }
 
@@ -86,7 +86,9 @@ export function useGridController(props: IGridListProps<any>) {
         setAllRows(props?.rows)
     }, [props?.rows?.length]);
 
-    useEffect(() => {
+    useEffect(() => { generateTreeRows(); }, [props?.rowsAsNode, props?.renderAs]);
+
+    const generateTreeRows = () => {
         if (props?.renderAs === 'tree' && props?.rowsAsNode) {
             const nodes = props.rowsAsNode;
             const items: IRow[] = [];
@@ -96,7 +98,7 @@ export function useGridController(props: IGridListProps<any>) {
             setAllRows(items);
             setGroups(groups);
         }
-    }, [props?.rowsAsNode, props?.renderAs]);
+    }
 
     const onRowClick = (item: IRow) => {
         if (props?.onRowClick)
@@ -152,6 +154,7 @@ export function useGridController(props: IGridListProps<any>) {
     /**Isso deve estar O log n */
     const onApplyFilter: IPanelFilterProps['onApply'] = (selectedItems) => {
         if(selectedItems.size === 0) {
+            generateTreeRows();
             setActualRows(allRows);
             setCurFilteredRows([]);
             return;
@@ -167,14 +170,14 @@ export function useGridController(props: IGridListProps<any>) {
             for (const key of filteredKeys) {
                 let realKey: string = key;
                 const valueFromKey = Utils.getNestedObject(row, key?.split('.'));
-                if(valueFromKey === undefined ||valueFromKey === null) continue;
+                if(valueFromKey === undefined || valueFromKey === null) continue;
                 if(groupedMaps.has(realKey)) {
                     const thisKeyMap = groupedMaps.get(realKey);
                     thisKeyMap.forEach((v) => {
                         const currentFilteredIds = orFilterAggregation.map(r => r?.Id);
-                        const mapKeyWithDots = (v.rootItemKey as string)?.split('.');
-                        const valueFromMap = Utils.getNestedObject(v.data, mapKeyWithDots);
-                        if(!(currentFilteredIds.includes(row.Id)) && valueFromKey === valueFromMap)
+                        const mapKeyWithDots = (v?.rootItemKey as string)?.split('.');
+                        const valueFromMap = Utils.getNestedObject(v?.data, mapKeyWithDots);
+                        if(!(currentFilteredIds.includes(row?.Id)) && valueFromKey === valueFromMap)
                             orFilterAggregation.push(row);
                     });
                 }
@@ -203,19 +206,31 @@ export function useGridController(props: IGridListProps<any>) {
         setActualFilteredValues
     }
 
+    const listConfig: IListOptionsProps = {
+        onSearchItem: (text, key) => {
+            const filteredRows = text ?
+                allRows?.filter(item => {
+                    const itemValue: string = Utils.getNestedObject(item, (key as string).split('.'));
+                    return itemValue?.toLowerCase()?.includes(text.toLowerCase());
+                }) : allRows;
+            setActualRows(filteredRows);
+            setCurFilteredRows(filteredRows);
+        },
+        setIsFilterPanelOpen: (value) => { setIsFilterPanel(value); },
+        ...props?.headerOptions
+    }
+
     return {
         state: {
             actualRows,
             cols,
             groups,
             panelConfig,
-            allRows,
             isFilterPanelOpen,
+            listConfig
         },
         handlers: {
             onRowClick,
-            setActualRows,
-            setIsFilterPanel,
         }
     }
 }

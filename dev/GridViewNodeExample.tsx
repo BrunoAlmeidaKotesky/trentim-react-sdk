@@ -9,7 +9,7 @@ export function GridViewNodeExample() {
             headerOptions={{
               enableFilter: true,
               enableSearch: true,
-              searchKey: 'name'
+              searchKey: 'file.name'
             }}
             hiddenFilterKeys={['file.iconUrl']}
             columns={[

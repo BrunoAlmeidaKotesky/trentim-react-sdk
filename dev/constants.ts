@@ -17,11 +17,18 @@ export const nodeItem: INode[] = [
                     {
                         Id: 3,
                         file: { fileType: 'xlsx', iconUrl: 'https://static2.sharepointonline.com/files/fabric/assets/item-types/16/one.svg', key: 'fileType', name: 'Arquivo2.xlsx' },
-                        responsavel: 'José da Silva'
+                        responsavel: 'José da Silva',
+                        NestedObj: {
+                            Level1: {
+                                Level2: {
+                                    Value: "String"
+                                }
+                            } 
+                        }
                     },
                     {
                         Id: 4,
-                        file: { fileType: 'xlsx', iconUrl: 'https://static2.sharepointonline.com/files/fabric/assets/item-types/16/one.svg', key: 'fileType', name: 'Arquivo.xlsx' },
+                        file: { fileType: 'xlsx', iconUrl: 'https://static2.sharepointonline.com/files/fabric/assets/item-types/16/one.svg', key: 'fileType', name: 'Arquivo3.xlsx' },
                         responsavel: 'José da Silva'
                     },
                 ]

@@ -3,19 +3,6 @@ import type { INode, IRow } from "../models/interfaces/IGridView";
 
 export class Utils {
 
-    public static findObjectByPath<T, R extends any>(objectIn: T, path: string[]): R {
-        try {
-            let obj = objectIn;
-            for (let i = 0; i <= path.length - 1; i++) {
-                const item = path[i]
-                obj = obj[item]
-            }
-            return obj as R ?? null;
-        } catch (e) {
-            return null;
-        }
-    }
-
     public static convertIsoToLocaleString(date: string, locales: string | string[] = 'pt-BR', formatOptions: Intl.DateTimeFormatOptions = undefined): string {
         //First check if the string can be converted to a date object.
         if(!(new Date(date) instanceof Date) && isNaN(new Date(date)?.getTime()))
@@ -65,20 +52,13 @@ export class Utils {
         return pathArr.reduce((obj, key) => (obj && obj[key] !== 'undefined') ? obj[key] : undefined, nestedObj);
     }
 
-    public static getAllNestedObjectKeys(nestedObj: Record<any, any>): string[] {
-        return Object.keys(nestedObj).reduce((acc, key) => {
-            const value = nestedObj[key];
-            return typeof value === 'object' ? [...acc, ...Utils.getAllNestedObjectKeys(value)] : [...acc, key];
-        }, []);
-    }
-
     public static getDeepKeys(obj: Record<any, any>): string[] {
         let keys: string[] = [];
         for(let key in obj) {
             keys.push(key);
             if(typeof obj[key] === "object") {
                 let subkeys = Utils.getDeepKeys(obj[key]);
-                keys = keys.concat(subkeys.map(function(subkey) {
+                keys = keys.concat(subkeys?.map(subkey => {
                     return key + "." + subkey;
                 }));
             }

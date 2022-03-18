@@ -9,24 +9,12 @@ import { ListOptions } from './ListOptions';
 
 export const GridView = (props: IGridListProps<any>) => {   
     const {state, handlers} = useGridController(props);
-    const {actualRows, allRows, cols, groups, isFilterPanelOpen, panelConfig} = state;
-    const {onRowClick, setActualRows, setIsFilterPanel} = handlers;
+    const {actualRows, cols, groups, isFilterPanelOpen, panelConfig, listConfig} = state;
+    const {onRowClick} = handlers;
 
     return (
         <FilterPaneContext.Provider value={panelConfig}>
-            <ListOptionsContext.Provider value={{
-                onSearchItem: (text, key) => {
-                    const filteredRows = text ?
-                        allRows?.filter(item => {
-                            const isKeyInsideFileObj = item?.file ? Object.keys(item?.file)?.includes(key as unknown as string) : false;
-                            const itemValue: string = isKeyInsideFileObj ? item?.file[key] : item?.[key];
-                            return itemValue?.toLowerCase().includes(text.toLowerCase());
-                        }) : allRows;
-                    setActualRows(filteredRows);
-                },
-                setIsFilterPanelOpen: (value) => { setIsFilterPanel(value); },
-                ...props?.headerOptions
-            }}>
+            <ListOptionsContext.Provider value={listConfig}>
                 <div>
                     <ListOptions />
                     <div data-is-scrollable="true" style={{ position: 'relative', zIndex: 0 }}>
