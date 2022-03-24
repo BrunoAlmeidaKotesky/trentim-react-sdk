@@ -9,25 +9,49 @@ export default {
         rows: {
             type: 'array',
             defaultValue: simpleRow
-        }
-    }
-}
-
-export const ListGridView = (args) => (
-    <GridView
-        headerOptions={{
-            enableSearch: true, enableFilter: true,
-            searchKey: 'Title',
-            customButtons: [{
+        },
+        searchKey: {
+            type: 'string',
+            defaultValue: 'Title'
+        },
+        enableSearch: {
+            type: 'boolean',
+            defaultValue: true
+        },
+        enableFilter: {
+            type: 'boolean',
+            defaultValue: true
+        },
+        customButtons: {
+            type: 'array',
+            defaultValue: [{
                 text: 'Upload', props: {
                     onClick: () => console.log('Clicked')
                 }
             }]
-        }}
+        },
+        onRowClick: {
+            action: 'onRowClick'
+        }
+
+    }
+}
+
+
+export const ListGridView = (args) => {
+    const headerOptions = {
+        enableSearch: args.enableSearch,
+        enableFilter: args.enableFilter,
+        customButtons: args.customButtons,
+        searchKey: args.searchKey
+    }
+    return(
+    <GridView
+        headerOptions={headerOptions}
         renderAs="list"
         {...args}
+        onRowClick={args.onRowClick}
         hiddenFilterKeys={['NumeroPI']}
-        onRowClick={(i) => console.log(i)}
         columns={[
             { key: 'Title', name: 'Nome Do Projeto', fieldName: 'Title', minWidth: 100, maxWidth: 200, isResizable: true, renderFilterAs: 'SearchBox' },
             { key: 'NumeroPI', name: 'PI', fieldName: 'NumeroPI', minWidth: 100, maxWidth: 200, isResizable: true },
@@ -35,4 +59,5 @@ export const ListGridView = (args) => (
             { key: 'GerenteProjeto.Title', name: 'Gerente do Projeto', fieldName: 'GerenteProjeto.Title', minWidth: 100, maxWidth: 200, isResizable: true },
             { key: 'DonoProjeto.Title', name: 'Dono do Projeto', fieldName: 'DonoProjeto.Title', minWidth: 100, maxWidth: 200, isResizable: true },
             { key: 'DataInicio', name: 'Data Início', fieldName: 'DataInicio', minWidth: 100, maxWidth: 200, isResizable: true, dateConvertionOptions: { shouldConvertToLocaleString: true } },
-        ]} />)
+        ]} />);
+}
