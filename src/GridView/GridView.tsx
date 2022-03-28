@@ -1,21 +1,24 @@
 import * as React from 'react';
 import { useGridController } from './useGridController';
-import { FilterPaneContext, ListOptionsContext } from './Contexts';
+import { FilterPanelContext, GroupPanelContext, ListOptionsContext } from './Contexts';
 import { CheckboxVisibility, CollapseAllVisibility, DetailsList, DetailsListLayoutMode } from '@fluentui/react/lib/DetailsList';
 import { Sticky, StickyPositionType } from '@fluentui/react/lib/Sticky';
 import type { IGridListProps } from '../models/interfaces/IGridView';
 import PanelFilter from './PanelFilter';
+import GroupPanel from './GroupPanel';
 import { ListOptions } from './ListOptions';
 import { Suspense } from 'react';
 
+/** Mudar nome do componente talvez? Ele é mais do que só um Grid. */
 export function GridView<T = any>(props: IGridListProps<T>) {
     const {state, handlers, JSX} = useGridController(props);
     const {CardsList} = JSX;
-    const {actualRows, cols, groups, isFilterPanelOpen, panelConfig, listConfig, shouldRenderCard} = state;
+    const {actualRows, cols, groups, isFilterPanelOpen, filterPanelConfig, groupPanelConfig, listConfig, shouldRenderCard, isGroupPanelOpen} = state;
     const {onRowClick} = handlers;
 
     return (
-        <FilterPaneContext.Provider value={panelConfig}>
+        <GroupPanelContext.Provider value={groupPanelConfig}>
+        <FilterPanelContext.Provider value={filterPanelConfig}>
             <ListOptionsContext.Provider value={listConfig}>
                 <div>
                     <ListOptions />
@@ -52,7 +55,9 @@ export function GridView<T = any>(props: IGridListProps<T>) {
                         }
                     </div>
                     {isFilterPanelOpen && <PanelFilter />}
+                    {isGroupPanelOpen && <GroupPanel />}
                 </div>
             </ListOptionsContext.Provider>
-        </FilterPaneContext.Provider>);
+        </FilterPanelContext.Provider>
+        </GroupPanelContext.Provider>);
 }

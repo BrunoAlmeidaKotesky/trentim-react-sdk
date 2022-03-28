@@ -1,5 +1,6 @@
 import type { IRow } from "./IGridView";
 import type { Dispatch, SetStateAction } from 'react';
+import { ICommonPanel } from "./ICommonPanel";
 export declare type FilterOption = {
     key: string | number;
     text: string;
@@ -12,16 +13,10 @@ export interface IAvailableFilters {
     name: string;
     options: FilterOption[];
     enableMultiple: boolean;
-    renderAs: 'Dropdown' | 'SearchBox';
+    renderAs: 'Dropdown' | 'SearchBox' | 'DateSlider';
 }
-export interface IPanelFilterProps {
-    isOpen: boolean;
+export interface IPanelFilterProps extends ICommonPanel<SelectedItemsMap> {
     availableFilters: IAvailableFilters[];
-    onApply: (map: SelectedItemsMap) => void;
-    onCancel: () => void;
-    onClose: () => void;
-    onOpen: () => void;
-    panelTitle: string;
     setActualFilteredValues: Dispatch<SetStateAction<SelectedItemsMap>>;
     actualFilteredValues: SelectedItemsMap;
 }

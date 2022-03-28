@@ -1,10 +1,11 @@
 import * as React from 'react';
 import { CSSProperties } from 'react';
 import { DefaultButton, PrimaryButton, TextField } from '@fluentui/react'
-import {ListOptionsContext} from './Contexts';
+import {GroupPanelContext, ListOptionsContext} from './Contexts';
 
 export const ListOptions = () => {
     const {customButtons, enableFilter, enableSearch, searchKey, onSearchItem, setIsFilterPanelOpen, defaultButtonsOrder, searchBoxPlaceholder, enableCardView, setRenderAs} = React.useContext(ListOptionsContext);
+    const {onOpen} = React.useContext(GroupPanelContext);
 
     const defaultStyles: Record<string, CSSProperties> = {
         container: {
@@ -19,7 +20,7 @@ export const ListOptions = () => {
     return (
     <div data-class-name="grid-view-header-container" style={defaultStyles.container}>
         <DefaultButton 
-            onClick={ _ => ''} styles={{label: {fontSize: 14}, root: {order: defaultButtonsOrder?.group}}} iconProps={{iconName: 'GroupList'}} />
+            onClick={ _ => onOpen()} styles={{label: {fontSize: 14}, root: {order: defaultButtonsOrder?.group}}} iconProps={{iconName: 'GroupList'}} />
         {enableCardView && 
         <DefaultButton 
             onClick={_ => setRenderAs()} styles={{label: {fontSize: 14}, root: {order: defaultButtonsOrder?.card}}} iconProps={{iconName: 'GridViewMedium'}} />}

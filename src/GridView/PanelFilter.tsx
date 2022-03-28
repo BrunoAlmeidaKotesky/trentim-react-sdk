@@ -1,18 +1,19 @@
 import * as React from 'react';
 import { lazy, useContext, useMemo, Suspense, useRef, useEffect } from 'react';
-import { FilterPaneContext } from './Contexts';
+import { FilterPanelContext } from './Contexts';
 import type { FilterOption } from '../models/interfaces/IPanelFilter';
 import type { ITag } from '@fluentui/react/lib/Pickers';
 
 function PanelFilter() {
-    const { isOpen, onClose, availableFilters, panelTitle, onCancel, onApply, actualFilteredValues, setActualFilteredValues, onOpen } = useContext(FilterPaneContext);
-    const [FluentPanel, Dropdown, PrimaryButton, DefaultButton, TagPicker] = useMemo(() => {
+    const { isOpen, onClose, availableFilters, panelTitle, onCancel, onApply, actualFilteredValues, setActualFilteredValues, onOpen } = useContext(FilterPanelContext);
+    const [FluentPanel, Dropdown, PrimaryButton, DefaultButton, TagPicker, Slider] = useMemo(() => {
         const Panel = lazy(() => import('@fluentui/react/lib/Panel').then(({ Panel }) => ({ default: Panel })));
         const DropDown = lazy(() => import('@fluentui/react/lib/Dropdown').then(({ Dropdown }) => ({ default: Dropdown })));
         const PrimaryButton = lazy(() => import('@fluentui/react/lib/Button').then(({ PrimaryButton }) => ({ default: PrimaryButton })));
         const DefaultButton = lazy(() => import('@fluentui/react/lib/Button').then(({ DefaultButton }) => ({ default: DefaultButton })));
         const TagPicker = lazy(() => import('@fluentui/react/lib/Pickers').then(({ TagPicker }) => ({ default: TagPicker })));
-        return [Panel, DropDown, PrimaryButton, DefaultButton, TagPicker];
+        const Slider = lazy(() => import('@fluentui/react/lib/Slider').then(({ Slider }) => ({ default: Slider })));
+        return [Panel, DropDown, PrimaryButton, DefaultButton, TagPicker, Slider];
     }, []);
     const lastAddedTag = useRef<FilterOption>(null);
 
@@ -62,8 +63,7 @@ function PanelFilter() {
         return selectedTags as unknown as ITag[];
     }
 
-    if (!isOpen)
-        return null;
+    if (!isOpen) return null;
     return (
         <Suspense fallback={<div>...</div>}>
             <FluentPanel 
@@ -89,13 +89,13 @@ function PanelFilter() {
                         data
                     }));
                     return (<Suspense fallback={'...'}>
-                        {filter.renderAs === 'Dropdown' ? 
+                        {(filter.renderAs === 'Dropdown') ? 
                         <Dropdown
                             defaultSelectedKeys={getDefaultDropdownSelectedKeys()}
                             key={filter?.key + "-" + idx} options={options}
                             multiSelect={filter?.enableMultiple} label={filter?.name}
                             onChange={(_, opt) => onAddOrRemoveToMap(filter?.key, opt)} /> :
-                        filter.renderAs === 'SearchBox' ? 
+                        (filter.renderAs === 'SearchBox') ?
                         <div key={filter?.key + "-" + filter?.name + "-" + idx}>
                         <label>{filter?.name}</label>
                         <TagPicker 
@@ -133,7 +133,11 @@ function PanelFilter() {
                                     && !listContainsTagList(opt, tagList as unknown as FilterOption[])).map(f => ({...f, name: f?.text})): [];
                                 return result;
                             }} /></div> :
-                        null}
+                        (filter.renderAs === 'DateSlider') ?
+                        <Slider
+                            key={filter?.key + "-" + idx}
+                            label={filter?.name}/> : null
+                        }
                     </Suspense>);
                 })}
             </FluentPanel>

@@ -11,7 +11,12 @@ export type IFrameProps = IBaseFrame & {
 };
 
 
-/**https://gist.github.com/threepointone/e73a87f7bbbebc78cf71744469ec5a15*/
+/**The same thing as the <iframe>, but it can be lazy loaded and needs a fallback component.
+ * 
+ * You can also pass a callback with the ref of the iframe, and it's dependency list.
+ * 
+ * https://gist.github.com/threepointone/e73a87f7bbbebc78cf71744469ec5a15
+ * */
 export function IFrame(props: IFrameProps) {
     const { fallback, ...rest } = props;
 

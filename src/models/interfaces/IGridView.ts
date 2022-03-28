@@ -1,7 +1,7 @@
-import { IButtonProps } from "@fluentui/react/lib/Button";
 import type { IColumn, IDetailsListProps, IGroup } from "@fluentui/react/lib/DetailsList";
-import { CSSProperties } from "react";
-import { IInfoCardProps, IRightColumn } from "./IInfoCardProps";
+import type { CSSProperties } from "react";
+import type { IInfoCardProps, IRightColumn } from "./IInfoCardProps";
+import type { IConfigurableHeader } from "./IListOptions";
 
 type Children = INode & {key: string, title: string};
 export interface INode {
@@ -41,7 +41,7 @@ export type TColumn<T> = IColumn & {
      * @example "file.name" will get the value from the file object.
     */
     fieldName?: keyof T;
-    dateConvertionOptions?: IDateConvertionOptions;
+    dateConversionOptions?: IDateConvertionOptions;
     /**How should the filter on the filter panel be rendered */
     renderFilterAs?: 'Dropdown' | 'SearchBox';
 }
@@ -54,7 +54,6 @@ interface IDateConvertionOptions {
     formatOptions?: Intl.DateTimeFormatOptions;
 }
 
-type IConfigurableHeader = Omit<IListOptionsProps, 'onSearchItem' | 'setIsFilterPanelOpen' | 'setRenderAs'>;
 type IGridCardRightCol = Pick<IRightColumn, 'containerStyle'> & {keys: {title: string, style?: CSSProperties}[]};
 type ICardProps = Omit<IInfoCardProps, 'cardTitle' | 'cardSubtitle' | 'cardRightColInformation'> & {
     containerStyle?: CSSProperties;
@@ -102,46 +101,21 @@ export interface IGridListProps<T extends any> {
     rowsAsNode?: INode[];
     /**A custom event to be fired when the row is clicked. */
     onRowClick?: (row: IRow) => void;
+    /**The same event from `IDetialsListProps` from `@fluent-ui` with generic types.
+     * 
+     * This is different from `onRenderCustomComponent`, since this method is applied to the default `onRenderItemColumn` from `Detailslist` and not on the entire component.
+     */
     onRenderItemColumn?: <S>(item?: S, index?: number, column?: TColumn<S>) => React.ReactNode;
     /**If you want to totally overwrite the component that is being rendered, independent of the `renderAs` value, use this rendering function. 
      *
      *  This element will be applied to each item `IRow`, not the entire component. */
     onRenderCustomComponent?: (item: IRow) => React.ReactNode;
-    /**The label to be displayed on the top of the Panel. */
+    /**The label to be displayed on the top of the filter Panel. */
     filterPanelTitle?: string;
-    /**A list of keys from `IRow` to not be displayed on the top of the Panel.*/
+    /**The label to be displayed on the top of the group Panel. */
+    groupPanelTitle?: string;
+    /**A list of keys from `IRow` to not be displayed on the top of the Panel when filtering.*/
     hiddenFilterKeys?: string[] | Array<keyof IRow>;
-}
-
-type CustomButtons = { props: IButtonProps, position?: number, className?: string, text: string }[];
-export interface IListOptionsProps {
-    /**
-     * If set to `true`, the filter panel will be displayed, and all the automatic filters logic will be applied to the list.
-     * @defaultvalue `true`
-     **/
-    enableFilter?: boolean;
-    /**
-     * If set to `true`, will display the searchbox, where the `searchKey` property should be used to define which key to filter by. 
-     * @defaultvalue `true` */
-    enableSearch?: boolean;
-    /**If set to `true` it will display an additional button on the header that changes the `renderAs` to `card` or `list` when clicked. */
-    enableCardView?: boolean;
-    /**If `enableSearch` is set to `true`, you need to provide a primitive array of keys from your `IRow[]` to be filtered. */
-    searchKey?: string[];
-    /**A placeholder text to the search box. */
-    searchBoxPlaceholder?: string;
-    onSearchItem?: (searchText: string, keys: Array<keyof IRow>) => void;
-    setIsFilterPanelOpen: (isOpen: boolean) => void;
-    setRenderAs: () => void;
-    /**Use this property if you want to add more custom buttons on the header. The button will be the `@fluent-ui` `PrimaryButton`, but it's props can be changed
-     * on the `props`.
-    * @defaultvalue `[]`*/
-    customButtons?: CustomButtons;
-    /**The order of the default buttons. */
-    defaultButtonsOrder?: {
-        group: number;
-        search: number;
-        filter: number;
-        card: number;
-    }
+    /**A list of keys from `IRow` to not be displayed on the top of the Panel when grouping.*/
+    hiddenGroupKeys?: string[] | Array<keyof IRow>;
 }

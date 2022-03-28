@@ -1,21 +1,25 @@
 import * as React from 'react';
 import { useState, useEffect, useMemo, lazy } from 'react';
 import {classNames} from './styles';
-import type { IGridListProps, IListOptionsProps, IRow } from '../models/interfaces/IGridView';
+import type { IGridListProps, IRow } from '../models/interfaces/IGridView';
+import type { IListOptionsProps } from '../models/interfaces/IListOptions';
 import { Utils } from '../helpers/Utils';
 import type { FilterOption, IAvailableFilters, IPanelFilterProps, SelectedItemsMap } from '../models/interfaces/IPanelFilter';
 import type { IGroup } from '@fluentui/react/lib/DetailsList';
+import { IGroupPanel } from '../models/interfaces/IGroupPanel';
 
 export function useGridController(props: IGridListProps<any>) {
     const [renderAs, setRenderAs] = useState<typeof props.renderAs>(props?.renderAs || 'list');
     const [shouldRenderCard, setShouldRenderCard] = useState(props?.renderAs === 'card');
     const [cols, setCols] = useState(props?.columns);
     const [actualFilteredValues, setActualFilteredValues] = useState<SelectedItemsMap>(new Map());
+    const [selectedGroupKeys, setSelectedGroupKeys] = useState<Map<string, string>>(new Map());
     const [allRows, setAllRows] = useState(props?.rows);
     const [actualRows, setActualRows] = useState(props?.rows ?? []);
     const [currentFilteredRows, setCurFilteredRows] = useState<IRow[]>([]);
     const [groups, setGroups] = useState(props?.groups);
     const [isFilterPanelOpen, setIsFilterPanel] = useState(false);
+    const [isGroupPanelOpen, setIsGroupPanel] = useState(false);
 
     useEffect(() => {
         setRenderAs(props?.renderAs);
@@ -89,9 +93,9 @@ export function useGridController(props: IGridListProps<any>) {
                     }
 
                     return c;
-                } else if (c?.dateConvertionOptions?.shouldConvertToLocaleString) {
+                } else if (c?.dateConversionOptions?.shouldConvertToLocaleString) {
                     c.onRender = (item, _2) => {
-                        const fieldValue = Utils.convertIsoToLocaleString(item[c?.fieldName ?? c?.key], c?.dateConvertionOptions?.locales, c?.dateConvertionOptions?.formatOptions);
+                        const fieldValue = Utils.convertIsoToLocaleString(item[c?.fieldName ?? c?.key], c?.dateConversionOptions?.locales, c?.dateConversionOptions?.formatOptions);
                         return <span>{fieldValue}</span>;
                     }
                 }
@@ -158,18 +162,21 @@ export function useGridController(props: IGridListProps<any>) {
         if (props?.onRowClick)
             props?.onRowClick(item);
     }
+
+    const filterFromColumns = (hiddenKeys: string[] | Array<keyof IRow>) => cols.filter(c => (!hiddenKeys?.includes(c?.key)));
+
     /**Generate the dropdowns of each availabe column and it's unique values */
     const buildFilters = (): IAvailableFilters[] => {
         const filters: IAvailableFilters[] = [];
-        const columnsToFilter = cols.filter(c => (!props?.hiddenFilterKeys?.includes(c?.key)));
+        const columnsToFilter = filterFromColumns(props?.hiddenFilterKeys);
         for (let index = 0; index < columnsToFilter.length; index++) {
             const col = columnsToFilter[index];
             const renderAs = col?.renderFilterAs ?? 'Dropdown';
             const keys = col?.key?.split('.') ?? col.fieldName?.split('.'); 
             const options: FilterOption[] = allRows?.filter(d => d)?.map((data, idx) => {
                 let stringObject = Utils.getNestedObject(data, keys)?.toString();
-                if (col?.dateConvertionOptions?.shouldConvertToLocaleString)
-                    stringObject = Utils.convertIsoToLocaleString(stringObject, col?.dateConvertionOptions?.locales, col?.dateConvertionOptions?.formatOptions);
+                if (col?.dateConversionOptions?.shouldConvertToLocaleString)
+                    stringObject = Utils.convertIsoToLocaleString(stringObject, col?.dateConversionOptions?.locales, col?.dateConversionOptions?.formatOptions);
                 return {
                     key: idx + "_" + col?.key,
                     text: stringObject,
@@ -247,7 +254,7 @@ export function useGridController(props: IGridListProps<any>) {
         setIsFilterPanel(false);
     }
 
-    const panelConfig: IPanelFilterProps = {
+    const filterPanelConfig: IPanelFilterProps = {
         isOpen: isFilterPanelOpen,
         onApply: onApplyFilter,
         onCancel: () => { setIsFilterPanel(false); },
@@ -258,6 +265,21 @@ export function useGridController(props: IGridListProps<any>) {
         panelTitle: props?.filterPanelTitle ?? 'Filtrar',
         actualFilteredValues,
         setActualFilteredValues
+    }
+
+    const groupPanelConfig: IGroupPanel = {
+        isOpen: isGroupPanelOpen,
+        onCancel: () => { setIsGroupPanel(false); },
+        onClose: () =>  { setIsGroupPanel(false); },
+        onOpen: () => { setIsGroupPanel(true); },
+        panelTitle: props?.groupPanelTitle ?? 'Agrupar',
+        setSelectedGroupKeys,
+        selectedGroupKeys,
+        options: filterFromColumns(props?.hiddenGroupKeys)?.map(c => ({key: c?.key, text: c?.name})) ?? [],
+        onApply: (groupMap) => {
+            if(groupMap.size === 0) return;
+            console.warn('Grouping is not implemented yet');
+        }
     }
 
     const listConfig: IListOptionsProps = {
@@ -286,9 +308,10 @@ export function useGridController(props: IGridListProps<any>) {
             setRenderAs('card');
         },
         setIsFilterPanelOpen: (value) => { setIsFilterPanel(value); },
+        setIsGroupPanelOpen: (value) => { setIsGroupPanel(value); },
         enableSearch: props?.headerOptions?.enableSearch ?? true,
         enableFilter: props?.headerOptions?.enableFilter ?? true,
-        enableCardView: props?.headerOptions?.enableCardView ?? true,
+        enableCardView: props?.headerOptions?.enableCardView ?? false,
         ...props?.headerOptions
     }
 
@@ -297,8 +320,10 @@ export function useGridController(props: IGridListProps<any>) {
             actualRows,
             cols,
             groups,
-            panelConfig,
+            filterPanelConfig,
+            groupPanelConfig,
             isFilterPanelOpen,
+            isGroupPanelOpen,
             listConfig,
             shouldRenderCard
         },
