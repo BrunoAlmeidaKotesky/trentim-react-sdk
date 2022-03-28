@@ -6,10 +6,12 @@ import { Sticky, StickyPositionType } from '@fluentui/react/lib/Sticky';
 import type { IGridListProps } from '../models/interfaces/IGridView';
 import PanelFilter from './PanelFilter';
 import { ListOptions } from './ListOptions';
+import { Suspense } from 'react';
 
-export const GridView = (props: IGridListProps<any>) => {   
-    const {state, handlers} = useGridController(props);
-    const {actualRows, cols, groups, isFilterPanelOpen, panelConfig, listConfig} = state;
+export function GridView<T = any>(props: IGridListProps<T>) {
+    const {state, handlers, JSX} = useGridController(props);
+    const {CardsList} = JSX;
+    const {actualRows, cols, groups, isFilterPanelOpen, panelConfig, listConfig, shouldRenderCard} = state;
     const {onRowClick} = handlers;
 
     return (
@@ -18,6 +20,9 @@ export const GridView = (props: IGridListProps<any>) => {
                 <div>
                     <ListOptions />
                     <div data-is-scrollable="true" style={{ position: 'relative', zIndex: 0 }}>
+                        {
+                        !!props?.onRenderCustomComponent ? actualRows?.map(i => props?.onRenderCustomComponent(i)) :
+                        !shouldRenderCard ? 
                         <DetailsList
                             {...props?.detailsListProps}
                             onRenderItemColumn={props?.onRenderItemColumn}
@@ -38,7 +43,13 @@ export const GridView = (props: IGridListProps<any>) => {
                                     <div key={headerProps?.key}>{defaultRender!(headerProps)}</div>
                                 </Sticky>)}
                             checkboxVisibility={props?.detailsListProps?.checkboxVisibility ?? CheckboxVisibility.hidden}
-                        />
+                        /> :
+                        <Suspense fallback={'...'}>
+                            <div id="gridView-cardContainer" style={props?.cardProps?.containerStyle ?? {display: 'grid', gap: 12, gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))'}}>
+                            {CardsList}
+                            </div>
+                        </Suspense>
+                        }
                     </div>
                     {isFilterPanelOpen && <PanelFilter />}
                 </div>

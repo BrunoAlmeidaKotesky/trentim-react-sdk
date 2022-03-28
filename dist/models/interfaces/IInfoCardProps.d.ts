@@ -1,10 +1,15 @@
 import { CSSProperties } from 'react';
 import type { BaseButton } from '@fluentui/react/lib/Button';
-
-type CircleIndicator = {title: string, color: string};
+declare type CircleIndicator = {
+    title: string;
+    color: string;
+};
 export interface IRightColumn {
     containerStyle?: CSSProperties;
-    values: {title: string, style: CSSProperties}[];
+    values: {
+        title: string;
+        style: CSSProperties;
+    }[];
 }
 export interface IInfoCardProps {
     circleIndicator?: CircleIndicator;
@@ -12,7 +17,7 @@ export interface IInfoCardProps {
     cardSubtitle?: string;
     width?: string;
     /**@default '150px' */
-    height?: string; 
+    height?: string;
     cardRightColInformation?: IRightColumn;
     /** The possible icons names are available on OfficeUiIcons.
      * @external https://uifabricicons.azurewebsites.net/
@@ -23,3 +28,4 @@ export interface IInfoCardProps {
     onCardClick?: (e?: any) => void | Promise<void>;
     enableUserSelect?: boolean;
 }
+export {};

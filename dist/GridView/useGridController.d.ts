@@ -1,3 +1,4 @@
+import * as React from 'react';
 import type { IGridListProps, IListOptionsProps, IRow } from '../models/interfaces/IGridView';
 import type { IPanelFilterProps } from '../models/interfaces/IPanelFilter';
 import type { IGroup } from '@fluentui/react/lib/DetailsList';
@@ -9,8 +10,12 @@ export declare function useGridController(props: IGridListProps<any>): {
         panelConfig: IPanelFilterProps;
         isFilterPanelOpen: boolean;
         listConfig: IListOptionsProps;
+        shouldRenderCard: boolean;
     };
     handlers: {
         onRowClick: (item: IRow) => void;
+    };
+    JSX: {
+        CardsList: React.ReactNode[];
     };
 };

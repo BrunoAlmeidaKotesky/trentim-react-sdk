@@ -1,5 +1,7 @@
 import { IButtonProps } from "@fluentui/react/lib/Button";
 import type { IColumn, IDetailsListProps, IGroup } from "@fluentui/react/lib/DetailsList";
+import { CSSProperties } from "react";
+import { IInfoCardProps, IRightColumn } from "./IInfoCardProps";
 declare type Children = INode & {
     key: string;
     title: string;
@@ -48,14 +50,28 @@ interface IDateConvertionOptions {
     /**Use this if you want to overwrite the behavior of the default `Intl.DateTimeFormatOptions` applied. */
     formatOptions?: Intl.DateTimeFormatOptions;
 }
-declare type IConfigurabeHeader = Omit<IListOptionsProps, 'onSearchItem' | 'setIsFilterPanelOpen'>;
+declare type IConfigurableHeader = Omit<IListOptionsProps, 'onSearchItem' | 'setIsFilterPanelOpen' | 'setRenderAs'>;
+declare type IGridCardRightCol = Pick<IRightColumn, 'containerStyle'> & {
+    keys: {
+        title: string;
+        style?: CSSProperties;
+    }[];
+};
+declare type ICardProps = Omit<IInfoCardProps, 'cardTitle' | 'cardSubtitle' | 'cardRightColInformation'> & {
+    containerStyle?: CSSProperties;
+    cardTitleKey: string;
+    cardSubtitleKey?: string;
+    rightColumn?: IGridCardRightCol;
+};
 export interface IGridListProps<T extends any> {
     /**Use this to overwrite the default props `IDetailListProps` from Microsoft's `@fluent-ui` */
     detailsListProps?: IDetailsListProps;
+    /**if `renderAs` is set to `card`, you need to provide the card props. */
+    cardProps?: ICardProps;
     /**Configure the header behavior, such as to enable filter and other functionalities. */
-    headerOptions: IConfigurabeHeader;
+    headerOptions: IConfigurableHeader;
     groups?: IGroup[];
-    renderAs: 'tree' | 'list';
+    renderAs: 'tree' | 'list' | 'card';
     /**If you set tis property to `true`, on your `rowAsNode` interface, the `items` property which is an
      * `IRow[]`, you need to provide a `file` property for each row, of the type `IFileInfo`, otherwise it won't work.
      * You can also do this render by yourself, changing the `onRender` of your `columns` */
@@ -87,6 +103,10 @@ export interface IGridListProps<T extends any> {
     /**A custom event to be fired when the row is clicked. */
     onRowClick?: (row: IRow) => void;
     onRenderItemColumn?: <S>(item?: S, index?: number, column?: TColumn<S>) => React.ReactNode;
+    /**If you want to totally overwrite the component that is being rendered, independent of the `renderAs` value, use this rendering function.
+     *
+     *  This element will be applied to each item `IRow`, not the entire component. */
+    onRenderCustomComponent?: (item: IRow) => React.ReactNode;
     /**The label to be displayed on the top of the Panel. */
     filterPanelTitle?: string;
     /**A list of keys from `IRow` to not be displayed on the top of the Panel.*/
@@ -100,18 +120,23 @@ declare type CustomButtons = {
 }[];
 export interface IListOptionsProps {
     /**
-     * If set to true, the filter panel will be displayed, and all the automatic filters logic will be applied to the list.
+     * If set to `true`, the filter panel will be displayed, and all the automatic filters logic will be applied to the list.
      * @defaultvalue `true`
      **/
     enableFilter?: boolean;
     /**
-     * If se to true, will display the searchbox, where the `searchKey` property should be used to define which key to filter by.
+     * If set to `true`, will display the searchbox, where the `searchKey` property should be used to define which key to filter by.
      * @defaultvalue `true` */
     enableSearch?: boolean;
-    /**If `enableSearch` is set to `true`, you need to provide a primitive key from your `IRow[]` to be filtered. */
-    searchKey?: string;
-    onSearchItem?: (searchText: string, key: keyof IRow) => void;
+    /**If set to `true` it will display an additional button on the header that changes the `renderAs` to `card` or `list` when clicked. */
+    enableCardView?: boolean;
+    /**If `enableSearch` is set to `true`, you need to provide a primitive array of keys from your `IRow[]` to be filtered. */
+    searchKey?: string[];
+    /**A placeholder text to the search box. */
+    searchBoxPlaceholder?: string;
+    onSearchItem?: (searchText: string, keys: Array<keyof IRow>) => void;
     setIsFilterPanelOpen: (isOpen: boolean) => void;
+    setRenderAs: () => void;
     /**Use this property if you want to add more custom buttons on the header. The button will be the `@fluent-ui` `PrimaryButton`, but it's props can be changed
      * on the `props`.
     * @defaultvalue `[]`*/
@@ -121,6 +146,7 @@ export interface IListOptionsProps {
         group: number;
         search: number;
         filter: number;
+        card: number;
     };
 }
 export {};

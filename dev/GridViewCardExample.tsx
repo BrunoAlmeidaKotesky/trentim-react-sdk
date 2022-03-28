@@ -2,20 +2,27 @@ import * as React from 'react';
 import { GridView } from '../src/GridView/GridView';
 import { simpleRow } from './constants';
 
-
-export function GridViewListExample() {
+export function GridViewCardExample() {
     return (
         <div>
           <GridView
             headerOptions={{
-              enableSearch: true, enableFilter: true,
+              enableSearch: true, enableFilter: true, enableCardView: true,
               searchKey: ['Title', 'Status'],
               searchBoxPlaceholder: "Pesquisar",
               customButtons: [{text: 'Upload', props: {
                 onClick: () => console.log('Clicked')
               }}]
             }}
-            renderAs="list"
+            cardProps={{
+              cardTitleKey: 'Title',
+              cardSubtitleKey: 'Status',
+              rightColumn: {
+                keys: [{title: 'NumeroPI'}, {title: 'GerenteProjeto.Title'}]
+              },
+              circleIndicator: {title: 'Status', color: '#06ad51' }
+            }}
+            renderAs="card"
             rows={simpleRow}
             hiddenFilterKeys={['NumeroPI']}
             onRowClick={(i) => console.log(i)}

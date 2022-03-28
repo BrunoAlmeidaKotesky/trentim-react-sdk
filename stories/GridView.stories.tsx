@@ -11,8 +11,8 @@ export default {
             defaultValue: simpleRow
         },
         searchKey: {
-            type: 'string',
-            defaultValue: 'Title'
+            type: 'array',
+            defaultValue: ['Title']
         },
         enableSearch: {
             type: 'boolean',

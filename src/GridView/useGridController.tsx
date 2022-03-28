@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo, lazy } from 'react';
 import {classNames} from './styles';
 import type { IGridListProps, IListOptionsProps, IRow } from '../models/interfaces/IGridView';
 import { Utils } from '../helpers/Utils';
@@ -7,6 +7,8 @@ import type { FilterOption, IAvailableFilters, IPanelFilterProps, SelectedItemsM
 import type { IGroup } from '@fluentui/react/lib/DetailsList';
 
 export function useGridController(props: IGridListProps<any>) {
+    const [renderAs, setRenderAs] = useState<typeof props.renderAs>(props?.renderAs || 'list');
+    const [shouldRenderCard, setShouldRenderCard] = useState(props?.renderAs === 'card');
     const [cols, setCols] = useState(props?.columns);
     const [actualFilteredValues, setActualFilteredValues] = useState<SelectedItemsMap>(new Map());
     const [allRows, setAllRows] = useState(props?.rows);
@@ -16,12 +18,64 @@ export function useGridController(props: IGridListProps<any>) {
     const [isFilterPanelOpen, setIsFilterPanel] = useState(false);
 
     useEffect(() => {
+        setRenderAs(props?.renderAs);
+    }, [props?.renderAs]);
+
+    useEffect(() => {
         if(props?.autoFileDisplay) {
-            if((!props?.rowsAsNode) && props.renderAs !== 'tree') {
-                console.warn("You are using `autoFileDisplay`, but you are not using rowsAsNode. This will not work.");
+            if((!props?.rowsAsNode) && renderAs !== 'tree') {
+                console.warn("[GridView] - You are using `autoFileDisplay`, but you are not using rowsAsNode. This will not work.");
             }
         }
-    }, [props?.autoFileDisplay, props?.rowsAsNode, props?.renderAs]);
+    }, [props?.autoFileDisplay, props?.rowsAsNode, renderAs]);
+
+    useEffect(() => {
+        if(renderAs === 'card') {
+            setShouldRenderCard(true);
+            if(!props?.cardProps)
+                console.error("[GridView] - You are using `renderAs: card`, but you are not passing cardProps. This will not work.");
+        }
+        else setShouldRenderCard(false);
+    }, [renderAs]);
+
+    const Card = useMemo(() => {
+        if(!shouldRenderCard) return null;
+        return lazy(() => import('../Card/Card').then((module) => ({ default: module?.default })));
+    }, [shouldRenderCard]);
+
+    const CardsList = useMemo(() => {
+        if(!Card)
+            return [];
+        
+        return actualRows?.map(row => {
+            const hasCustomCard = !!props?.onRenderCustomComponent;
+            if(hasCustomCard)
+                return props?.onRenderCustomComponent(row);
+            const cProps = props?.cardProps;
+            const cardTitle: string = Utils.getNestedObject(row, cProps?.cardTitleKey?.split('.')) || '';
+            const cardSubtitle: string = Utils.getNestedObject(row, cProps?.cardSubtitleKey?.split('.')) || '';
+            const rightCol = cProps?.rightColumn;
+            return (
+            <Card
+                key={row?.Id}
+                cardRightColInformation={rightCol?.keys && {
+                    ...rightCol,
+                    values: rightCol?.keys?.map(opt => ({
+                        title: Utils.getNestedObject(row, opt?.title?.split('.') as any),
+                        style: opt?.style ??  { fontSize: 16, marginBottom: 4, fontWeight: 600 }
+                    }))
+                }}
+                onCardClick={e => {
+                    onRowClick(row);
+                    if(cProps?.onCardClick)
+                        cProps?.onCardClick(e);
+                }}
+                cardTitle={cardTitle}
+                cardSubtitle={cardSubtitle}
+                {...props?.cardProps} />
+            );
+        })
+    }, [Card, props?.cardProps, actualRows, renderAs, props?.onRenderCustomComponent]);
 
     //Effects
     useEffect(() => {
@@ -48,7 +102,7 @@ export function useGridController(props: IGridListProps<any>) {
     }, [props?.columns]);
 
     useEffect(() => {
-        if (props.renderAs === 'tree' && props?.autoFileDisplay)
+        if (renderAs === 'tree' && props?.autoFileDisplay)
             setCols([{
                 key: 'file.iconUrl',
                 name: 'ícone',
@@ -79,17 +133,17 @@ export function useGridController(props: IGridListProps<any>) {
                 isPadded: true,
             }, ...cols]);
         else setCols(props?.columns);
-    }, [props?.renderAs, props?.autoFileDisplay]);
+    }, [renderAs, props?.autoFileDisplay]);
 
     useEffect(() => {
         setActualRows(props?.rows);
         setAllRows(props?.rows)
     }, [props?.rows?.length]);
 
-    useEffect(() => { generateTreeRows(); }, [props?.rowsAsNode, props?.renderAs]);
+    useEffect(() => { generateTreeRows(); }, [props?.rowsAsNode, renderAs]);
 
     const generateTreeRows = () => {
-        if (props?.renderAs === 'tree' && props?.rowsAsNode) {
+        if (renderAs === 'tree' && props?.rowsAsNode) {
             const nodes = props.rowsAsNode;
             const items: IRow[] = [];
             const groups: IGroup[] = [];
@@ -207,16 +261,34 @@ export function useGridController(props: IGridListProps<any>) {
     }
 
     const listConfig: IListOptionsProps = {
-        onSearchItem: (text, key) => {
-            const filteredRows = text ?
-                allRows?.filter(item => {
-                    const itemValue: string = Utils.getNestedObject(item, (key as string).split('.'));
-                    return itemValue?.toLowerCase()?.includes(text.toLowerCase());
-                }) : allRows;
+        onSearchItem: (text, keys) => {
+            const filteredRows: IRow[] = []; 
+            if(!text)
+                filteredRows.push(...allRows);
+            else {
+                filteredRows.push(...allRows?.filter(item => {
+                    const itemValues: string[] = [];
+                    for (const key of keys) {
+                        const value = Utils.getNestedObject(item, (key as string)?.split('.'));
+                        if(value !== undefined && value !== null)
+                            itemValues.push(value.toString());
+                    }
+                    const containsText = itemValues.some(v => v?.toLowerCase().includes(text?.toLowerCase()));
+                    return containsText;
+                }));
+            } 
             setActualRows(filteredRows);
             setCurFilteredRows(filteredRows);
         },
+        setRenderAs: () => {
+            if(renderAs === 'card')
+                return setRenderAs('list');
+            setRenderAs('card');
+        },
         setIsFilterPanelOpen: (value) => { setIsFilterPanel(value); },
+        enableSearch: props?.headerOptions?.enableSearch ?? true,
+        enableFilter: props?.headerOptions?.enableFilter ?? true,
+        enableCardView: props?.headerOptions?.enableCardView ?? true,
         ...props?.headerOptions
     }
 
@@ -227,10 +299,14 @@ export function useGridController(props: IGridListProps<any>) {
             groups,
             panelConfig,
             isFilterPanelOpen,
-            listConfig
+            listConfig,
+            shouldRenderCard
         },
         handlers: {
             onRowClick,
+        },
+        JSX: {
+            CardsList
         }
     }
 }
