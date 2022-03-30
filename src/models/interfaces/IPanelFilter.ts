@@ -1,14 +1,15 @@
 import type { IRow } from "./IGridView";
 import type { Dispatch, SetStateAction } from 'react';
-import { ICommonPanel } from "./ICommonPanel";
- 
+import type { ICommonPanel } from "./ICommonPanel";
+import type { FilterComponent } from '../types/Common';
+
 export type FilterOption = {key: string | number, text: string, data?: IRow, selected?: boolean; name?: string};
 export interface IAvailableFilters {
     key: string;
     name: string;
     options: FilterOption[];
     enableMultiple: boolean;
-    renderAs: 'Dropdown' | 'SearchBox' | 'DateSlider';
+    renderAs: FilterComponent;
 }
 export interface IPanelFilterProps extends ICommonPanel<SelectedItemsMap> {
     availableFilters: IAvailableFilters[];

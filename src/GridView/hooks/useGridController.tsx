@@ -1,12 +1,10 @@
 import * as React from 'react';
 import { useState, useEffect, useMemo, lazy } from 'react';
-import {classNames} from './styles';
-import type { IGridListProps, IRow } from '../models/interfaces/IGridView';
-import type { IListOptionsProps } from '../models/interfaces/IListOptions';
-import { Utils } from '../helpers/Utils';
-import type { FilterOption, IAvailableFilters, IPanelFilterProps, SelectedItemsMap } from '../models/interfaces/IPanelFilter';
-import type { IGroup } from '@fluentui/react/lib/DetailsList';
-import { IGroupPanel } from '../models/interfaces/IGroupPanel';
+import type { IGridListProps, IRow } from '../../models/interfaces/IGridView';
+import type { IListOptionsProps } from '../../models/interfaces/IListOptions';
+import { Utils } from '../../helpers/Utils';
+import type { FilterOption, IAvailableFilters, IPanelFilterProps, SelectedItemsMap } from '../../models/interfaces/IPanelFilter';
+import { IGroupPanel } from '../../models/interfaces/IGroupPanel';
 
 export function useGridController(props: IGridListProps<any>) {
     const [renderAs, setRenderAs] = useState<typeof props.renderAs>(props?.renderAs || 'list');
@@ -17,21 +15,10 @@ export function useGridController(props: IGridListProps<any>) {
     const [allRows, setAllRows] = useState(props?.rows);
     const [actualRows, setActualRows] = useState(props?.rows ?? []);
     const [currentFilteredRows, setCurFilteredRows] = useState<IRow[]>([]);
-    const [groups, setGroups] = useState(props?.groups);
     const [isFilterPanelOpen, setIsFilterPanel] = useState(false);
     const [isGroupPanelOpen, setIsGroupPanel] = useState(false);
 
-    useEffect(() => {
-        setRenderAs(props?.renderAs);
-    }, [props?.renderAs]);
-
-    useEffect(() => {
-        if(props?.autoFileDisplay) {
-            if((!props?.rowsAsNode) && renderAs !== 'tree') {
-                console.warn("[GridView] - You are using `autoFileDisplay`, but you are not using rowsAsNode. This will not work.");
-            }
-        }
-    }, [props?.autoFileDisplay, props?.rowsAsNode, renderAs]);
+    useEffect(() => { setRenderAs(props?.renderAs); }, [props?.renderAs]);
 
     useEffect(() => {
         if(renderAs === 'card') {
@@ -44,7 +31,7 @@ export function useGridController(props: IGridListProps<any>) {
 
     const Card = useMemo(() => {
         if(!shouldRenderCard) return null;
-        return lazy(() => import('../Card/Card').then((module) => ({ default: module?.default })));
+        return lazy(() => import('../../Card/Card').then((module) => ({ default: module?.default })));
     }, [shouldRenderCard]);
 
     const CardsList = useMemo(() => {
@@ -81,7 +68,6 @@ export function useGridController(props: IGridListProps<any>) {
         })
     }, [Card, props?.cardProps, actualRows, renderAs, props?.onRenderCustomComponent]);
 
-    //Effects
     useEffect(() => {
         if (props?.columns?.length) {
             const columns = props?.columns;
@@ -106,57 +92,9 @@ export function useGridController(props: IGridListProps<any>) {
     }, [props?.columns]);
 
     useEffect(() => {
-        if (renderAs === 'tree' && props?.autoFileDisplay)
-            setCols([{
-                key: 'file.iconUrl',
-                name: 'ícone',
-                className: classNames.fileIconCell,
-                iconClassName: classNames.fileIconHeaderIcon,
-                ariaLabel: 'Column operations for File type, Press to sort on File type',
-                iconName: 'Page',
-                isIconOnly: true,
-                fieldName: 'file.iconUrl',
-                minWidth: 16,
-                maxWidth: 16,
-                onRender: (item: IRow) => (<img src={item?.file?.iconUrl} className={classNames.fileIconImg} alt={`${item?.file?.fileType} file icon`} />),
-            },
-            {
-                key: 'file.name',
-                name: 'Nome',
-                fieldName: 'file.name',
-                minWidth: 210,
-                maxWidth: 350,
-                isRowHeader: true,
-                isResizable: true,
-                isSorted: true,
-                isSortedDescending: false,
-                sortAscendingAriaLabel: 'Sorted A to Z',
-                sortDescendingAriaLabel: 'Sorted Z to A',
-                onRender: (item: IRow) => (<span>{item?.file?.name}</span>),
-                data: 'string',
-                isPadded: true,
-            }, ...cols]);
-        else setCols(props?.columns);
-    }, [renderAs, props?.autoFileDisplay]);
-
-    useEffect(() => {
         setActualRows(props?.rows);
         setAllRows(props?.rows)
     }, [props?.rows?.length]);
-
-    useEffect(() => { generateTreeRows(); }, [props?.rowsAsNode, renderAs]);
-
-    const generateTreeRows = () => {
-        if (renderAs === 'tree' && props?.rowsAsNode) {
-            const nodes = props.rowsAsNode;
-            const items: IRow[] = [];
-            const groups: IGroup[] = [];
-            Utils.processNodes(nodes, groups, items, 0);
-            setActualRows(items);
-            setAllRows(items);
-            setGroups(groups);
-        }
-    }
 
     const onRowClick = (item: IRow) => {
         if (props?.onRowClick)
@@ -165,7 +103,7 @@ export function useGridController(props: IGridListProps<any>) {
 
     const filterFromColumns = (hiddenKeys: string[] | Array<keyof IRow>) => cols.filter(c => (!hiddenKeys?.includes(c?.key)));
 
-    /**Generate the dropdowns of each availabe column and it's unique values */
+    /**Generate the dropdowns of each available column and it's unique values */
     const buildFilters = (): IAvailableFilters[] => {
         const filters: IAvailableFilters[] = [];
         const columnsToFilter = filterFromColumns(props?.hiddenFilterKeys);
@@ -200,9 +138,9 @@ export function useGridController(props: IGridListProps<any>) {
         const mapsByKeyKind = new Map<string, SelectedItemsMap>();
         selectedItems.forEach((_, key, map) => {
             const keyName = key.split('_')[1];
-            const doesntHaveKey = !mapsByKeyKind.has(keyName);
+            const doesNotHaveKey = !mapsByKeyKind.has(keyName);
             const sameMapsList = [...map].filter(d => d[0] === key);
-            if(doesntHaveKey) 
+            if(doesNotHaveKey) 
                 mapsByKeyKind.set(keyName, new Map(sameMapsList));
             else {
                 const thisKindMap = mapsByKeyKind.get(keyName);
@@ -215,15 +153,21 @@ export function useGridController(props: IGridListProps<any>) {
     /**Isso deve estar O log n */
     const onApplyFilter: IPanelFilterProps['onApply'] = (selectedItems) => {
         if(selectedItems.size === 0) {
-            generateTreeRows();
             setActualRows(allRows);
             setCurFilteredRows([]);
             return;
         }
-        const groupedMaps = groupMaps(selectedItems);
-        //const allGroupMapKeys = [...groupedMaps.keys()]?.flatMap(i => i?.split('.')) ?? [];
-        const onlyNecessaryKeysToVerify = cols.filter(c => groupedMaps.has(c?.key)).map(c => c?.key);
         let orFilterAggregation: IRow[] = currentFilteredRows;
+        const groupedMaps = groupMaps(selectedItems);
+        const onlyNecessaryKeysToVerify = cols.filter(c => groupedMaps.has(c?.key)).map(c => c?.key);
+        //An filter algorithm that if the groupMap key is the same is an OR operation and if it's different is an AND operation
+        let currentIdx = 0;
+        for(const [mapKey, map] of groupedMaps.entries()) {
+            orFilterAggregation
+            currentIdx += 1;
+            console.log(`${mapKey}/${map.size}`, currentIdx);
+        }
+
         for (let idx = 0; idx < allRows?.length; idx++) {
             const row = allRows[idx];
             const deepKey = Utils.getDeepKeys(row);
@@ -319,7 +263,6 @@ export function useGridController(props: IGridListProps<any>) {
         state: {
             actualRows,
             cols,
-            groups,
             filterPanelConfig,
             groupPanelConfig,
             isFilterPanelOpen,

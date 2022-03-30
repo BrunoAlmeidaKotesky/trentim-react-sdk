@@ -1,81 +1,27 @@
 import * as React from 'react';
-import { lazy, useContext, useMemo, Suspense, useRef, useEffect } from 'react';
-import { FilterPanelContext } from './Contexts';
+import DateSlider from '../DateSlider';
+import {usePanelFilterController} from './hooks/usePanelFilterController';
 import type { FilterOption } from '../models/interfaces/IPanelFilter';
-import type { ITag } from '@fluentui/react/lib/Pickers';
 
 function PanelFilter() {
-    const { isOpen, onClose, availableFilters, panelTitle, onCancel, onApply, actualFilteredValues, setActualFilteredValues, onOpen } = useContext(FilterPanelContext);
-    const [FluentPanel, Dropdown, PrimaryButton, DefaultButton, TagPicker, Slider] = useMemo(() => {
-        const Panel = lazy(() => import('@fluentui/react/lib/Panel').then(({ Panel }) => ({ default: Panel })));
-        const DropDown = lazy(() => import('@fluentui/react/lib/Dropdown').then(({ Dropdown }) => ({ default: Dropdown })));
-        const PrimaryButton = lazy(() => import('@fluentui/react/lib/Button').then(({ PrimaryButton }) => ({ default: PrimaryButton })));
-        const DefaultButton = lazy(() => import('@fluentui/react/lib/Button').then(({ DefaultButton }) => ({ default: DefaultButton })));
-        const TagPicker = lazy(() => import('@fluentui/react/lib/Pickers').then(({ TagPicker }) => ({ default: TagPicker })));
-        const Slider = lazy(() => import('@fluentui/react/lib/Slider').then(({ Slider }) => ({ default: Slider })));
-        return [Panel, DropDown, PrimaryButton, DefaultButton, TagPicker, Slider];
-    }, []);
-    const lastAddedTag = useRef<FilterOption>(null);
-
-    const onAddOrRemoveToMap = (rootItemKey: string, option: FilterOption) => {
-        //If the current option is selected and is not already on the actualFilteredValues map, add it
-        //else if the current option is not select and all the other options are not select too, remove the key from the map
-        const copyMap = new Map(actualFilteredValues);
-        if(!option.key) return;
-        if (option.selected && !copyMap.has(option?.key as string)) {
-            copyMap.set(option.key as string, { rootItemKey, itemKey: option.key, data: option?.data, text: option?.text });
-        }
-        else if (!option.selected && copyMap.has(option?.key as string)) {
-            copyMap.delete(option?.key as string); 
-        }
-        setActualFilteredValues(copyMap);
-    }
-
-    useEffect(() => { if(onOpen) onOpen();}, []);
-
-    const listContainsTagList = (tag: FilterOption, tagList?: FilterOption[]) => {
-        if (!tagList || !tagList.length || tagList.length === 0) 
-          return false;
-        return tagList.some(compareTag => compareTag?.key === tag?.key);
-    };
-
-    const getDefaultDropdownSelectedKeys = () => {
-        const selectedKeys: string[] = [];
-        actualFilteredValues.forEach((_, k) => {
-            selectedKeys.push(k);
-        })
-        return selectedKeys;
-    }
-
-    const getDefaultSelectedTag = (keyToFilter: string) => {
-        const selectedTags: FilterOption[] = [];
-        actualFilteredValues.forEach((d, k) => {
-            const keyKind = k?.split('_')[1];
-            if(keyKind === keyToFilter) 
-                selectedTags.push({
-                    key: keyKind,
-                    text: d?.text,
-                    data: d?.data,
-                    selected: true,
-                    name: d?.text
-                });
-        })
-        return selectedTags as unknown as ITag[];
-    }
+    const {JSX, state, handlers} = usePanelFilterController();
+    const {actualFilteredValues, panelTitle, availableFilters, isOpen, lastAddedTag} = state;
+    const {FluentPanel, PrimaryButton, Dropdown, TagPicker, DefaultButton} = JSX;
+    const {onClose, onCancel, getDefaultDropdownSelectedKeys, onAddOrRemoveToMap, getDefaultSelectedTag, setActualFilteredValues, listContainsTagList} = handlers;
 
     if (!isOpen) return null;
     return (
-        <Suspense fallback={<div>...</div>}>
+        <React.Suspense fallback={<div>...</div>}>
             <FluentPanel 
                 onRenderFooter={_ => (<div style={{padding: 20}}>
-                    <Suspense fallback={'...'}>
-                        <PrimaryButton onClick={() => onApply(actualFilteredValues)} styles={{root: {marginRight: 8}}}>
+                    <React.Suspense fallback={'...'}>
+                        <PrimaryButton onClick={() => handlers.onApply(actualFilteredValues)} styles={{root: {marginRight: 8}}}>
                             Aplicar
                         </PrimaryButton>
-                    </Suspense>
-                    <Suspense fallback={'...'}>
+                    </React.Suspense>
+                    <React.Suspense fallback={'...'}>
                         <DefaultButton onClick={onCancel}>Cancelar</DefaultButton>
-                    </Suspense>
+                    </React.Suspense>
                   </div>)}
                 isFooterAtBottom={true}
                 onDismiss={onClose} isOpen={isOpen}>
@@ -88,7 +34,7 @@ function PanelFilter() {
                         text,
                         data
                     }));
-                    return (<Suspense fallback={'...'}>
+                    return (<React.Suspense fallback={'...'}>
                         {(filter.renderAs === 'Dropdown') ? 
                         <Dropdown
                             defaultSelectedKeys={getDefaultDropdownSelectedKeys()}
@@ -134,14 +80,15 @@ function PanelFilter() {
                                 return result;
                             }} /></div> :
                         (filter.renderAs === 'DateSlider') ?
-                        <Slider
+                        <DateSlider
+                            onChange={(d) => console.log(d)}
                             key={filter?.key + "-" + idx}
                             label={filter?.name}/> : null
                         }
-                    </Suspense>);
+                    </React.Suspense>);
                 })}
             </FluentPanel>
-        </Suspense>
+        </React.Suspense>
     );
 }
 
