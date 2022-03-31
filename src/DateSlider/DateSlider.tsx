@@ -42,6 +42,11 @@ function DateSliderComponent(props: IDateSliderProps) {
             props.onRecordDateRange(fromDate, toDate, RangeType.CUSTOM);
     }, [fromDate, toDate]);
 
+    React.useEffect(() => {
+        if(props?.defaultValues?.slider === 4 && !displayDatePicker)
+            setDisplayDatePicker(true);
+    }, [props?.defaultValues?.slider]);
+
     const dateSrings = React.useMemo(() => ({
         months: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
         shortMonths: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
@@ -99,7 +104,7 @@ function DateSliderComponent(props: IDateSliderProps) {
                     else if(d && toDate && toDate.getTime() > d.getTime())
                         setFromDate(d);
                 }}
-                value={props?.defaultValues?.to ?? fromDate}
+                value={props?.defaultValues?.to ?? toDate}
                 label="Até"/>
         </div>
     }
