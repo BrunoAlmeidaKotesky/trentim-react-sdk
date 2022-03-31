@@ -2,6 +2,7 @@ import { lazy, useContext, useMemo, useRef, useEffect } from 'react';
 import { FilterPanelContext } from '../Contexts';
 import type { FilterOption } from '../../models/interfaces/IPanelFilter';
 import type { ITag } from '@fluentui/react/lib/Pickers';
+import { RangeType } from '../../helpers/enums';
 
 export function usePanelFilterController() {
     const { isOpen, onClose, availableFilters, panelTitle, onCancel, onApply, actualFilteredValues, setActualFilteredValues, onOpen } = useContext(FilterPanelContext);
@@ -26,10 +27,23 @@ export function usePanelFilterController() {
         else if (!option.selected && copyMap.has(option?.key as string)) {
             copyMap.delete(option?.key as string);
         }
+        else if(option.selected && copyMap.has(option?.key as string) && option?.isDateComponent) {
+            copyMap.set(option.key as string, { rootItemKey, itemKey: option.key, data: option?.data, text: option?.text });
+        }
         setActualFilteredValues(copyMap);
     }
 
     useEffect(() => { if (onOpen) onOpen(); }, []);
+
+    const mapOptions = (options: FilterOption[]) => {
+        return options
+        .filter(i => (i?.text !== null && i?.text !== undefined))
+        .map<FilterOption>(({ key, text, data }) => ({
+            key,
+            text,
+            data
+        }));
+    }
 
     const listContainsTagList = (tag: FilterOption, tagList?: FilterOption[]) => {
         if (!tagList || !tagList.length || tagList.length === 0)
@@ -60,25 +74,86 @@ export function usePanelFilterController() {
         })
         return selectedTags as unknown as ITag[];
     }
+
+    const getDefaultSelectedDate = (keyToFilter: string): {slider: RangeType, from: Date, to: Date} => {
+        const mapWithSameKey = [...actualFilteredValues]?.find(([key]) => key === keyToFilter);
+        const mapWithSameKeyValue = mapWithSameKey?.[1]?.data;
+        if(mapWithSameKeyValue)
+            return {slider: mapWithSameKeyValue?.type, from: mapWithSameKeyValue?.from, to: mapWithSameKeyValue?.to};
+        return {
+            slider: RangeType.NONE,
+            from: null,
+            to: null
+        }
+    }
+
+    const onChangeTags = (options: FilterOption[]) => (tags: ITag[]) => {
+        const copyMap = new Map(actualFilteredValues);
+        if(tags.length === 0) {
+            options.forEach(opt => {
+                if(copyMap.has(opt?.key as string))
+                    copyMap.delete(opt?.key as string);
+            });
+        } else if(!(tags?.map(i => i?.key).includes(lastAddedTag?.current?.key))) {
+            copyMap.delete(lastAddedTag?.current?.key as string);
+            lastAddedTag.current = null; 
+        }
+        setActualFilteredValues(copyMap);
+    }
+
+    const onTagSelected = (key: string) =>(selectedItem: ITag) => {
+        onAddOrRemoveToMap(key, {...selectedItem, selected: true} as unknown as FilterOption);
+        lastAddedTag.current = selectedItem as unknown as FilterOption;
+        return selectedItem;
+    }
+
+    const onResolveTagSuggestion = (options: FilterOption[]) => (currentFilter: string, tagList: ITag[], ) => {
+        const result = currentFilter
+        ? options.filter(opt => 
+            opt?.text?.toLowerCase().indexOf(currentFilter.toLowerCase()) === 0 
+            && !listContainsTagList(opt, tagList as unknown as FilterOption[])).map(f => ({...f, name: f?.text})): [];
+        return result;
+    }
+
+    const onRecordDateChange = (key: string) => (from: Date, to: Date, type: RangeType) => {
+        if(from && to && type !== RangeType.NONE)
+            onAddOrRemoveToMap(key, {
+                key: key,
+                text: `${from?.toISOString()} - ${to?.toISOString()}`,
+                data: { from, to, type },
+                selected: true,
+                isDateComponent: true,
+                name: `${from?.toISOString()} - ${to?.toISOString()}`
+            } as unknown as FilterOption);
+        else {
+            const copyMap = new Map(actualFilteredValues);
+            copyMap.delete(key);
+            setActualFilteredValues(copyMap);
+        }
+    }
+
     return {
         state: {
             isOpen,
             actualFilteredValues,
             panelTitle,
-            availableFilters,
-            lastAddedTag,
-
+            availableFilters
         },
         handlers: {
             getDefaultDropdownSelectedKeys,
             getDefaultSelectedTag,
-            listContainsTagList,
+            getDefaultSelectedDate,
             onAddOrRemoveToMap,
             onClose,
             onCancel,
             onApply,
             onOpen,
-            setActualFilteredValues
+            setActualFilteredValues,
+            onChangeTags,
+            onTagSelected,
+            onResolveTagSuggestion,
+            onRecordDateChange,
+            mapOptions
         },
         JSX: {
             FluentPanel,

@@ -137,7 +137,9 @@ export function useGridController(props: IGridListProps<any>) {
     const groupMaps = (selectedItems: SelectedItemsMap): Map<string, SelectedItemsMap> => {
         const mapsByKeyKind = new Map<string, SelectedItemsMap>();
         selectedItems.forEach((_, key, map) => {
-            const keyName = key.split('_')[1];
+            let keyName = key.split('_')[1];
+            if(!keyName && !key.includes('_'))
+                keyName = key;
             const doesNotHaveKey = !mapsByKeyKind.has(keyName);
             const sameMapsList = [...map].filter(d => d[0] === key);
             if(doesNotHaveKey) 
@@ -155,6 +157,7 @@ export function useGridController(props: IGridListProps<any>) {
         if(selectedItems.size === 0) {
             setActualRows(allRows);
             setCurFilteredRows([]);
+            setIsFilterPanel(false);
             return;
         }
         let orFilterAggregation: IRow[] = currentFilteredRows;

@@ -3,7 +3,14 @@ import type { Dispatch, SetStateAction } from 'react';
 import type { ICommonPanel } from "./ICommonPanel";
 import type { FilterComponent } from '../types/Common';
 
-export type FilterOption = {key: string | number, text: string, data?: IRow, selected?: boolean; name?: string};
+export interface FilterOption {
+    key: string | number;
+    text: string; 
+    data?: IRow; 
+    selected?: boolean; 
+    name?: string
+    isDateComponent?: boolean;
+};
 export interface IAvailableFilters {
     key: string;
     name: string;
