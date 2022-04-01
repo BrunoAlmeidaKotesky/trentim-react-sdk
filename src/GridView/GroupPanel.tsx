@@ -32,14 +32,10 @@ function GroupPanel() {
                 <Suspense fallback={'...'}>
                     <RadioButton
                         onChange={(_, opt) => {
-                            const copyMap = new Map(selectedGroupKeys);
-                            if(!copyMap.has(opt?.key))
-                                copyMap.set(opt.key, opt.text);
-                            else
-                                copyMap.delete(opt.key);
-                            setSelectedGroupKeys(copyMap);
+                            const keyWithName = `${opt?.key};${opt?.text}` as const;
+                            setSelectedGroupKeys(keyWithName);
                         }}
-                        options={options}/>
+                        options={[{key: '@NONE', text: 'Nenhum'} ,...options]}/>
                 </Suspense>
             </FluentPanel>
         </Suspense>

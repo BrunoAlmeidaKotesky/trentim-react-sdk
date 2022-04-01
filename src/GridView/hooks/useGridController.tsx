@@ -4,14 +4,17 @@ import type { IGridListProps, IRow } from '../../models/interfaces/IGridView';
 import type { IListOptionsProps } from '../../models/interfaces/IListOptions';
 import { Utils } from '../../helpers/Utils';
 import type { FilterOption, IAvailableFilters, IPanelFilterProps, SelectedItemsMap } from '../../models/interfaces/IPanelFilter';
-import { IGroupPanel } from '../../models/interfaces/IGroupPanel';
+import type { IGroupPanel } from '../../models/interfaces/IGroupPanel';
+import type { IGroup } from '@fluentui/react/lib/DetailsList';
+import type { KeyAndName } from '../../models/types/Common';
 
 export function useGridController(props: IGridListProps<any>) {
     const [renderAs, setRenderAs] = useState<typeof props.renderAs>(props?.renderAs || 'list');
     const [shouldRenderCard, setShouldRenderCard] = useState(props?.renderAs === 'card');
     const [cols, setCols] = useState(props?.columns);
+    const [groups, setGroups] = useState<IGroup[]>(undefined);
     const [actualFilteredValues, setActualFilteredValues] = useState<SelectedItemsMap>(new Map());
-    const [selectedGroupKeys, setSelectedGroupKeys] = useState<Map<string, string>>(new Map());
+    const [selectedGroupKeys, setSelectedGroupKeys] = useState<KeyAndName>(null);
     const [allRows, setAllRows] = useState(props?.rows);
     const [actualRows, setActualRows] = useState(props?.rows ?? []);
     const [currentFilteredRows, setCurFilteredRows] = useState<IRow[]>([]);
@@ -152,7 +155,6 @@ export function useGridController(props: IGridListProps<any>) {
         return mapsByKeyKind;
     }
 
-    /**Isso deve estar O log n */
     const onApplyFilter: IPanelFilterProps['onApply'] = (selectedItems) => {
         if(selectedItems.size === 0) {
             setActualRows(allRows);
@@ -160,40 +162,20 @@ export function useGridController(props: IGridListProps<any>) {
             setIsFilterPanel(false);
             return;
         }
-        let orFilterAggregation: IRow[] = currentFilteredRows;
         const groupedMaps = groupMaps(selectedItems);
-        const onlyNecessaryKeysToVerify = cols.filter(c => groupedMaps.has(c?.key)).map(c => c?.key);
-        //An filter algorithm that if the groupMap key is the same is an OR operation and if it's different is an AND operation
-        let currentIdx = 0;
+        let filteredRows: IRow[] = currentFilteredRows;
         for(const [mapKey, map] of groupedMaps.entries()) {
-            orFilterAggregation
-            currentIdx += 1;
-            console.log(`${mapKey}/${map.size}`, currentIdx);
+            const filterFrom = filteredRows?.length > 0 ? filteredRows : allRows;
+            map?.forEach(value => {
+                const ORrowsFromThisKey = filterFrom.filter(r => Utils.getNestedObject(r, mapKey.split('.')) === value?.text);
+                if(ORrowsFromThisKey.length > 0 && !filteredRows?.map(r => r?.Id)?.includes(value?.data?.Id))
+                    filteredRows.push(...ORrowsFromThisKey);
+            });
         }
-
-        for (let idx = 0; idx < allRows?.length; idx++) {
-            const row = allRows[idx];
-            const deepKey = Utils.getDeepKeys(row);
-            const filteredKeys = onlyNecessaryKeysToVerify.filter(k => deepKey.includes(k));
-            for (const key of filteredKeys) {
-                let realKey: string = key;
-                const valueFromKey = Utils.getNestedObject(row, key?.split('.'));
-                if(valueFromKey === undefined || valueFromKey === null) continue;
-                if(groupedMaps.has(realKey)) {
-                    const thisKeyMap = groupedMaps.get(realKey);
-                    thisKeyMap.forEach((v) => {
-                        const currentFilteredIds = orFilterAggregation.map(r => r?.Id);
-                        const mapKeyWithDots = (v?.rootItemKey as string)?.split('.');
-                        const valueFromMap = Utils.getNestedObject(v?.data, mapKeyWithDots);
-                        if(!(currentFilteredIds.includes(row?.Id)) && valueFromKey === valueFromMap)
-                            orFilterAggregation.push(row);
-                    });
-                }
-            }
-        }
-        if (orFilterAggregation.length > 0) {
-            setActualRows(orFilterAggregation)
-            setCurFilteredRows(orFilterAggregation);
+        const uniqueFilteredRows = filteredRows.filter((obj, pos, arr) => arr.map(mapObj => mapObj?.Id).indexOf(obj?.Id) === pos);
+        if (uniqueFilteredRows.length > 0) {
+            setActualRows(uniqueFilteredRows)
+            setCurFilteredRows(uniqueFilteredRows);
         } else { 
             setActualRows(allRows);
             setCurFilteredRows([]);
@@ -223,9 +205,37 @@ export function useGridController(props: IGridListProps<any>) {
         setSelectedGroupKeys,
         selectedGroupKeys,
         options: filterFromColumns(props?.hiddenGroupKeys)?.map(c => ({key: c?.key, text: c?.name})) ?? [],
-        onApply: (groupMap) => {
-            if(groupMap.size === 0) return;
-            console.warn('Grouping is not implemented yet');
+        onApply: (keyAndName) => {
+            if(!keyAndName || keyAndName?.split(';')?.[0] === '@NONE') 
+                return setGroups(undefined);
+            const groups: IGroup[] = [...actualRows]
+            .sort((a, b) => (a?.Id as number )- (b?.Id as number))
+            .reduce<IGroup[]>((acc, cur) => {
+                const [key, name] = keyAndName?.split(';');
+                const valueFromKey = Utils.getNestedObject(cur, key.split('.')) as string;
+                const group: IGroup = {
+                    key: valueFromKey,
+                    name: `${name}: ${valueFromKey}`,
+                    startIndex: 0,
+                    count: 1,
+                }
+                if (acc.length === 0) {
+                    acc.push(group)
+                    return acc
+                } else if (acc[acc.length - 1]?.key !== valueFromKey) {
+                    const count = acc?.filter(g => g?.key === valueFromKey).length;
+                    const startIndex = acc[acc.length - 1]?.startIndex + acc[acc.length - 1]?.count;
+                    acc.push({
+                        key: valueFromKey,
+                        name: `${name}: ${valueFromKey}`,
+                        startIndex,
+                        count
+                    });
+                }
+                acc[acc.length - 1].count++
+                return acc
+            }, []);
+            setGroups(groups);
         }
     }
 
@@ -271,7 +281,8 @@ export function useGridController(props: IGridListProps<any>) {
             isFilterPanelOpen,
             isGroupPanelOpen,
             listConfig,
-            shouldRenderCard
+            shouldRenderCard,
+            groups
         },
         handlers: {
             onRowClick,

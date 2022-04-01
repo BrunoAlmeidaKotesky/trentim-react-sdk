@@ -1,11 +1,12 @@
-import { Dispatch, SetStateAction } from 'react';
+import type { Dispatch, SetStateAction } from 'react';
 import type { ICommonPanel } from './ICommonPanel';
+import type { KeyAndName } from '../types/Common';
 
-export interface IGroupPanel extends ICommonPanel<Map<string, string>> {
+export interface IGroupPanel extends ICommonPanel<string> {
     options: {
         key: string;
         text: string;
     }[];
-    selectedGroupKeys: Map<string, string>;
-    setSelectedGroupKeys: Dispatch<SetStateAction<Map<string, string>>>;
+    selectedGroupKeys: KeyAndName;
+    setSelectedGroupKeys: Dispatch<SetStateAction<KeyAndName>>;
 }

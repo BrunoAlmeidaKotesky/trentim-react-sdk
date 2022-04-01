@@ -35,6 +35,6 @@ export const GroupPanelContext = createContext<IGroupPanel>({
     onOpen: undefined,
     panelTitle: '',
     options: [],
-    selectedGroupKeys: new Map(),
+    selectedGroupKeys: null,
     setSelectedGroupKeys: undefined
 });

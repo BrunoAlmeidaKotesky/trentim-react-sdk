@@ -13,7 +13,7 @@ import { Suspense } from 'react';
 export function GridView<T = any>(props: IGridListProps<T>) {
     const {state, handlers, JSX} = useGridController(props);
     const {CardsList} = JSX;
-    const {actualRows, cols, isFilterPanelOpen, filterPanelConfig, groupPanelConfig, listConfig, shouldRenderCard, isGroupPanelOpen} = state;
+    const {actualRows, cols, isFilterPanelOpen, filterPanelConfig, groupPanelConfig, listConfig, shouldRenderCard, isGroupPanelOpen, groups} = state;
     const {onRowClick} = handlers;
 
     return (
@@ -31,6 +31,7 @@ export function GridView<T = any>(props: IGridListProps<T>) {
                         onRenderItemColumn={props?.onRenderItemColumn}
                         onRenderRow={(p, defaultRender) => <div onClick={() => onRowClick(p?.item)}>{defaultRender({ ...p, styles: { root: { cursor: props?.onRowClick ? 'pointer' : 'default' } } })}</div>}
                         items={actualRows} columns={cols}
+                        groups={groups}
                         groupProps={{
                             isAllGroupsCollapsed: /*props?.groups ? props?.groups.filter(gr => !gr?.isCollapsed)?.length === 0 :*/ true,
                             collapseAllVisibility: CollapseAllVisibility.visible,
@@ -38,7 +39,8 @@ export function GridView<T = any>(props: IGridListProps<T>) {
                                 if (!props.group!.name)
                                     return <></>;
                                 return defaultRender(props);
-                            }
+                            },
+                            showEmptyGroups: false
                         }}
                         layoutMode={DetailsListLayoutMode.fixedColumns} isHeaderVisible={true}
                         onRenderDetailsHeader={(headerProps, defaultRender) => (
