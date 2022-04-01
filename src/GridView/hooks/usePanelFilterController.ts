@@ -1,8 +1,9 @@
 import { lazy, useContext, useMemo, useRef, useEffect } from 'react';
 import { FilterPanelContext } from '../Contexts';
+import { RangeType } from '../../helpers/enums';
 import type { FilterOption } from '../../models/interfaces/IPanelFilter';
 import type { ITag } from '@fluentui/react/lib/Pickers';
-import { RangeType } from '../../helpers/enums';
+import type { IPersonaProps } from '@fluentui/react/lib/Persona';
 
 export function usePanelFilterController() {
     const { isOpen, onClose, availableFilters, panelTitle, onCancel, onApply, actualFilteredValues, setActualFilteredValues, onOpen } = useContext(FilterPanelContext);
@@ -87,6 +88,18 @@ export function usePanelFilterController() {
         }
     }
 
+    const getDefaultSelectedPeople = (keyToFilter: string): IPersonaProps[] => {
+        const mapWithSameKey = [...actualFilteredValues]?.filter(([key]) => {
+            const keyKind = key?.split('_')[1];
+            return keyKind === keyToFilter
+        });
+        if(mapWithSameKey?.length > 0) {
+            const people = mapWithSameKey?.map(([_, value]) => value as IPersonaProps);
+            return people;
+        }
+        return [];
+    }
+
     const onChangeTags = (options: FilterOption[]) => (tags: ITag[]) => {
         const copyMap = new Map(actualFilteredValues);
         if(tags.length === 0) {
@@ -132,6 +145,29 @@ export function usePanelFilterController() {
         }
     }
 
+    const onChangePeople = (key: string) => (items: IPersonaProps[]) => {
+        const copyMap = new Map(actualFilteredValues);
+        if(items.length === 0) {
+            actualFilteredValues?.forEach((_, k) => {
+                if(k?.split('_')?.[1] === key)
+                    copyMap.delete(k);
+            });
+            setActualFilteredValues(copyMap);
+        } 
+        else {
+            items.forEach(i => {
+                onAddOrRemoveToMap(key, {
+                    key: i?.key,
+                    text: i?.text,
+                    data: i?.['data'],
+                    selected: true,
+                    isDateComponent: false,
+                    name: i?.text
+                } as unknown as FilterOption);
+            });
+        }
+    }
+
     return {
         state: {
             isOpen,
@@ -143,6 +179,7 @@ export function usePanelFilterController() {
             getDefaultDropdownSelectedKeys,
             getDefaultSelectedTag,
             getDefaultSelectedDate,
+            getDefaultSelectedPeople,
             onAddOrRemoveToMap,
             onClose,
             onCancel,
@@ -153,7 +190,8 @@ export function usePanelFilterController() {
             onTagSelected,
             onResolveTagSuggestion,
             onRecordDateChange,
-            mapOptions
+            mapOptions,
+            onChangePeople
         },
         JSX: {
             FluentPanel,

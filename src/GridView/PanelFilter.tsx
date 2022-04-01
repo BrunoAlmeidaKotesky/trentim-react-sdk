@@ -1,5 +1,6 @@
 import * as React from 'react';
-import {DateSlider} from '../DateSlider/DateSlider';
+import {DateSlider} from './DateSlider';
+import {PeoplePicker} from './PeoplePicker';
 import {usePanelFilterController} from './hooks/usePanelFilterController';
 
 function PanelFilter() {
@@ -55,7 +56,13 @@ function PanelFilter() {
                             defaultValues={getDefaultSelectedDate(filter?.key)}
                             onRecordDateRange={handlers.onRecordDateChange(filter?.key)}
                             key={filter?.key + "-" + idx}
-                            label={filter?.name}/> : null
+                            label={filter?.name}/> :
+                        (filter?.renderAs === 'PeoplePicker') ?
+                        <PeoplePicker 
+                            label={filter?.name} key={filter?.key + "-" + idx}
+                            people={options}
+                            defaultSelectedItems={handlers.getDefaultSelectedPeople(filter?.key)}
+                            onChangePeople={handlers.onChangePeople(filter?.key)} /> : null
                         }
                     </React.Suspense>);
                 })}

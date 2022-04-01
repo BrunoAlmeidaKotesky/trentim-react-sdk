@@ -1,17 +1,8 @@
-import type { IColumn, IDetailsListProps, IGroup } from "@fluentui/react/lib/DetailsList";
+import type { IColumn, IDetailsListProps } from "@fluentui/react/lib/DetailsList";
 import type { CSSProperties } from "react";
 import type { IInfoCardProps, IRightColumn } from "./IInfoCardProps";
 import type { IConfigurableHeader } from "./IListOptions";
-declare type Children = INode & {
-    key: string;
-    title: string;
-};
-export interface INode {
-    key: string;
-    title: string;
-    items?: IRow[];
-    children?: Children[];
-}
+import type { FilterComponent } from '../types/Common';
 export interface IFileInfo {
     key: string;
     name: string;
@@ -41,7 +32,7 @@ export declare type TColumn<T> = IColumn & {
     fieldName?: keyof T;
     dateConversionOptions?: IDateConvertionOptions;
     /**How should the filter on the filter panel be rendered */
-    renderFilterAs?: 'Dropdown' | 'SearchBox';
+    renderFilterAs?: FilterComponent;
 };
 interface IDateConvertionOptions {
     /**If se to `true`, it will automatically convert the string ISO dates to your locale date. */
@@ -62,18 +53,15 @@ declare type ICardProps = Omit<IInfoCardProps, 'cardTitle' | 'cardSubtitle' | 'c
     cardSubtitleKey?: string;
     rightColumn?: IGridCardRightCol;
 };
-export interface IGridListProps<T extends any> {
+export interface IGridListProps<T extends any> extends IGridHandler {
     /**Use this to overwrite the default props `IDetailListProps` from Microsoft's `@fluent-ui` */
     detailsListProps?: IDetailsListProps;
     /**if `renderAs` is set to `card`, you need to provide the card props. */
     cardProps?: ICardProps;
     /**Configure the header behavior, such as to enable filter and other functionalities. */
     headerOptions: IConfigurableHeader;
-    groups?: IGroup[];
-    renderAs: 'tree' | 'list' | 'card';
-    /**If you set tis property to `true`, on your `rowAsNode` interface, the `items` property which is an
-     * `IRow[]`, you need to provide a `file` property for each row, of the type `IFileInfo`, otherwise it won't work.
-     * You can also do this render by yourself, changing the `onRender` of your `columns` */
+    /**If the grid will be rendered as a list or as a collection of `<Card />` component */
+    renderAs: 'list' | 'card';
     autoFileDisplay?: boolean;
     /**The column model to be applied to the list.
      * It extends the Microsoft `@fluent-ui` `IColumn` interface.
@@ -87,7 +75,7 @@ export interface IGridListProps<T extends any> {
      *      key: 'file.name',
      *      fieldName: 'file.name',
      *      renderFilterAs: 'SearchBox',
-     *      dateConvertionOptions: {
+     *      dateConversionOptions: {
      *          shouldConvertToLocaleString: true,
      *          locales: ['en-US']
      *      }
@@ -97,8 +85,17 @@ export interface IGridListProps<T extends any> {
     columns: TColumn<T>[];
     /**The list of items to be displayed. If you intend to display a list like a tree/folder model, you need to use the `rowsAsNode` instead.*/
     rows?: IRow[];
-    /**If set, the columns will be displayed as tree view. */
-    rowsAsNode?: INode[];
+    /**The label to be displayed on the top of the filter Panel. */
+    filterPanelTitle?: string;
+    /**The label to be displayed on the top of the group Panel. */
+    groupPanelTitle?: string;
+    /**A list of keys from `IRow` to not be displayed on the top of the Panel when filtering.*/
+    hiddenFilterKeys?: string[] | Array<keyof IRow>;
+    /**A list of keys from `IRow` to not be displayed on the top of the Panel when grouping.*/
+    hiddenGroupKeys?: string[] | Array<keyof IRow>;
+}
+/**Represents all the functions that can be used. */
+interface IGridHandler {
     /**A custom event to be fired when the row is clicked. */
     onRowClick?: (row: IRow) => void;
     /**The same event from `IDetialsListProps` from `@fluent-ui` with generic types.
@@ -108,15 +105,7 @@ export interface IGridListProps<T extends any> {
     onRenderItemColumn?: <S>(item?: S, index?: number, column?: TColumn<S>) => React.ReactNode;
     /**If you want to totally overwrite the component that is being rendered, independent of the `renderAs` value, use this rendering function.
      *
-     *  This element will be applied to each item `IRow`, not the entire component. */
+     * This element will be applied to each item `IRow`, not the entire component. */
     onRenderCustomComponent?: (item: IRow) => React.ReactNode;
-    /**The label to be displayed on the top of the filter Panel. */
-    filterPanelTitle?: string;
-    /**The label to be displayed on the top of the group Panel. */
-    groupPanelTitle?: string;
-    /**A list of keys from `IRow` to not be displayed on the top of the Panel when filtering.*/
-    hiddenFilterKeys?: string[] | Array<keyof IRow>;
-    /**A list of keys from `IRow` to not be displayed on the top of the Panel when grouping.*/
-    hiddenGroupKeys?: string[] | Array<keyof IRow>;
 }
 export {};

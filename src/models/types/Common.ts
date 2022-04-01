@@ -1,2 +1,2 @@
 
-export type FilterComponent = 'Dropdown' | 'SearchBox' | 'DateSlider';
+export type FilterComponent = 'Dropdown' | 'SearchBox' | 'DateSlider' | 'PeoplePicker';

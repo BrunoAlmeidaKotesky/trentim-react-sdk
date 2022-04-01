@@ -47,7 +47,7 @@ function DateSliderComponent(props: IDateSliderProps) {
             setDisplayDatePicker(true);
     }, [props?.defaultValues?.slider]);
 
-    const dateSrings = React.useMemo(() => ({
+    const dateStrings = React.useMemo(() => ({
         months: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
         shortMonths: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
         days: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
@@ -80,7 +80,7 @@ function DateSliderComponent(props: IDateSliderProps) {
             {/**Translate Datepicker all props to portuguese*/}
             <DatePicker
                 maxDate={toDate}
-                strings={dateSrings}
+                strings={dateStrings}
                 value={props?.defaultValues?.from ?? fromDate}
                 formatDate={(date) => date?.toLocaleDateString()}
                 onSelectDate={(d) => {
@@ -94,7 +94,7 @@ function DateSliderComponent(props: IDateSliderProps) {
                 label="De"/>
             <DatePicker
                 minDate={fromDate}
-                strings={dateSrings}
+                strings={dateStrings}
                 formatDate={(date) => date?.toLocaleDateString()}
                 onSelectDate={(d) => {
                     if(d && !toDate || !toDate && d)

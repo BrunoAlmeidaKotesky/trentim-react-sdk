@@ -25,7 +25,7 @@ export const ListOptions = () => {
         <DefaultButton 
             onClick={_ => setRenderAs()} styles={{label: {fontSize: 14}, root: {order: defaultButtonsOrder?.card}}} iconProps={{iconName: 'GridViewMedium'}} />}
         {customButtons?.length > 0 && customButtons?.map(b => 
-            <PrimaryButton className={b?.className} styles={{label: {fontSize: 14}, root: {order: b?.position ?? 'unset'}}} {...b?.props}>{b?.text}</PrimaryButton>)}
+            <PrimaryButton key={b?.text} className={b?.className} styles={{label: {fontSize: 14}, root: {order: b?.position ?? 'unset'}}} {...b?.props}>{b?.text}</PrimaryButton>)}
         {(enableSearch && searchKey) && 
         <TextField 
             onChange={(_, newValue) => onSearchItem(newValue, searchKey)} placeholder={searchBoxPlaceholder}
