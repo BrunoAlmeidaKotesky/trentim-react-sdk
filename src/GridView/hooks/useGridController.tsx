@@ -59,6 +59,7 @@ export function useGridController(props: IGridListProps<any>) {
                         style: opt?.style ??  { fontSize: 16, marginBottom: 4, fontWeight: 600 }
                     }))
                 }}
+                circleIndicator={{...cProps?.circleIndicator, title: Utils.getNestedObject(row, cProps?.circleIndicator?.title?.split('.') as any)}}
                 onCardClick={e => {
                     onRowClick(row);
                     if(cProps?.onCardClick)

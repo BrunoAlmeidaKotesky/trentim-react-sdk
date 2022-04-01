@@ -50,7 +50,7 @@ export function GridView<T = any>(props: IGridListProps<T>) {
                         checkboxVisibility={props?.detailsListProps?.checkboxVisibility ?? CheckboxVisibility.hidden}
                     /> :
                     <Suspense fallback={'...'}>
-                        <div id="gridView-cardContainer" style={props?.cardProps?.containerStyle ?? {display: 'grid', gap: 12, gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))'}}>
+                        <div id="gridView-cardContainer" style={props?.cardProps?.containerStyle ?? {display: 'grid', gap: 12, gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))'}}>
                         {CardsList}
                         </div>
                     </Suspense>
