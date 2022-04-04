@@ -17,7 +17,7 @@ export declare function useGridController(props: IGridListProps<any>): {
         groups: IGroup[];
     };
     handlers: {
-        onRowClick: (item: IRow) => void;
+        onItemClick: (item: IRow) => void;
     };
     JSX: {
         CardsList: React.ReactNode[];

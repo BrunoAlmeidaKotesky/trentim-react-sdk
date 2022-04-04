@@ -101,8 +101,8 @@ export interface IGridListProps<T extends any> extends IGridHandler {
 
 /**Represents all the functions that can be used. */
 interface IGridHandler {
-    /**A custom event to be fired when the row is clicked. */
-    onRowClick?: (row: IRow) => void;
+    /**A custom event to be fired when a row is clicked or the card action button. */
+    onItemClick?: (row: IRow) => void;
     /**The same event from `IDetialsListProps` from `@fluent-ui` with generic types.
      * 
      * This is different from `onRenderCustomComponent`, since this method is applied to the default `onRenderItemColumn` from `Detailslist` and not on the entire component.

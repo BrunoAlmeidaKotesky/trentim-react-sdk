@@ -14,7 +14,7 @@ export function GridView<T = any>(props: IGridListProps<T>) {
     const {state, handlers, JSX} = useGridController(props);
     const {CardsList} = JSX;
     const {actualRows, cols, isFilterPanelOpen, filterPanelConfig, groupPanelConfig, listConfig, shouldRenderCard, isGroupPanelOpen, groups} = state;
-    const {onRowClick} = handlers;
+    const {onItemClick} = handlers;
 
     return (
         <GroupPanelContext.Provider value={groupPanelConfig}>
@@ -29,7 +29,7 @@ export function GridView<T = any>(props: IGridListProps<T>) {
                     <DetailsList
                         {...props?.detailsListProps}
                         onRenderItemColumn={props?.onRenderItemColumn}
-                        onRenderRow={(p, defaultRender) => <div onClick={() => onRowClick(p?.item)}>{defaultRender({ ...p, styles: { root: { cursor: props?.onRowClick ? 'pointer' : 'default' } } })}</div>}
+                        onRenderRow={(p, defaultRender) => <div onClick={() => onItemClick(p?.item)}>{defaultRender({ ...p, styles: { root: { cursor: props?.onItemClick ? 'pointer' : 'default' } } })}</div>}
                         items={actualRows} columns={cols}
                         groups={groups}
                         groupProps={{

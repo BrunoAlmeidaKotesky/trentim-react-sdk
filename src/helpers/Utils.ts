@@ -14,7 +14,11 @@ export class Utils {
 
     public static copyAndSort<T>(items: T[], columnKey: string, isSortedDescending?: boolean): T[] {
         const key = columnKey as keyof T;
-        return items.slice(0).sort((a: T, b: T) => ((isSortedDescending ? a[key] < b[key] : a[key] > b[key]) ? 1 : -1));
+        return items.slice(0).sort((a: T, b: T) => {
+            const aValue = Utils.getNestedObject(a, (key as string)?.split('.'));
+            const bValue = Utils.getNestedObject(b, (key as string)?.split('.'));
+            return ((isSortedDescending ? aValue < bValue : aValue > bValue) ? 1 : -1);
+        });
     }
 
     /**Get a value from a deep nested object.

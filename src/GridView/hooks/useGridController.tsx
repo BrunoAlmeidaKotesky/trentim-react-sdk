@@ -74,7 +74,7 @@ export function useGridController(props: IGridListProps<any>) {
                 },
                 circleIndicator,
                 onClickDownButton: e => {
-                    onRowClick(row);
+                    onItemClick(row);
                     if(cProps?.onCardClick)
                         cProps?.onCardClick(e);
                 }
@@ -111,9 +111,9 @@ export function useGridController(props: IGridListProps<any>) {
         setAllRows(props?.rows)
     }, [props?.rows?.length]);
 
-    const onRowClick = (item: IRow) => {
-        if (props?.onRowClick)
-            props?.onRowClick(item);
+    const onItemClick = (item: IRow) => {
+        if (props?.onItemClick)
+            props?.onItemClick(item);
     }
 
     const filterFromColumns = (hiddenKeys: string[] | Array<keyof IRow>) => cols.filter(c => (!hiddenKeys?.includes(c?.key)));
@@ -173,7 +173,7 @@ export function useGridController(props: IGridListProps<any>) {
         if (column?.isSorted) 
           isSortedDescending = !isSortedDescending;
     
-        const sortedItems = Utils.copyAndSort(actualRows, column?.fieldName, isSortedDescending);
+        const sortedItems = Utils.copyAndSort(actualRows, column?.key, isSortedDescending);
         setActualRows(sortedItems);
         setCols(c => c.map(col => {
             col.isSorted = col.key === column?.key;
@@ -328,7 +328,7 @@ export function useGridController(props: IGridListProps<any>) {
             groups
         },
         handlers: {
-            onRowClick
+            onItemClick
         },
         JSX: {
             CardsList

@@ -25,7 +25,7 @@ export function GridViewCardExample() {
             renderAs="card"
             rows={simpleRow}
             hiddenFilterKeys={['NumeroPI']}
-            onRowClick={(i) => console.log(i)}
+            onItemClick={(i) => console.log(i)}
             columns={[
               {key: 'Title', name: 'Nome Do Projeto', fieldName: 'Title', minWidth: 100, maxWidth: 200, isResizable: true, renderFilterAs: 'SearchBox'},
               {key: 'NumeroPI', name: 'PI', fieldName: 'NumeroPI', minWidth: 100, maxWidth: 200, isResizable: true},
