@@ -28,7 +28,7 @@ function PanelFilter() {
                 <h2>{panelTitle}</h2>
                 {availableFilters?.map((filter, idx) => {
                     const options = handlers.mapOptions(filter?.options);
-                    return (<React.Suspense fallback={'...'}>
+                    return (<React.Suspense key={filter?.key + "-" + idx} fallback={'...'}>
                         {(filter.renderAs === 'Dropdown') ? 
                         <Dropdown
                             defaultSelectedKeys={getDefaultDropdownSelectedKeys()}

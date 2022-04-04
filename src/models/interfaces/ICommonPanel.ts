@@ -4,6 +4,6 @@ export interface ICommonPanel<T = any> {
     onApply: (map: T) => void;
     onCancel: () => void;
     onClose: () => void;
-    onOpen: () => void;
+    onOpen?: () => void;
     panelTitle: string;
 }

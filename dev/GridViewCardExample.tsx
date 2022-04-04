@@ -4,7 +4,7 @@ import { simpleRow } from './constants';
 
 export function GridViewCardExample() {
     return (
-        <div>
+        <div style={{width: '80%'}}>
           <GridView
             headerOptions={{
               enableSearch: true, enableFilter: true, enableCardView: true, enableGrouping: true,

@@ -25,8 +25,8 @@ export const ListOptions = () => {
         {enableCardView && 
         <DefaultButton 
             onClick={_ => setRenderAs()} styles={{label: {fontSize: 14}, root: {order: defaultButtonsOrder?.card}}} iconProps={{iconName: 'GridViewMedium'}} />}
-        {customButtons?.length > 0 && customButtons?.map(b => 
-            <PrimaryButton key={b?.text} className={b?.className} styles={{label: {fontSize: 14}, root: {order: b?.position ?? 'unset'}}} {...b?.props}>{b?.text}</PrimaryButton>)}
+        {customButtons?.length > 0 && customButtons?.map((b, idx) => 
+            <PrimaryButton key={b?.text + "_" + idx} className={b?.className} styles={{label: {fontSize: 14}, root: {order: b?.position ?? 'unset'}}} {...b?.props}>{b?.text}</PrimaryButton>)}
         {(enableSearch && searchKeys) && 
         <TextField 
             onChange={(_, newValue) => onSearchItem(newValue, searchKeys)} placeholder={searchBoxPlaceholder}
