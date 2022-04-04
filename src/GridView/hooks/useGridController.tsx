@@ -185,7 +185,11 @@ export function useGridController(props: IGridListProps<any>) {
 
     useEffect(() => {
         setCols(columns => {
-            return columns?.map(c => ({...c, onColumnClick}));
+            return columns?.map(c => {
+                if(!c?.onColumnClick)
+                    c.onColumnClick = onColumnClick;
+                return c;
+            });
         });
     }, []);
 
@@ -219,8 +223,10 @@ export function useGridController(props: IGridListProps<any>) {
 
     const onApplyGrouping = (keyAndName: KeyAndName) => {
         const defaultEmptyLabel = props?.emptyGroupLabel ?? 'Sem itens definidos';
-        if(!keyAndName || keyAndName?.split(';')?.[0] === '@NONE') 
-                return setGroups(undefined);
+        if(!keyAndName || keyAndName?.split(';')?.[0] === '@NONE') {
+            setIsGroupPanel(false);
+            return setGroups(undefined);
+        }
         const groups: IGroup[] = [...actualRows]
         .sort((a, b) => (a?.Id as number )- (b?.Id as number))
         .reduce<IGroup[]>((acc, cur) => {

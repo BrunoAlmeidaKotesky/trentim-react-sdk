@@ -3,6 +3,7 @@ import * as ReactDOM from 'react-dom';
 import { initializeIcons, loadTheme } from '@fluentui/react';
 import { GridViewListExample } from './GridViewListExample';
 import { GridViewCardExample } from './GridViewCardExample';
+import { GridRealExample } from './GridRealExample';
 import { DataTableExample } from './DataTableExample';
 
 let hmrUpdate: undefined | (() => void);
@@ -62,6 +63,7 @@ const Demo = (): JSX.Element => {
       <div style={{ display: "grid", placeItems: "center", margin: "0 auto", height: "100%" }}>
         <DataTableExample/>
         <GridViewListExample/>
+        <GridRealExample />
         <GridViewCardExample/>
       </div>
     </div>);

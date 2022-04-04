@@ -225,3 +225,166 @@ export const simpleRow = [{
     "Setor": "a"
 }
 ]
+
+export const realColumnEx = [
+    {
+        "key": "Title",
+        "name": "Nome Do Projeto",
+        "fieldName": "Title",
+        "minWidth": 100,
+        "maxWidth": 200,
+        "isResizable": true,
+        "renderFilterAs": "SearchBox",
+        "onColumnClick": (_, column) => {
+            console.log(column);
+        }
+    },
+    {
+        "key": "NumeroPI",
+        "name": "PI",
+        "fieldName": "NumeroPI",
+        "minWidth": 100,
+        "maxWidth": 200,
+        "isResizable": true
+    },
+    {
+        "key": "Status",
+        "name": "Status",
+        "fieldName": "Status",
+        "minWidth": 100,
+        "maxWidth": 200,
+        "isResizable": true
+    },
+    {
+        "key": "GerenteProjeto.Title",
+        "name": "Gerente do Projeto",
+        "fieldName": "GerenteProjeto.Title",
+        "minWidth": 100,
+        "maxWidth": 200,
+        "isResizable": true,
+        "renderFilterAs": "PeoplePicker"
+    },
+    {
+        "key": "UnidadeDeNegocio.Title",
+        "name": "Unidade de Negócio",
+        "fieldName": "UnidadeDeNegocio.Title",
+        "minWidth": 100,
+        "maxWidth": 200,
+        "isResizable": true
+    },
+    {
+        "key": "TipoDeProjeto.Title",
+        "name": "Tipo de Projeto",
+        "fieldName": "TipoDeProjeto.Title",
+        "minWidth": 100,
+        "maxWidth": 200,
+        "isResizable": true
+    },
+    {
+        "key": "Modified",
+        "name": "Última Alteração",
+        "fieldName": "Modified",
+        "minWidth": 100,
+        "maxWidth": 200,
+        "isResizable": true,
+        "dateConversionOptions": {
+            "shouldConvertToLocaleString": true
+        },
+        "renderFilterAs": "DateSlider"
+    },
+    {
+        "key": "Setor",
+        "name": "Setor",
+        "fieldName": "Setor",
+        "minWidth": 100,
+        "maxWidth": 200,
+        "isResizable": true
+    }
+];
+
+export const realRowsEx = [
+    {
+        "GerenteProjeto": {
+            "Title": "Dev"
+        },
+        "DonoProjeto": {
+            "Title": "Dev"
+        },
+        "UnidadeDeNegocio": {
+            "Id": 1,
+            "Title": "Unidade SJC"
+        },
+        "TipoDeProjeto": {
+            "odata.type": "SP.Data.TiposProjetoListItem",
+            "odata.id": "e3aa6d1e-5330-4e7e-85ea-0a85dd583797",
+            "Id": 1,
+            "Title": "Tipo 01"
+        },
+        "Id": 1,
+        "ID": 1,
+        "Title": "Projeto Teste 1",
+        "Modified": "2022-02-14T18:16:09Z",
+        "Created": "2022-02-04T17:24:09Z",
+        "DataInicio": "2022-02-04T08:00:00Z",
+        "Status": "Escolha 1",
+        "NumeroPI": "3,14",
+        "DescricaoPI": null,
+        "Setor": null
+    },
+    {
+        "GerenteProjeto": {
+            "Title": "Dev"
+        },
+        "DonoProjeto": {
+            "Title": "Dev"
+        },
+        "UnidadeDeNegocio": {
+            "Id": 3,
+            "Title": "Unidade RJ"
+        },
+        "TipoDeProjeto": {
+            "odata.type": "SP.Data.TiposProjetoListItem",
+            "odata.id": "d43069fb-0a06-4b58-a90f-d73f50f35824",
+            "Id": 3,
+            "Title": "Tipo 03"
+        },
+        "Id": 2,
+        "ID": 2,
+        "Title": "Outro Projeto",
+        "Modified": "2022-02-14T18:18:31Z",
+        "Created": "2022-02-14T18:16:47Z",
+        "DataInicio": "2022-02-07T08:00:00Z",
+        "Status": "Escolha 2",
+        "NumeroPI": "3,1415",
+        "DescricaoPI": "PI",
+        "Setor": null
+    },
+    {
+        "GerenteProjeto": {
+            "Title": "Dev Agraria"
+        },
+        "DonoProjeto": {
+            "Title": "Dev Agraria"
+        },
+        "UnidadeDeNegocio": {
+            "Id": 1,
+            "Title": "Unidade SJC"
+        },
+        "TipoDeProjeto": {
+            "odata.type": "SP.Data.TiposProjetoListItem",
+            "odata.id": "f8dee4a6-c5a4-4961-86b9-beebdf21826b",
+            "Id": 1,
+            "Title": "Tipo 01"
+        },
+        "Id": 3,
+        "ID": 3,
+        "Title": "Teste Power Automate",
+        "Modified": "2022-02-17T18:25:23Z",
+        "Created": "2022-02-17T18:25:23Z",
+        "DataInicio": "2022-02-08T08:00:00Z",
+        "Status": "Escolha 2",
+        "NumeroPI": "32123",
+        "DescricaoPI": "D",
+        "Setor": "a"
+    }
+]
