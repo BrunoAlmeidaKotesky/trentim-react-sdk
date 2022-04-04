@@ -1,5 +1,5 @@
 import * as React from 'react';
-import type { IGridListProps, IRow } from '../../models/interfaces/IGridView';
+import type { IGridListProps, IRow, TColumn } from '../../models/interfaces/IGridView';
 import type { IListOptionsProps } from '../../models/interfaces/IListOptions';
 import type { IPanelFilterProps } from '../../models/interfaces/IPanelFilter';
 import type { IGroupPanel } from '../../models/interfaces/IGroupPanel';
@@ -7,7 +7,7 @@ import type { IGroup } from '@fluentui/react/lib/DetailsList';
 export declare function useGridController(props: IGridListProps<any>): {
     state: {
         actualRows: IRow[];
-        cols: import("../../models/interfaces/IGridView").TColumn<any>[];
+        cols: TColumn<any>[];
         filterPanelConfig: IPanelFilterProps;
         groupPanelConfig: IGroupPanel;
         isFilterPanelOpen: boolean;

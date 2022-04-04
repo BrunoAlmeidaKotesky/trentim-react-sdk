@@ -93,6 +93,8 @@ export interface IGridListProps<T extends any> extends IGridHandler {
     hiddenFilterKeys?: string[] | Array<keyof IRow>;
     /**A list of keys from `IRow` to not be displayed on the top of the Panel when grouping.*/
     hiddenGroupKeys?: string[] | Array<keyof IRow>;
+    /** If set, this will be used to display when a group does not have any values to be grouped by. */
+    emptyGroupLabel?: string;
 }
 /**Represents all the functions that can be used. */
 interface IGridHandler {
