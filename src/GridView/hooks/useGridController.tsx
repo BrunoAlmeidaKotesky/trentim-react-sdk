@@ -167,13 +167,13 @@ export function useGridController(props: IGridListProps<any>) {
         return mapsByKeyKind;
     }
 
-    const onColumnClick = (_: any, column: TColumn<any>): void => {
+    const onColumnClick = (currentRows: IRow[]) => (_: any, column: TColumn<any>): void => {
         if(!column) return;
         let isSortedDescending = column?.isSortedDescending;
         if (column?.isSorted) 
           isSortedDescending = !isSortedDescending;
     
-        const sortedItems = Utils.copyAndSort(actualRows, column?.key, isSortedDescending);
+        const sortedItems = Utils.copyAndSort(currentRows, column?.key, isSortedDescending);
         setActualRows(sortedItems);
         setCols(c => c.map(col => {
             col.isSorted = col.key === column?.key;
@@ -181,17 +181,16 @@ export function useGridController(props: IGridListProps<any>) {
               col.isSortedDescending = isSortedDescending;
             return col;
         }));
-    };
+    }
 
     useEffect(() => {
         setCols(columns => {
             return columns?.map(c => {
-                if(!c?.onColumnClick)
-                    c.onColumnClick = onColumnClick;
+                c.onColumnClick = onColumnClick(actualRows);
                 return c;
             });
         });
-    }, []);
+    }, [actualRows?.length]);
 
     const onApplyFilter: IPanelFilterProps['onApply'] = (selectedItems) => {
         if(selectedItems.size === 0) {
