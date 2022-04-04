@@ -35,6 +35,7 @@ function GroupPanel() {
                             const keyWithName = `${opt?.key};${opt?.text}` as const;
                             setSelectedGroupKeys(keyWithName);
                         }}
+                        defaultSelectedKey={selectedGroupKeys?.split(';')?.[0] ?? undefined}
                         options={[{key: '@NONE', text: 'Nenhum'} ,...options]}/>
                 </Suspense>
             </FluentPanel>

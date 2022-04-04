@@ -9,7 +9,8 @@ export function GridViewListExample() {
           <GridView
             headerOptions={{
               enableSearch: true, enableFilter: true,
-              searchKey: ['Title', 'Status'],
+              enableGrouping: true,
+              searchKeys: ['Title', 'Status'],
               searchBoxPlaceholder: "Pesquisar",
               customButtons: [{text: 'Upload', props: {
                 onClick: () => console.log('Clicked')

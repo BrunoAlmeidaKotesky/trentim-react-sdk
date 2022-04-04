@@ -10,7 +10,7 @@ export default {
             type: 'array',
             defaultValue: simpleRow
         },
-        searchKey: {
+        searchKeys: {
             type: 'array',
             defaultValue: ['Title']
         },
@@ -43,7 +43,7 @@ export const ListGridView = (args) => {
         enableSearch: args.enableSearch,
         enableFilter: args.enableFilter,
         customButtons: args.customButtons,
-        searchKey: args.searchKey
+        searchKeys: args.searchKeys
     }
     return(
     <GridView

@@ -7,8 +7,8 @@ export function GridViewCardExample() {
         <div>
           <GridView
             headerOptions={{
-              enableSearch: true, enableFilter: true, enableCardView: true,
-              searchKey: ['Title', 'Status'],
+              enableSearch: true, enableFilter: true, enableCardView: true, enableGrouping: true,
+              searchKeys: ['Title', 'Status'],
               searchBoxPlaceholder: "Pesquisar",
               customButtons: [{text: 'Upload', props: {
                 onClick: () => console.log('Clicked')

@@ -1,18 +1,20 @@
 import * as React from 'react';
 import { useState, useEffect, useMemo, lazy } from 'react';
-import type { IGridListProps, IRow } from '../../models/interfaces/IGridView';
+import type { IGridListProps, IRow, TColumn } from '../../models/interfaces/IGridView';
 import type { IListOptionsProps } from '../../models/interfaces/IListOptions';
 import { Utils } from '../../helpers/Utils';
 import type { FilterOption, IAvailableFilters, IPanelFilterProps, SelectedItemsMap } from '../../models/interfaces/IPanelFilter';
 import type { IGroupPanel } from '../../models/interfaces/IGroupPanel';
 import type { IGroup } from '@fluentui/react/lib/DetailsList';
 import type { KeyAndName } from '../../models/types/Common';
+import type { IInfoCardProps } from '../../models/interfaces/IInfoCardProps';
 
 export function useGridController(props: IGridListProps<any>) {
     const [renderAs, setRenderAs] = useState<typeof props.renderAs>(props?.renderAs || 'list');
     const [shouldRenderCard, setShouldRenderCard] = useState(props?.renderAs === 'card');
     const [cols, setCols] = useState(props?.columns);
     const [groups, setGroups] = useState<IGroup[]>(undefined);
+    const [enableGrouping, setEnableGrouping] = useState(props?.headerOptions?.enableGrouping ?? false);
     const [actualFilteredValues, setActualFilteredValues] = useState<SelectedItemsMap>(new Map());
     const [selectedGroupKeys, setSelectedGroupKeys] = useState<KeyAndName>(null);
     const [allRows, setAllRows] = useState(props?.rows);
@@ -26,10 +28,15 @@ export function useGridController(props: IGridListProps<any>) {
     useEffect(() => {
         if(renderAs === 'card') {
             setShouldRenderCard(true);
-            if(!props?.cardProps)
+            if(!props?.cardProps || Object?.keys(props?.cardProps)?.length === 0)
                 console.error("[GridView] - You are using `renderAs: card`, but you are not passing cardProps. This will not work.");
+            setEnableGrouping(false);
         }
-        else setShouldRenderCard(false);
+        else {
+            setShouldRenderCard(false);
+            if(props?.headerOptions?.enableGrouping)
+                setEnableGrouping(true);
+        }
     }, [renderAs]);
 
     const Card = useMemo(() => {
@@ -38,7 +45,7 @@ export function useGridController(props: IGridListProps<any>) {
     }, [shouldRenderCard]);
 
     const CardsList = useMemo(() => {
-        if(!Card)
+        if(!Card || renderAs === 'list')
             return [];
         
         return actualRows?.map(row => {
@@ -49,26 +56,30 @@ export function useGridController(props: IGridListProps<any>) {
             const cardTitle: string = Utils.getNestedObject(row, cProps?.cardTitleKey?.split('.')) || '';
             const cardSubtitle: string = Utils.getNestedObject(row, cProps?.cardSubtitleKey?.split('.')) || '';
             const rightCol = cProps?.rightColumn;
-            return (
-            <Card
-                key={row?.Id}
-                cardRightColInformation={rightCol?.keys && {
+            const titleValue = Utils.getNestedObject(row, cProps?.circleIndicator?.title?.split('.') as any) as string;
+            const circleIndicator = {
+                ...cProps?.circleIndicator, 
+                title: titleValue
+            };
+            const cardProps: IInfoCardProps = {
+                ...cProps,
+                cardTitle,
+                cardSubtitle,
+                cardRightColInformation: rightCol?.keys && {
                     ...rightCol,
                     values: rightCol?.keys?.map(opt => ({
                         title: Utils.getNestedObject(row, opt?.title?.split('.') as any),
                         style: opt?.style ??  { fontSize: 16, marginBottom: 4, fontWeight: 600 }
                     }))
-                }}
-                circleIndicator={{...cProps?.circleIndicator, title: Utils.getNestedObject(row, cProps?.circleIndicator?.title?.split('.') as any)}}
-                onCardClick={e => {
+                },
+                circleIndicator,
+                onClickDownButton: e => {
                     onRowClick(row);
                     if(cProps?.onCardClick)
                         cProps?.onCardClick(e);
-                }}
-                cardTitle={cardTitle}
-                cardSubtitle={cardSubtitle}
-                {...props?.cardProps} />
-            );
+                }
+            }
+            return (<Card key={row?.Id} {...cardProps} />);
         })
     }, [Card, props?.cardProps, actualRows, renderAs, props?.onRenderCustomComponent]);
 
@@ -156,6 +167,28 @@ export function useGridController(props: IGridListProps<any>) {
         return mapsByKeyKind;
     }
 
+    const onColumnClick = (_: any, column: TColumn<any>): void => {
+        if(!column) return;
+        let isSortedDescending = column?.isSortedDescending;
+        if (column?.isSorted) 
+          isSortedDescending = !isSortedDescending;
+    
+        const sortedItems = Utils.copyAndSort(actualRows, column?.fieldName, isSortedDescending);
+        setActualRows(sortedItems);
+        setCols(c => c.map(col => {
+            col.isSorted = col.key === column?.key;
+            if (col?.isSorted) 
+              col.isSortedDescending = isSortedDescending;
+            return col;
+        }));
+    };
+
+    useEffect(() => {
+        setCols(columns => {
+            return columns?.map(c => ({...c, onColumnClick}));
+        });
+    }, []);
+
     const onApplyFilter: IPanelFilterProps['onApply'] = (selectedItems) => {
         if(selectedItems.size === 0) {
             setActualRows(allRows);
@@ -184,13 +217,52 @@ export function useGridController(props: IGridListProps<any>) {
         setIsFilterPanel(false);
     }
 
+    const onApplyGrouping = (keyAndName: KeyAndName) => {
+        const defaultEmptyLabel = props?.emptyGroupLabel ?? 'Sem itens definidos';
+        if(!keyAndName || keyAndName?.split(';')?.[0] === '@NONE') 
+                return setGroups(undefined);
+        const groups: IGroup[] = [...actualRows]
+        .sort((a, b) => (a?.Id as number )- (b?.Id as number))
+        .reduce<IGroup[]>((acc, cur) => {
+            const [key, name] = keyAndName?.split(';');
+            let valueFromKey = Utils.getNestedObject(cur, key.split('.')) as string ?? defaultEmptyLabel;
+            const isKeyADate = cols.find(i => i?.key === key)?.dateConversionOptions?.shouldConvertToLocaleString;
+            if(isKeyADate)
+                valueFromKey = Utils.convertIsoToLocaleString(valueFromKey, cols.find(i => i?.key === key)?.dateConversionOptions?.locales, cols.find(i => i?.key === key)?.dateConversionOptions?.formatOptions);
+            const group: IGroup = {
+                key: valueFromKey,
+                name: `${name}: ${valueFromKey}`,
+                startIndex: 0,
+                count: 1,
+            }
+            if (acc.length === 0) {
+                acc.push(group)
+                return acc
+            } else if (!acc?.map(i => i?.key).includes(valueFromKey)) {
+                const count = acc?.filter(g => g?.key === valueFromKey).length;
+                const startIndex = acc[acc.length - 1]?.startIndex + acc[acc.length - 1]?.count;
+                acc.push({
+                    key: valueFromKey,
+                    name: `${name}: ${valueFromKey}`,
+                    startIndex,
+                    count
+                });
+            }
+            const lastAcc = acc[acc.length - 1];
+            if(lastAcc?.key === valueFromKey)
+                acc[acc.length - 1].count++;
+            return acc
+        }, []);
+        setGroups(groups);
+        setIsGroupPanel(false);
+    }
+
     const filterPanelConfig: IPanelFilterProps = {
         isOpen: isFilterPanelOpen,
         onApply: onApplyFilter,
         onCancel: () => { setIsFilterPanel(false); },
         onClose: () =>  { setIsFilterPanel(false); },
         onOpen: () => { setCurFilteredRows([]); },
-        //The available filters are the ones that are defined in the `columns` prop, and the options are the rows that are defined in the `rows` prop according to the key
         availableFilters: buildFilters(),
         panelTitle: props?.filterPanelTitle ?? 'Filtrar',
         actualFilteredValues,
@@ -206,41 +278,11 @@ export function useGridController(props: IGridListProps<any>) {
         setSelectedGroupKeys,
         selectedGroupKeys,
         options: filterFromColumns(props?.hiddenGroupKeys)?.map(c => ({key: c?.key, text: c?.name})) ?? [],
-        onApply: (keyAndName) => {
-            if(!keyAndName || keyAndName?.split(';')?.[0] === '@NONE') 
-                return setGroups(undefined);
-            const groups: IGroup[] = [...actualRows]
-            .sort((a, b) => (a?.Id as number )- (b?.Id as number))
-            .reduce<IGroup[]>((acc, cur) => {
-                const [key, name] = keyAndName?.split(';');
-                const valueFromKey = Utils.getNestedObject(cur, key.split('.')) as string;
-                const group: IGroup = {
-                    key: valueFromKey,
-                    name: `${name}: ${valueFromKey}`,
-                    startIndex: 0,
-                    count: 1,
-                }
-                if (acc.length === 0) {
-                    acc.push(group)
-                    return acc
-                } else if (acc[acc.length - 1]?.key !== valueFromKey) {
-                    const count = acc?.filter(g => g?.key === valueFromKey).length;
-                    const startIndex = acc[acc.length - 1]?.startIndex + acc[acc.length - 1]?.count;
-                    acc.push({
-                        key: valueFromKey,
-                        name: `${name}: ${valueFromKey}`,
-                        startIndex,
-                        count
-                    });
-                }
-                acc[acc.length - 1].count++
-                return acc
-            }, []);
-            setGroups(groups);
-        }
+        onApply: onApplyGrouping
     }
 
     const listConfig: IListOptionsProps = {
+        ...props?.headerOptions,
         onSearchItem: (text, keys) => {
             const filteredRows: IRow[] = []; 
             if(!text)
@@ -270,7 +312,7 @@ export function useGridController(props: IGridListProps<any>) {
         enableSearch: props?.headerOptions?.enableSearch ?? true,
         enableFilter: props?.headerOptions?.enableFilter ?? true,
         enableCardView: props?.headerOptions?.enableCardView ?? false,
-        ...props?.headerOptions
+        enableGrouping
     }
 
     return {
@@ -286,7 +328,7 @@ export function useGridController(props: IGridListProps<any>) {
             groups
         },
         handlers: {
-            onRowClick,
+            onRowClick
         },
         JSX: {
             CardsList

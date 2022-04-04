@@ -4,7 +4,7 @@ import { DefaultButton, PrimaryButton, TextField } from '@fluentui/react'
 import {GroupPanelContext, ListOptionsContext} from './Contexts';
 
 export const ListOptions = () => {
-    const {customButtons, enableFilter, enableSearch, searchKey, onSearchItem, setIsFilterPanelOpen, defaultButtonsOrder, searchBoxPlaceholder, enableCardView, setRenderAs} = React.useContext(ListOptionsContext);
+    const {customButtons, enableFilter, enableSearch, searchKeys, onSearchItem, setIsFilterPanelOpen, defaultButtonsOrder, searchBoxPlaceholder, enableCardView, setRenderAs, enableGrouping} = React.useContext(ListOptionsContext);
     const {onOpen} = React.useContext(GroupPanelContext);
 
     const defaultStyles: Record<string, CSSProperties> = {
@@ -19,16 +19,17 @@ export const ListOptions = () => {
 
     return (
     <div data-class-name="grid-view-header-container" style={defaultStyles.container}>
+        {enableGrouping &&
         <DefaultButton 
-            onClick={ _ => onOpen()} styles={{label: {fontSize: 14}, root: {order: defaultButtonsOrder?.group}}} iconProps={{iconName: 'GroupList'}} />
+            onClick={ _ => onOpen()} styles={{label: {fontSize: 14}, root: {order: defaultButtonsOrder?.group}}} iconProps={{iconName: 'GroupList'}} />}
         {enableCardView && 
         <DefaultButton 
             onClick={_ => setRenderAs()} styles={{label: {fontSize: 14}, root: {order: defaultButtonsOrder?.card}}} iconProps={{iconName: 'GridViewMedium'}} />}
         {customButtons?.length > 0 && customButtons?.map(b => 
             <PrimaryButton key={b?.text} className={b?.className} styles={{label: {fontSize: 14}, root: {order: b?.position ?? 'unset'}}} {...b?.props}>{b?.text}</PrimaryButton>)}
-        {(enableSearch && searchKey) && 
+        {(enableSearch && searchKeys) && 
         <TextField 
-            onChange={(_, newValue) => onSearchItem(newValue, searchKey)} placeholder={searchBoxPlaceholder}
+            onChange={(_, newValue) => onSearchItem(newValue, searchKeys)} placeholder={searchBoxPlaceholder}
             iconProps={{iconName: 'Search'}} styles={{root: {width: 320, order: defaultButtonsOrder?.search}, icon: {color: '[theme: themePrimary, default: #0078D4]'}}} />}
         {enableFilter && 
         <DefaultButton 
