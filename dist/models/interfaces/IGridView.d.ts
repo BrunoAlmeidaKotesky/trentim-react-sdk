@@ -1,6 +1,6 @@
 import type { IColumn, IDetailsListProps } from "@fluentui/react/lib/DetailsList";
 import type { CSSProperties } from "react";
-import type { IInfoCardProps, IRightColumn } from "./IInfoCardProps";
+import type { CircleIndicator, IInfoCardProps, IRightColumn } from "./IInfoCardProps";
 import type { IConfigurableHeader } from "./IListOptions";
 import type { FilterComponent } from '../types/Common';
 export interface IFileInfo {
@@ -30,11 +30,12 @@ export declare type TColumn<T> = IColumn & {
      * @example "file.name" will get the value from the file object.
     */
     fieldName?: keyof T;
-    dateConversionOptions?: IDateConvertionOptions;
+    dateConversionOptions?: IDateConversionOptions;
     /**How should the filter on the filter panel be rendered */
     renderFilterAs?: FilterComponent;
 };
-interface IDateConvertionOptions {
+/**This interface is used to represent objects that can be used to convert ISO string formats to a locale string from a date. */
+interface IDateConversionOptions {
     /**If se to `true`, it will automatically convert the string ISO dates to your locale date. */
     shouldConvertToLocaleString?: boolean;
     locales?: string | string[];
@@ -45,13 +46,19 @@ declare type IGridCardRightCol = Pick<IRightColumn, 'containerStyle'> & {
     keys: {
         title: string;
         style?: CSSProperties;
+        dateConversionOptions?: IDateConversionOptions;
     }[];
 };
-declare type ICardProps = Omit<IInfoCardProps, 'cardTitle' | 'cardSubtitle' | 'cardRightColInformation'> & {
+declare type ICardProps = Omit<IInfoCardProps, 'cardTitle' | 'cardSubtitle' | 'cardRightColInformation' | ''> & {
     containerStyle?: CSSProperties;
     cardTitleKey: string;
     cardSubtitleKey?: string;
+    titleDateConversionOptions?: IDateConversionOptions;
+    subtitleDateConversionOptions?: IDateConversionOptions;
     rightColumn?: IGridCardRightCol;
+    circleIndicator: CircleIndicator & {
+        dateConversionOptions?: IDateConversionOptions;
+    };
 };
 export interface IGridListProps<T extends any> extends IGridHandler {
     /**Use this to overwrite the default props `IDetailListProps` from Microsoft's `@fluent-ui` */
@@ -66,7 +73,7 @@ export interface IGridListProps<T extends any> extends IGridHandler {
     /**The column model to be applied to the list.
      * It extends the Microsoft `@fluent-ui` `IColumn` interface.
      *
-     * If you want to the values that are ISO dates to be automatically converted to locale strings, use the `dateConvertionOptions` property.
+     * If you want to the values that are ISO dates to be automatically converted to locale strings, use the `dateConversionOptions` property.
      * If you want to change the type of the component to be used on the filter panel, use the `renderFilterAs` property.
      * @example
      * ```ts
@@ -100,9 +107,9 @@ export interface IGridListProps<T extends any> extends IGridHandler {
 interface IGridHandler {
     /**A custom event to be fired when a row is clicked or the card action button. */
     onItemClick?: (row: IRow) => void;
-    /**The same event from `IDetialsListProps` from `@fluent-ui` with generic types.
+    /**The same event from `IDetailsListProps` from `@fluent-ui` with generic types.
      *
-     * This is different from `onRenderCustomComponent`, since this method is applied to the default `onRenderItemColumn` from `Detailslist` and not on the entire component.
+     * This is different from `onRenderCustomComponent`, since this method is applied to the default `onRenderItemColumn` from `DetailsList` and not on the entire component.
      */
     onRenderItemColumn?: <S>(item?: S, index?: number, column?: TColumn<S>) => React.ReactNode;
     /**If you want to totally overwrite the component that is being rendered, independent of the `renderAs` value, use this rendering function.

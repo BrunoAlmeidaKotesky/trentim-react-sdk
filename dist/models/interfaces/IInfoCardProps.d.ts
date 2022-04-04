@@ -1,8 +1,8 @@
 import { CSSProperties } from 'react';
 import type { BaseButton } from '@fluentui/react/lib/Button';
-declare type CircleIndicator = {
+export declare type CircleIndicator = {
     title: string;
-    color: string;
+    color?: string;
 };
 export interface IRightColumn {
     containerStyle?: CSSProperties;
@@ -28,4 +28,3 @@ export interface IInfoCardProps {
     onCardClick?: (e?: any) => void | Promise<void>;
     enableUserSelect?: boolean;
 }
-export {};

@@ -91,7 +91,7 @@ const InfoCard = React.memo((props: IInfoCardProps) => {
             </div>
             <div data-class-name="card-bottom" style={styles.bottom}>
                 <div data-class-name="card-circle-wrapper" style={styles.circleWrap}>
-                    <div style={{ ...styles.circle, background: props?.circleIndicator?.color, border: `1px solid ${props?.circleIndicator?.color}` }}></div>
+                    <div style={props?.circleIndicator?.color ? { ...styles.circle, background: props?.circleIndicator?.color, border: `1px solid ${props?.circleIndicator?.color}` } : {}}></div>
                     <span style={styles.status}>{props?.circleIndicator?.title}</span>
                 </div>
                 <div data-class-name="card-button-container">

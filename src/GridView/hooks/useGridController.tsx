@@ -53,12 +53,19 @@ export function useGridController(props: IGridListProps<any>) {
             if(hasCustomCard)
                 return props?.onRenderCustomComponent(row);
             const cProps = props?.cardProps;
-            const cardTitle: string = Utils.getNestedObject(row, cProps?.cardTitleKey?.split('.')) || '';
-            const cardSubtitle: string = Utils.getNestedObject(row, cProps?.cardSubtitleKey?.split('.')) || '';
+            let cardTitle: string = Utils.getNestedObject(row, cProps?.cardTitleKey?.split('.')) || '';
+            let cardSubtitle: string = Utils.getNestedObject(row, cProps?.cardSubtitleKey?.split('.')) || '';
+            if(cProps?.titleDateConversionOptions?.shouldConvertToLocaleString)
+                cardTitle = Utils.convertIsoToLocaleString(cardTitle, cProps?.titleDateConversionOptions?.locales, cProps?.titleDateConversionOptions?.formatOptions);
+            if(cProps?.subtitleDateConversionOptions?.shouldConvertToLocaleString)
+                cardSubtitle = Utils.convertIsoToLocaleString(cardSubtitle, cProps?.subtitleDateConversionOptions?.locales, cProps?.subtitleDateConversionOptions?.formatOptions);
             const rightCol = cProps?.rightColumn;
-            const titleValue = Utils.getNestedObject(row, cProps?.circleIndicator?.title?.split('.') as any) as string;
+            const cIndicator = cProps?.circleIndicator;
+            let titleValue = Utils.getNestedObject(row, cIndicator?.title?.split('.') as any) as string;
+            if(cIndicator?.dateConversionOptions?.shouldConvertToLocaleString)
+                titleValue = Utils.convertIsoToLocaleString(titleValue, cIndicator?.dateConversionOptions?.locales, cIndicator?.dateConversionOptions?.formatOptions);
             const circleIndicator = {
-                ...cProps?.circleIndicator, 
+                ...cIndicator, 
                 title: titleValue
             };
             const cardProps: IInfoCardProps = {
@@ -67,10 +74,12 @@ export function useGridController(props: IGridListProps<any>) {
                 cardSubtitle,
                 cardRightColInformation: rightCol?.keys && {
                     ...rightCol,
-                    values: rightCol?.keys?.map(opt => ({
-                        title: Utils.getNestedObject(row, opt?.title?.split('.') as any),
-                        style: opt?.style ??  { fontSize: 16, marginBottom: 4, fontWeight: 600 }
-                    }))
+                    values: rightCol?.keys?.map(opt => {
+                        let title: string = Utils.getNestedObject(row, opt?.title?.split('.') as any);
+                        if(opt?.dateConversionOptions?.shouldConvertToLocaleString)
+                            title = Utils.convertIsoToLocaleString(title, opt?.dateConversionOptions?.locales, opt?.dateConversionOptions?.formatOptions);
+                        return ({title, style: opt?.style ??  { fontSize: 16, marginBottom: 4, fontWeight: 600 }});
+                    })
                 },
                 circleIndicator,
                 onClickDownButton: e => {

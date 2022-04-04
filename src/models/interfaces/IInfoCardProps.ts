@@ -1,7 +1,7 @@
 import { CSSProperties } from 'react';
 import type { BaseButton } from '@fluentui/react/lib/Button';
 
-type CircleIndicator = {title: string, color: string};
+export type CircleIndicator = {title: string, color?: string};
 export interface IRightColumn {
     containerStyle?: CSSProperties;
     values: {title: string, style: CSSProperties}[];
