@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { useState, useEffect, useMemo, lazy } from 'react';
-import {GridViewMapper} from '../GridViewMapper';
+import {GridViewFilter} from '../GridViewFilter';
+import {GridViewGrouping} from '../GridViewGrouping';
 import type { IGridListProps, IRow, TColumn } from '../../models/interfaces/IGridView';
 import type { IListOptionsProps } from '../../models/interfaces/IListOptions';
 import { Utils } from '../../helpers/Utils';
@@ -137,85 +138,12 @@ export function useGridController(props: IGridListProps<any>) {
         setCols(columns => [...columns.map(c => ({...c, onColumnClick: onColumnClick(actualRows)}))]);
     }, [actualRows?.length]);
 
-    const onApplyFilter: IPanelFilterProps['onApply'] = (selectedItems) => {
-        if(selectedItems.size === 0) {
-            setActualRows(allRows);
-            return setIsFilterPanel(false);
-        }
-        const groupedMaps = GridViewMapper.groupMaps(selectedItems);
-        //TO DO: Evitar com que o currentFilteredRows mantenha os valores.
-        let filteredRows: IRow[] = [];
-        for(const [mapKey, map] of groupedMaps.entries()) {
-            const filterFrom = filteredRows?.length > 0 ? filteredRows : allRows;
-            map?.forEach(value => {
-                const ORrowsFromThisKey = filterFrom.filter(r => Utils.getNestedObject(r, mapKey.split('.')) === value?.text);
-                if(ORrowsFromThisKey.length > 0 && !filteredRows?.map(r => r?.Id)?.includes(value?.data?.Id))
-                    filteredRows.push(...ORrowsFromThisKey);
-            });
-        }
-        for(const [mapKey, map] of groupedMaps.entries()) {
-            const allMapValues = [...map.values()];
-            const newFilteredItems = filteredRows.filter(r => {
-                const rowValue = Utils.getNestedObject(r, mapKey.split('.'));
-                return allMapValues.some(v => v?.text === rowValue);
-            });
-            if(newFilteredItems?.length > 0)
-                filteredRows = newFilteredItems;
-        }
-        filteredRows = filteredRows.filter((obj, pos, arr) => arr.map(mapObj => mapObj?.Id).indexOf(obj?.Id) === pos);
-        setActualRows(filteredRows)
-        //setCurFilteredRows(filteredRows);
-        setIsFilterPanel(false);
-    }
-
-    const onApplyGrouping = (keyAndName: KeyAndName) => {
-        const defaultEmptyLabel = props?.emptyGroupLabel ?? 'Sem itens definidos';
-        if(!keyAndName || keyAndName?.split(';')?.[0] === '@NONE') {
-            setIsGroupPanel(false);
-            return setGroups(undefined);
-        }
-        const groups: IGroup[] = [...actualRows]
-        .sort((a, b) => (a?.Id as number )- (b?.Id as number))
-        .reduce<IGroup[]>((acc, cur) => {
-            const [key, name] = keyAndName?.split(';');
-            let valueFromKey = Utils.getNestedObject(cur, key.split('.')) as string ?? defaultEmptyLabel;
-            const isKeyADate = cols.find(i => i?.key === key)?.dateConversionOptions?.shouldConvertToLocaleString;
-            if(isKeyADate)
-                valueFromKey = Utils.convertIsoToLocaleString(valueFromKey, cols.find(i => i?.key === key)?.dateConversionOptions?.locales, cols.find(i => i?.key === key)?.dateConversionOptions?.formatOptions);
-            const group: IGroup = {
-                key: valueFromKey,
-                name: `${name}: ${valueFromKey}`,
-                startIndex: 0,
-                count: 1,
-            }
-            if (acc.length === 0) {
-                acc.push(group)
-                return acc
-            } else if (!acc?.map(i => i?.key).includes(valueFromKey)) {
-                const count = acc?.filter(g => g?.key === valueFromKey).length;
-                const startIndex = acc[acc.length - 1]?.startIndex + acc[acc.length - 1]?.count;
-                acc.push({
-                    key: valueFromKey,
-                    name: `${name}: ${valueFromKey}`,
-                    startIndex,
-                    count
-                });
-            }
-            const lastAcc = acc[acc.length - 1];
-            if(lastAcc?.key === valueFromKey)
-                acc[acc.length - 1].count++;
-            return acc
-        }, []);
-        setGroups(groups);
-        setIsGroupPanel(false);
-    }
-
     const filterPanelConfig: IPanelFilterProps = {
         isOpen: isFilterPanelOpen,
-        onApply: onApplyFilter,
+        onApply: GridViewFilter.onApplyFilter({allRows, setActualRows, setIsFilterPanel}),
         onCancel: () => { setIsFilterPanel(false); },
         onClose: () =>  { setIsFilterPanel(false); },
-        availableFilters: GridViewMapper.buildFilters(allRows, cols, props?.hiddenFilterKeys as string[]),
+        availableFilters: GridViewFilter.buildFilters(allRows, cols, props?.hiddenFilterKeys as string[]),
         panelTitle: props?.filterPanelTitle ?? 'Filtrar',
         actualFilteredValues,
         setActualFilteredValues
@@ -229,8 +157,14 @@ export function useGridController(props: IGridListProps<any>) {
         panelTitle: props?.groupPanelTitle ?? 'Agrupar',
         setSelectedGroupKeys,
         selectedGroupKeys,
-        options: GridViewMapper.filterFromColumns(props?.hiddenGroupKeys as string[], cols)?.map(c => ({key: c?.key, text: c?.name})) ?? [],
-        onApply: onApplyGrouping
+        options: GridViewFilter.filterFromColumns(props?.hiddenGroupKeys as string[], cols)?.map(c => ({key: c?.key, text: c?.name})) ?? [],
+        onApply: GridViewGrouping.onApplyGrouping({
+            actualRows,
+            cols,
+            emptyGroupLabel: props?.emptyGroupLabel,
+            setIsGroupPanel,
+            setGroups,
+        })
     }
 
     const listConfig: IListOptionsProps = {
@@ -281,8 +215,6 @@ export function useGridController(props: IGridListProps<any>) {
         handlers: {
             onItemClick
         },
-        JSX: {
-            CardsList
-        }
+        JSX: { CardsList }
     }
 }

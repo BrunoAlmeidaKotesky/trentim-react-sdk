@@ -1,5 +1,4 @@
-import { IAvailableFilters, SelectedItemsMap } from "../models/interfaces/IPanelFilter";
-import { IRow, TColumn } from "../models/interfaces/IGridView";
+import { SelectedItemsMap } from "../models/interfaces/IPanelFilter";
 /**Internal class to be used when using map data operations on the GridView component context as a whole. */
 export declare class GridViewMapper {
     /**
@@ -12,7 +11,4 @@ export declare class GridViewMapper {
      * ```
      **/
     static groupMaps(selectedItems: SelectedItemsMap): Map<string, SelectedItemsMap>;
-    static filterFromColumns: (hiddenKeys: string[], columns: TColumn<any>[]) => TColumn<any>[];
-    /**Generate the components of each available column and it's unique values */
-    static buildFilters(allRows: IRow[], columns: TColumn<any>[], hiddenFields: string[]): IAvailableFilters[];
 }

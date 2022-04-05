@@ -1,6 +1,4 @@
-import { FilterOption, IAvailableFilters, SelectedItemsMap } from "../models/interfaces/IPanelFilter";
-import {Utils} from '../helpers/Utils';
-import { IRow, TColumn } from "../models/interfaces/IGridView";
+import { SelectedItemsMap } from "../models/interfaces/IPanelFilter";
 
 /**Internal class to be used when using map data operations on the GridView component context as a whole. */
 export class GridViewMapper {
@@ -30,38 +28,5 @@ export class GridViewMapper {
             } 
         });
         return mapsByKeyKind;
-    }
-
-    static filterFromColumns = (hiddenKeys: string[], columns: TColumn<any>[]) => columns.filter(c => (!hiddenKeys?.includes(c?.key)));
-
-    /**Generate the components of each available column and it's unique values */
-    static buildFilters(allRows: IRow[], columns: TColumn<any>[], hiddenFields: string[]): IAvailableFilters[] {
-        const filters: IAvailableFilters[] = [];
-        const columnsToFilter = GridViewMapper.filterFromColumns(hiddenFields, columns);
-        for (let index = 0; index < columnsToFilter.length; index++) {
-            const col = columnsToFilter[index];
-            const renderAs = col?.renderFilterAs ?? 'Dropdown';
-            const keys = col?.key?.split('.') ?? col.fieldName?.split('.'); 
-            const options: FilterOption[] = allRows?.filter(d => d)?.map((data, idx) => {
-                let stringObject = Utils.getNestedObject(data, keys)?.toString();
-                if (col?.dateConversionOptions?.shouldConvertToLocaleString)
-                    stringObject = Utils.convertIsoToLocaleString(stringObject, col?.dateConversionOptions?.locales, col?.dateConversionOptions?.formatOptions);
-                return {
-                    key: idx + "_" + col?.key,
-                    text: stringObject,
-                    data
-                };
-            });
-            const uniqueOptions = options?.filter((obj, pos, arr) => arr.map(mapObj => mapObj?.text).indexOf(obj?.text) === pos);
-
-            filters.push({
-                key: col?.key,
-                options: uniqueOptions,
-                enableMultiple: true,
-                name: col?.name,
-                renderAs
-            });
-        }
-        return filters;
     }
 }
