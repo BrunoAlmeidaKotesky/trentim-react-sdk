@@ -23,6 +23,8 @@ export function useGridController(props: IGridListProps<any>) {
     const [actualRows, setActualRows] = useState(props?.rows ?? []);
     const [isFilterPanelOpen, setIsFilterPanel] = useState(false);
     const [isGroupPanelOpen, setIsGroupPanel] = useState(false);
+    const [fromDate, setFromDate] = useState<Date>(null);
+    const [toDate, setToDate] = useState(new Date());
 
     useEffect(() => { setRenderAs(props?.renderAs); }, [props?.renderAs]);
 
@@ -90,7 +92,8 @@ export function useGridController(props: IGridListProps<any>) {
         availableFilters: GridViewFilter.buildFilters(allRows, cols, props?.hiddenFilterKeys as string[]),
         panelTitle: props?.filterPanelTitle ?? 'Filtrar',
         actualFilteredValues,
-        setActualFilteredValues
+        setActualFilteredValues,
+        fromDate, toDate, setFromDate, setToDate
     }
 
     const groupPanelConfig: IGroupPanel = {

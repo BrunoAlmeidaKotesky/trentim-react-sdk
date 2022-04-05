@@ -17,7 +17,13 @@ export interface IAvailableFilters {
     enableMultiple: boolean;
     renderAs: FilterComponent;
 }
-export interface IPanelFilterProps extends ICommonPanel<SelectedItemsMap> {
+interface IDateSliderCtx {
+    fromDate: Date;
+    toDate: Date;
+    setFromDate: Dispatch<SetStateAction<Date>>;
+    setToDate: Dispatch<SetStateAction<Date>>;
+}
+export interface IPanelFilterProps extends ICommonPanel<SelectedItemsMap>, IDateSliderCtx {
     availableFilters: IAvailableFilters[];
     setActualFilteredValues: Dispatch<SetStateAction<SelectedItemsMap>>;
     actualFilteredValues: SelectedItemsMap;
@@ -28,3 +34,4 @@ export declare type SelectedItemsMap = Map<string, {
     data: IRow;
     text: string;
 }>;
+export {};

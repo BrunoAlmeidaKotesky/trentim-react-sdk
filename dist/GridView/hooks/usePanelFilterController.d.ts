@@ -12,11 +12,7 @@ export declare function usePanelFilterController(): {
     handlers: {
         getDefaultDropdownSelectedKeys: () => string[];
         getDefaultSelectedTag: (keyToFilter: string) => ITag[];
-        getDefaultSelectedDate: (keyToFilter: string) => {
-            slider: RangeType;
-            from: Date;
-            to: Date;
-        };
+        getDefaultSelectedSlider: (keyToFilter: string) => RangeType;
         getDefaultSelectedPeople: (keyToFilter: string) => IPersonaProps[];
         onAddOrRemoveToMap: (rootItemKey: string, option: FilterOption) => void;
         onClose: () => void;

@@ -24,7 +24,11 @@ export const FilterPanelContext = createContext<IPanelFilterProps>({
     panelTitle: '',
     actualFilteredValues: new Map(),
     setActualFilteredValues: undefined,
-    onOpen: undefined
+    onOpen: undefined,
+    fromDate: null,
+    toDate: new Date(),
+    setFromDate: undefined,
+    setToDate: undefined
 });
 
 export const GroupPanelContext = createContext<IGroupPanel>({

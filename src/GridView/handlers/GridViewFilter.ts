@@ -102,20 +102,19 @@ export class GridViewFilter {
 
     static onSearchItem: SearchItem = ({allRows, setActualRows}) => (searchText, keys) => {
         const filteredRows: IRow[] = []; 
-        if(!searchText)
-            filteredRows.push(...allRows);
-        else {
-            filteredRows.push(...allRows?.filter(item => {
-                const itemValues: string[] = [];
-                for (const key of keys) {
-                    const value = Utils.getNestedObject(item, (key as string)?.split('.'));
-                    if(value !== undefined && value !== null)
-                        itemValues.push(value.toString());
-                }
-                const containsText = itemValues.some(v => v?.toLowerCase().includes(searchText?.toLowerCase()));
-                return containsText;
-            }));
-        } 
+        if(!searchText) 
+            return setActualRows(allRows);
+        
+        filteredRows.push(...allRows?.filter(item => {
+            const itemValues: string[] = [];
+            for (const key of keys) {
+                const value = Utils.getNestedObject(item, (key as string)?.split('.'));
+                if(value !== undefined && value !== null)
+                    itemValues.push(value.toString());
+            }
+            const containsText = itemValues.some(v => v?.toLowerCase().includes(searchText?.toLowerCase()));
+            return containsText;
+        }));
         setActualRows(filteredRows);
     }
 }

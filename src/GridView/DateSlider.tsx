@@ -3,11 +3,12 @@ import { RangeType } from '../helpers/enums';
 import { Slider, ISliderProps } from '@fluentui/react/lib/Slider';
 import { DatePicker } from '@fluentui/react/lib/DatePicker';
 import type { IDateSliderProps } from '../models/interfaces/IDateSlider';
+import { useContext, useEffect, useState, memo, useMemo } from 'react';
+import { FilterPanelContext } from './Contexts';
 
 function DateSliderComponent(props: IDateSliderProps) {
-    const [displayDatePicker, setDisplayDatePicker] = React.useState(false);
-    const [fromDate, setFromDate] = React.useState<Date>(null);
-    const [toDate, setToDate] = React.useState(new Date());
+    const [displayDatePicker, setDisplayDatePicker] = useState(false);
+    const {fromDate, toDate, setFromDate, setToDate} = useContext(FilterPanelContext);
     const formatSliderValue = (num: number): string => num === 0 ? 'Nenhum' : num === 1 ? 'Última Semana' : num === 2 ? 'Último Mês' : num === 3 ? 'Últimos Ano' : '';
     const onSliderChange: ISliderProps['onChanged'] = (_, val) => {
         if(val === 4)
@@ -37,17 +38,17 @@ function DateSliderComponent(props: IDateSliderProps) {
         }
     }
 
-    React.useEffect(() => {
+    useEffect(() => {
         if(fromDate && toDate)
             props.onRecordDateRange(fromDate, toDate, RangeType.CUSTOM);
     }, [fromDate, toDate]);
 
-    React.useEffect(() => {
-        if(props?.defaultValues?.slider === 4 && !displayDatePicker)
+    useEffect(() => {
+        if(props?.defaultSliderValue === 4 && !displayDatePicker)
             setDisplayDatePicker(true);
-    }, [props?.defaultValues?.slider]);
+    }, [props?.defaultSliderValue]);
 
-    const dateStrings = React.useMemo(() => ({
+    const dateStrings = useMemo(() => ({
         months: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
         shortMonths: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
         days: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
@@ -71,25 +72,19 @@ function DateSliderComponent(props: IDateSliderProps) {
     return (<>
     <Slider
         min={0} max={4} step={1}
-        defaultValue={props?.defaultValues?.slider ?? 0} styles={{container: { display: 'grid' }}}
+        defaultValue={props?.defaultSliderValue ?? 0} styles={{container: { display: 'grid' }}}
         valueFormat={formatSliderValue}
         onChanged={onSliderChange}
         label={props?.label}/>
     {displayDatePicker && 
         <div>
-            {/**Translate Datepicker all props to portuguese*/}
             <DatePicker
                 maxDate={toDate}
                 strings={dateStrings}
-                value={props?.defaultValues?.from ?? fromDate}
+                value={fromDate}
                 formatDate={(date) => date?.toLocaleDateString()}
                 onSelectDate={(d) => {
-                    if(d && !fromDate || !fromDate && d)
-                        setFromDate(d);
-                    else if(d && fromDate && fromDate.getTime() > d.getTime())
-                        setFromDate(d);
-                    else if(d && fromDate && fromDate.getTime() < d.getTime() && !toDate)
-                        setToDate(d);
+                    setFromDate(d);
                 }}
                 label="De"/>
             <DatePicker
@@ -97,18 +92,13 @@ function DateSliderComponent(props: IDateSliderProps) {
                 strings={dateStrings}
                 formatDate={(date) => date?.toLocaleDateString()}
                 onSelectDate={(d) => {
-                    if(d && !toDate || !toDate && d)
-                        setToDate(d);
-                    else if(d && toDate && toDate.getTime() < d.getTime())
-                        setToDate(d);
-                    else if(d && toDate && toDate.getTime() > d.getTime())
-                        setFromDate(d);
+                    setToDate(d);
                 }}
-                value={props?.defaultValues?.to ?? toDate}
+                value={toDate}
                 label="Até"/>
         </div>
     }
     </>);
 }
 
-export const DateSlider = React.memo(DateSliderComponent);
+export const DateSlider = memo(DateSliderComponent);

@@ -7,7 +7,8 @@ function PanelFilter() {
     const {JSX, state, handlers} = usePanelFilterController();
     const {actualFilteredValues, panelTitle, availableFilters, isOpen} = state;
     const {FluentPanel, PrimaryButton, Dropdown, TagPicker, DefaultButton} = JSX;
-    const {onClose, onCancel, getDefaultDropdownSelectedKeys, onAddOrRemoveToMap, getDefaultSelectedTag, getDefaultSelectedDate} = handlers;
+    const { onClose, onCancel, getDefaultDropdownSelectedKeys, onAddOrRemoveToMap, 
+            getDefaultSelectedTag, getDefaultSelectedSlider } = handlers;
 
     if (!isOpen) return null;
     return (
@@ -53,7 +54,7 @@ function PanelFilter() {
                             onResolveSuggestions={handlers.onResolveTagSuggestion(options)} /></div> :
                         (filter.renderAs === 'DateSlider') ?
                         <DateSlider
-                            defaultValues={getDefaultSelectedDate(filter?.key)}
+                            defaultSliderValue={getDefaultSelectedSlider(filter?.key)}
                             onRecordDateRange={handlers.onRecordDateChange(filter?.key)}
                             key={filter?.key + "-" + idx}
                             label={filter?.name}/> :

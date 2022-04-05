@@ -76,16 +76,12 @@ export function usePanelFilterController() {
         return selectedTags as unknown as ITag[];
     }
 
-    const getDefaultSelectedDate = (keyToFilter: string): {slider: RangeType, from: Date, to: Date} => {
+    const getDefaultSelectedSlider = (keyToFilter: string): RangeType => {
         const mapWithSameKey = [...actualFilteredValues]?.find(([key]) => key === keyToFilter);
         const mapWithSameKeyValue = mapWithSameKey?.[1]?.data;
-        if(mapWithSameKeyValue)
-            return {slider: mapWithSameKeyValue?.type, from: mapWithSameKeyValue?.from, to: mapWithSameKeyValue?.to};
-        return {
-            slider: RangeType.NONE,
-            from: null,
-            to: null
-        }
+        if(mapWithSameKeyValue) 
+            return mapWithSameKeyValue?.type;
+        return RangeType.NONE;
     }
 
     const getDefaultSelectedPeople = (keyToFilter: string): IPersonaProps[] => {
@@ -178,7 +174,7 @@ export function usePanelFilterController() {
         handlers: {
             getDefaultDropdownSelectedKeys,
             getDefaultSelectedTag,
-            getDefaultSelectedDate,
+            getDefaultSelectedSlider,
             getDefaultSelectedPeople,
             onAddOrRemoveToMap,
             onClose,
