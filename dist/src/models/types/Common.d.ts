@@ -2,16 +2,13 @@ import type { SelectedItemsMap } from "../interfaces/IPanelFilter";
 import type { IRow, TColumn } from "../interfaces/IGridView";
 import type { Dispatch, SetStateAction } from "react";
 import type { IGroup } from "@fluentui/react/lib/DetailsList";
-
-export type FilterComponent = 'Dropdown' | 'SearchBox' | 'DateSlider' | 'PeoplePicker';
-export type KeyAndName = `${string};${string}`;
-
-export type ApplyFilter = ({ allRows, setActualRows, setIsFilterPanel }: {
+export declare type FilterComponent = 'Dropdown' | 'SearchBox' | 'DateSlider' | 'PeoplePicker';
+export declare type KeyAndName = `${string};${string}`;
+export declare type ApplyFilter = ({ allRows, setActualRows, setIsFilterPanel }: {
     allRows: IRow[];
     setActualRows: Dispatch<SetStateAction<IRow[]>>;
     setIsFilterPanel: Dispatch<SetStateAction<boolean>>;
 }) => (selectedItems: SelectedItemsMap) => void;
-
 interface IGroupingParams {
     emptyGroupLabel: string;
     actualRows: IRow[];
@@ -19,7 +16,5 @@ interface IGroupingParams {
     setGroups: Dispatch<SetStateAction<IGroup[]>>;
     setIsGroupPanel: Dispatch<SetStateAction<boolean>>;
 }
-export type ApplyGrouping = ({ actualRows, cols, setGroups, setIsGroupPanel, emptyGroupLabel }: IGroupingParams) => (keyAndName: KeyAndName) => void;
-
-type ISearchParams = { allRows: IRow[], setActualRows: Dispatch<SetStateAction<IRow[]>> };
-export type SearchItem = ({allRows, setActualRows}: ISearchParams) => (searchText: string, keys: (keyof IRow)[]) => void;
+export declare type ApplyGrouping = ({ actualRows, cols, setGroups, setIsGroupPanel, emptyGroupLabel }: IGroupingParams) => (keyAndName: KeyAndName) => void;
+export {};

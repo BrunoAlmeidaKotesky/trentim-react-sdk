@@ -3,7 +3,6 @@ import type { CSSProperties } from "react";
 import type { CircleIndicator, IInfoCardProps, IRightColumn } from "./IInfoCardProps";
 import type { IConfigurableHeader } from "./IListOptions";
 import type { FilterComponent } from '../types/Common';
-
 export interface IFileInfo {
     key: string;
     name: string;
@@ -11,9 +10,8 @@ export interface IFileInfo {
     value?: any;
     iconUrl: string;
     fileType: string;
-};
-
-/**It should represent any object with primitive data types. 
+}
+/**It should represent any object with primitive data types.
  * Please use the `Id` property to uniquely identify the object, it helps to avoid duplicates and correctly apply the filter.
 */
 export interface IRow {
@@ -22,23 +20,20 @@ export interface IRow {
     Id: number | string;
     /**If you are rendering the `GridView` as an tree view, you can use this property to display an additional column, automatically showing the file icon types. */
     file?: IFileInfo;
-    
 }
-
-export type TColumn<T> = IColumn & {
-    /**If the desired value is from an nested object, provide the value with dots. 
+export declare type TColumn<T> = IColumn & {
+    /**If the desired value is from an nested object, provide the value with dots.
      * @example "file.name" will get the value from the file object.
     */
     key: keyof T;
-    /**If the desired value is from an nested object, provide the value with dots. 
+    /**If the desired value is from an nested object, provide the value with dots.
      * @example "file.name" will get the value from the file object.
     */
     fieldName?: keyof T;
     dateConversionOptions?: IDateConversionOptions;
     /**How should the filter on the filter panel be rendered */
     renderFilterAs?: FilterComponent;
-}
-
+};
 /**This interface is used to represent objects that can be used to convert ISO string formats to a locale string from a date. */
 interface IDateConversionOptions {
     /**If se to `true`, it will automatically convert the string ISO dates to your locale date. */
@@ -47,18 +42,24 @@ interface IDateConversionOptions {
     /**Use this if you want to overwrite the behavior of the default `Intl.DateTimeFormatOptions` applied. */
     formatOptions?: Intl.DateTimeFormatOptions;
 }
-
-type IGridCardRightCol = Pick<IRightColumn, 'containerStyle'> & {keys: {title: string, style?: CSSProperties, dateConversionOptions?: IDateConversionOptions}[]};
-export type ICardProps = Omit<IInfoCardProps, 'cardTitle' | 'cardSubtitle' | 'cardRightColInformation' | ''> & {
+declare type IGridCardRightCol = Pick<IRightColumn, 'containerStyle'> & {
+    keys: {
+        title: string;
+        style?: CSSProperties;
+        dateConversionOptions?: IDateConversionOptions;
+    }[];
+};
+declare type ICardProps = Omit<IInfoCardProps, 'cardTitle' | 'cardSubtitle' | 'cardRightColInformation' | ''> & {
     containerStyle?: CSSProperties;
     cardTitleKey: string;
     cardSubtitleKey?: string;
     titleDateConversionOptions?: IDateConversionOptions;
     subtitleDateConversionOptions?: IDateConversionOptions;
     rightColumn?: IGridCardRightCol;
-    circleIndicator: CircleIndicator & {dateConversionOptions?: IDateConversionOptions};
-}
-
+    circleIndicator: CircleIndicator & {
+        dateConversionOptions?: IDateConversionOptions;
+    };
+};
 export interface IGridListProps<T extends any> extends IGridHandler {
     /**Use this to overwrite the default props `IDetailListProps` from Microsoft's `@fluent-ui` */
     detailsListProps?: IDetailsListProps;
@@ -69,9 +70,9 @@ export interface IGridListProps<T extends any> extends IGridHandler {
     /**If the grid will be rendered as a list or as a collection of `<Card />` component */
     renderAs: 'list' | 'card';
     autoFileDisplay?: boolean;
-    /**The column model to be applied to the list.  
+    /**The column model to be applied to the list.
      * It extends the Microsoft `@fluent-ui` `IColumn` interface.
-     * 
+     *
      * If you want to the values that are ISO dates to be automatically converted to locale strings, use the `dateConversionOptions` property.
      * If you want to change the type of the component to be used on the filter panel, use the `renderFilterAs` property.
      * @example
@@ -100,20 +101,20 @@ export interface IGridListProps<T extends any> extends IGridHandler {
     /**A list of keys from `IRow` to not be displayed on the top of the Panel when grouping.*/
     hiddenGroupKeys?: string[] | Array<keyof IRow>;
     /** If set, this will be used to display when a group does not have any values to be grouped by. */
-    emptyGroupLabel?: string; 
+    emptyGroupLabel?: string;
 }
-
 /**Represents all the functions that can be used. */
 interface IGridHandler {
     /**A custom event to be fired when a row is clicked or the card action button. */
     onItemClick?: (row: IRow) => void;
     /**The same event from `IDetailsListProps` from `@fluent-ui` with generic types.
-     * 
+     *
      * This is different from `onRenderCustomComponent`, since this method is applied to the default `onRenderItemColumn` from `DetailsList` and not on the entire component.
      */
     onRenderItemColumn?: <S>(item?: S, index?: number, column?: TColumn<S>) => React.ReactNode;
-    /**If you want to totally overwrite the component that is being rendered, independent of the `renderAs` value, use this rendering function. 
+    /**If you want to totally overwrite the component that is being rendered, independent of the `renderAs` value, use this rendering function.
      *
      * This element will be applied to each item `IRow`, not the entire component. */
     onRenderCustomComponent?: (item: IRow) => React.ReactNode;
 }
+export {};

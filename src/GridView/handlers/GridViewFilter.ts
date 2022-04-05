@@ -1,8 +1,8 @@
-import { Utils } from '../helpers/Utils';
+import { Utils } from '../../helpers/Utils';
 import { GridViewMapper } from './GridViewMapper';
-import type { IRow, TColumn } from '../models/interfaces/IGridView';
-import type { ApplyFilter } from '../models/types/Common';
-import type { FilterOption, IAvailableFilters } from '../models/interfaces/IPanelFilter';
+import type { IRow, TColumn } from '../../models/interfaces/IGridView';
+import type { ApplyFilter, SearchItem } from '../../models/types/Common';
+import type { FilterOption, IAvailableFilters } from '../../models/interfaces/IPanelFilter';
 
 export class GridViewFilter {
 
@@ -99,4 +99,23 @@ export class GridViewFilter {
     }
 
     static filterFromColumns = (hiddenKeys: string[], columns: TColumn<any>[]) => columns.filter(c => (!hiddenKeys?.includes(c?.key)));
+
+    static onSearchItem: SearchItem = ({allRows, setActualRows}) => (searchText, keys) => {
+        const filteredRows: IRow[] = []; 
+        if(!searchText)
+            filteredRows.push(...allRows);
+        else {
+            filteredRows.push(...allRows?.filter(item => {
+                const itemValues: string[] = [];
+                for (const key of keys) {
+                    const value = Utils.getNestedObject(item, (key as string)?.split('.'));
+                    if(value !== undefined && value !== null)
+                        itemValues.push(value.toString());
+                }
+                const containsText = itemValues.some(v => v?.toLowerCase().includes(searchText?.toLowerCase()));
+                return containsText;
+            }));
+        } 
+        setActualRows(filteredRows);
+    }
 }

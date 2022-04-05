@@ -1,6 +1,6 @@
-import { Utils } from '../helpers/Utils';
+import { Utils } from '../../helpers/Utils';
 import type { IGroup } from "@fluentui/react/lib/DetailsList";
-import type { ApplyGrouping } from "../models/types/Common";
+import type { ApplyGrouping } from "../../models/types/Common";
 
 export class GridViewGrouping {
     
