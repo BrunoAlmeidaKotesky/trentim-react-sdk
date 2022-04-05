@@ -1,4 +1,4 @@
-import { SelectedItemsMap } from "../models/interfaces/IPanelFilter";
+import { SelectedItemsMap } from "../../models/interfaces/IPanelFilter";
 /**Internal class to be used when using map data operations on the GridView component context as a whole. */
 export declare class GridViewMapper {
     /**

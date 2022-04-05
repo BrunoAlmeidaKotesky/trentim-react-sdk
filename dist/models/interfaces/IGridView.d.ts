@@ -49,7 +49,7 @@ declare type IGridCardRightCol = Pick<IRightColumn, 'containerStyle'> & {
         dateConversionOptions?: IDateConversionOptions;
     }[];
 };
-declare type ICardProps = Omit<IInfoCardProps, 'cardTitle' | 'cardSubtitle' | 'cardRightColInformation' | ''> & {
+export declare type ICardProps = Omit<IInfoCardProps, 'cardTitle' | 'cardSubtitle' | 'cardRightColInformation' | ''> & {
     containerStyle?: CSSProperties;
     cardTitleKey: string;
     cardSubtitleKey?: string;

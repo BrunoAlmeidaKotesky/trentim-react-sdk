@@ -17,4 +17,9 @@ interface IGroupingParams {
     setIsGroupPanel: Dispatch<SetStateAction<boolean>>;
 }
 export declare type ApplyGrouping = ({ actualRows, cols, setGroups, setIsGroupPanel, emptyGroupLabel }: IGroupingParams) => (keyAndName: KeyAndName) => void;
+declare type ISearchParams = {
+    allRows: IRow[];
+    setActualRows: Dispatch<SetStateAction<IRow[]>>;
+};
+export declare type SearchItem = ({ allRows, setActualRows }: ISearchParams) => (searchText: string, keys: (keyof IRow)[]) => void;
 export {};
