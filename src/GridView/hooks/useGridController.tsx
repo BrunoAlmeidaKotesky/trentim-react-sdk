@@ -1,10 +1,11 @@
 import * as React from 'react';
 import useRefCallback from '../../hooks/useRefWithCallback';
 import { Utils } from '../../helpers/Utils';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useGridCardRendering } from './useGridCardRendering';
 import {GridViewFilter} from '../handlers/GridViewFilter';
 import {GridViewGrouping} from '../handlers/GridViewGrouping';
+import { IconClickCaller } from '../../helpers/enums';
 import type { IGridListProps, IRow, TColumn } from '../../models/interfaces/IGridView';
 import type { IListOptionsProps } from '../../models/interfaces/IListOptions';
 import type { IPanelFilterProps, SelectedItemsMap } from '../../models/interfaces/IPanelFilter';
@@ -86,12 +87,14 @@ export function useGridController(props: IGridListProps<any>) {
         setCols(columns => [...columns.map(c => ({...c, onColumnClick: onColumnClick(actualRows)}))]);
     }, [actualRows?.length]);
 
+    const memoizedAvailableFilter = useMemo(() => GridViewFilter.buildFilters(allRows, cols, props?.hiddenFilterKeys as string[]), [allRows?.length, cols?.length, props?.hiddenGroupKeys?.length]);
+
     const filterPanelConfig: IPanelFilterProps = {
         isOpen: isFilterPanelOpen,
         onApply: GridViewFilter.onApplyFilter({allRows, setActualRows, setIsFilterPanel, applyCustomFilter: props?.applyCustomFilter}),
         onCancel: () => { setIsFilterPanel(false); },
         onClose: () =>  { setIsFilterPanel(false); },
-        availableFilters: GridViewFilter.buildFilters(allRows, cols, props?.hiddenFilterKeys as string[]),
+        availableFilters: memoizedAvailableFilter,
         panelTitle: props?.filterPanelTitle ?? 'Filtrar',
         actualFilteredValues,
         setActualFilteredValues,
@@ -126,7 +129,17 @@ export function useGridController(props: IGridListProps<any>) {
         enableFilter: props?.headerOptions?.enableFilter ?? true,
         enableCardView: props?.headerOptions?.enableCardView ?? false,
         enableGrouping,
-        onClickSearchIcon: () => { setActualRows(currentSearchBoxItems?.current); }
+        onClickSearchIcon: (callerType, text, key) => {
+            if(callerType === IconClickCaller.CLICK)
+                return setActualRows(currentSearchBoxItems?.current);
+            if(callerType === IconClickCaller.ENTER) {
+                if(!text)
+                    return setActualRows(allRows);
+                const filteredItems = GridViewFilter.onSearchItemChange({allRows, searchCb, setActualRows})(text, key);
+                searchCb(filteredItems);
+                setActualRows(filteredItems);
+            }
+        }
     }
 
     return {

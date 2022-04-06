@@ -10,6 +10,8 @@ function PanelFilter() {
     const { onClose, onCancel, getDefaultDropdownSelectedKeys, onAddOrRemoveToMap, 
             getDefaultSelectedTag, getDefaultSelectedSlider } = handlers;
 
+    const options = React.useMemo(() => availableFilters.map(f => handlers.mapOptions(f?.options)), [availableFilters?.length]);
+
     if (!isOpen) return null;
     return (
         <React.Suspense fallback={<div>...</div>}>
@@ -28,12 +30,11 @@ function PanelFilter() {
                 onDismiss={onClose} isOpen={isOpen}>
                 <h2>{panelTitle}</h2>
                 {availableFilters?.map((filter, idx) => {
-                    const options = handlers.mapOptions(filter?.options);
                     return (<React.Suspense key={filter?.key + "-" + idx} fallback={'...'}>
                         {(filter.renderAs === 'Dropdown') ? 
                         <Dropdown
                             defaultSelectedKeys={getDefaultDropdownSelectedKeys()}
-                            key={filter?.key + "-" + idx} options={options}
+                            key={filter?.key + "-" + idx} options={options[idx]}
                             multiSelect={filter?.enableMultiple} label={filter?.name}
                             onChange={(_, opt) => onAddOrRemoveToMap(filter?.key, opt)} /> :
                         (filter.renderAs === 'SearchBox') ?
@@ -49,9 +50,9 @@ function PanelFilter() {
                                 loadingText: "Carregando..."
                             }}
                             pickerCalloutProps={{doNotLayer: true}}
-                            onChange={handlers.onChangeTags(options)}
+                            onChange={handlers.onChangeTags(options[idx])}
                             onItemSelected={handlers.onTagSelected(filter?.key)}
-                            onResolveSuggestions={handlers.onResolveTagSuggestion(options)} /></div> :
+                            onResolveSuggestions={handlers.onResolveTagSuggestion(options[idx])} /></div> :
                         (filter.renderAs === 'DateSlider') ?
                         <DateSlider
                             defaultSliderValue={getDefaultSelectedSlider(filter?.key)}
@@ -61,7 +62,7 @@ function PanelFilter() {
                         (filter?.renderAs === 'PeoplePicker') ?
                         <PeoplePicker 
                             label={filter?.name} key={filter?.key + "-" + idx}
-                            people={options}
+                            people={options[idx]}
                             defaultSelectedItems={handlers.getDefaultSelectedPeople(filter?.key)}
                             onChangePeople={handlers.onChangePeople(filter?.key)} /> : null
                         }

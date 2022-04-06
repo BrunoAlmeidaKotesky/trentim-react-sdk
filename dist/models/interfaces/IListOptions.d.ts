@@ -1,4 +1,5 @@
 import type { IButtonProps } from "@fluentui/react/lib/Button";
+import type { IconClickCaller } from "../../helpers/enums";
 import type { IRow } from "./IGridView";
 declare type CustomButtons = {
     props: IButtonProps;
@@ -25,7 +26,7 @@ export interface IListOptionsProps {
     /**A placeholder text to the search box. */
     searchBoxPlaceholder?: string;
     onSearchItemChange?: (searchText: string, keys: Array<keyof IRow>) => void;
-    onClickSearchIcon?: () => void;
+    onClickSearchIcon?: (calledBy: IconClickCaller, searchText?: string, keys?: (keyof IRow)[]) => void;
     setIsFilterPanelOpen: (isOpen: boolean) => void;
     setIsGroupPanelOpen: (isOpen: boolean) => void;
     setRenderAs: () => void;

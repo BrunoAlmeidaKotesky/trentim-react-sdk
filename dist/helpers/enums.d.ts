@@ -5,3 +5,7 @@ export declare enum RangeType {
     YEAR = 3,
     CUSTOM = 4
 }
+export declare enum IconClickCaller {
+    CLICK = 0,
+    ENTER = 1
+}

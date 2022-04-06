@@ -19,7 +19,7 @@ interface IGroupingParams {
 export type ApplyGrouping = ({ actualRows, cols, setGroups, setIsGroupPanel, emptyGroupLabel }: IGroupingParams) => (keyAndName: KeyAndName) => void;
 
 type ISearchParams = { allRows: IRow[], setActualRows: Dispatch<SetStateAction<IRow[]>>, searchCb: (value: IRow[]) => void };
-export type SearchItem = ({allRows, searchCb, setActualRows}: ISearchParams) => (searchText: string, keys: (keyof IRow)[]) => void;
+export type SearchItem = ({allRows, searchCb, setActualRows}: ISearchParams) => (searchText: string, keys: (keyof IRow)[]) => IRow[];
 
 interface IApplyCustomFilterParams extends ApplyFilterParams {
     /**The selected items `Map`, but already grouped in a collection of Maps, without the `index_` from the map key. */

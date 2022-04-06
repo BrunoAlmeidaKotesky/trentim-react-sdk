@@ -66,9 +66,11 @@ export type ICardProps = Omit<IInfoCardProps, 'cardTitle' | 'cardSubtitle' | 'ca
     circleIndicator: CircleIndicator & {dateConversionOptions?: IDateConversionOptions};
 }
 
+export type IFluentDetailsListProps = Omit<IDetailsListProps, 'columns' | 'items' | 'onRenderItemColumn' | 'onRenderRow'| 'layoutMode' | 'onRenderDetailsHeader'>; 
+
 export interface IGridListProps<T extends any> extends IGridHandler, IGridViewStyles {
     /**Use this to overwrite the default props `IDetailListProps` from Microsoft's `@fluent-ui` */
-    detailsListProps?: IDetailsListProps;
+    detailsListProps?: IFluentDetailsListProps;
     /**if `renderAs` is set to `card`, you need to provide the card props. */
     cardProps?: ICardProps;
     /**Configure the header behavior, such as to enable filter and other functionalities. */

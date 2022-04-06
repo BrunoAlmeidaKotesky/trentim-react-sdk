@@ -6,3 +6,8 @@ export enum RangeType {
     YEAR,
     CUSTOM
 }
+
+export enum IconClickCaller {
+    CLICK,
+    ENTER
+}

@@ -25,7 +25,7 @@ declare type ISearchParams = {
     setActualRows: Dispatch<SetStateAction<IRow[]>>;
     searchCb: (value: IRow[]) => void;
 };
-export declare type SearchItem = ({ allRows, searchCb, setActualRows }: ISearchParams) => (searchText: string, keys: (keyof IRow)[]) => void;
+export declare type SearchItem = ({ allRows, searchCb, setActualRows }: ISearchParams) => (searchText: string, keys: (keyof IRow)[]) => IRow[];
 interface IApplyCustomFilterParams extends ApplyFilterParams {
     /**The selected items `Map`, but already grouped in a collection of Maps, without the `index_` from the map key. */
     groupedMaps: Map<string, SelectedItemsMap>;
