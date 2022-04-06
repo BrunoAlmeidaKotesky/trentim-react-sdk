@@ -1,6 +1,6 @@
 {
   "name": "trentim-react-sdk",
-  "version": "1.0.1-beta.7",
+  "version": "1.0.1-beta.8",
   "description": "Trentim internal SDK for ReactJS projects, with UI components, helpers, hooks and more.",
   "repository": {
     "type": "git",
