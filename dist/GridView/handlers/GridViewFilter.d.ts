@@ -6,5 +6,5 @@ export declare class GridViewFilter {
     /**Generate the components of each available column and it's unique values */
     static buildFilters(allRows: IRow[], columns: TColumn<any>[], hiddenFields: string[]): IAvailableFilters[];
     static filterFromColumns: (hiddenKeys: string[], columns: TColumn<any>[]) => TColumn<any>[];
-    static onSearchItem: SearchItem;
+    static onSearchItemChange: SearchItem;
 }

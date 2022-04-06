@@ -2,7 +2,7 @@ import type { IColumn, IDetailsListProps } from "@fluentui/react/lib/DetailsList
 import type { CSSProperties } from "react";
 import type { CircleIndicator, IInfoCardProps, IRightColumn } from "./IInfoCardProps";
 import type { IConfigurableHeader } from "./IListOptions";
-import type { FilterComponent } from '../types/Common';
+import type { ApplyCustomFilter, FilterComponent } from '../types/Common';
 
 export interface IFileInfo {
     key: string;
@@ -50,16 +50,23 @@ interface IDateConversionOptions {
 
 type IGridCardRightCol = Pick<IRightColumn, 'containerStyle'> & {keys: {title: string, style?: CSSProperties, dateConversionOptions?: IDateConversionOptions}[]};
 export type ICardProps = Omit<IInfoCardProps, 'cardTitle' | 'cardSubtitle' | 'cardRightColInformation' | ''> & {
+    /**The style to be applied on the root container of the card(s). */
     containerStyle?: CSSProperties;
+    /**A key from your `IRow` to be used on the title. */
     cardTitleKey: string;
+    /**A key from your `IRow` to be used on the subtitle. */
     cardSubtitleKey?: string;
+    /**Use this if you want to apply an automatic date conversion from ISO strings to a localized string. */
     titleDateConversionOptions?: IDateConversionOptions;
+    /**Use this if you want to apply an automatic date conversion from ISO strings to a localized string. */
     subtitleDateConversionOptions?: IDateConversionOptions;
+    /**All the possible values to be set on the right side of the card. */
     rightColumn?: IGridCardRightCol;
+    /**All the possible values to be set on the right side of the card. With the option to set an `IDateConversionOptions` to _dateConversionOptions_ */
     circleIndicator: CircleIndicator & {dateConversionOptions?: IDateConversionOptions};
 }
 
-export interface IGridListProps<T extends any> extends IGridHandler {
+export interface IGridListProps<T extends any> extends IGridHandler, IGridViewStyles {
     /**Use this to overwrite the default props `IDetailListProps` from Microsoft's `@fluent-ui` */
     detailsListProps?: IDetailsListProps;
     /**if `renderAs` is set to `card`, you need to provide the card props. */
@@ -116,4 +123,19 @@ interface IGridHandler {
      *
      * This element will be applied to each item `IRow`, not the entire component. */
     onRenderCustomComponent?: (item: IRow) => React.ReactNode;
+    /**If you want to overwrite the default filter algorithm that is applied to the filter panel, pass this callback.
+     * 
+     * This callback will be applied only to the filter algorithm of the panel, an not to the SearchBox for example, and it also doesn't changes the behavior of how the filter panel components are created.
+     * 
+     * This callback has an `IApplyCustomFilterParams` as it's parameter, which is the data that are **necessary** if want to apply the filter.
+     * @returns `void`
+    */
+    applyCustomFilter?: ApplyCustomFilter;
+}
+
+interface IGridViewStyles {
+    styles?: {
+        root?: React.CSSProperties;
+        contentContainer?: React.CSSProperties;
+    }
 }

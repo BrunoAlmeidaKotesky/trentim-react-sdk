@@ -12,7 +12,8 @@ export const ListOptionsContext = createContext<IListOptionsProps>({
     searchBoxPlaceholder: '',
     setRenderAs: undefined, 
     defaultButtonsOrder: { group: 0, search: 1, filter: 2, card: 3 },
-    setIsGroupPanelOpen: undefined
+    setIsGroupPanelOpen: undefined,
+    onClickSearchIcon: undefined
 });
 
 export const FilterPanelContext = createContext<IPanelFilterProps>({ 

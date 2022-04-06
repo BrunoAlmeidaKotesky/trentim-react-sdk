@@ -1,4 +1,5 @@
 import * as React from 'react';
+import useRefCallback from '../../hooks/useRefWithCallback';
 import { Utils } from '../../helpers/Utils';
 import { useState, useEffect } from 'react';
 import { useGridCardRendering } from './useGridCardRendering';
@@ -25,6 +26,7 @@ export function useGridController(props: IGridListProps<any>) {
     const [isGroupPanelOpen, setIsGroupPanel] = useState(false);
     const [fromDate, setFromDate] = useState<Date>(null);
     const [toDate, setToDate] = useState(new Date());
+    const [searchCb, currentSearchBoxItems] = useRefCallback<IRow[]>([]);
 
     useEffect(() => { setRenderAs(props?.renderAs); }, [props?.renderAs]);
 
@@ -86,7 +88,7 @@ export function useGridController(props: IGridListProps<any>) {
 
     const filterPanelConfig: IPanelFilterProps = {
         isOpen: isFilterPanelOpen,
-        onApply: GridViewFilter.onApplyFilter({allRows, setActualRows, setIsFilterPanel}),
+        onApply: GridViewFilter.onApplyFilter({allRows, setActualRows, setIsFilterPanel, applyCustomFilter: props?.applyCustomFilter}),
         onCancel: () => { setIsFilterPanel(false); },
         onClose: () =>  { setIsFilterPanel(false); },
         availableFilters: GridViewFilter.buildFilters(allRows, cols, props?.hiddenFilterKeys as string[]),
@@ -116,14 +118,15 @@ export function useGridController(props: IGridListProps<any>) {
 
     const listConfig: IListOptionsProps = {
         ...props?.headerOptions,
-        onSearchItem: GridViewFilter.onSearchItem({allRows, setActualRows}),
+        onSearchItemChange: GridViewFilter.onSearchItemChange({allRows, searchCb, setActualRows}),
         setRenderAs: () => renderAs === 'card' ? setRenderAs('list') : setRenderAs('card'),
         setIsFilterPanelOpen: (value) => { setIsFilterPanel(value); },
         setIsGroupPanelOpen: (value) => { setIsGroupPanel(value); },
         enableSearch: props?.headerOptions?.enableSearch ?? true,
         enableFilter: props?.headerOptions?.enableFilter ?? true,
         enableCardView: props?.headerOptions?.enableCardView ?? false,
-        enableGrouping
+        enableGrouping,
+        onClickSearchIcon: () => { setActualRows(currentSearchBoxItems?.current); }
     }
 
     return {

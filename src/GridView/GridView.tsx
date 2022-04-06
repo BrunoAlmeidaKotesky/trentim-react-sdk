@@ -20,9 +20,9 @@ export function GridView<T = any>(props: IGridListProps<T>) {
         <GroupPanelContext.Provider value={groupPanelConfig}>
         <FilterPanelContext.Provider value={filterPanelConfig}>
         <ListOptionsContext.Provider value={listConfig}>
-            <div>
+            <div style={props?.styles?.root ?? {}}>
                 <ListOptions />
-                <div data-is-scrollable="true" style={{ position: 'relative', zIndex: 0 }}>
+                <div data-is-scrollable="true" style={{ position: 'relative', zIndex: 0, ...props?.styles?.contentContainer }}>
                     {
                     !!props?.onRenderCustomComponent ? actualRows?.map(i => props?.onRenderCustomComponent(i)) :
                     !shouldRenderCard ? 

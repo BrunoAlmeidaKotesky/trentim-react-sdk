@@ -33,6 +33,7 @@
     "skipLibCheck": true,
     "noErrorTruncation": true,
     "noImplicitAny": false,
+    "resolveJsonModule": true,
     "forceConsistentCasingInFileNames": true,
     "noImplicitReturns": false,
     "noImplicitThis": true,

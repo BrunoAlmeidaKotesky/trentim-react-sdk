@@ -4,7 +4,9 @@ import { DefaultButton, PrimaryButton, TextField } from '@fluentui/react'
 import {GroupPanelContext, ListOptionsContext} from './Contexts';
 
 export const ListOptions = () => {
-    const {customButtons, enableFilter, enableSearch, searchKeys, onSearchItem, setIsFilterPanelOpen, defaultButtonsOrder, searchBoxPlaceholder, enableCardView, setRenderAs, enableGrouping} = React.useContext(ListOptionsContext);
+    const { customButtons, enableFilter, enableSearch, searchKeys, onSearchItemChange, 
+            setIsFilterPanelOpen, defaultButtonsOrder, searchBoxPlaceholder, enableCardView, 
+            setRenderAs, enableGrouping, onClickSearchIcon} = React.useContext(ListOptionsContext);
     const {onOpen} = React.useContext(GroupPanelContext);
 
     const defaultStyles: Record<string, CSSProperties> = {
@@ -29,8 +31,13 @@ export const ListOptions = () => {
             <PrimaryButton key={b?.text + "_" + idx} className={b?.className} styles={{label: {fontSize: 14}, root: {order: b?.position ?? 'unset'}}} {...b?.props}>{b?.text}</PrimaryButton>)}
         {(enableSearch && searchKeys) && 
         <TextField 
-            onChange={(_, newValue) => onSearchItem(newValue, searchKeys)} placeholder={searchBoxPlaceholder}
-            iconProps={{iconName: 'Search'}} styles={{root: {width: 320, order: defaultButtonsOrder?.search}, icon: {color: '[theme: themePrimary, default: #0078D4]'}}} />}
+            onBlur={e => onSearchItemChange(e.target.value, searchKeys)} placeholder={searchBoxPlaceholder}
+            iconProps={{
+                iconName: 'Search',
+                style: { pointerEvents: "auto", cursor: "pointer" },
+                onClick: onClickSearchIcon
+            }} 
+            styles={{root: {width: 320, order: defaultButtonsOrder?.search}, icon: {color: '[theme: themePrimary, default: #0078D4]'}}} />}
         {enableFilter && 
         <DefaultButton 
             onClick={_ => setIsFilterPanelOpen(true)} styles={{label: {fontSize: 14}, root: {order: defaultButtonsOrder?.filter}}} iconProps={{iconName: 'Filter'}} />}

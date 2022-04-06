@@ -2,6 +2,7 @@ import type { IRow } from "./IGridView";
 import type { Dispatch, SetStateAction } from 'react';
 import type { ICommonPanel } from "./ICommonPanel";
 import type { FilterComponent } from '../types/Common';
+import type { RangeType } from "../../helpers/enums";
 export interface FilterOption {
     key: string | number;
     text: string;
@@ -28,10 +29,14 @@ export interface IPanelFilterProps extends ICommonPanel<SelectedItemsMap>, IDate
     setActualFilteredValues: Dispatch<SetStateAction<SelectedItemsMap>>;
     actualFilteredValues: SelectedItemsMap;
 }
-export declare type SelectedItemsMap = Map<string, {
+declare type SelectedItemsValue = {
     rootItemKey: keyof IRow;
     itemKey: string | number;
     data: IRow;
     text: string;
-}>;
+    type?: RangeType;
+    from?: Date;
+    to?: Date;
+};
+export declare type SelectedItemsMap = Map<string, SelectedItemsValue>;
 export {};

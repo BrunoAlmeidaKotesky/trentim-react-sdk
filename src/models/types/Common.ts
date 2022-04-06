@@ -6,11 +6,8 @@ import type { IGroup } from "@fluentui/react/lib/DetailsList";
 export type FilterComponent = 'Dropdown' | 'SearchBox' | 'DateSlider' | 'PeoplePicker';
 export type KeyAndName = `${string};${string}`;
 
-export type ApplyFilter = ({ allRows, setActualRows, setIsFilterPanel }: {
-    allRows: IRow[];
-    setActualRows: Dispatch<SetStateAction<IRow[]>>;
-    setIsFilterPanel: Dispatch<SetStateAction<boolean>>;
-}) => (selectedItems: SelectedItemsMap) => void;
+type ApplyFilterParams = { allRows: IRow[]; setActualRows: Dispatch<SetStateAction<IRow[]>>; setIsFilterPanel: Dispatch<SetStateAction<boolean>>; };
+export type ApplyFilter = ({ allRows, setActualRows, setIsFilterPanel, applyCustomFilter }: ApplyFilterParams & {applyCustomFilter?: ApplyCustomFilter}) => (selectedItems: SelectedItemsMap) => void;
 
 interface IGroupingParams {
     emptyGroupLabel: string;
@@ -21,5 +18,18 @@ interface IGroupingParams {
 }
 export type ApplyGrouping = ({ actualRows, cols, setGroups, setIsGroupPanel, emptyGroupLabel }: IGroupingParams) => (keyAndName: KeyAndName) => void;
 
-type ISearchParams = { allRows: IRow[], setActualRows: Dispatch<SetStateAction<IRow[]>> };
-export type SearchItem = ({allRows, setActualRows}: ISearchParams) => (searchText: string, keys: (keyof IRow)[]) => void;
+type ISearchParams = { allRows: IRow[], setActualRows: Dispatch<SetStateAction<IRow[]>>, searchCb: (value: IRow[]) => void };
+export type SearchItem = ({allRows, searchCb, setActualRows}: ISearchParams) => (searchText: string, keys: (keyof IRow)[]) => void;
+
+interface IApplyCustomFilterParams extends ApplyFilterParams {
+    /**The selected items `Map`, but already grouped in a collection of Maps, without the `index_` from the map key. */
+    groupedMaps: Map<string, SelectedItemsMap>;
+    /**All the selected items as an `Map`, it can be for example
+     * @example 
+     * ```ts
+     * Map([['0_User.Title', data], ['1_User.Title', data]])
+     * ```
+     */
+    selectedItems: SelectedItemsMap;
+};
+export type ApplyCustomFilter = (params: IApplyCustomFilterParams) => void;

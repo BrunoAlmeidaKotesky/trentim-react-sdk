@@ -4,10 +4,13 @@ import type { Dispatch, SetStateAction } from "react";
 import type { IGroup } from "@fluentui/react/lib/DetailsList";
 export declare type FilterComponent = 'Dropdown' | 'SearchBox' | 'DateSlider' | 'PeoplePicker';
 export declare type KeyAndName = `${string};${string}`;
-export declare type ApplyFilter = ({ allRows, setActualRows, setIsFilterPanel }: {
+declare type ApplyFilterParams = {
     allRows: IRow[];
     setActualRows: Dispatch<SetStateAction<IRow[]>>;
     setIsFilterPanel: Dispatch<SetStateAction<boolean>>;
+};
+export declare type ApplyFilter = ({ allRows, setActualRows, setIsFilterPanel, applyCustomFilter }: ApplyFilterParams & {
+    applyCustomFilter?: ApplyCustomFilter;
 }) => (selectedItems: SelectedItemsMap) => void;
 interface IGroupingParams {
     emptyGroupLabel: string;
@@ -20,6 +23,19 @@ export declare type ApplyGrouping = ({ actualRows, cols, setGroups, setIsGroupPa
 declare type ISearchParams = {
     allRows: IRow[];
     setActualRows: Dispatch<SetStateAction<IRow[]>>;
+    searchCb: (value: IRow[]) => void;
 };
-export declare type SearchItem = ({ allRows, setActualRows }: ISearchParams) => (searchText: string, keys: (keyof IRow)[]) => void;
+export declare type SearchItem = ({ allRows, searchCb, setActualRows }: ISearchParams) => (searchText: string, keys: (keyof IRow)[]) => void;
+interface IApplyCustomFilterParams extends ApplyFilterParams {
+    /**The selected items `Map`, but already grouped in a collection of Maps, without the `index_` from the map key. */
+    groupedMaps: Map<string, SelectedItemsMap>;
+    /**All the selected items as an `Map`, it can be for example
+     * @example
+     * ```ts
+     * Map([['0_User.Title', data], ['1_User.Title', data]])
+     * ```
+     */
+    selectedItems: SelectedItemsMap;
+}
+export declare type ApplyCustomFilter = (params: IApplyCustomFilterParams) => void;
 export {};

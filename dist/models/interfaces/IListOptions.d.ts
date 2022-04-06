@@ -24,7 +24,8 @@ export interface IListOptionsProps {
     searchKeys?: string[];
     /**A placeholder text to the search box. */
     searchBoxPlaceholder?: string;
-    onSearchItem?: (searchText: string, keys: Array<keyof IRow>) => void;
+    onSearchItemChange?: (searchText: string, keys: Array<keyof IRow>) => void;
+    onClickSearchIcon?: () => void;
     setIsFilterPanelOpen: (isOpen: boolean) => void;
     setIsGroupPanelOpen: (isOpen: boolean) => void;
     setRenderAs: () => void;
@@ -40,5 +41,5 @@ export interface IListOptionsProps {
         card: number;
     };
 }
-export declare type IConfigurableHeader = Omit<IListOptionsProps, 'onSearchItem' | 'setIsFilterPanelOpen' | 'setRenderAs' | 'setGroupBy' | 'setIsGroupPanelOpen'>;
+export declare type IConfigurableHeader = Omit<IListOptionsProps, 'onSearchItemChange' | 'onClickSearchIcon' | 'setIsFilterPanelOpen' | 'setRenderAs' | 'setGroupBy' | 'setIsGroupPanelOpen'>;
 export {};

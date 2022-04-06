@@ -6,7 +6,11 @@ import type { FilterOption, IAvailableFilters } from '../../models/interfaces/IP
 
 export class GridViewFilter {
 
-    static onApplyFilter: ApplyFilter = ({allRows, setActualRows, setIsFilterPanel}) => (selectedItems) => {
+    static onApplyFilter: ApplyFilter = ({allRows, setActualRows, setIsFilterPanel, applyCustomFilter}) => (selectedItems) => {
+        if(!!applyCustomFilter) {
+            const groupedMaps = GridViewMapper.groupMaps(selectedItems);
+            return applyCustomFilter({allRows, setActualRows, setIsFilterPanel, selectedItems, groupedMaps});
+        }
         /**Se não tiver nada no map, limpa os filtros. */
         if(selectedItems.size === 0) {
             setActualRows(allRows);
@@ -100,21 +104,18 @@ export class GridViewFilter {
 
     static filterFromColumns = (hiddenKeys: string[], columns: TColumn<any>[]) => columns.filter(c => (!hiddenKeys?.includes(c?.key)));
 
-    static onSearchItem: SearchItem = ({allRows, setActualRows}) => (searchText, keys) => {
-        const filteredRows: IRow[] = []; 
+    static onSearchItemChange: SearchItem = ({allRows, searchCb, setActualRows}) => (searchText, keys) => {
+        const allFilteredRows: IRow[] = []; 
         if(!searchText) 
             return setActualRows(allRows);
-        
-        filteredRows.push(...allRows?.filter(item => {
-            const itemValues: string[] = [];
-            for (const key of keys) {
-                const value = Utils.getNestedObject(item, (key as string)?.split('.'));
-                if(value !== undefined && value !== null)
-                    itemValues.push(value.toString());
-            }
-            const containsText = itemValues.some(v => v?.toLowerCase().includes(searchText?.toLowerCase()));
-            return containsText;
-        }));
-        setActualRows(filteredRows);
+        for (const key of keys) {
+            const filterFrom = allFilteredRows?.length > 0 ? allFilteredRows : allRows;
+            const filteredValues = filterFrom.filter(item => {
+                const foundValues: string = Utils.getNestedObject(item, (key as string)?.split('.'))?.toString();
+                return foundValues?.toLowerCase()?.startsWith(searchText?.toLowerCase());
+            });
+            allFilteredRows.push(...filteredValues);
+        }
+        searchCb(allFilteredRows);
     }
 }

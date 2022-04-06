@@ -1,23 +1,24 @@
 import * as React from 'react';
 import { GridView } from '../src/GridView/GridView';
-import { simpleRow } from './constants';
-
+import * as json from './MOCK_DATA.json';
 
 export function GridViewListExample() {
+
     return (
         <div style={{width: '80%'}}>
           <GridView
             headerOptions={{
               enableSearch: true, enableFilter: true,
               enableGrouping: true,
-              searchKeys: ['Title', 'Status'],
+              searchKeys: ['Title', 'Status', 'NumeroPI'],
               searchBoxPlaceholder: "Pesquisar",
               customButtons: [{text: 'Upload', props: {
                 onClick: () => console.log('Clicked')
               }}]
             }}
+            styles={{contentContainer: {maxHeight: 500, overflowY: 'auto'}}}
             renderAs="list"
-            rows={simpleRow}
+            rows={json}
             hiddenFilterKeys={['NumeroPI']}
             onItemClick={(i) => console.log(i)}
             columns={[
