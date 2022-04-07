@@ -30,6 +30,7 @@ export function useGridController<T extends BaseType>(props: IGridListProps<T>) 
     const [toDate, setToDate] = useState(new Date());
     const [searchCb, currentSearchBoxItems] = useRefCallback<IRow[]>([]);
 
+    const visibleCols = useMemo(() => cols?.filter(c => !c?.hideColumn), [cols]);
     useEffect(() => { setRenderAs(props?.renderAs); }, [props?.renderAs]);
 
     const onItemClick = (item: IRow<T>) => !!props?.onItemClick && props?.onItemClick(item);
@@ -146,7 +147,7 @@ export function useGridController<T extends BaseType>(props: IGridListProps<T>) 
     return {
         state: {
             actualRows,
-            cols,
+            visibleCols,
             filterPanelConfig,
             groupPanelConfig,
             isFilterPanelOpen,

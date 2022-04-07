@@ -8,7 +8,7 @@ import type { IGroup } from '@fluentui/react/lib/DetailsList';
 export declare function useGridController<T extends BaseType>(props: IGridListProps<T>): {
     state: {
         actualRows: IRow<T>[];
-        cols: TColumn<T>[];
+        visibleCols: TColumn<T>[];
         filterPanelConfig: IPanelFilterProps;
         groupPanelConfig: IGroupPanel;
         isFilterPanelOpen: boolean;

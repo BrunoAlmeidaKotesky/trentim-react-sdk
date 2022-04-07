@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useGridController } from './hooks/useGridController';
 import { FilterPanelContext, GroupPanelContext, ListOptionsContext } from './Contexts';
-import { CheckboxVisibility, CollapseAllVisibility, DetailsList, DetailsListLayoutMode, IDetailsHeaderProps } from '@fluentui/react/lib/DetailsList';
+import { CheckboxVisibility, CollapseAllVisibility, DetailsList, DetailsListLayoutMode } from '@fluentui/react/lib/DetailsList';
 import { Sticky, StickyPositionType } from '@fluentui/react/lib/Sticky';
 import type { IGridListProps, BaseType } from '../models/interfaces/IGridView';
 import PanelFilter from './PanelFilter';
@@ -16,7 +16,7 @@ import { Suspense } from 'react';
 export function GridView<T extends BaseType>(props: IGridListProps<T>) {
     const {state, handlers, JSX} = useGridController(props);
     const {CardsList} = JSX;
-    const {actualRows, cols, isFilterPanelOpen, filterPanelConfig, groupPanelConfig, listConfig, shouldRenderCard, isGroupPanelOpen, groups} = state;
+    const {actualRows, visibleCols, isFilterPanelOpen, filterPanelConfig, groupPanelConfig, listConfig, shouldRenderCard, isGroupPanelOpen, groups} = state;
     const {onItemClick} = handlers;
 
     return (
@@ -33,7 +33,7 @@ export function GridView<T extends BaseType>(props: IGridListProps<T>) {
                         {...props?.detailsListProps}
                         onRenderItemColumn={props?.onRenderItemColumn}
                         onRenderRow={(p, defaultRender) => <div onClick={() => onItemClick(p?.item)}>{defaultRender({ ...p, styles: { root: { cursor: props?.onItemClick ? 'pointer' : 'default' } } })}</div>}
-                        items={actualRows} columns={cols}
+                        items={actualRows} columns={visibleCols}
                         groups={groups}
                         groupProps={{
                             isAllGroupsCollapsed: props?.detailsListProps?.groups ? props?.detailsListProps?.groups?.filter(gr => !gr?.isCollapsed)?.length === 0 : true,
@@ -46,13 +46,11 @@ export function GridView<T extends BaseType>(props: IGridListProps<T>) {
                             showEmptyGroups: false
                         }}
                         layoutMode={DetailsListLayoutMode.fixedColumns} isHeaderVisible={true}
-                        onRenderDetailsHeader={(headerProps, defaultRender) => {
-                            const _headerProps: IDetailsHeaderProps = {...headerProps, columns: headerProps.columns.filter(c => !c?.['hideColumn'])};
-                            return (
-                            <Sticky key={_headerProps?.key} stickyPosition={StickyPositionType.Header} stickyBackgroundColor="transparent">
-                                <div key={_headerProps?.key}>{defaultRender!(_headerProps)}</div>
-                            </Sticky>);
-                        }}
+                        onRenderDetailsHeader={(headerProps, defaultRender) => (
+                            <Sticky key={headerProps?.key} stickyPosition={StickyPositionType.Header} stickyBackgroundColor="transparent">
+                                <div key={headerProps?.key}>{defaultRender!(headerProps)}</div>
+                            </Sticky>)
+                        }
                         checkboxVisibility={props?.detailsListProps?.checkboxVisibility ?? CheckboxVisibility.hidden}
                     /> :
                     <Suspense fallback={'...'}>
