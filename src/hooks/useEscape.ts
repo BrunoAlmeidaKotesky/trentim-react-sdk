@@ -1,5 +1,10 @@
 import { KeyboardEvent, useEffect } from "react";
 
+/**
+ * A function that is triggered when the keyboard "Escape" key is pressed, anywhere in the document.
+ * 
+ * @param onEscape - The callback function to be executed when the user presses the escape key.
+ */
 export function useEscape(onEscape: Function) {
     useEffect(() => {
         const handleEsc = (event: KeyboardEvent<Event>) => {

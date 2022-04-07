@@ -1,5 +1,6 @@
-import { CSSProperties } from 'react';
+import type { CSSProperties } from 'react';
 import type { BaseButton } from '@fluentui/react/lib/Button';
+import type { IDateConversionOptions } from './ICommon';
 
 export type CircleIndicator = {title: string, color?: string};
 export interface IRightColumn {
@@ -37,4 +38,22 @@ export interface IInfoCardProps {
      *```
      */
     enableUserSelect?: boolean;
+}
+
+type IGridCardRightCol = Pick<IRightColumn, 'containerStyle'> & {keys: {title: string, style?: CSSProperties, dateConversionOptions?: IDateConversionOptions}[]};
+export type ICardProps = Omit<IInfoCardProps, 'cardTitle' | 'cardSubtitle' | 'cardRightColInformation' | ''> & {
+    /**The style to be applied on the root container of the card(s). */
+    containerStyle?: CSSProperties;
+    /**A key from your `IRow` to be used on the title. */
+    cardTitleKey: string;
+    /**A key from your `IRow` to be used on the subtitle. */
+    cardSubtitleKey?: string;
+    /**Use this if you want to apply an automatic date conversion from ISO strings to a localized string. */
+    titleDateConversionOptions?: IDateConversionOptions;
+    /**Use this if you want to apply an automatic date conversion from ISO strings to a localized string. */
+    subtitleDateConversionOptions?: IDateConversionOptions;
+    /**All the possible values to be set on the right side of the card. */
+    rightColumn?: IGridCardRightCol;
+    /**All the possible values to be set on the right side of the card. With the option to set an `IDateConversionOptions` to _dateConversionOptions_ */
+    circleIndicator: CircleIndicator & {dateConversionOptions?: IDateConversionOptions};
 }

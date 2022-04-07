@@ -12,6 +12,9 @@ export class Utils {
         return new Intl.DateTimeFormat(locales, formatOptions).format(new Date(date));
     }
 
+    /**
+     * @TO-DO: Add documentation
+     */
     public static copyAndSort<T>(items: T[], columnKey: string, isSortedDescending?: boolean): T[] {
         return items.slice(0).sort((a: T, b: T) => {
             const aValue = Utils.getNestedObject(a, columnKey?.split('.'));
@@ -32,6 +35,7 @@ export class Utils {
         return pathArr?.reduce((obj, key) => (obj && obj[key] !== 'undefined') ? obj[key] : undefined, nestedObj) as ReturnV;
     }
 
+    /**@TO-DO: Add documentation */
     public static getDeepKeys(obj: Record<any, any>): string[] {
         let keys: string[] = [];
         for(let key in obj) {

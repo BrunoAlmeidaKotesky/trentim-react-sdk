@@ -6,14 +6,15 @@ import { useGridCardRendering } from './useGridCardRendering';
 import {GridViewFilter} from '../handlers/GridViewFilter';
 import {GridViewGrouping} from '../handlers/GridViewGrouping';
 import { IconClickCaller } from '../../helpers/enums';
-import type { IGridListProps, IRow, TColumn } from '../../models/interfaces/IGridView';
+import type { IGridListProps, IRow, TColumn, BaseType } from '../../models/interfaces/IGridView';
 import type { IListOptionsProps } from '../../models/interfaces/IListOptions';
 import type { IPanelFilterProps, SelectedItemsMap } from '../../models/interfaces/IPanelFilter';
 import type { IGroupPanel } from '../../models/interfaces/IGroupPanel';
 import type { IGroup } from '@fluentui/react/lib/DetailsList';
 import type { KeyAndName } from '../../models/types/Common';
 
-export function useGridController(props: IGridListProps<any>) {
+/** TO-DO: Use `useReducer` with context for better code splitting. */
+export function useGridController<T extends BaseType>(props: IGridListProps<T>) {
     const [renderAs, setRenderAs] = useState<typeof props.renderAs>(props?.renderAs || 'list');
     const [shouldRenderCard, setShouldRenderCard] = useState(props?.renderAs === 'card');
     const [cols, setCols] = useState(props?.columns);
@@ -22,7 +23,7 @@ export function useGridController(props: IGridListProps<any>) {
     const [actualFilteredValues, setActualFilteredValues] = useState<SelectedItemsMap>(new Map());
     const [selectedGroupKeys, setSelectedGroupKeys] = useState<KeyAndName>(null);
     const [allRows, setAllRows] = useState(props?.rows);
-    const [actualRows, setActualRows] = useState(props?.rows ?? []);
+    const [actualRows, setActualRows] = useState<IRow<T>[]>(props?.rows ?? []);
     const [isFilterPanelOpen, setIsFilterPanel] = useState(false);
     const [isGroupPanelOpen, setIsGroupPanel] = useState(false);
     const [fromDate, setFromDate] = useState<Date>(null);
@@ -31,8 +32,8 @@ export function useGridController(props: IGridListProps<any>) {
 
     useEffect(() => { setRenderAs(props?.renderAs); }, [props?.renderAs]);
 
-    const onItemClick = (item: IRow) => !!props?.onItemClick && props?.onItemClick(item);
-    const onColumnClick = (currentRows: IRow[]) => (_: any, column: TColumn<any>): void => {
+    const onItemClick = (item: IRow<T>) => !!props?.onItemClick && props?.onItemClick(item);
+    const onColumnClick = (currentRows: IRow<T>[]) => (_: any, column: TColumn<T>): void => {
         if(!column) return;
         let isSortedDescending = column?.isSortedDescending;
         if (column?.isSorted) 
@@ -131,13 +132,13 @@ export function useGridController(props: IGridListProps<any>) {
         enableGrouping,
         onClickSearchIcon: (callerType, text, key) => {
             if(callerType === IconClickCaller.CLICK)
-                return setActualRows(currentSearchBoxItems?.current);
+                return setActualRows(currentSearchBoxItems?.current as IRow<T>[]);
             if(callerType === IconClickCaller.ENTER) {
                 if(!text)
                     return setActualRows(allRows);
                 const filteredItems = GridViewFilter.onSearchItemChange({allRows, searchCb, setActualRows})(text, key);
                 searchCb(filteredItems);
-                setActualRows(filteredItems);
+                setActualRows(filteredItems as IRow<T>[]);
             }
         }
     }

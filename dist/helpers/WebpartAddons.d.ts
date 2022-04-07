@@ -14,7 +14,6 @@ export declare class WebpartAddons {
      * ```js
      * const elementsToChange = new Map<keyof CSSStyleDeclaration, any>([['height', '100%']]);
      * ```
-     * @returns
      */
     changeNodeProperty(nodeElement: HTMLCollection, finalTarget: Target, elementsToChange: Map<keyof CSSStyleDeclaration, any>): boolean;
     private changeNodeRecursive;

@@ -1,13 +1,14 @@
 import * as React from 'react';
-import type { IGridListProps, IRow, TColumn } from '../../models/interfaces/IGridView';
+import type { IGridListProps, IRow, TColumn, BaseType } from '../../models/interfaces/IGridView';
 import type { IListOptionsProps } from '../../models/interfaces/IListOptions';
 import type { IPanelFilterProps } from '../../models/interfaces/IPanelFilter';
 import type { IGroupPanel } from '../../models/interfaces/IGroupPanel';
 import type { IGroup } from '@fluentui/react/lib/DetailsList';
-export declare function useGridController(props: IGridListProps<any>): {
+/** TO-DO: Use `useReducer` with context for better code splitting. */
+export declare function useGridController<T extends BaseType>(props: IGridListProps<T>): {
     state: {
-        actualRows: IRow[];
-        cols: TColumn<any>[];
+        actualRows: IRow<T>[];
+        cols: TColumn<T>[];
         filterPanelConfig: IPanelFilterProps;
         groupPanelConfig: IGroupPanel;
         isFilterPanelOpen: boolean;
@@ -17,7 +18,7 @@ export declare function useGridController(props: IGridListProps<any>): {
         groups: IGroup[];
     };
     handlers: {
-        onItemClick: (item: IRow) => void;
+        onItemClick: (item: IRow<T>) => void;
     };
     JSX: {
         CardsList: React.ReactNode[];

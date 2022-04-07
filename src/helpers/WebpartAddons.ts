@@ -22,9 +22,8 @@ export class WebpartAddons {
      * ```js
      * const elementsToChange = new Map<keyof CSSStyleDeclaration, any>([['height', '100%']]);
      * ```
-     * @returns 
      */
-    public changeNodeProperty(nodeElement: HTMLCollection, finalTarget: Target, elementsToChange: Map<keyof CSSStyleDeclaration, any>):boolean {
+    public changeNodeProperty(nodeElement: HTMLCollection, finalTarget: Target, elementsToChange: Map<keyof CSSStyleDeclaration, any>): boolean {
         try {
             let childCanvasChild: HTMLElement = null;
             if (nodeElement?.length > 1) {
@@ -38,7 +37,7 @@ export class WebpartAddons {
             return canChange ? canChange : this.changeNodeRecursive(childCanvasChild, finalTarget, elementsToChange);
         }
         catch (err) {
-            console.error('Erro ao atualizar o tamannho das divs');
+            console.error('[WebpartAddons] - changeElementProperty - Error while changing the node property', err);
             return false;
         }
     }

@@ -4,13 +4,14 @@ import { RefObject } from "react";
  *
  * Usage
  * ```tsx
- * const [toggle, refCallback, myRef] = useRefWithCallback<HTMLSpanElement>();
+ * const [refCallback, ref, toggle] = useRefWithCallback<HTMLSpanElement>();
  * const onClick = useCallback(() => {
-    if (myRef.current) {
-      myRef.current.scrollIntoView({ behavior: "smooth" });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    if (ref.current)
+      ref.current.scrollIntoView({ behavior: "smooth" });
   }, [toggle]);
+
+  //Change the value of the ref with refCallback(value);
+
   return (<span ref={refCallback} />);
   ```
  * @returns

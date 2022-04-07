@@ -2,9 +2,9 @@ import type { ICacheHandler, ICacheOptions, ICacheResponse } from "../models/int
 /**
  * The same interface from `JSON`, but it can also be from some other JSON parser libraries, such as npm module `flatted` for allowing circular objects.
  */
-interface IDepencyJson extends Omit<JSON, 'readonly [Symbol.toStringTag]: string'> {};
+interface IDependencyJson extends Omit<JSON, 'readonly [Symbol.toStringTag]: string'> {};
 export class CacheHandler implements ICacheHandler {
-    constructor(private _json?:IDepencyJson){}
+    constructor(private _json?: IDependencyJson){}
     private stringify = this?._json?.stringify ? this._json.stringify : JSON.stringify;
     private parse = this?._json?.parse ? this._json?.parse : JSON.parse;
 

@@ -1,5 +1,5 @@
-import { ConvertionOptions } from "./ConverterOptions";
-import type { IBlobStringWritter, IFileInfo } from "../models/interfaces/IFileInfo";
+import { ConversionOptions } from "./ConverterOptions";
+import type { IBlobStringWritter as IBlobStringWriter, IFileInfo } from "../models/interfaces/IFileInfo";
 import type { IMimeConverter } from "../models/interfaces/IMimeConverter";
 export declare class FileUtils {
     mime?: IMimeConverter;
@@ -35,7 +35,14 @@ export declare class FileUtils {
      * @param blob - Any Blob object, such as `File` and other inherited objects from this interface.
      * @returns A promise of the base64 string.
      */
-    static blobToBase64: (blob: Blob, config?: IBlobStringWritter) => Promise<string>;
+    static blobToBase64: (blob: Blob, config?: IBlobStringWriter) => Promise<string>;
     private checkIfHasMime;
-    converBase64To(base64: string, fileName?: string, type?: string): ConvertionOptions;
+    /**
+     * Convert's a base 64 string to some of the possible return values from `ConversionOptions` class.
+     * @returns
+     * ```ts
+     * new ConversionOptions()
+     * ```
+     * */
+    convertBase64To(base64: string, fileName?: string, type?: string): ConversionOptions;
 }

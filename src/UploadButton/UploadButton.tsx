@@ -10,6 +10,11 @@ export interface IUploadButton {
     styles?: IButtonStyles;
 }
 
+/**
+ * It's the same as `<PrimaryButton/>`  from  `@fluentui/react` but it can be used as an file upload button.
+ * 
+ * The `onChange` event is called when the user selects one or more files.
+ */
 export const UploadButton = memo(({ accepts, onChange, buttonLabel, buttonIconName, styles }: IUploadButton) => {
     const hiddenInput = useRef<HTMLInputElement>(null);
     const handleClick = (_: any) => {

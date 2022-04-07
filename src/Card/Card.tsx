@@ -3,6 +3,12 @@ import { PrimaryButton } from '@fluentui/react/lib/Button';
 import { IInfoCardProps } from '../models/interfaces/IInfoCardProps';
 import { CSSProperties } from 'react';
 
+/**
+ * A card component that can be used in `GridView` automatically if `renderAs` is set to `card`.
+ * 
+ * @param props - IInfoCardProps
+ * @returns JSX.Element
+ */
 const InfoCard = React.memo((props: IInfoCardProps) => {
     const styles: Record<string, CSSProperties> = {
         card: {

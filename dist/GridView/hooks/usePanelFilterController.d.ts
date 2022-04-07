@@ -26,7 +26,7 @@ export declare function usePanelFilterController(): {
             name: string;
             key: string | number;
             text: string;
-            data?: import("../../models/interfaces/IGridView").IRow;
+            data?: import("../../models").IRow<import("../../models").BaseType>;
             selected?: boolean;
             isDateComponent?: boolean;
         }[];
@@ -40,5 +40,6 @@ export declare function usePanelFilterController(): {
         PrimaryButton: import("react").LazyExoticComponent<typeof import("@fluentui/react/lib/Button").PrimaryButton>;
         DefaultButton: import("react").LazyExoticComponent<typeof import("@fluentui/react/lib/Button").DefaultButton>;
         TagPicker: import("react").LazyExoticComponent<import("react").FunctionComponent<import("@fluentui/react/lib/Pickers").ITagPickerProps>>;
+        Label: import("react").LazyExoticComponent<import("react").FunctionComponent<import("@fluentui/react/lib/Label").ILabelProps>>;
     };
 };

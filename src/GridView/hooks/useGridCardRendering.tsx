@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { useEffect, Dispatch, SetStateAction, useMemo, lazy } from 'react';
 import { Utils } from '../../helpers/Utils';
-import { IRow, ICardProps } from '../../models/interfaces/IGridView';
-import { IInfoCardProps } from '../../models/interfaces/IInfoCardProps';
+import { IRow } from '../../models/interfaces/IGridView';
+import { IInfoCardProps, ICardProps } from '../../models/interfaces/IInfoCardProps';
 
 interface IGridCardHandler {
     renderAs: 'card' | 'list';

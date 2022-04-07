@@ -7,13 +7,14 @@ import type { IPersonaProps } from '@fluentui/react/lib/Persona';
 
 export function usePanelFilterController() {
     const { isOpen, onClose, availableFilters, panelTitle, onCancel, onApply, actualFilteredValues, setActualFilteredValues, onOpen } = useContext(FilterPanelContext);
-    const [FluentPanel, Dropdown, PrimaryButton, DefaultButton, TagPicker] = useMemo(() => {
+    const [FluentPanel, Dropdown, PrimaryButton, DefaultButton, TagPicker, Label] = useMemo(() => {
         const Panel = lazy(() => import('@fluentui/react/lib/Panel').then(({ Panel }) => ({ default: Panel })));
         const DropDown = lazy(() => import('@fluentui/react/lib/Dropdown').then(({ Dropdown }) => ({ default: Dropdown })));
         const PrimaryButton = lazy(() => import('@fluentui/react/lib/Button').then(({ PrimaryButton }) => ({ default: PrimaryButton })));
         const DefaultButton = lazy(() => import('@fluentui/react/lib/Button').then(({ DefaultButton }) => ({ default: DefaultButton })));
         const TagPicker = lazy(() => import('@fluentui/react/lib/Pickers').then(({ TagPicker }) => ({ default: TagPicker })));
-        return [Panel, DropDown, PrimaryButton, DefaultButton, TagPicker];
+        const Label = lazy(() => import('@fluentui/react/lib/Label').then(({ Label }) => ({ default: Label })));
+        return [Panel, DropDown, PrimaryButton, DefaultButton, TagPicker, Label];
     }, []);
     const lastAddedTag = useRef<FilterOption>(null);
 
@@ -194,7 +195,8 @@ export function usePanelFilterController() {
             Dropdown,
             PrimaryButton,
             DefaultButton,
-            TagPicker
+            TagPicker,
+            Label
         }
     }
 }

@@ -6,7 +6,7 @@ import {usePanelFilterController} from './hooks/usePanelFilterController';
 function PanelFilter() {
     const {JSX, state, handlers} = usePanelFilterController();
     const {actualFilteredValues, panelTitle, availableFilters, isOpen} = state;
-    const {FluentPanel, PrimaryButton, Dropdown, TagPicker, DefaultButton} = JSX;
+    const {FluentPanel, PrimaryButton, Dropdown, TagPicker, DefaultButton, Label} = JSX;
     const { onClose, onCancel, getDefaultDropdownSelectedKeys, onAddOrRemoveToMap, 
             getDefaultSelectedTag, getDefaultSelectedSlider } = handlers;
 
@@ -39,7 +39,7 @@ function PanelFilter() {
                             onChange={(_, opt) => onAddOrRemoveToMap(filter?.key, opt)} /> :
                         (filter.renderAs === 'SearchBox') ?
                         <div key={filter?.key + "-" + filter?.name + "-" + idx}>
-                        <label>{filter?.name}</label>
+                        <Label>{filter?.name}</Label>
                         <TagPicker 
                             key={filter?.key + "-" + idx}
                             getTextFromItem={item => item?.name}
@@ -49,7 +49,11 @@ function PanelFilter() {
                                 noResultsFoundText: "Nenhum resultado encontrado",
                                 loadingText: "Carregando..."
                             }}
-                            pickerCalloutProps={{doNotLayer: true}}
+                            pickerCalloutProps={{
+                                doNotLayer: true,
+                                style: {overflowY: 'auto'},
+                                styles: {root: {position: 'relative'}}
+                            }}
                             onChange={handlers.onChangeTags(options[idx])}
                             onItemSelected={handlers.onTagSelected(filter?.key)}
                             onResolveSuggestions={handlers.onResolveTagSuggestion(options[idx])} /></div> :
@@ -60,11 +64,15 @@ function PanelFilter() {
                             key={filter?.key + "-" + idx}
                             label={filter?.name}/> :
                         (filter?.renderAs === 'PeoplePicker') ?
-                        <PeoplePicker 
-                            label={filter?.name} key={filter?.key + "-" + idx}
+                        <div>
+                        <Label key={filter?.key + "-" + filter?.name + "-" + idx}>{filter?.name}</Label>
+                        <PeoplePicker
+                            label={''}
+                            key={filter?.key + "-" + idx}
                             people={options[idx]}
                             defaultSelectedItems={handlers.getDefaultSelectedPeople(filter?.key)}
-                            onChangePeople={handlers.onChangePeople(filter?.key)} /> : null
+                            onChangePeople={handlers.onChangePeople(filter?.key)} /> 
+                        </div> : null
                         }
                     </React.Suspense>);
                 })}

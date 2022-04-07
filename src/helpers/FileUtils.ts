@@ -1,5 +1,5 @@
-import { ConvertionOptions } from "./ConverterOptions";
-import type { IBlobStringWritter, IFileInfo } from "../models/interfaces/IFileInfo";
+import { ConversionOptions } from "./ConverterOptions";
+import type { IBlobStringWritter as IBlobStringWriter, IFileInfo } from "../models/interfaces/IFileInfo";
 import type { IMimeConverter } from "../models/interfaces/IMimeConverter";
 
 export class FileUtils {
@@ -65,7 +65,7 @@ export class FileUtils {
     }
   }
 
-  private fileNameValidator(fileName: string, ext: string) {
+  private fileNameValidator(fileName: string, ext: string): string {
     if (!ext.startsWith('.'))
       ext = "." + ext;
     if (fileName) {
@@ -80,7 +80,7 @@ export class FileUtils {
    * @param blob - Any Blob object, such as `File` and other inherited objects from this interface.
    * @returns A promise of the base64 string.
    */
-   static blobToBase64 = async (blob: Blob, config?: IBlobStringWritter): Promise<string> => {
+   static blobToBase64 = async (blob: Blob, config?: IBlobStringWriter): Promise<string> => {
     const readAs = config?.readAs ?? 'DataURL';
     try {
         return new Promise((resolve, reject) => {
@@ -116,7 +116,14 @@ export class FileUtils {
     return type;
   }
 
-  public converBase64To(base64: string, fileName?: string, type?: string): ConvertionOptions {
+  /**
+   * Convert's a base 64 string to some of the possible return values from `ConversionOptions` class. 
+   * @returns
+   * ```ts 
+   * new ConversionOptions()
+   * ```
+   * */
+  public convertBase64To(base64: string, fileName?: string, type?: string): ConversionOptions {
     type = type || this.checkIfHasMime(fileName);
     let sliceSize = 512;
     let byteCharacters = atob(decodeURIComponent(base64));
@@ -131,6 +138,6 @@ export class FileUtils {
       byteArrays.push(byteArray);
     }
     const blob = type ? new Blob(byteArrays, { type }) : new Blob(byteArrays);
-    return new ConvertionOptions(blob, byteArrays, type, this?.mime ?? undefined, fileName);
+    return new ConversionOptions(blob, byteArrays, type, this?.mime ?? undefined, fileName);
   }
 }

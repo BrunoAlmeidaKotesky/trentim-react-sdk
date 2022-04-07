@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Dispatch, SetStateAction } from 'react';
-import { IRow, ICardProps } from '../../models/interfaces/IGridView';
+import { IRow } from '../../models/interfaces/IGridView';
+import { ICardProps } from '../../models/interfaces/IInfoCardProps';
 interface IGridCardHandler {
     renderAs: 'card' | 'list';
     enableGrouping: boolean;
