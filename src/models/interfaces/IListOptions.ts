@@ -1,8 +1,21 @@
 import type { IButtonProps } from "@fluentui/react/lib/Button";
+import type {ReactNode} from "react";
 import type { IconClickCaller } from "../../helpers/enums";
 import type { IRow } from "./IGridView";
 
-type CustomButtons = { props: IButtonProps, position?: number, className?: string, text: string }[];
+type ButtonTypes = 'PrimaryButton' | 'DefaultButton' | 'CustomButton';
+interface ICustomButtons {
+    /**Default `fluent-ui` Button props. */
+    props: IButtonProps,
+    /**The flex position of your button. */
+    position?: number, 
+    /**Custom class name. */
+    className?: string,
+    /**Text to display on the button. */
+    text: string;
+    renderAs?:  ButtonTypes;
+    onRenderCustombutton?: (props?: IButtonProps) => ReactNode;
+};
 export interface IListOptionsProps {
     /**
      * If set to `true`, the filter panel will be displayed, and all the automatic filters logic will be applied to the list.
@@ -29,7 +42,7 @@ export interface IListOptionsProps {
     /**Use this property if you want to add more custom buttons on the header. The button will be the `@fluent-ui` `PrimaryButton`, but it's props can be changed
      * on the `props`.
     * @defaultvalue `[]`*/
-    customButtons?: CustomButtons;
+    customButtons?: ICustomButtons[];
     /**The order of the default buttons. */
     defaultButtonsOrder?: {
         group: number;

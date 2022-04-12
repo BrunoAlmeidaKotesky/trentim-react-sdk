@@ -28,8 +28,17 @@ export const ListOptions = () => {
         {enableCardView && 
         <DefaultButton 
             onClick={_ => setRenderAs()} styles={{label: {fontSize: 14}, root: {order: defaultButtonsOrder?.card}}} iconProps={{iconName: 'GridViewMedium'}} />}
-        {customButtons?.length > 0 && customButtons?.map((b, idx) => 
-            <PrimaryButton key={b?.text + "_" + idx} className={b?.className} styles={{label: {fontSize: 14}, root: {order: b?.position ?? 'unset'}}} {...b?.props}>{b?.text}</PrimaryButton>)}
+        {customButtons?.length > 0 && customButtons?.map((b, idx) => {
+            switch (b?.renderAs) {
+                case 'PrimaryButton':
+                    return (<PrimaryButton key={b?.text + "_" + idx} className={b?.className} styles={{label: {fontSize: 14}, root: {order: b?.position ?? 'unset'}}} {...b?.props}>{b?.text}</PrimaryButton>);
+                case 'DefaultButton': 
+                    return (<DefaultButton key={b?.text + "_" + idx} className={b?.className} styles={{label: {fontSize: 14}, root: {order: b?.position ?? 'unset'}}} {...b?.props}>{b?.text}</DefaultButton>);
+                case 'CustomButton': 
+                    return b?.onRenderCustombutton(b?.props) ?? null;
+                default: return (<PrimaryButton key={b?.text + "_" + idx} className={b?.className} styles={{label: {fontSize: 14}, root: {order: b?.position ?? 'unset'}}} {...b?.props}>{b?.text}</PrimaryButton>);
+            }
+        })}
         {(enableSearch && searchKeys) && 
         <TextField
             placeholder={searchBoxPlaceholder}
