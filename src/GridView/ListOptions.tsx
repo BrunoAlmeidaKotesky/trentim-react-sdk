@@ -7,7 +7,7 @@ import { IconClickCaller } from '../helpers/enums';
 export const ListOptions = () => {
     const { customButtons, enableFilter, enableSearch, searchKeys, onSearchItemChange, 
             setIsFilterPanelOpen, defaultButtonsOrder, searchBoxPlaceholder, enableCardView, 
-            setRenderAs, enableGrouping, onClickSearchIcon} = React.useContext(ListOptionsContext);
+            setRenderAs, enableGrouping, onClickSearchIcon, onFilterIconClick, onGroupIconClick, onSearchBoxClick} = React.useContext(ListOptionsContext);
     const {onOpen} = React.useContext(GroupPanelContext);
 
     const defaultStyles: Record<string, CSSProperties> = {
@@ -24,7 +24,11 @@ export const ListOptions = () => {
     <div data-class-name="grid-view-header-container" style={defaultStyles.container}>
         {enableGrouping &&
         <DefaultButton 
-            onClick={ _ => onOpen()} styles={{label: {fontSize: 14}, root: {order: defaultButtonsOrder?.group}}} iconProps={{iconName: 'GroupList'}} />}
+            onClick={_ => {
+                if(!!onGroupIconClick)
+                onGroupIconClick();
+                onOpen();
+            }} styles={{label: {fontSize: 14}, root: {order: defaultButtonsOrder?.group}}} iconProps={{iconName: 'GroupList'}} />}
         {enableCardView && 
         <DefaultButton 
             onClick={_ => setRenderAs()} styles={{label: {fontSize: 14}, root: {order: defaultButtonsOrder?.card}}} iconProps={{iconName: 'GridViewMedium'}} />}
@@ -35,7 +39,7 @@ export const ListOptions = () => {
                 case 'DefaultButton': 
                     return (<DefaultButton key={b?.text + "_" + idx} className={b?.className} styles={{label: {fontSize: 14}, root: {order: b?.position ?? 'unset'}}} {...b?.props}>{b?.text}</DefaultButton>);
                 case 'CustomButton': 
-                    return b?.onRenderCustombutton(b?.props) ?? null;
+                    return b?.onRenderCustomButton(b?.props) ?? null;
                 default: return (<PrimaryButton key={b?.text + "_" + idx} className={b?.className} styles={{label: {fontSize: 14}, root: {order: b?.position ?? 'unset'}}} {...b?.props}>{b?.text}</PrimaryButton>);
             }
         })}
@@ -47,6 +51,7 @@ export const ListOptions = () => {
                     onClickSearchIcon(IconClickCaller.ENTER, e?.currentTarget?.value, searchKeys);
                 }
             }}
+            onFocus={onSearchBoxClick}
             onBlur={e => onSearchItemChange(e.target.value, searchKeys)} 
             iconProps={{
                 iconName: 'Search',
@@ -60,6 +65,11 @@ export const ListOptions = () => {
             styles={{root: {width: 320, order: defaultButtonsOrder?.search}, icon: {color: '[theme: themePrimary, default: #0078D4]'}}} />}
         {enableFilter && 
         <DefaultButton 
-            onClick={_ => setIsFilterPanelOpen(true)} styles={{label: {fontSize: 14}, root: {order: defaultButtonsOrder?.filter}}} iconProps={{iconName: 'Filter'}} />}
+            onClick={_ => {
+                if(!!onFilterIconClick) 
+                    onFilterIconClick();
+                setIsFilterPanelOpen(true);
+            }} 
+            styles={{label: {fontSize: 14}, root: {order: defaultButtonsOrder?.filter}}} iconProps={{iconName: 'Filter'}} />}
     </div>);
 }

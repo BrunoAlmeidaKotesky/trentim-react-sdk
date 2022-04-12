@@ -45,7 +45,7 @@ export function useGridCardRendering({
 
     const CardsList = useMemo(() => {
         if (!Card || renderAs === 'list') return null;
-
+        
         return actualRows?.map(row => {
             if (!!onRenderCustomComponent)
                 return onRenderCustomComponent(row);

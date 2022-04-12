@@ -41,7 +41,7 @@ export interface IInfoCardProps {
 }
 
 type IGridCardRightCol = Pick<IRightColumn, 'containerStyle'> & {keys: {title: string, style?: CSSProperties, dateConversionOptions?: IDateConversionOptions}[]};
-export type ICardProps = Omit<IInfoCardProps, 'cardTitle' | 'cardSubtitle' | 'cardRightColInformation' | ''> & {
+export type ICardProps = Omit<IInfoCardProps, 'cardTitle' | 'cardSubtitle' | 'cardRightColInformation'> & {
     /**The style to be applied on the root container of the card(s). */
     containerStyle?: CSSProperties;
     /**A key from your `IRow` to be used on the title. */

@@ -1,7 +1,8 @@
 import type { IButtonProps } from "@fluentui/react/lib/Button";
 import type {ReactNode} from "react";
 import type { IconClickCaller } from "../../helpers/enums";
-import type { IRow } from "./IGridView";
+import type { IGridClickActions, IRow } from "./IGridView";
+import type { ColumnKey } from './ICommon';
 
 type ButtonTypes = 'PrimaryButton' | 'DefaultButton' | 'CustomButton';
 interface ICustomButtons {
@@ -14,9 +15,9 @@ interface ICustomButtons {
     /**Text to display on the button. */
     text: string;
     renderAs?:  ButtonTypes;
-    onRenderCustombutton?: (props?: IButtonProps) => ReactNode;
+    onRenderCustomButton?: (props?: IButtonProps) => ReactNode;
 };
-export interface IListOptionsProps {
+export interface IListOptionsProps<T> extends Partial<IGridClickActions> {
     /**
      * If set to `true`, the filter panel will be displayed, and all the automatic filters logic will be applied to the list.
      * @defaultvalue `true`
@@ -31,7 +32,7 @@ export interface IListOptionsProps {
     /**If set to `true`, the grouping panel will be displayed, and all the automatic grouping logic will be applied to the list.*/
     enableGrouping?: boolean;
     /**If `enableSearch` is set to `true`, you need to provide a primitive array of keys from your `IRow[]` to be filtered. */
-    searchKeys?: string[];
+    searchKeys?: Array<ColumnKey<T>>;
     /**A placeholder text to the search box. */
     searchBoxPlaceholder?: string;
     onSearchItemChange?: (searchText: string, keys: Array<keyof IRow>) => void;
@@ -52,4 +53,5 @@ export interface IListOptionsProps {
     }
 }
 
-export type IConfigurableHeader = Omit<IListOptionsProps, 'onSearchItemChange' | 'onClickSearchIcon' | 'setIsFilterPanelOpen' | 'setRenderAs' | 'setGroupBy'| 'setIsGroupPanelOpen'>;
+export type IConfigurableHeader<T = any> = Omit<IListOptionsProps<T>, 
+    'onSearchItemChange' | 'onClickSearchIcon' | 'setIsFilterPanelOpen' | 'setRenderAs' | 'setGroupBy'| 'setIsGroupPanelOpen' | 'onFilterIconClick' | 'onSearchBoxClick' | 'onGroupIconClick' >;

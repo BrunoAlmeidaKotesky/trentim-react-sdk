@@ -2,8 +2,9 @@ import { createContext } from "react";
 import type { IListOptionsProps } from "../models/interfaces/IListOptions";
 import type { IPanelFilterProps } from '../models/interfaces/IPanelFilter';
 import type { IGroupPanel } from '../models/interfaces/IGroupPanel';
+import type { IRow } from "../models/interfaces/IGridView";
 
-export const ListOptionsContext = createContext<IListOptionsProps>({ 
+export const ListOptionsContext = createContext<IListOptionsProps<IRow>>({ 
     enableFilter: true, 
     enableSearch: true,
     enableCardView: true,

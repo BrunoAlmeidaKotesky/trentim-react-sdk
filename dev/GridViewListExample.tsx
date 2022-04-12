@@ -19,6 +19,9 @@ export function GridViewListExample() {
             }}
             styles={{contentContainer: {maxHeight: 500, overflowY: 'auto'}}}
             renderAs="list"
+            onFilterIconClick={() => {console.log("Before Filter")}}
+            onGroupIconClick={() => {console.log("Before Group")}}
+            onSearchBoxClick={() => {console.log("Before Search")}}
             rows={json}
             hiddenFilterKeys={['NumeroPI']}
             onItemClick={(i) => console.log(i.Id)}
@@ -29,7 +32,7 @@ export function GridViewListExample() {
               {key: 'GerenteProjeto.Title', name: 'Gerente do Projeto', fieldName: 'GerenteProjeto.Title', minWidth: 100, maxWidth: 200, isResizable: true, renderFilterAs: 'PeoplePicker'},
               {key: 'DonoProjeto.Title', name: 'Dono do Projeto', fieldName: 'DonoProjeto.Title', minWidth: 100, maxWidth: 200, isResizable: true, renderFilterAs: 'PeoplePicker'},
               {key: 'DataInicio', name: 'Data Início', fieldName: 'DataInicio', minWidth: 100, maxWidth: 200, isResizable: true, dateConversionOptions: {shouldConvertToLocaleString: true}, renderFilterAs: 'DateSlider'},
-              {key: 'Modified', name: 'Modificado', fieldName: 'Modified', minWidth: 100, maxWidth: 200, hideColumn: true}
+              {key: 'GerenteProjeto.Nested.Value.Another.MoreNest', name: 'Modificado', fieldName: 'GerenteProjeto.Nested.Value.Another.MoreNest', minWidth: 100, maxWidth: 200, hideColumn: true}
             ]}/>
         </div>
     )

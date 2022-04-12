@@ -7,7 +7,8 @@ export type FilterComponent = 'Dropdown' | 'SearchBox' | 'DateSlider' | 'PeopleP
 export type KeyAndName = `${string};${string}`;
 
 type ApplyFilterParams = { allRows: IRow[]; setActualRows: Dispatch<SetStateAction<IRow[]>>; setIsFilterPanel: Dispatch<SetStateAction<boolean>>; };
-export type ApplyFilter = ({ allRows, setActualRows, setIsFilterPanel, applyCustomFilter }: ApplyFilterParams & {applyCustomFilter?: ApplyCustomFilter}) => (selectedItems: SelectedItemsMap) => void;
+export type ApplyFilter = ({ allRows, setActualRows, setIsFilterPanel, applyCustomFilter }: 
+    ApplyFilterParams & {applyCustomFilter?: ApplyCustomFilter}) => (selectedItems: SelectedItemsMap) => void;
 
 interface IGroupingParams {
     emptyGroupLabel: string;
@@ -26,10 +27,10 @@ interface IApplyCustomFilterParams extends ApplyFilterParams {
     groupedMaps: Map<string, SelectedItemsMap>;
     /**All the selected items as an `Map`, it can be for example
      * @example 
-     * ```ts
      * Map([['0_User.Title', data], ['1_User.Title', data]])
      * ```
      */
     selectedItems: SelectedItemsMap;
 };
+
 export type ApplyCustomFilter = (params: IApplyCustomFilterParams) => void;

@@ -121,7 +121,7 @@ export function useGridController<T extends BaseType>(props: IGridListProps<T>) 
         })
     }
 
-    const listConfig: IListOptionsProps = {
+    const listConfig: IListOptionsProps<any> = {
         ...props?.headerOptions,
         onSearchItemChange: GridViewFilter.onSearchItemChange({allRows, searchCb, setActualRows}),
         setRenderAs: () => renderAs === 'card' ? setRenderAs('list') : setRenderAs('card'),
@@ -141,7 +141,10 @@ export function useGridController<T extends BaseType>(props: IGridListProps<T>) 
                 searchCb(filteredItems);
                 setActualRows(filteredItems as IRow<T>[]);
             }
-        }
+        },
+        onFilterIconClick: props?.onFilterIconClick,
+        onGroupIconClick: props?.onGroupIconClick,
+        onSearchBoxClick: props?.onSearchBoxClick
     }
 
     return {
