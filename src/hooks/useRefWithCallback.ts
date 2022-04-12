@@ -17,7 +17,7 @@ import { RefObject, useCallback, useRef, useState } from "react";
   ```
  * @returns 
  */
-function useRefWithCallback<T>(initialValue: T): [
+export function useRefWithCallback<T>(initialValue: T): [
     (value: T) => void,
     RefObject<T>,
     boolean
@@ -31,5 +31,3 @@ function useRefWithCallback<T>(initialValue: T): [
 
     return [refCallback, ref, toggleState];
 }
-
-export default useRefWithCallback;

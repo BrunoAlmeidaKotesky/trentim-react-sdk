@@ -16,9 +16,8 @@ import { RefObject } from "react";
   ```
  * @returns
  */
-declare function useRefWithCallback<T>(initialValue: T): [
+export declare function useRefWithCallback<T>(initialValue: T): [
     (value: T) => void,
     RefObject<T>,
     boolean
 ];
-export default useRefWithCallback;

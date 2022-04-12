@@ -1,5 +1,5 @@
 import * as React from 'react';
-import useRefCallback from '../../hooks/useRefWithCallback';
+import {useRefWithCallback} from '../../hooks/useRefWithCallback';
 import { Utils } from '../../helpers/Utils';
 import { useState, useEffect, useMemo } from 'react';
 import { useGridCardRendering } from './useGridCardRendering';
@@ -28,7 +28,7 @@ export function useGridController<T extends BaseType>(props: IGridListProps<T>) 
     const [isGroupPanelOpen, setIsGroupPanel] = useState(false);
     const [fromDate, setFromDate] = useState<Date>(null);
     const [toDate, setToDate] = useState(new Date());
-    const [searchCb, currentSearchBoxItems] = useRefCallback<IRow[]>([]);
+    const [searchCb, currentSearchBoxItems] = useRefWithCallback<IRow[]>([]);
 
     const visibleCols = useMemo(() => cols?.filter(c => !c?.hideColumn), [cols]);
     useEffect(() => { setRenderAs(props?.renderAs); }, [props?.renderAs]);
