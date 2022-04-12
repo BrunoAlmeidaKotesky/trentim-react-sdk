@@ -31,7 +31,6 @@ interface IApplyCustomFilterParams extends ApplyFilterParams {
     groupedMaps: Map<string, SelectedItemsMap>;
     /**All the selected items as an `Map`, it can be for example
      * @example
-     * ```ts
      * Map([['0_User.Title', data], ['1_User.Title', data]])
      * ```
      */

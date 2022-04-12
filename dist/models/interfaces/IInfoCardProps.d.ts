@@ -51,7 +51,7 @@ declare type IGridCardRightCol = Pick<IRightColumn, 'containerStyle'> & {
         dateConversionOptions?: IDateConversionOptions;
     }[];
 };
-export declare type ICardProps = Omit<IInfoCardProps, 'cardTitle' | 'cardSubtitle' | 'cardRightColInformation' | ''> & {
+export declare type ICardProps = Omit<IInfoCardProps, 'cardTitle' | 'cardSubtitle' | 'cardRightColInformation'> & {
     /**The style to be applied on the root container of the card(s). */
     containerStyle?: CSSProperties;
     /**A key from your `IRow` to be used on the title. */

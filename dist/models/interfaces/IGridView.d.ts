@@ -1,17 +1,8 @@
 import type { IColumn, IDetailsListProps } from "@fluentui/react/lib/DetailsList";
 import type { ICardProps } from "./IInfoCardProps";
 import type { IConfigurableHeader } from "./IListOptions";
-import type { IDateConversionOptions } from './ICommon';
+import type { ColumnKey, IDateConversionOptions } from './ICommon';
 import type { ApplyCustomFilter, FilterComponent } from '../types/Common';
-import type { Paths } from '../types/UtilityTypes';
-export interface IFileInfo {
-    key: string;
-    name: string;
-    /**Any Extra value to hold on that object */
-    value?: any;
-    iconUrl: string;
-    fileType: string;
-}
 /**It should represent any object with primitive data types.
  * Please use the `Id` property to uniquely identify the object, it helps to avoid duplicates and correctly apply the filter.
 */
@@ -22,16 +13,15 @@ export declare type BaseType = {
 export declare type IRow<T extends {} = BaseType> = T & BaseType & {
     [key: string]: any;
 };
-declare type DeepKey<T> = Paths<T>;
 export declare type TColumn<T> = IColumn & {
     /**If the desired value is from an nested object, provide the value with dots.
      * @example "file.name" will get the value from the file object.
     */
-    key: keyof T | DeepKey<T>;
+    key: ColumnKey<T>;
     /**If the desired value is from an nested object, provide the value with dots.
      * @example "file.name" will get the value from the file object.
     */
-    fieldName?: keyof T | DeepKey<T>;
+    fieldName?: ColumnKey<T>;
     dateConversionOptions?: IDateConversionOptions;
     /**How should the filter on the filter panel be rendered */
     renderFilterAs?: FilterComponent;
@@ -46,7 +36,7 @@ export interface IGridListProps<T extends any> extends IGridHandler<T>, IGridVie
     /**if `renderAs` is set to `card`, you need to provide the card props. */
     cardProps?: ICardProps;
     /**Configure the header behavior, such as to enable filter and other functionalities. */
-    headerOptions: IConfigurableHeader;
+    headerOptions: IConfigurableHeader<T>;
     /**If the grid will be rendered as a list or as a collection of `<Card />` component */
     renderAs: 'list' | 'card';
     /**The column model to be applied to the list.
@@ -76,14 +66,27 @@ export interface IGridListProps<T extends any> extends IGridHandler<T>, IGridVie
     /**The label to be displayed on the top of the group Panel. */
     groupPanelTitle?: string;
     /**A list of keys from `IRow` to not be displayed on the top of the Panel when filtering.*/
-    hiddenFilterKeys?: string[] | Array<keyof IRow<T>>;
+    hiddenFilterKeys?: string[] | Array<ColumnKey<T>>;
     /**A list of keys from `IRow` to not be displayed on the top of the Panel when grouping.*/
-    hiddenGroupKeys?: string[] | Array<keyof IRow<T>>;
+    hiddenGroupKeys?: string[] | Array<ColumnKey<T>>;
     /** If set, this will be used to display when a group does not have any values to be grouped by. */
     emptyGroupLabel?: string;
 }
+export interface IGridClickActions {
+    /**A callback function that will be called when the filter button is clicked.
+    *
+    *This is **different** from `applyCustomFilter` property, which is a way to provide a custom filter algorithm when confirming.
+    *
+    * Both the default algorithm or the custom will be executed **after** this callback.
+    */
+    onFilterIconClick?: () => void;
+    /**A callback function that will be called when the search box is focused, it **will not** overwrite the default search behavior. */
+    onSearchBoxClick?: (e?: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement, Element>) => void;
+    /**A callback function that will be called when the grouping button is clicked, it **will not** overwrite the default grouping behavior.*/
+    onGroupIconClick?: () => void;
+}
 /**Represents all the functions that can be used. */
-interface IGridHandler<T> {
+interface IGridHandler<T> extends IGridClickActions {
     /**A custom event to be fired when a row is clicked or the card action button. */
     onItemClick?: (row: IRow<T>) => void;
     /**The same event from `IDetailsListProps` from `@fluent-ui` with generic types.

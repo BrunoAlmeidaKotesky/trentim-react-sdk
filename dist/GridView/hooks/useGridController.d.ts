@@ -13,7 +13,7 @@ export declare function useGridController<T extends BaseType>(props: IGridListPr
         groupPanelConfig: IGroupPanel;
         isFilterPanelOpen: boolean;
         isGroupPanelOpen: boolean;
-        listConfig: IListOptionsProps;
+        listConfig: IListOptionsProps<any>;
         shouldRenderCard: boolean;
         groups: IGroup[];
     };
