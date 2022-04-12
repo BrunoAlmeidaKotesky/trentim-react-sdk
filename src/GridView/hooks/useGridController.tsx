@@ -93,7 +93,13 @@ export function useGridController<T extends BaseType>(props: IGridListProps<T>) 
 
     const filterPanelConfig: IPanelFilterProps = {
         isOpen: isFilterPanelOpen,
-        onApply: GridViewFilter.onApplyFilter({allRows, setActualRows, setIsFilterPanel, applyCustomFilter: props?.applyCustomFilter}),
+        onApply: GridViewFilter.onApplyFilter({
+            allRows, 
+            setActualRows, 
+            setIsFilterPanel, 
+            applyCustomFilter: props?.applyCustomFilter, 
+            onItemsFiltered: props?.onItemsFiltered
+        }),
         onCancel: () => { setIsFilterPanel(false); },
         onClose: () =>  { setIsFilterPanel(false); },
         availableFilters: memoizedAvailableFilter,
@@ -118,12 +124,13 @@ export function useGridController<T extends BaseType>(props: IGridListProps<T>) 
             emptyGroupLabel: props?.emptyGroupLabel,
             setIsGroupPanel,
             setGroups,
+            onItemsGrouped: props?.onItemsGrouped
         })
     }
 
     const listConfig: IListOptionsProps<any> = {
         ...props?.headerOptions,
-        onSearchItemChange: GridViewFilter.onSearchItemChange({allRows, searchCb, setActualRows}),
+        onSearchItemChange: GridViewFilter.onSearchItemChange({allRows, searchCb, setActualRows, onSearchBoxItemsFiltered: props?.onSearchBoxItemsFiltered}),
         setRenderAs: () => renderAs === 'card' ? setRenderAs('list') : setRenderAs('card'),
         setIsFilterPanelOpen: (value) => { setIsFilterPanel(value); },
         setIsGroupPanelOpen: (value) => { setIsGroupPanel(value); },
@@ -137,7 +144,7 @@ export function useGridController<T extends BaseType>(props: IGridListProps<T>) 
             if(callerType === IconClickCaller.ENTER) {
                 if(!text)
                     return setActualRows(allRows);
-                const filteredItems = GridViewFilter.onSearchItemChange({allRows, searchCb, setActualRows})(text, key);
+                const filteredItems = GridViewFilter.onSearchItemChange({allRows, searchCb, setActualRows, onSearchBoxItemsFiltered: props?.onSearchBoxItemsFiltered})(text, key);
                 searchCb(filteredItems);
                 setActualRows(filteredItems as IRow<T>[]);
             }
@@ -159,9 +166,7 @@ export function useGridController<T extends BaseType>(props: IGridListProps<T>) 
             shouldRenderCard,
             groups
         },
-        handlers: {
-            onItemClick
-        },
+        handlers: { onItemClick },
         JSX: { CardsList }
     }
 }

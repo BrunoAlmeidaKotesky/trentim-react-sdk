@@ -18,7 +18,7 @@ export function GridViewCardExample() {
               cardTitleKey: 'Title',
               cardSubtitleKey: 'Status',
               rightColumn: {
-                keys: [{title: 'NumeroPI'}, {title: 'GerenteProjeto.Title'}, {title: 'DataInicio', dateConversionOptions: {
+                 keys: [{title: 'NumeroPI'}, {title: 'GerenteProjeto.Title'}, {title: 'DataInicio', dateConversionOptions: {
                   shouldConvertToLocaleString: true
                 }}]
               },

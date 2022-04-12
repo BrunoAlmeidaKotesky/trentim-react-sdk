@@ -6,7 +6,7 @@ import type { FilterOption, IAvailableFilters } from '../../models/interfaces/IP
 
 export class GridViewFilter {
 
-    static onApplyFilter: ApplyFilter = ({allRows, setActualRows, setIsFilterPanel, applyCustomFilter}) => (selectedItems) => {
+    static onApplyFilter: ApplyFilter<IRow<any>> = ({allRows, setActualRows, setIsFilterPanel, applyCustomFilter, onItemsFiltered}) => (selectedItems) => {
         if(!!applyCustomFilter) {
             const groupedMaps = GridViewMapper.groupMaps(selectedItems);
             return applyCustomFilter({allRows, setActualRows, setIsFilterPanel, selectedItems, groupedMaps});
@@ -58,6 +58,8 @@ export class GridViewFilter {
         filteredRows = filteredRows.filter((obj, pos, arr) => arr.map(mapObj => mapObj?.Id).indexOf(obj?.Id) === pos);
         setActualRows(filteredRows)
         setIsFilterPanel(false);
+        if(!!onItemsFiltered) 
+            onItemsFiltered(filteredRows);
     }
 
     /**Generate the components of each available column and it's unique values */
@@ -93,7 +95,7 @@ export class GridViewFilter {
 
     static filterFromColumns = (hiddenKeys: string[], columns: TColumn<any>[]) => columns.filter(c => (!hiddenKeys?.includes(c?.key)));
 
-    static onSearchItemChange: SearchItem = ({allRows, searchCb, setActualRows}) => (searchText, keys) => {
+    static onSearchItemChange: SearchItem = ({allRows, searchCb, setActualRows, onSearchBoxItemsFiltered}) => (searchText, keys) => {
         const allFilteredRows: IRow[] = []; 
         if(!searchText) {
             setActualRows(allRows);
@@ -108,6 +110,8 @@ export class GridViewFilter {
             allFilteredRows.push(...filteredValues);
         }
         searchCb(allFilteredRows);
+        if(!!onSearchBoxItemsFiltered)
+            onSearchBoxItemsFiltered(allFilteredRows);
         return allFilteredRows;
     }
 }

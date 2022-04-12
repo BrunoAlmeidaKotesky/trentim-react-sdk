@@ -97,7 +97,7 @@ export interface IGridClickActions {
 }
 
 /**Represents all the functions that can be used. */
-interface IGridHandler<T> extends IGridClickActions {
+export interface IGridHandler<T> extends IGridClickActions {
     /**A custom event to be fired when a row is clicked or the card action button. */
     onItemClick?: (row: IRow<T>) => void;
     /**The same event from `IDetailsListProps` from `@fluent-ui` with generic types.
@@ -116,7 +116,16 @@ interface IGridHandler<T> extends IGridClickActions {
      * This callback has an `IApplyCustomFilterParams` as it's parameter, which is the data that are **necessary** if want to apply the filter.
      * @returns `void`
     */
-    applyCustomFilter?: ApplyCustomFilter;
+    applyCustomFilter?: ApplyCustomFilter<T>;
+    /**A callback that will be called after the items were filtered on the panel.
+     * 
+     * @note It will not work if using `applyCustomFilter`, however you can use the same logic of this callback on the custom filter.
+    */
+    onItemsFiltered?: (filtered?: IRow<T>[]) => void;
+    /**A callback that will be called after the items were grouped on the panel. */
+    onItemsGrouped?: () => void;
+    /**A callback that will be called after the items were filtered from the search box. */
+    onSearchBoxItemsFiltered?: (filtered?: IRow<T>[]) => void;
 }
 
 interface IGridViewStyles {

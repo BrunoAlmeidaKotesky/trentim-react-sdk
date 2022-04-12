@@ -4,7 +4,7 @@ import type { ApplyGrouping } from "../../models/types/Common";
 
 export class GridViewGrouping {
     
-    static onApplyGrouping: ApplyGrouping = ({actualRows, cols, setGroups, setIsGroupPanel, emptyGroupLabel}) => (keyAndName) => {
+    static onApplyGrouping: ApplyGrouping = ({actualRows, cols, setGroups, setIsGroupPanel, emptyGroupLabel, onItemsGrouped}) => (keyAndName) => {
         const defaultEmptyLabel = emptyGroupLabel ?? 'Sem itens definidos';
         if (!keyAndName || keyAndName?.split(';')?.[0] === '@NONE') {
             setIsGroupPanel(false);
@@ -48,5 +48,7 @@ export class GridViewGrouping {
             }, []);
         setGroups(groups);
         setIsGroupPanel(false);
+        if(!!onItemsGrouped) 
+            onItemsGrouped();
     }
 }

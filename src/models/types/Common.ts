@@ -6,9 +6,11 @@ import type { IGroup } from "@fluentui/react/lib/DetailsList";
 export type FilterComponent = 'Dropdown' | 'SearchBox' | 'DateSlider' | 'PeoplePicker';
 export type KeyAndName = `${string};${string}`;
 
-type ApplyFilterParams = { allRows: IRow[]; setActualRows: Dispatch<SetStateAction<IRow[]>>; setIsFilterPanel: Dispatch<SetStateAction<boolean>>; };
-export type ApplyFilter = ({ allRows, setActualRows, setIsFilterPanel, applyCustomFilter }: 
-    ApplyFilterParams & {applyCustomFilter?: ApplyCustomFilter}) => (selectedItems: SelectedItemsMap) => void;
+type ApplyFilterParams<T> = { allRows: IRow<T>[]; setActualRows: Dispatch<SetStateAction<IRow[]>>; setIsFilterPanel: Dispatch<SetStateAction<boolean>>; };
+type OnItemsFiltered<T> = (filtered?: IRow<T>[]) => void;
+
+type CustomFilterParams<T> = {applyCustomFilter?: ApplyCustomFilter<T>, onItemsFiltered?: OnItemsFiltered<T>};
+export type ApplyFilter<T> = (params: ApplyFilterParams<T> & CustomFilterParams<T>) => (selectedItems: SelectedItemsMap) => void;
 
 interface IGroupingParams {
     emptyGroupLabel: string;
@@ -16,13 +18,19 @@ interface IGroupingParams {
     cols: TColumn<any>[];
     setGroups: Dispatch<SetStateAction<IGroup[]>>;
     setIsGroupPanel: Dispatch<SetStateAction<boolean>>;
+    onItemsGrouped: () => void;
 }
-export type ApplyGrouping = ({ actualRows, cols, setGroups, setIsGroupPanel, emptyGroupLabel }: IGroupingParams) => (keyAndName: KeyAndName) => void;
+export type ApplyGrouping = (paramns: IGroupingParams) => (keyAndName: KeyAndName) => void;
 
-type ISearchParams = { allRows: IRow[], setActualRows: Dispatch<SetStateAction<IRow[]>>, searchCb: (value: IRow[]) => void };
-export type SearchItem = ({allRows, searchCb, setActualRows}: ISearchParams) => (searchText: string, keys: (keyof IRow)[]) => IRow[];
+interface ISearchParams { 
+    allRows: IRow[];
+    setActualRows: Dispatch<SetStateAction<IRow[]>>;
+    searchCb: (value: IRow[]) => void;
+    onSearchBoxItemsFiltered: (filtered?: IRow[]) => void;
+}
+export type SearchItem = (params: ISearchParams) => (searchText: string, keys: (keyof IRow)[]) => IRow[];
 
-interface IApplyCustomFilterParams extends ApplyFilterParams {
+interface IApplyCustomFilterParams<T> extends ApplyFilterParams<T> {
     /**The selected items `Map`, but already grouped in a collection of Maps, without the `index_` from the map key. */
     groupedMaps: Map<string, SelectedItemsMap>;
     /**All the selected items as an `Map`, it can be for example
@@ -33,4 +41,4 @@ interface IApplyCustomFilterParams extends ApplyFilterParams {
     selectedItems: SelectedItemsMap;
 };
 
-export type ApplyCustomFilter = (params: IApplyCustomFilterParams) => void;
+export type ApplyCustomFilter<T> = (params: IApplyCustomFilterParams<T>) => void;
