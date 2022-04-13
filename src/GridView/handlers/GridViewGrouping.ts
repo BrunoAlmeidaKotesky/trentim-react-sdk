@@ -9,6 +9,8 @@ export class GridViewGrouping {
         const selectedKey = keyAndName?.split(';')?.[0];
         if (!keyAndName || selectedKey === '@NONE') {
             setIsGroupPanel(false);
+            if(!!onItemsGrouped) 
+                onItemsGrouped({selectedKey, setGroups});
             return setGroups(undefined);
         }
         const groups: IGroup[] = [...actualRows]
