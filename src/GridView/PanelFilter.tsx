@@ -5,12 +5,10 @@ import {usePanelFilterController} from './hooks/usePanelFilterController';
 
 function PanelFilter() {
     const {JSX, state, handlers} = usePanelFilterController();
-    const {actualFilteredValues, panelTitle, availableFilters, isOpen} = state;
+    const {actualFilteredValues, panelTitle, isOpen, filterOptionsMatrix, availableFilters} = state;
     const {FluentPanel, PrimaryButton, Dropdown, TagPicker, DefaultButton, Label} = JSX;
     const { onClose, onCancel, getDefaultDropdownSelectedKeys, onAddOrRemoveToMap, 
             getDefaultSelectedTag, getDefaultSelectedSlider } = handlers;
-
-    const options = React.useMemo(() => availableFilters.map(f => handlers.mapOptions(f?.options)), [availableFilters?.length]);
 
     if (!isOpen) return null;
     return (
@@ -34,7 +32,7 @@ function PanelFilter() {
                         {(filter.renderAs === 'Dropdown') ? 
                         <Dropdown
                             defaultSelectedKeys={getDefaultDropdownSelectedKeys()}
-                            key={filter?.key + "-" + idx} options={options[idx]}
+                            key={filter?.key + "-" + idx} options={filterOptionsMatrix[idx]}
                             multiSelect={filter?.enableMultiple} label={filter?.name}
                             onChange={(_, opt) => onAddOrRemoveToMap(filter?.key, opt)} /> :
                         (filter.renderAs === 'SearchBox') ?
@@ -54,9 +52,9 @@ function PanelFilter() {
                                 style: {overflowY: 'auto'},
                                 styles: {root: {position: 'relative'}}
                             }}
-                            onChange={handlers.onChangeTags(options[idx])}
+                            onChange={handlers.onChangeTags(filterOptionsMatrix[idx])}
                             onItemSelected={handlers.onTagSelected(filter?.key)}
-                            onResolveSuggestions={handlers.onResolveTagSuggestion(options[idx])} /></div> :
+                            onResolveSuggestions={handlers.onResolveTagSuggestion(filterOptionsMatrix[idx])} /></div> :
                         (filter.renderAs === 'DateSlider') ?
                         <DateSlider
                             defaultSliderValue={getDefaultSelectedSlider(filter?.key)}
@@ -69,7 +67,7 @@ function PanelFilter() {
                         <PeoplePicker
                             label={''}
                             key={filter?.key + "-" + idx}
-                            people={options[idx]}
+                            people={filterOptionsMatrix[idx]}
                             defaultSelectedItems={handlers.getDefaultSelectedPeople(filter?.key)}
                             onChangePeople={handlers.onChangePeople(filter?.key)} /> 
                         </div> : null

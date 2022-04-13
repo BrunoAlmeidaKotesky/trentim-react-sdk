@@ -28,9 +28,10 @@ interface IDateSliderCtx {
 }
 
 export interface IPanelFilterProps extends ICommonPanel<SelectedItemsMap>, IDateSliderCtx {
-    availableFilters: IAvailableFilters[];
     setActualFilteredValues: Dispatch<SetStateAction<SelectedItemsMap>>;
     actualFilteredValues: SelectedItemsMap;
+    filterOptionsMatrix: FilterOption[][];
+    availableFilters: IAvailableFilters[];
 }
 
 type SelectedItemsValue = {rootItemKey: keyof IRow, itemKey: string | number, data: IRow, text: string, type?: RangeType, from?: Date, to?: Date};

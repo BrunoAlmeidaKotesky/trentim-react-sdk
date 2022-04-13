@@ -5,10 +5,11 @@ import { useState, useEffect, useMemo } from 'react';
 import { useGridCardRendering } from './useGridCardRendering';
 import {GridViewFilter} from '../handlers/GridViewFilter';
 import {GridViewGrouping} from '../handlers/GridViewGrouping';
+import {GridViewMapper} from '../handlers/GridViewMapper';
 import { IconClickCaller } from '../../helpers/enums';
 import type { IGridListProps, IRow, TColumn, BaseType } from '../../models/interfaces/IGridView';
 import type { IListOptionsProps } from '../../models/interfaces/IListOptions';
-import type { IPanelFilterProps, SelectedItemsMap } from '../../models/interfaces/IPanelFilter';
+import type { IAvailableFilters, IPanelFilterProps, SelectedItemsMap } from '../../models/interfaces/IPanelFilter';
 import type { IGroupPanel } from '../../models/interfaces/IGroupPanel';
 import type { IGroup } from '@fluentui/react/lib/DetailsList';
 import type { KeyAndName } from '../../models/types/Common';
@@ -29,6 +30,7 @@ export function useGridController<T extends BaseType>(props: IGridListProps<T>) 
     const [fromDate, setFromDate] = useState<Date>(null);
     const [toDate, setToDate] = useState(new Date());
     const [searchCb, currentSearchBoxItems] = useRefWithCallback<IRow[]>([]);
+    const [memoizedAvailableFilter, setAvailableFilters] = useState<IAvailableFilters[]>([]);
 
     const visibleCols = useMemo(() => cols?.filter(c => !c?.hideColumn), [cols]);
     useEffect(() => { setRenderAs(props?.renderAs); }, [props?.renderAs]);
@@ -83,13 +85,19 @@ export function useGridController<T extends BaseType>(props: IGridListProps<T>) 
         setCols(convertedColumns);
     }, [props?.columns]);
 
+    
+
     useEffect(() => { setActualRows(props?.rows); setAllRows(props?.rows) }, [props?.rows?.length]);
 
     useEffect(() => {
         setCols(columns => [...columns.map(c => ({...c, onColumnClick: onColumnClick(actualRows)}))]);
     }, [actualRows?.length]);
 
-    const memoizedAvailableFilter = useMemo(() => GridViewFilter.buildFilters(allRows, cols, props?.hiddenFilterKeys as string[]), [allRows?.length, cols?.length, props?.hiddenGroupKeys?.length]);
+    useEffect(() => {
+        setAvailableFilters([...GridViewFilter.buildFilters(allRows, cols, props?.hiddenFilterKeys as string[])]);   
+    }, [allRows?.length, cols?.length, props?.hiddenGroupKeys?.length]);
+
+    const filterOptionsMatrix = useMemo(() => memoizedAvailableFilter.map(f => GridViewMapper.mapFilterOptions(f?.options)), [memoizedAvailableFilter]);
 
     const filterPanelConfig: IPanelFilterProps = {
         isOpen: isFilterPanelOpen,
@@ -102,11 +110,12 @@ export function useGridController<T extends BaseType>(props: IGridListProps<T>) 
         }),
         onCancel: () => { setIsFilterPanel(false); },
         onClose: () =>  { setIsFilterPanel(false); },
-        availableFilters: memoizedAvailableFilter,
         panelTitle: props?.filterPanelTitle ?? 'Filtrar',
         actualFilteredValues,
         setActualFilteredValues,
-        fromDate, toDate, setFromDate, setToDate
+        fromDate, toDate, setFromDate, setToDate,
+        filterOptionsMatrix,
+        availableFilters: memoizedAvailableFilter,
     }
 
     const groupPanelConfig: IGroupPanel = {

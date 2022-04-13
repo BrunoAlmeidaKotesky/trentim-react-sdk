@@ -6,7 +6,7 @@ import type { ITag } from '@fluentui/react/lib/Pickers';
 import type { IPersonaProps } from '@fluentui/react/lib/Persona';
 
 export function usePanelFilterController() {
-    const { isOpen, onClose, availableFilters, panelTitle, onCancel, onApply, actualFilteredValues, setActualFilteredValues, onOpen } = useContext(FilterPanelContext);
+    const { isOpen, onClose, panelTitle, onCancel, onApply, actualFilteredValues, setActualFilteredValues, onOpen, filterOptionsMatrix, availableFilters } = useContext(FilterPanelContext);
     const [FluentPanel, Dropdown, PrimaryButton, DefaultButton, TagPicker, Label] = useMemo(() => {
         const Panel = lazy(() => import('@fluentui/react/lib/Panel').then(({ Panel }) => ({ default: Panel })));
         const DropDown = lazy(() => import('@fluentui/react/lib/Dropdown').then(({ Dropdown }) => ({ default: Dropdown })));
@@ -36,16 +36,6 @@ export function usePanelFilterController() {
     }
 
     useEffect(() => { if (onOpen) onOpen(); }, []);
-
-    const mapOptions = (options: FilterOption[]) => {
-        return options
-        .filter(i => (i?.text !== null && i?.text !== undefined))
-        .map<FilterOption>(({ key, text, data }) => ({
-            key,
-            text,
-            data
-        }));
-    }
 
     const listContainsTagList = (tag: FilterOption, tagList?: FilterOption[]) => {
         if (!tagList || !tagList.length || tagList.length === 0)
@@ -170,6 +160,7 @@ export function usePanelFilterController() {
             isOpen,
             actualFilteredValues,
             panelTitle,
+            filterOptionsMatrix,
             availableFilters
         },
         handlers: {
@@ -187,7 +178,6 @@ export function usePanelFilterController() {
             onTagSelected,
             onResolveTagSuggestion,
             onRecordDateChange,
-            mapOptions,
             onChangePeople
         },
         JSX: {

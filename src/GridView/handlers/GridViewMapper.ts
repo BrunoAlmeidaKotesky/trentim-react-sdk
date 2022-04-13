@@ -1,4 +1,4 @@
-import { SelectedItemsMap } from "../../models/interfaces/IPanelFilter";
+import { FilterOption, SelectedItemsMap } from "../../models/interfaces/IPanelFilter";
 
 /**Internal class to be used when using map data operations on the GridView component context as a whole. */
 export class GridViewMapper {
@@ -28,5 +28,15 @@ export class GridViewMapper {
             } 
         });
         return mapsByKeyKind;
+    }
+
+    static mapFilterOptions = (options: FilterOption[]) => {
+        return options
+        .filter(i => (i?.text !== null && i?.text !== undefined))
+        .map<FilterOption>(({ key, text, data }) => ({
+            key,
+            text,
+            data
+        }));
     }
 }

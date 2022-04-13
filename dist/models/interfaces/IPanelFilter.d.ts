@@ -25,9 +25,10 @@ interface IDateSliderCtx {
     setToDate: Dispatch<SetStateAction<Date>>;
 }
 export interface IPanelFilterProps extends ICommonPanel<SelectedItemsMap>, IDateSliderCtx {
-    availableFilters: IAvailableFilters[];
     setActualFilteredValues: Dispatch<SetStateAction<SelectedItemsMap>>;
     actualFilteredValues: SelectedItemsMap;
+    filterOptionsMatrix: FilterOption[][];
+    availableFilters: IAvailableFilters[];
 }
 declare type SelectedItemsValue = {
     rootItemKey: keyof IRow;

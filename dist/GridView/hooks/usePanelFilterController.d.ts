@@ -7,6 +7,7 @@ export declare function usePanelFilterController(): {
         isOpen: boolean;
         actualFilteredValues: import("../../models/interfaces/IPanelFilter").SelectedItemsMap;
         panelTitle: string;
+        filterOptionsMatrix: FilterOption[][];
         availableFilters: import("../../models/interfaces/IPanelFilter").IAvailableFilters[];
     };
     handlers: {
@@ -31,7 +32,6 @@ export declare function usePanelFilterController(): {
             isDateComponent?: boolean;
         }[];
         onRecordDateChange: (key: string) => (from: Date, to: Date, type: RangeType) => void;
-        mapOptions: (options: FilterOption[]) => FilterOption[];
         onChangePeople: (key: string) => (items: IPersonaProps[]) => void;
     };
     JSX: {

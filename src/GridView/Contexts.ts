@@ -20,7 +20,6 @@ export const ListOptionsContext = createContext<IListOptionsProps<IRow>>({
 export const FilterPanelContext = createContext<IPanelFilterProps>({ 
     isOpen: false, 
     onApply: undefined, 
-    availableFilters: [], 
     onCancel: undefined, 
     onClose: undefined, 
     panelTitle: '',
@@ -30,7 +29,9 @@ export const FilterPanelContext = createContext<IPanelFilterProps>({
     fromDate: null,
     toDate: new Date(),
     setFromDate: undefined,
-    setToDate: undefined
+    setToDate: undefined,
+    filterOptionsMatrix: [],
+    availableFilters: []
 });
 
 export const GroupPanelContext = createContext<IGroupPanel>({
