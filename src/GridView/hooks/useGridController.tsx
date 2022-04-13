@@ -87,7 +87,7 @@ export function useGridController<T extends BaseType>(props: IGridListProps<T>) 
 
     
 
-    useEffect(() => { setActualRows(props?.rows); setAllRows(props?.rows) }, [props?.rows?.length]);
+    useEffect(() => { setActualRows(props?.rows); setAllRows(props?.rows) }, [props?.rows]);
 
     useEffect(() => {
         setCols(columns => [...columns.map(c => ({...c, onColumnClick: onColumnClick(actualRows)}))]);
