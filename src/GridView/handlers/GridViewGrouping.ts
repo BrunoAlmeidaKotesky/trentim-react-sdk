@@ -6,7 +6,8 @@ export class GridViewGrouping {
     
     static onApplyGrouping: ApplyGrouping = ({actualRows, cols, setGroups, setIsGroupPanel, emptyGroupLabel, onItemsGrouped}) => (keyAndName) => {
         const defaultEmptyLabel = emptyGroupLabel ?? 'Sem itens definidos';
-        if (!keyAndName || keyAndName?.split(';')?.[0] === '@NONE') {
+        const selectedKey = keyAndName?.split(';')?.[0];
+        if (!keyAndName || selectedKey === '@NONE') {
             setIsGroupPanel(false);
             return setGroups(undefined);
         }
@@ -49,6 +50,6 @@ export class GridViewGrouping {
         setGroups(groups);
         setIsGroupPanel(false);
         if(!!onItemsGrouped) 
-            onItemsGrouped();
+            onItemsGrouped({selectedKey, setGroups});
     }
 }

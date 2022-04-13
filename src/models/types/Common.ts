@@ -18,7 +18,7 @@ interface IGroupingParams {
     cols: TColumn<any>[];
     setGroups: Dispatch<SetStateAction<IGroup[]>>;
     setIsGroupPanel: Dispatch<SetStateAction<boolean>>;
-    onItemsGrouped: () => void;
+    onItemsGrouped: (opt?: {selectedKey: string, setGroups: Dispatch<SetStateAction<IGroup[]>>}) => void;
 }
 export type ApplyGrouping = (paramns: IGroupingParams) => (keyAndName: KeyAndName) => void;
 

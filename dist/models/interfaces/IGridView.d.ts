@@ -1,8 +1,9 @@
-import type { IColumn, IDetailsListProps } from "@fluentui/react/lib/DetailsList";
+import type { IColumn, IDetailsListProps, IGroup } from "@fluentui/react/lib/DetailsList";
 import type { ICardProps } from "./IInfoCardProps";
 import type { IConfigurableHeader } from "./IListOptions";
 import type { ColumnKey, IDateConversionOptions } from './ICommon';
 import type { ApplyCustomFilter, FilterComponent } from '../types/Common';
+import type { Dispatch, SetStateAction } from "react";
 /**It should represent any object with primitive data types.
  * Please use the `Id` property to uniquely identify the object, it helps to avoid duplicates and correctly apply the filter.
 */
@@ -111,8 +112,14 @@ export interface IGridHandler<T> extends IGridClickActions {
      * @note It will not work if using `applyCustomFilter`, however you can use the same logic of this callback on the custom filter.
     */
     onItemsFiltered?: (filtered?: IRow<T>[]) => void;
-    /**A callback that will be called after the items were grouped on the panel. */
-    onItemsGrouped?: () => void;
+    /**A callback that will be called after the items were grouped on the panel.
+     *
+     *You can also work with the key that was selected, and you have access to the group state setter.
+    */
+    onItemsGrouped?: (opt?: {
+        selectedKey: string;
+        setGroups: Dispatch<SetStateAction<IGroup[]>>;
+    }) => void;
     /**A callback that will be called after the items were filtered from the search box. */
     onSearchBoxItemsFiltered?: (filtered?: IRow<T>[]) => void;
 }
