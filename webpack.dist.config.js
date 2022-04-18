@@ -63,7 +63,7 @@ const config = {
     library: package_.name,
     libraryTarget: 'umd',
     umdNamedDefine: true,
-    sourceMapFilename: 'bundle.map'
+    sourceMapFilename: '[name]/bundle.js.map'
   }
     : {
       // Multiple module exports of the /src/<Module name>/index.ts
@@ -72,7 +72,7 @@ const config = {
       publicPath: ASSET_PATH,
       libraryTarget: 'umd',
       umdNamedDefine: true,
-      sourceMapFilename: '[name]/bundle.map'
+      sourceMapFilename: '[name]/bundle.js.map'
     },
   resolve: {
     alias: {
