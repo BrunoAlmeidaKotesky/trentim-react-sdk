@@ -72,7 +72,7 @@ const config = {
       publicPath: ASSET_PATH,
       libraryTarget: 'umd',
       umdNamedDefine: true,
-      //sourceMapFilename: 'bundle.map'
+      sourceMapFilename: 'bundle.map'
     },
   resolve: {
     alias: {
