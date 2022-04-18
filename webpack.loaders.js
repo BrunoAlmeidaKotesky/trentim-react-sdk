@@ -169,8 +169,10 @@ module.exports = {
         test: /\.(tsx|ts)$/,
         use:  'ts-loader',
         exclude: /node_modules/,
-        include: [path.resolve(__dirname, 'src'), path.resolve(__dirname, 'dev')],
-      }
+        include: [path.resolve(__dirname, 'src'), path.resolve(__dirname, 'dev'), path.resolve(__dirname, 'stories'), path.resolve(__dirname, '.storybook')]
+      },
+      //Story book MDX loader
+
     ]
   }
 };

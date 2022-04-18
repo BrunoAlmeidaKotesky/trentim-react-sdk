@@ -5,16 +5,16 @@ This is an Alpha version, which everything still can be changed.
 This repo will become a private repository in the future.
 
 ### Components
-* Datatable - (On Analysis)
+* Datatable - (Probably going to be removed.)
 * GridView
 * Card
 * ConditionalWrapper
 * IFrame
 ### Utils
-* CacheHandler
 * FileUtils
-* SPFx WebpartAddons
+* WebpartAddons
 * Utils
+* ConversionOptions
 
 ### React Hooks
 * useDebounce
@@ -22,6 +22,7 @@ This repo will become a private repository in the future.
 * useOuterClick
 * usePrevious
 * useWindowSize
+* useRefWithCallback
 
 ### Utility Types
 * Path

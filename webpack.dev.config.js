@@ -70,7 +70,7 @@ const config = {
   },
   plugins: [
     new CleanWebpackPlugin(),
-    new HtmlWebpackPlugin({title: 'Hot Module Replacement'}),
+    new HtmlWebpackPlugin({title: 'Hot Module Replacement'})
     // new webpack.HotModuleReplacementPlugin(),       // enable HMR globally
   ],
 };

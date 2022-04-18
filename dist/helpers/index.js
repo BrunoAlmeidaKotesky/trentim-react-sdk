@@ -1,2 +1,943 @@
-(function e(t,r){if(typeof exports==="object"&&typeof module==="object")module.exports=r();else if(typeof define==="function"&&define.amd)define([],r);else{var n=r();for(var o in n)(typeof exports==="object"?exports:t)[o]=n[o]}})(window,function(){return function(r){var n={};function o(e){if(n[e]){return n[e].exports}var t=n[e]={i:e,l:false,exports:{}};r[e].call(t.exports,t,t.exports,o);t.l=true;return t.exports}o.m=r;o.c=n;o.d=function(e,t,r){if(!o.o(e,t)){Object.defineProperty(e,t,{enumerable:true,get:r})}};o.r=function(e){if(typeof Symbol!=="undefined"&&Symbol.toStringTag){Object.defineProperty(e,Symbol.toStringTag,{value:"Module"})}Object.defineProperty(e,"__esModule",{value:true})};o.t=function(t,e){if(e&1)t=o(t);if(e&8)return t;if(e&4&&typeof t==="object"&&t&&t.__esModule)return t;var r=Object.create(null);o.r(r);Object.defineProperty(r,"default",{enumerable:true,value:t});if(e&2&&typeof t!="string")for(var n in t)o.d(r,n,function(e){return t[e]}.bind(null,n));return r};o.n=function(t){var e=t&&t.__esModule?function e(){return t["default"]}:function e(){return t};o.d(e,"a",e);return e};o.o=function(e,t){return Object.prototype.hasOwnProperty.call(e,t)};o.p="/";return o(o.s="./src/helpers/index.ts")}({"./node_modules/webpack/buildin/module.js":function(e,t){e.exports=function(e){if(!e.webpackPolyfill){e.deprecate=function(){};e.paths=[];if(!e.children)e.children=[];Object.defineProperty(e,"loaded",{enumerable:true,get:function(){return e.l}});Object.defineProperty(e,"id",{enumerable:true,get:function(){return e.i}});e.webpackPolyfill=1}return e}},"./src/helpers/CacheHandler.ts":function(e,n,t){"use strict";(function(t){(function(){var e=typeof reactHotLoaderGlobal!=="undefined"?reactHotLoaderGlobal.enterModule:undefined;e&&e(t)})();var e=typeof reactHotLoaderGlobal!=="undefined"?reactHotLoaderGlobal["default"].signature:function(e){return e};Object.defineProperty(n,"__esModule",{value:true});n.CacheHandler=void 0;var r=function(){function e(e){var t,r,n;this._json=e;this.stringify=((t=this===null||this===void 0?void 0:this._json)===null||t===void 0?void 0:t.stringify)?this._json.stringify:JSON.stringify;this.parse=((r=this===null||this===void 0?void 0:this._json)===null||r===void 0?void 0:r.parse)?(n=this._json)===null||n===void 0?void 0:n.parse:JSON.parse}e.prototype.setCache=function(e,t,r){var n=r.type;var o=new Date;var i=o.toISOString();var l=this.setRefreshDate(o);var a={value:t,expireDate:l,requestedAt:i};if(n==="local")localStorage.setItem(e,this.stringify(a));else sessionStorage.setItem(e,this.stringify(a))};e.prototype.getCache=function(e,t){var r=t.type;var n;if(r==="local")n=localStorage.getItem(e);else n=sessionStorage.getItem(e);var o=this.parseCache(n);if((o===null||o===void 0?void 0:o.value)&&(o===null||o===void 0?void 0:o.expireDate)&&(o===null||o===void 0?void 0:o.requestedAt))return{value:o===null||o===void 0?void 0:o.value,expireDate:o===null||o===void 0?void 0:o.expireDate,requestedAt:o===null||o===void 0?void 0:o.requestedAt};return null};e.prototype.parseCache=function(e){try{var t=this.parse(e);var r=t.value,n=t.expireDate,o=t.requestedAt;return{value:r,expireDate:n,requestedAt:o}}catch(e){return{value:null,expireDate:null,requestedAt:null}}};e.prototype.removeCacheKey=function(e){localStorage.removeItem(e)};e.prototype.setRefreshDate=function(e,t){if(t===void 0){t=36}var r=e;r.setHours(r.getHours()+t);return r.toISOString()};return e}();n.CacheHandler=r;(function(){var e=typeof reactHotLoaderGlobal!=="undefined"?reactHotLoaderGlobal.default:undefined;if(!e){return}e.register(r,"CacheHandler","F:\\Projetos Individuais\\ReactLibraries\\trentim-react-sdk\\src\\helpers\\CacheHandler.ts")})();(function(){var e=typeof reactHotLoaderGlobal!=="undefined"?reactHotLoaderGlobal.leaveModule:undefined;e&&e(t)})()}).call(this,t("./node_modules/webpack/buildin/module.js")(e))},"./src/helpers/ConverterOptions.ts":function(e,n,t){"use strict";(function(t){(function(){var e=typeof reactHotLoaderGlobal!=="undefined"?reactHotLoaderGlobal.enterModule:undefined;e&&e(t)})();var e=typeof reactHotLoaderGlobal!=="undefined"?reactHotLoaderGlobal["default"].signature:function(e){return e};Object.defineProperty(n,"__esModule",{value:true});n.ConversionOptions=void 0;var r=function(){function e(e,t,r,n,o){this.blob=e;this.byteArrays=t;this.mimeType=r;this.mimeUtils=n;this.fileName=o}e.prototype.getBlob=function(){return this.blob};e.prototype.getFile=function(){return new File([this.getBlob()],this===null||this===void 0?void 0:this.fileName,{type:this===null||this===void 0?void 0:this.mimeType})};e.prototype.getByteArray=function(){return this.byteArrays};e.prototype.getMimeType=function(){return this.mimeUtils.contentType(this.mimeType)||this.mimeType};return e}();n.ConversionOptions=r;(function(){var e=typeof reactHotLoaderGlobal!=="undefined"?reactHotLoaderGlobal.default:undefined;if(!e){return}e.register(r,"ConversionOptions","F:\\Projetos Individuais\\ReactLibraries\\trentim-react-sdk\\src\\helpers\\ConverterOptions.ts")})();(function(){var e=typeof reactHotLoaderGlobal!=="undefined"?reactHotLoaderGlobal.leaveModule:undefined;e&&e(t)})()}).call(this,t("./node_modules/webpack/buildin/module.js")(e))},"./src/helpers/FileUtils.ts":function(e,n,o){"use strict";(function(t){(function(){var e=typeof reactHotLoaderGlobal!=="undefined"?reactHotLoaderGlobal.enterModule:undefined;e&&e(t)})();var e=typeof reactHotLoaderGlobal!=="undefined"?reactHotLoaderGlobal["default"].signature:function(e){return e};var u=this&&this.__awaiter||function(e,l,r,a){function u(t){return t instanceof r?t:new r(function(e){e(t)})}return new(r||(r=Promise))(function(t,r){function n(e){try{i(a.next(e))}catch(e){r(e)}}function o(e){try{i(a["throw"](e))}catch(e){r(e)}}function i(e){e.done?t(e.value):u(e.value).then(n,o)}i((a=a.apply(e,l||[])).next())})};var d=this&&this.__generator||function(e,r){var n={label:0,sent:function e(){if(l[0]&1)throw l[1];return l[1]},trys:[],ops:[]},o,i,l,t;return t={next:a(0),throw:a(1),return:a(2)},typeof Symbol==="function"&&(t[Symbol.iterator]=function(){return this}),t;function a(t){return function(e){return u([t,e])}}function u(t){if(o)throw new TypeError("Generator is already executing.");while(n){try{if(o=1,i&&(l=t[0]&2?i["return"]:t[0]?i["throw"]||((l=i["return"])&&l.call(i),0):i.next)&&!(l=l.call(i,t[1])).done)return l;if(i=0,l)t=[t[0]&2,l.value];switch(t[0]){case 0:case 1:l=t;break;case 4:n.label++;return{value:t[1],done:false};case 5:n.label++;i=t[1];t=[0];continue;case 7:t=n.ops.pop();n.trys.pop();continue;default:if(!(l=n.trys,l=l.length>0&&l[l.length-1])&&(t[0]===6||t[0]===2)){n=0;continue}if(t[0]===3&&(!l||t[1]>l[0]&&t[1]<l[3])){n.label=t[1];break}if(t[0]===6&&n.label<l[1]){n.label=l[1];l=t;break}if(l&&n.label<l[2]){n.label=l[2];n.ops.push(t);break}if(l[2])n.ops.pop();n.trys.pop();continue}t=r.call(e,n)}catch(e){t=[6,e];i=0}finally{o=l=0}}if(t[0]&5)throw t[1];return{value:t[0]?t[1]:void 0,done:true}}};Object.defineProperty(n,"__esModule",{value:true});n.FileUtils=void 0;var v=o("./src/helpers/ConverterOptions.ts");var r=function(){function e(e){this.mime=e}e.prototype.urlToFile=function(o,i,l){if(l===void 0){l=null}return u(this,void 0,void 0,function(){var t,r,n;return d(this,function(e){switch(e.label){case 0:e.trys.push([0,2,,3]);return[4,fetch(o,l).then(function(e){return e.blob()})];case 1:t=e.sent();r=new File([t],i.fileName,{type:(i===null||i===void 0?void 0:i.fileMime)||this.checkIfHasMime(i===null||i===void 0?void 0:i.fileName),lastModified:(i===null||i===void 0?void 0:i.lastModified)||(new Date).getTime()});return[2,r];case 2:n=e.sent();console.error(n===null||n===void 0?void 0:n.message);return[2,null];case 3:return[2]}})})};e.prototype.downloadXml=function(e,t){if(e){var r=document.createElement("a");var n=t||"undefinedName.xml";n=this.fileNameValidator(n,".xml");var o=new Blob([e],{type:"application/octet-stream"});var i=URL.createObjectURL(o);r.setAttribute("href",i);r.setAttribute("download",n);r.dataset.downloadurl=["text/plain",r.download,r.href].join(":");r.draggable=true;r.classList.add("dragout");r.click();setTimeout(function(){window.URL.revokeObjectURL(i);r===null||r===void 0?void 0:r.remove()},200)}};e.prototype.fileNameValidator=function(e,t){if(!t.startsWith("."))t="."+t;if(e){if(!e.endsWith(t))return e+t;return e}};e.prototype.checkIfHasMime=function(e){var t;if(!e)return null;var r=((t=this===null||this===void 0?void 0:this.mime)===null||t===void 0?void 0:t.contentType(e))||"application/octet-stream";return r};e.prototype.convertBase64To=function(e,t,r){var n;r=r||this.checkIfHasMime(t);var o=512;var i=atob(decodeURIComponent(e));var l=[];for(var a=0;a<i.length;a+=o){var u=i===null||i===void 0?void 0:i.slice(a,a+o);var d=new Array(u.length);for(var s=0;s<u.length;s++){d[s]=u.charCodeAt(s)}var c=new Uint8Array(d);l.push(c)}var f=r?new Blob(l,{type:r}):new Blob(l);return new v.ConversionOptions(f,l,r,(n=this===null||this===void 0?void 0:this.mime)!==null&&n!==void 0?n:undefined,t)};var o;o=e;e.blobToBase64=function(n,a){return u(void 0,void 0,void 0,function(){var t;var r;return d(o,function(e){t=(r=a===null||a===void 0?void 0:a.readAs)!==null&&r!==void 0?r:"DataURL";try{return[2,new Promise(function(o,i){var l=new FileReader;l.onloadend=function(){return u(void 0,void 0,void 0,function(){var t,r,n;return d(this,function(e){switch(e.label){case 0:t=l===null||l===void 0?void 0:l.result;if(!t)i(new Error("FileReader error"));if(!!(a===null||a===void 0?void 0:a.customCb))return[3,1];r=/^data:.+;base64,/;return[2,o(t===null||t===void 0?void 0:t.replace(r,""))];case 1:return[4,a===null||a===void 0?void 0:a.customCb(t)];case 2:n=e.sent();return[2,o(n)]}})})};l.onerror=function(e){return i(e)};if(a===null||a===void 0?void 0:a.encoding)l["readAs".concat(t)](n);else l["readAs".concat(t)](n,a===null||a===void 0?void 0:a.encoding)})]}catch(e){console.log(e);return[2,null]}return[2]})})};return e}();n.FileUtils=r;(function(){var e=typeof reactHotLoaderGlobal!=="undefined"?reactHotLoaderGlobal.default:undefined;if(!e){return}e.register(u,"__awaiter","F:\\Projetos Individuais\\ReactLibraries\\trentim-react-sdk\\src\\helpers\\FileUtils.ts");e.register(d,"__generator","F:\\Projetos Individuais\\ReactLibraries\\trentim-react-sdk\\src\\helpers\\FileUtils.ts");e.register(r,"FileUtils","F:\\Projetos Individuais\\ReactLibraries\\trentim-react-sdk\\src\\helpers\\FileUtils.ts")})();(function(){var e=typeof reactHotLoaderGlobal!=="undefined"?reactHotLoaderGlobal.leaveModule:undefined;e&&e(t)})()}).call(this,o("./node_modules/webpack/buildin/module.js")(e))},"./src/helpers/Utils.ts":function(e,n,t){"use strict";(function(t){(function(){var e=typeof reactHotLoaderGlobal!=="undefined"?reactHotLoaderGlobal.enterModule:undefined;e&&e(t)})();function i(e){"@babel/helpers - typeof";return i="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e},i(e)}var e=typeof reactHotLoaderGlobal!=="undefined"?reactHotLoaderGlobal["default"].signature:function(e){return e};Object.defineProperty(n,"__esModule",{value:true});n.Utils=void 0;var r=function(){function l(){}l.convertIsoToLocaleString=function(e,t,r){var n;if(t===void 0){t="pt-BR"}if(r===void 0){r=undefined}if(!(new Date(e)instanceof Date)&&isNaN((n=new Date(e))===null||n===void 0?void 0:n.getTime()))return e;var o=/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?Z/.test(e);if(!o)return e;return new Intl.DateTimeFormat(t,r).format(new Date(e))};l.copyAndSort=function(e,o,i){return e.slice(0).sort(function(e,t){var r=l.getNestedObject(e,o===null||o===void 0?void 0:o.split("."));var n=l.getNestedObject(t,o===null||o===void 0?void 0:o.split("."));return(i?r<n:r>n)?1:-1})};l.getNestedObject=function(e,t){return t===null||t===void 0?void 0:t.reduce(function(e,t){return e&&e[t]!=="undefined"?e[t]:undefined},e)};l.getDeepKeys=function(n){var o=[];var e=function e(t){o.push(t);if(i(n[t])==="object"){var r=l.getDeepKeys(n[t]);o=o.concat(r===null||r===void 0?void 0:r.map(function(e){return t+"."+e}))}};for(var t in n){e(t)}return o};return l}();n.Utils=r;(function(){var e=typeof reactHotLoaderGlobal!=="undefined"?reactHotLoaderGlobal.default:undefined;if(!e){return}e.register(r,"Utils","F:\\Projetos Individuais\\ReactLibraries\\trentim-react-sdk\\src\\helpers\\Utils.ts")})();(function(){var e=typeof reactHotLoaderGlobal!=="undefined"?reactHotLoaderGlobal.leaveModule:undefined;e&&e(t)})()}).call(this,t("./node_modules/webpack/buildin/module.js")(e))},"./src/helpers/WebpartAddons.ts":function(e,n,t){"use strict";(function(t){(function(){var e=typeof reactHotLoaderGlobal!=="undefined"?reactHotLoaderGlobal.enterModule:undefined;e&&e(t)})();function o(e){"@babel/helpers - typeof";return o="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e},o(e)}var e=typeof reactHotLoaderGlobal!=="undefined"?reactHotLoaderGlobal["default"].signature:function(e){return e};Object.defineProperty(n,"__esModule",{value:true});n.WebpartAddons=void 0;var r=function(){function e(){}e.prototype.changeElementProperty=function(r,e){if(r===null||r===void 0?void 0:r.style){e===null||e===void 0?void 0:e.forEach(function(e,t){r.style[t]=e})}};e.prototype.changeNodeProperty=function(e,t,r){var n,o;try{var i=null;if((e===null||e===void 0?void 0:e.length)>1){if((o=(n=e[0])===null||n===void 0?void 0:n.className)===null||o===void 0?void 0:o.includes("ControlZone-control"))i=e[0];else i=e[1]}else i=e[0];var l=this.targetCondition(t,i);return l?l:this.changeNodeRecursive(i,t,r)}catch(e){console.error("[WebpartAddons] - changeElementProperty - Error while changing the node property",e);return false}};e.prototype.changeNodeRecursive=function(e,t,r){var n;if(!(e===null||e===void 0?void 0:e.children))return this.changeNodeProperty((n=e===null||e===void 0?void 0:e.nextElementSibling)===null||n===void 0?void 0:n.children,t,r);else{this.changeElementProperty(e,r);return this.changeNodeProperty(e===null||e===void 0?void 0:e.children,t,r)}};e.prototype.targetCondition=function(e,t){var r;if(typeof e==="string")return(r=t===null||t===void 0?void 0:t.className)===null||r===void 0?void 0:r.startsWith(e);else if(o(e)==="object"){var n=t===null||t===void 0?void 0:t.isEqualNode(e);return n}return false};e.registerLiveReload=function(e,t,r){var n=e["loaderConfig"]["internalModuleBaseUrls"][0];if((n===null||n===void 0?void 0:n.indexOf(t||"https://localhost:4321"))!==-1){var o=document.createElement("script");o.src=r||"//localhost:35729/livereload.js?snipver=1";document.head.appendChild(o)}};return e}();n.WebpartAddons=r;(function(){var e=typeof reactHotLoaderGlobal!=="undefined"?reactHotLoaderGlobal.default:undefined;if(!e){return}e.register(r,"WebpartAddons","F:\\Projetos Individuais\\ReactLibraries\\trentim-react-sdk\\src\\helpers\\WebpartAddons.ts")})();(function(){var e=typeof reactHotLoaderGlobal!=="undefined"?reactHotLoaderGlobal.leaveModule:undefined;e&&e(t)})()}).call(this,t("./node_modules/webpack/buildin/module.js")(e))},"./src/helpers/index.ts":function(e,t,r){"use strict";var n=typeof reactHotLoaderGlobal!=="undefined"?reactHotLoaderGlobal["default"].signature:function(e){return e};Object.defineProperty(t,"__esModule",{value:true});t.Utils=t.ConversionOptions=t.WebpartAddons=t.FileUtils=t.CacheHandler=void 0;var o=r("./src/helpers/CacheHandler.ts");Object.defineProperty(t,"CacheHandler",{enumerable:true,get:function e(){return o.CacheHandler}});var i=r("./src/helpers/FileUtils.ts");Object.defineProperty(t,"FileUtils",{enumerable:true,get:function e(){return i.FileUtils}});var l=r("./src/helpers/WebpartAddons.ts");Object.defineProperty(t,"WebpartAddons",{enumerable:true,get:function e(){return l.WebpartAddons}});var a=r("./src/helpers/ConverterOptions.ts");Object.defineProperty(t,"ConversionOptions",{enumerable:true,get:function e(){return a.ConversionOptions}});var u=r("./src/helpers/Utils.ts");Object.defineProperty(t,"Utils",{enumerable:true,get:function e(){return u.Utils}})}})});
+(function webpackUniversalModuleDefinition(root, factory) {
+	if(typeof exports === 'object' && typeof module === 'object')
+		module.exports = factory();
+	else if(typeof define === 'function' && define.amd)
+		define([], factory);
+	else {
+		var a = factory();
+		for(var i in a) (typeof exports === 'object' ? exports : root)[i] = a[i];
+	}
+})(window, function() {
+return /******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId]) {
+/******/ 			return installedModules[moduleId].exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.l = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// define getter function for harmony exports
+/******/ 	__webpack_require__.d = function(exports, name, getter) {
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, { enumerable: true, get: getter });
+/******/ 		}
+/******/ 	};
+/******/
+/******/ 	// define __esModule on exports
+/******/ 	__webpack_require__.r = function(exports) {
+/******/ 		if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 			Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 		}
+/******/ 		Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 	};
+/******/
+/******/ 	// create a fake namespace object
+/******/ 	// mode & 1: value is a module id, require it
+/******/ 	// mode & 2: merge all properties of value into the ns
+/******/ 	// mode & 4: return value when already ns object
+/******/ 	// mode & 8|1: behave like require
+/******/ 	__webpack_require__.t = function(value, mode) {
+/******/ 		if(mode & 1) value = __webpack_require__(value);
+/******/ 		if(mode & 8) return value;
+/******/ 		if((mode & 4) && typeof value === 'object' && value && value.__esModule) return value;
+/******/ 		var ns = Object.create(null);
+/******/ 		__webpack_require__.r(ns);
+/******/ 		Object.defineProperty(ns, 'default', { enumerable: true, value: value });
+/******/ 		if(mode & 2 && typeof value != 'string') for(var key in value) __webpack_require__.d(ns, key, function(key) { return value[key]; }.bind(null, key));
+/******/ 		return ns;
+/******/ 	};
+/******/
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__webpack_require__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
+/******/
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "/";
+/******/
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(__webpack_require__.s = "./src/helpers/index.ts");
+/******/ })
+/************************************************************************/
+/******/ ({
+
+/***/ "./node_modules/webpack/buildin/module.js":
+/***/ (function(module, exports) {
+
+module.exports = function (module) {
+  if (!module.webpackPolyfill) {
+    module.deprecate = function () {};
+
+    module.paths = []; // module.parent = undefined by default
+
+    if (!module.children) module.children = [];
+    Object.defineProperty(module, "loaded", {
+      enumerable: true,
+      get: function () {
+        return module.l;
+      }
+    });
+    Object.defineProperty(module, "id", {
+      enumerable: true,
+      get: function () {
+        return module.i;
+      }
+    });
+    module.webpackPolyfill = 1;
+  }
+
+  return module;
+};
+
+/***/ }),
+
+/***/ "./src/helpers/ConverterOptions.ts":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(module) {
+
+(function () {
+  var enterModule = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal.enterModule : undefined;
+  enterModule && enterModule(module);
+})();
+
+var __signature__ = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal["default"].signature : function (a) {
+  return a;
+};
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.ConversionOptions = void 0;
+
+var ConversionOptions =
+/** @class */
+function () {
+  function ConversionOptions(blob, byteArrays, mimeType, mimeUtils, fileName) {
+    this.blob = blob;
+    this.byteArrays = byteArrays;
+    this.mimeType = mimeType;
+    this.mimeUtils = mimeUtils;
+    this.fileName = fileName;
+  }
+  /**
+   * @returns Return the converted value as an blob Object
+   */
+
+
+  ConversionOptions.prototype.getBlob = function () {
+    return this.blob;
+  };
+
+  ConversionOptions.prototype.getFile = function () {
+    return new File([this.getBlob()], this === null || this === void 0 ? void 0 : this.fileName, {
+      type: this === null || this === void 0 ? void 0 : this.mimeType
+    });
+  };
+  /**
+   * @returns Return an array representation of the type `Uint8Array` from the given base64 value.
+   */
+
+
+  ConversionOptions.prototype.getByteArray = function () {
+    return this.byteArrays;
+  };
+  /**
+   *  Applies only if the a file name was given, if the npm module `mime-types` or an similar module was provided on the class constructor it will return the correct detected mime, otherwise it will return 'application/octet-stream'
+   *
+   * @returns The converted mime type, or null if the fileName parameter was not provided.
+   */
+
+
+  ConversionOptions.prototype.getMimeType = function () {
+    return this.mimeUtils.contentType(this.mimeType) || this.mimeType;
+  };
+
+  return ConversionOptions;
+}();
+
+exports.ConversionOptions = ConversionOptions;
+;
+
+(function () {
+  var reactHotLoader = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal.default : undefined;
+
+  if (!reactHotLoader) {
+    return;
+  }
+
+  reactHotLoader.register(ConversionOptions, "ConversionOptions", "F:\\Projetos Individuais\\ReactLibraries\\trentim-react-sdk\\src\\helpers\\ConverterOptions.ts");
+})();
+
+;
+
+(function () {
+  var leaveModule = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal.leaveModule : undefined;
+  leaveModule && leaveModule(module);
+})();
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__("./node_modules/webpack/buildin/module.js")(module)))
+
+/***/ }),
+
+/***/ "./src/helpers/FileUtils.ts":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(module) {
+
+(function () {
+  var enterModule = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal.enterModule : undefined;
+  enterModule && enterModule(module);
+})();
+
+var __signature__ = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal["default"].signature : function (a) {
+  return a;
+};
+
+var __awaiter = this && this.__awaiter || function (thisArg, _arguments, P, generator) {
+  function adopt(value) {
+    return value instanceof P ? value : new P(function (resolve) {
+      resolve(value);
+    });
+  }
+
+  return new (P || (P = Promise))(function (resolve, reject) {
+    function fulfilled(value) {
+      try {
+        step(generator.next(value));
+      } catch (e) {
+        reject(e);
+      }
+    }
+
+    function rejected(value) {
+      try {
+        step(generator["throw"](value));
+      } catch (e) {
+        reject(e);
+      }
+    }
+
+    function step(result) {
+      result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
+    }
+
+    step((generator = generator.apply(thisArg, _arguments || [])).next());
+  });
+};
+
+var __generator = this && this.__generator || function (thisArg, body) {
+  var _ = {
+    label: 0,
+    sent: function sent() {
+      if (t[0] & 1) throw t[1];
+      return t[1];
+    },
+    trys: [],
+    ops: []
+  },
+      f,
+      y,
+      t,
+      g;
+  return g = {
+    next: verb(0),
+    "throw": verb(1),
+    "return": verb(2)
+  }, typeof Symbol === "function" && (g[Symbol.iterator] = function () {
+    return this;
+  }), g;
+
+  function verb(n) {
+    return function (v) {
+      return step([n, v]);
+    };
+  }
+
+  function step(op) {
+    if (f) throw new TypeError("Generator is already executing.");
+
+    while (_) {
+      try {
+        if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+        if (y = 0, t) op = [op[0] & 2, t.value];
+
+        switch (op[0]) {
+          case 0:
+          case 1:
+            t = op;
+            break;
+
+          case 4:
+            _.label++;
+            return {
+              value: op[1],
+              done: false
+            };
+
+          case 5:
+            _.label++;
+            y = op[1];
+            op = [0];
+            continue;
+
+          case 7:
+            op = _.ops.pop();
+
+            _.trys.pop();
+
+            continue;
+
+          default:
+            if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) {
+              _ = 0;
+              continue;
+            }
+
+            if (op[0] === 3 && (!t || op[1] > t[0] && op[1] < t[3])) {
+              _.label = op[1];
+              break;
+            }
+
+            if (op[0] === 6 && _.label < t[1]) {
+              _.label = t[1];
+              t = op;
+              break;
+            }
+
+            if (t && _.label < t[2]) {
+              _.label = t[2];
+
+              _.ops.push(op);
+
+              break;
+            }
+
+            if (t[2]) _.ops.pop();
+
+            _.trys.pop();
+
+            continue;
+        }
+
+        op = body.call(thisArg, _);
+      } catch (e) {
+        op = [6, e];
+        y = 0;
+      } finally {
+        f = t = 0;
+      }
+    }
+
+    if (op[0] & 5) throw op[1];
+    return {
+      value: op[0] ? op[1] : void 0,
+      done: true
+    };
+  }
+};
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.FileUtils = void 0;
+
+var ConverterOptions_1 = __webpack_require__("./src/helpers/ConverterOptions.ts");
+
+var FileUtils =
+/** @class */
+function () {
+  function FileUtils(mime) {
+    this.mime = mime;
+  }
+  /**
+  * Take an object Url, or an url of an image an convert it back to a File object.
+  *
+  * @param url - The first input number
+  * @param fileInfo - The second input number
+  * @param {RequestInit=} fetchOptions - An optional fetching options about the url request, it uses the same `{RequestInit}` interface from fetch api.
+  * @returns A promise containing the file
+  *
+  *@example
+  *```ts
+  * const newFile = await urlToFile("blob:https://tenant.com/bd3df1f7-38c5-44db-9a97-aa956072ef02", {
+  *   fileName: "bird.png",
+  *   fileMime: "image/png",
+  *   lastModified: new Date().getTime()
+  * });
+  * ```
+  * */
+
+
+  FileUtils.prototype.urlToFile = function (url, fileInfo, fetchOptions) {
+    if (fetchOptions === void 0) {
+      fetchOptions = null;
+    }
+
+    return __awaiter(this, void 0, void 0, function () {
+      var fileBlob, fileObj, e_1;
+      return __generator(this, function (_b) {
+        switch (_b.label) {
+          case 0:
+            _b.trys.push([0, 2,, 3]);
+
+            return [4
+            /*yield*/
+            , fetch(url, fetchOptions).then(function (r) {
+              return r.blob();
+            })];
+
+          case 1:
+            fileBlob = _b.sent();
+            fileObj = new File([fileBlob], fileInfo.fileName, {
+              type: (fileInfo === null || fileInfo === void 0 ? void 0 : fileInfo.fileMime) || this.checkIfHasMime(fileInfo === null || fileInfo === void 0 ? void 0 : fileInfo.fileName),
+              lastModified: (fileInfo === null || fileInfo === void 0 ? void 0 : fileInfo.lastModified) || new Date().getTime()
+            });
+            return [2
+            /*return*/
+            , fileObj];
+
+          case 2:
+            e_1 = _b.sent();
+            console.error(e_1 === null || e_1 === void 0 ? void 0 : e_1.message);
+            return [2
+            /*return*/
+            , null];
+
+          case 3:
+            return [2
+            /*return*/
+            ];
+        }
+      });
+    });
+  };
+  /**
+   * Downloads in the browser an XML File of the same given string.
+   *
+   * @param xmlText  - String of the whole content of the XML file
+   * @param {String=} fileName - the name of the XML file.
+   */
+
+
+  FileUtils.prototype.downloadXml = function (xmlText, fileName) {
+    if (xmlText) {
+      var xmlTag_1 = document.createElement('a');
+      var filename = fileName || 'undefinedName.xml';
+      filename = this.fileNameValidator(filename, '.xml');
+      var xmlBlob = new Blob([xmlText], {
+        type: 'application/octet-stream'
+      });
+      var objUrl_1 = URL.createObjectURL(xmlBlob);
+      xmlTag_1.setAttribute('href', objUrl_1);
+      xmlTag_1.setAttribute('download', filename);
+      xmlTag_1.dataset.downloadurl = ['text/plain', xmlTag_1.download, xmlTag_1.href].join(':');
+      xmlTag_1.draggable = true;
+      xmlTag_1.classList.add('dragout');
+      xmlTag_1.click();
+      setTimeout(function () {
+        window.URL.revokeObjectURL(objUrl_1);
+        xmlTag_1 === null || xmlTag_1 === void 0 ? void 0 : xmlTag_1.remove();
+      }, 200);
+    }
+  };
+
+  FileUtils.prototype.fileNameValidator = function (fileName, ext) {
+    if (!ext.startsWith('.')) ext = "." + ext;
+
+    if (fileName) {
+      if (!fileName.endsWith(ext)) return fileName + ext;
+      return fileName;
+    }
+  };
+
+  FileUtils.prototype.checkIfHasMime = function (fileName) {
+    var _b;
+
+    if (!fileName) return null;
+    var type = ((_b = this === null || this === void 0 ? void 0 : this.mime) === null || _b === void 0 ? void 0 : _b.contentType(fileName)) || 'application/octet-stream';
+    return type;
+  };
+  /**
+   * Convert's a base 64 string to some of the possible return values from `ConversionOptions` class.
+   * @returns
+   * ```ts
+   * new ConversionOptions()
+   * ```
+   * */
+
+
+  FileUtils.prototype.convertBase64To = function (base64, fileName, type) {
+    var _b;
+
+    type = type || this.checkIfHasMime(fileName);
+    var sliceSize = 512;
+    var byteCharacters = atob(decodeURIComponent(base64));
+    var byteArrays = [];
+
+    for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+      var slice = byteCharacters === null || byteCharacters === void 0 ? void 0 : byteCharacters.slice(offset, offset + sliceSize);
+      var byteNumbers = new Array(slice.length);
+
+      for (var i = 0; i < slice.length; i++) {
+        byteNumbers[i] = slice.charCodeAt(i);
+      }
+
+      var byteArray = new Uint8Array(byteNumbers);
+      byteArrays.push(byteArray);
+    }
+
+    var blob = type ? new Blob(byteArrays, {
+      type: type
+    }) : new Blob(byteArrays);
+    return new ConverterOptions_1.ConversionOptions(blob, byteArrays, type, (_b = this === null || this === void 0 ? void 0 : this.mime) !== null && _b !== void 0 ? _b : undefined, fileName);
+  };
+
+  var _a;
+
+  _a = FileUtils;
+  /**
+   * Takes any `Blob` object or inherited objects from this interface and convert it to a base64 string.
+   * @param blob - Any Blob object, such as `File` and other inherited objects from this interface.
+   * @returns A promise of the base64 string.
+   */
+
+  FileUtils.blobToBase64 = function (blob, config) {
+    return __awaiter(void 0, void 0, void 0, function () {
+      var readAs;
+
+      var _b;
+
+      return __generator(_a, function (_c) {
+        readAs = (_b = config === null || config === void 0 ? void 0 : config.readAs) !== null && _b !== void 0 ? _b : 'DataURL';
+
+        try {
+          return [2
+          /*return*/
+          , new Promise(function (resolve, reject) {
+            var reader = new FileReader();
+
+            reader.onloadend = function () {
+              return __awaiter(void 0, void 0, void 0, function () {
+                var b64, metarRegex, result;
+                return __generator(this, function (_b) {
+                  switch (_b.label) {
+                    case 0:
+                      b64 = reader === null || reader === void 0 ? void 0 : reader.result;
+                      if (!b64) reject(new Error('FileReader error'));
+                      if (!!(config === null || config === void 0 ? void 0 : config.customCb)) return [3
+                      /*break*/
+                      , 1];
+                      metarRegex = /^data:.+;base64,/;
+                      return [2
+                      /*return*/
+                      , resolve(b64 === null || b64 === void 0 ? void 0 : b64.replace(metarRegex, ''))];
+
+                    case 1:
+                      return [4
+                      /*yield*/
+                      , config === null || config === void 0 ? void 0 : config.customCb(b64)];
+
+                    case 2:
+                      result = _b.sent();
+                      return [2
+                      /*return*/
+                      , resolve(result)];
+                  }
+                });
+              });
+            };
+
+            reader.onerror = function (e) {
+              return reject(e);
+            };
+
+            if (config === null || config === void 0 ? void 0 : config.encoding) reader["readAs".concat(readAs)](blob);else reader["readAs".concat(readAs)](blob, config === null || config === void 0 ? void 0 : config.encoding);
+          })];
+        } catch (err) {
+          console.log(err);
+          return [2
+          /*return*/
+          , null];
+        }
+
+        return [2
+        /*return*/
+        ];
+      });
+    });
+  };
+
+  return FileUtils;
+}();
+
+exports.FileUtils = FileUtils;
+;
+
+(function () {
+  var reactHotLoader = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal.default : undefined;
+
+  if (!reactHotLoader) {
+    return;
+  }
+
+  reactHotLoader.register(__awaiter, "__awaiter", "F:\\Projetos Individuais\\ReactLibraries\\trentim-react-sdk\\src\\helpers\\FileUtils.ts");
+  reactHotLoader.register(__generator, "__generator", "F:\\Projetos Individuais\\ReactLibraries\\trentim-react-sdk\\src\\helpers\\FileUtils.ts");
+  reactHotLoader.register(FileUtils, "FileUtils", "F:\\Projetos Individuais\\ReactLibraries\\trentim-react-sdk\\src\\helpers\\FileUtils.ts");
+})();
+
+;
+
+(function () {
+  var leaveModule = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal.leaveModule : undefined;
+  leaveModule && leaveModule(module);
+})();
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__("./node_modules/webpack/buildin/module.js")(module)))
+
+/***/ }),
+
+/***/ "./src/helpers/Utils.ts":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(module) {
+
+(function () {
+  var enterModule = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal.enterModule : undefined;
+  enterModule && enterModule(module);
+})();
+
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+
+var __signature__ = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal["default"].signature : function (a) {
+  return a;
+};
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Utils = void 0;
+
+var Utils =
+/** @class */
+function () {
+  function Utils() {}
+  /**Tries to convert an ISO `string` to the locale format. */
+
+
+  Utils.convertIsoToLocaleString = function (date, locales, formatOptions) {
+    var _a;
+
+    if (locales === void 0) {
+      locales = 'pt-BR';
+    }
+
+    if (formatOptions === void 0) {
+      formatOptions = undefined;
+    } //First check if the string can be converted to a date object.
+
+
+    if (!(new Date(date) instanceof Date) && isNaN((_a = new Date(date)) === null || _a === void 0 ? void 0 : _a.getTime())) return date;
+    var isIsoDate = /\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?Z/.test(date);
+    if (!isIsoDate) return date;
+    return new Intl.DateTimeFormat(locales, formatOptions).format(new Date(date));
+  };
+  /**
+   * @TO-DO: Add documentation
+   */
+
+
+  Utils.copyAndSort = function (items, columnKey, isSortedDescending) {
+    return items.slice(0).sort(function (a, b) {
+      var aValue = Utils.getNestedObject(a, columnKey === null || columnKey === void 0 ? void 0 : columnKey.split('.'));
+      var bValue = Utils.getNestedObject(b, columnKey === null || columnKey === void 0 ? void 0 : columnKey.split('.'));
+      return (isSortedDescending ? aValue < bValue : aValue > bValue) ? 1 : -1;
+    });
+  };
+  /**Get a value from a deep nested object.
+   *
+   * @param obj The object to search in.
+   * @param path The path to the value, as an array of keys, separated by dots.
+   * @returns The value, if found.
+   *
+   * Theoretically, this function can be used to get the value from an `number[]` as the type of the `pathArr`, but I've not tested it.
+   */
+
+
+  Utils.getNestedObject = function (nestedObj, pathArr) {
+    return pathArr === null || pathArr === void 0 ? void 0 : pathArr.reduce(function (obj, key) {
+      return obj && obj[key] !== 'undefined' ? obj[key] : undefined;
+    }, nestedObj);
+  };
+  /**@TO-DO: Add documentation */
+
+
+  Utils.getDeepKeys = function (obj) {
+    var keys = [];
+
+    var _loop_1 = function _loop_1(key) {
+      keys.push(key);
+
+      if (_typeof(obj[key]) === "object") {
+        var subKeys = Utils.getDeepKeys(obj[key]);
+        keys = keys.concat(subKeys === null || subKeys === void 0 ? void 0 : subKeys.map(function (subkey) {
+          return key + "." + subkey;
+        }));
+      }
+    };
+
+    for (var key in obj) {
+      _loop_1(key);
+    }
+
+    return keys;
+  };
+
+  return Utils;
+}();
+
+exports.Utils = Utils;
+;
+
+(function () {
+  var reactHotLoader = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal.default : undefined;
+
+  if (!reactHotLoader) {
+    return;
+  }
+
+  reactHotLoader.register(Utils, "Utils", "F:\\Projetos Individuais\\ReactLibraries\\trentim-react-sdk\\src\\helpers\\Utils.ts");
+})();
+
+;
+
+(function () {
+  var leaveModule = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal.leaveModule : undefined;
+  leaveModule && leaveModule(module);
+})();
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__("./node_modules/webpack/buildin/module.js")(module)))
+
+/***/ }),
+
+/***/ "./src/helpers/WebpartAddons.ts":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(module) {
+
+(function () {
+  var enterModule = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal.enterModule : undefined;
+  enterModule && enterModule(module);
+})();
+
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+
+var __signature__ = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal["default"].signature : function (a) {
+  return a;
+};
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.WebpartAddons = void 0;
+
+var WebpartAddons =
+/** @class */
+function () {
+  function WebpartAddons() {}
+
+  WebpartAddons.prototype.changeElementProperty = function (element, elementsToChange) {
+    if (element === null || element === void 0 ? void 0 : element.style) {
+      elementsToChange === null || elementsToChange === void 0 ? void 0 : elementsToChange.forEach(function (value, key) {
+        element.style[key] = value;
+      });
+    }
+  };
+  /**
+   * @param nodeElement - Base Node element that contains a collection of children divs that can reach the target element
+   * @param finalTarget - The target element such as an class name selector like `my-element` or an `HTMLElement` using
+   * ```js
+   * document.querySelector('my-element');
+   * ```
+   * @param elementsToChange - A map of the elements to change, the key is the property name and the value is the new value
+   * ```js
+   * const elementsToChange = new Map<keyof CSSStyleDeclaration, any>([['height', '100%']]);
+   * ```
+   */
+
+
+  WebpartAddons.prototype.changeNodeProperty = function (nodeElement, finalTarget, elementsToChange) {
+    var _a, _b;
+
+    try {
+      var childCanvasChild = null;
+
+      if ((nodeElement === null || nodeElement === void 0 ? void 0 : nodeElement.length) > 1) {
+        if ((_b = (_a = nodeElement[0]) === null || _a === void 0 ? void 0 : _a.className) === null || _b === void 0 ? void 0 : _b.includes('ControlZone-control')) childCanvasChild = nodeElement[0];else childCanvasChild = nodeElement[1];
+      } else childCanvasChild = nodeElement[0];
+
+      var canChange = this.targetCondition(finalTarget, childCanvasChild);
+      return canChange ? canChange : this.changeNodeRecursive(childCanvasChild, finalTarget, elementsToChange);
+    } catch (err) {
+      console.error('[WebpartAddons] - changeElementProperty - Error while changing the node property', err);
+      return false;
+    }
+  };
+
+  WebpartAddons.prototype.changeNodeRecursive = function (childCanvasChild, target, elementsToChange) {
+    var _a;
+
+    if (!(childCanvasChild === null || childCanvasChild === void 0 ? void 0 : childCanvasChild.children)) return this.changeNodeProperty((_a = childCanvasChild === null || childCanvasChild === void 0 ? void 0 : childCanvasChild.nextElementSibling) === null || _a === void 0 ? void 0 : _a.children, target, elementsToChange);else {
+      this.changeElementProperty(childCanvasChild, elementsToChange);
+      return this.changeNodeProperty(childCanvasChild === null || childCanvasChild === void 0 ? void 0 : childCanvasChild.children, target, elementsToChange);
+    }
+  };
+
+  WebpartAddons.prototype.targetCondition = function (target, child) {
+    var _a;
+
+    if (typeof target === 'string') return (_a = child === null || child === void 0 ? void 0 : child.className) === null || _a === void 0 ? void 0 : _a.startsWith(target);else if (_typeof(target) === 'object') {
+      var nodeCondition = child === null || child === void 0 ? void 0 : child.isEqualNode(target);
+      return nodeCondition;
+    }
+    return false;
+  };
+  /**
+   * It enables the webpart to be live reloaded even when the webpart is already on a production environment, it only applies when using `gulp serve`.
+   * @param manifest - SPFx manifest from the webpart context - `{@microsoft/sp-component-base#BaseComponent.context}`
+   * @param serveUrl - An optional URL to use as the gulp serve address, by default it will be https://localhost:4321
+   * @param liveReloadUrl - An optional URL to use as the live reload address, by default it will be `//localhost:35729/livereload.js?snipver=1`
+   */
+
+
+  WebpartAddons.registerLiveReload = function (manifest, serveUrl, liveReloadUrl) {
+    var pageUrl = manifest["loaderConfig"]["internalModuleBaseUrls"][0];
+
+    if ((pageUrl === null || pageUrl === void 0 ? void 0 : pageUrl.indexOf(serveUrl || "https://localhost:4321")) !== -1) {
+      // create a new <script> element
+      var script = document.createElement('script'); // assign the src attribute to the livereload serve
+
+      script.src = liveReloadUrl || "//localhost:35729/livereload.js?snipver=1"; // add script to the head section of the page
+
+      document.head.appendChild(script);
+    }
+  };
+
+  return WebpartAddons;
+}();
+
+exports.WebpartAddons = WebpartAddons;
+;
+
+(function () {
+  var reactHotLoader = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal.default : undefined;
+
+  if (!reactHotLoader) {
+    return;
+  }
+
+  reactHotLoader.register(WebpartAddons, "WebpartAddons", "F:\\Projetos Individuais\\ReactLibraries\\trentim-react-sdk\\src\\helpers\\WebpartAddons.ts");
+})();
+
+;
+
+(function () {
+  var leaveModule = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal.leaveModule : undefined;
+  leaveModule && leaveModule(module);
+})();
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__("./node_modules/webpack/buildin/module.js")(module)))
+
+/***/ }),
+
+/***/ "./src/helpers/index.ts":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var __signature__ = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal["default"].signature : function (a) {
+  return a;
+};
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Utils = exports.ConversionOptions = exports.WebpartAddons = exports.FileUtils = void 0;
+
+var FileUtils_1 = __webpack_require__("./src/helpers/FileUtils.ts");
+
+Object.defineProperty(exports, "FileUtils", {
+  enumerable: true,
+  get: function get() {
+    return FileUtils_1.FileUtils;
+  }
+});
+
+var WebpartAddons_1 = __webpack_require__("./src/helpers/WebpartAddons.ts");
+
+Object.defineProperty(exports, "WebpartAddons", {
+  enumerable: true,
+  get: function get() {
+    return WebpartAddons_1.WebpartAddons;
+  }
+});
+
+var ConverterOptions_1 = __webpack_require__("./src/helpers/ConverterOptions.ts");
+
+Object.defineProperty(exports, "ConversionOptions", {
+  enumerable: true,
+  get: function get() {
+    return ConverterOptions_1.ConversionOptions;
+  }
+});
+
+var Utils_1 = __webpack_require__("./src/helpers/Utils.ts");
+
+Object.defineProperty(exports, "Utils", {
+  enumerable: true,
+  get: function get() {
+    return Utils_1.Utils;
+  }
+});
+
+/***/ })
+
+/******/ });
+});
 //# sourceMappingURL=index.js.map
