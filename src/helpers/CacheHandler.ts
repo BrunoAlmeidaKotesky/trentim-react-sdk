@@ -52,18 +52,23 @@ export class CacheHandler implements ICacheHandler {
         localStorage.removeItem(key);
     }
 
-    public setRefreshDate(date: Date, dateType: 'minutes' | 'hours'  | 'days', timeSpan: number) {
+    public setRefreshDate(date: Date, dateType: 'minutes' | 'hours'  | 'days' | 'seconds', timeSpan: number) {
         let refreshDate = date;
         switch (dateType) {
+            case 'seconds':
+                refreshDate.setSeconds(refreshDate.getSeconds() + timeSpan);
             case 'minutes':
-                refreshDate = new Date(date.getTime() + timeSpan * 60000);
+                refreshDate.setMinutes(refreshDate.getMinutes() + timeSpan);
                 break;
             case 'hours':
-                refreshDate = new Date(date.getTime() + timeSpan * 3600000);
+                refreshDate.setHours(refreshDate.getHours() + timeSpan);
                 break;
             case 'days':
-                refreshDate = new Date(date.getTime() + timeSpan * 86400000);
+                refreshDate.setDate(refreshDate.getDate() + timeSpan);
                 break;
+            default: {
+                throw new Error(`The dateType ${dateType} is not supported`);
+            }
         }
         return refreshDate.toISOString();
     }

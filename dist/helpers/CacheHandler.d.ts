@@ -14,6 +14,6 @@ export declare class CacheHandler implements ICacheHandler {
     getCache<T>(key: string, { type }: Pick<ICacheOptions, 'type'>): ICacheResponse<T>;
     private parseCache;
     removeCacheKey(key: string): void;
-    setRefreshDate(date: Date, dateType: 'minutes' | 'hours' | 'days', timeSpan: number): string;
+    setRefreshDate(date: Date, dateType: 'minutes' | 'hours' | 'days' | 'seconds', timeSpan: number): string;
 }
 export {};
