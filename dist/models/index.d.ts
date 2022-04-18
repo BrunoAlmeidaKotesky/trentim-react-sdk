@@ -1,3 +1,4 @@
+export * from './interfaces/ICacheHandler';
 export * from './interfaces/IGridView';
 export * from './interfaces/IMimeConverter';
 export * from './interfaces/IInfoCardProps';
