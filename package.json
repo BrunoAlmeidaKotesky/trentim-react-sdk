@@ -22,6 +22,7 @@
     "build-ts-declarations": "node tsconfig.update.js && tsc && cd dist/ && find . -name \\*.js -delete && cd ..",
     "storybook": "start-storybook -p 9200",
     "storybook-at": "start-storybook -p",
+    "build-storybook": "build-storybook --docs --loglevel verbose",
     "commit": "git add -u && git add -A && git commit --allow-empty -m",
     "commit-amend": "git add -u && git add -A && git commit --amend --allow-empty --no-edit",
     "publish-push": "yarn publish --non-interactive && git push && git push --tags",
@@ -32,7 +33,8 @@
     "sync-usages": "node sync-usages.js",
     "sync-usages-watch": "node sync-usages.js --watch",
     "release": "yarn test && yarn run build && git add -u && git add -A && git commit --allow-empty -m \"Build changes\" && yarn version && yarn run publish-push",
-    "upgrade-release": "yarn upgrade && yarn run release"
+    "upgrade-release": "yarn upgrade && yarn run release",
+    "chromatic": "npx chromatic -d storybook-static/"
   },
   "keywords": [
     "React",
@@ -68,6 +70,7 @@
     "autoprefixer": "^7.2.6",
     "babel-jest": "^26.6.3",
     "babel-loader": "^8.1.0",
+    "babel-preset-minify": "^0.5.1",
     "babel-preset-react-app": "^6.1.0",
     "chokidar": "^3.4.0",
     "chromatic": "^6.5.4",

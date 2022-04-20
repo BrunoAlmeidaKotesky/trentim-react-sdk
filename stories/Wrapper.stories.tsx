@@ -11,16 +11,16 @@ export default {
         },
         linkUrl: {
             type: 'string',
-            defaultValue: 'https://www.google.com'
+            defaultValue: 'https://www.trentim.com'
         },
         linkText: {
             type: 'string',
-            defaultValue: 'Google'
+            defaultValue: 'Trentim'
         }
     }
 }
 
 export const Template = ({linkText, asd, linkUrl , ...args}) => (
-<ConditionalWrapper condition wrapper={child => (<a href={linkUrl}>{child}</a>)} {...args}>
+<ConditionalWrapper condition wrapper={child => (<a href={linkUrl}>{child}</a>)}{...args}>
     <span>{linkText}</span>
 </ConditionalWrapper>);
