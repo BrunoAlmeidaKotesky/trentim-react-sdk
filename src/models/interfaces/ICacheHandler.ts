@@ -31,9 +31,9 @@ export interface ICacheHandler {
     /**
      * @param date - The date to set when the object will need to be refreshed. 
      */
-    setRefreshDate(date: Date, dateType: 'minutes' | 'hours'  | 'days', timeSpan: number): void;
+    setRefreshDate(date: Date, dateType: 'seconds' | 'minutes' | 'hours'  | 'days', timeSpan: number): void;
     /**
      * @param key - The key name to remove from the storage 
      */
-    removeCacheKey(key: string): void;
+    removeCacheKey(key: string, {type}: Pick<ICacheOptions, 'type'>): void;
 }

@@ -1,5 +1,6 @@
 import type { IColumn, IDetailsListProps, IGroup } from "@fluentui/react/lib/DetailsList";
 import type { ICardProps } from "./IInfoCardProps";
+import type { IPanelChildrenPosition } from './ICommonPanel';
 import type { IConfigurableHeader } from "./IListOptions";
 import type { ColumnKey, IDateConversionOptions } from './ICommon';
 import type { ApplyCustomFilter, FilterComponent } from '../types/Common';
@@ -80,7 +81,22 @@ export interface IGridListProps<T extends any> extends IGridHandler<T>, IGridVie
     /**A list of keys from `IRow` to not be displayed on the top of the Panel when grouping.*/
     hiddenGroupKeys?: string[] | Array<ColumnKey<T>>;
     /** If set, this will be used to display when a group does not have any values to be grouped by. */
-    emptyGroupLabel?: string; 
+    emptyGroupLabel?: string;
+    /** If set, the `<DetailsList />` will be grouped by this key by default.
+     * 
+     * Even if the `enableGrouping` property is set to `false`, the `groupByKey` property will be used to group the items.
+    */
+    initialGroupedBy?: {key: ColumnKey<T>; name: string};
+    /**Use this property if you want to render custom components inside grouping or filtering panel. 
+     * 
+     * `top` will be rendered on the top of the panel, `footer` will be rendered on the bottom of the panel.
+    */
+    panelChildren?: IPanelChildren;
+}
+
+export interface IPanelChildren {
+    group?: IPanelChildrenPosition
+    filter?: IPanelChildrenPosition
 }
 
 export interface IGridClickActions {

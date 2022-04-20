@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 
 export interface ICommonPanel<T = any> {
     isOpen: boolean;
@@ -7,3 +8,5 @@ export interface ICommonPanel<T = any> {
     onOpen?: () => void;
     panelTitle: string;
 }
+
+export type IPanelChildrenPosition = {footer?: ReactNode, top: ReactNode};

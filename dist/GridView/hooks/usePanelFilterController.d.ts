@@ -41,5 +41,7 @@ export declare function usePanelFilterController(): {
         DefaultButton: import("react").LazyExoticComponent<typeof import("@fluentui/react/lib/Button").DefaultButton>;
         TagPicker: import("react").LazyExoticComponent<import("react").FunctionComponent<import("@fluentui/react/lib/Pickers").ITagPickerProps>>;
         Label: import("react").LazyExoticComponent<import("react").FunctionComponent<import("@fluentui/react/lib/Label").ILabelProps>>;
+        top: import("react").ReactNode;
+        footer: import("react").ReactNode;
     };
 };

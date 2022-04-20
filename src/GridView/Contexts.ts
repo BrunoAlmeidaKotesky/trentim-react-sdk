@@ -31,7 +31,9 @@ export const FilterPanelContext = createContext<IPanelFilterProps>({
     setFromDate: undefined,
     setToDate: undefined,
     filterOptionsMatrix: [],
-    availableFilters: []
+    availableFilters: [],
+    top: undefined,
+    footer: undefined
 });
 
 export const GroupPanelContext = createContext<IGroupPanel>({
@@ -43,5 +45,7 @@ export const GroupPanelContext = createContext<IGroupPanel>({
     panelTitle: '',
     options: [],
     selectedGroupKeys: null,
-    setSelectedGroupKeys: undefined
+    setSelectedGroupKeys: undefined,
+    top: undefined,
+    footer: undefined
 });

@@ -3,7 +3,7 @@ import { lazy, useContext, useMemo, Suspense } from 'react';
 import { GroupPanelContext } from './Contexts';
 
 function GroupPanel() {
-    const {isOpen, panelTitle, onApply, onCancel, onClose, options, selectedGroupKeys, setSelectedGroupKeys} = useContext(GroupPanelContext);
+    const {isOpen, panelTitle, onApply, onCancel, onClose, options, selectedGroupKeys, setSelectedGroupKeys, top, footer} = useContext(GroupPanelContext);
     const [FluentPanel, PrimaryButton, DefaultButton, RadioButton] = useMemo(() => {
         const Panel = lazy(() => import('@fluentui/react/lib/Panel').then(({ Panel }) => ({ default: Panel })));
         const PrimaryButton = lazy(() => import('@fluentui/react/lib/Button').then(({ PrimaryButton }) => ({ default: PrimaryButton })));
@@ -18,7 +18,9 @@ function GroupPanel() {
             <FluentPanel
                 isFooterAtBottom={true}
                 onDismiss={onClose} isOpen={isOpen}
-                onRenderFooter={_ => (<div style={{padding: 20}}>
+                onRenderFooter={_ => (<>
+                {!!footer ? footer : null}
+                <div style={{padding: 20}}>
                     <Suspense fallback={'...'}>
                         <PrimaryButton onClick={() => onApply(selectedGroupKeys)} styles={{root: {marginRight: 8}}}>
                             Aplicar
@@ -27,7 +29,8 @@ function GroupPanel() {
                     <Suspense fallback={'...'}>
                         <DefaultButton onClick={onCancel}>Cancelar</DefaultButton>
                     </Suspense>
-                  </div>)}>
+                  </div></>)}>
+                {!!top ? top : null}
                 <h2>{panelTitle}</h2>
                 <Suspense fallback={'...'}>
                     <RadioButton

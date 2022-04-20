@@ -85,7 +85,17 @@ export function useGridController<T extends BaseType>(props: IGridListProps<T>) 
         setCols(convertedColumns);
     }, [props?.columns]);
 
-    
+    useEffect(() => {
+        if(!props?.initialGroupedBy?.key) return;
+        GridViewGrouping.onApplyGrouping({
+            actualRows,
+            cols,
+            emptyGroupLabel: props?.emptyGroupLabel,
+            setIsGroupPanel,
+            setGroups,
+            onItemsGrouped: props?.onItemsGrouped
+        })(`${props?.initialGroupedBy?.key};${props?.initialGroupedBy?.name}`);
+    }, [props?.initialGroupedBy?.key, actualRows, cols]);
 
     useEffect(() => { setActualRows(props?.rows); setAllRows(props?.rows) }, [props?.rows]);
 
@@ -116,6 +126,8 @@ export function useGridController<T extends BaseType>(props: IGridListProps<T>) 
         fromDate, toDate, setFromDate, setToDate,
         filterOptionsMatrix,
         availableFilters: memoizedAvailableFilter,
+        top: props?.panelChildren?.filter?.top,
+        footer: props?.panelChildren?.filter?.footer
     }
 
     const groupPanelConfig: IGroupPanel = {
@@ -134,7 +146,9 @@ export function useGridController<T extends BaseType>(props: IGridListProps<T>) 
             setIsGroupPanel,
             setGroups,
             onItemsGrouped: props?.onItemsGrouped
-        })
+        }),
+        top: props?.panelChildren?.group?.top,
+        footer: props?.panelChildren?.group?.footer
     }
 
     const listConfig: IListOptionsProps<any> = {

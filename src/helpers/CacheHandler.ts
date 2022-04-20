@@ -48,8 +48,10 @@ export class CacheHandler implements ICacheHandler {
         }
     }
 
-    public removeCacheKey(key: string) {
-        localStorage.removeItem(key);
+    public removeCacheKey(key: string, { type }: Pick<ICacheOptions, 'type'>) {
+        if (type === 'local')
+            localStorage.removeItem(key);
+        else sessionStorage.removeItem(key);
     }
 
     public setRefreshDate(date: Date, dateType: 'minutes' | 'hours'  | 'days' | 'seconds', timeSpan: number) {

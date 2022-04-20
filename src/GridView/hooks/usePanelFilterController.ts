@@ -6,7 +6,7 @@ import type { ITag } from '@fluentui/react/lib/Pickers';
 import type { IPersonaProps } from '@fluentui/react/lib/Persona';
 
 export function usePanelFilterController() {
-    const { isOpen, onClose, panelTitle, onCancel, onApply, actualFilteredValues, setActualFilteredValues, onOpen, filterOptionsMatrix, availableFilters } = useContext(FilterPanelContext);
+    const { isOpen, onClose, panelTitle, onCancel, onApply, actualFilteredValues, setActualFilteredValues, onOpen, filterOptionsMatrix, availableFilters, top, footer } = useContext(FilterPanelContext);
     const [FluentPanel, Dropdown, PrimaryButton, DefaultButton, TagPicker, Label] = useMemo(() => {
         const Panel = lazy(() => import('@fluentui/react/lib/Panel').then(({ Panel }) => ({ default: Panel })));
         const DropDown = lazy(() => import('@fluentui/react/lib/Dropdown').then(({ Dropdown }) => ({ default: Dropdown })));
@@ -186,7 +186,8 @@ export function usePanelFilterController() {
             PrimaryButton,
             DefaultButton,
             TagPicker,
-            Label
+            Label,
+            top, footer
         }
     }
 }

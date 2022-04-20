@@ -25,6 +25,7 @@ export function GridViewListExample() {
             {key: 'GerenteProjeto.Nested.Value.Another.MoreNest', name: 'Modificado', fieldName: 'GerenteProjeto.Nested.Value.Another.MoreNest', minWidth: 100, maxWidth: 200, hideColumn: true}
           ]}
           hiddenFilterKeys={['NumeroPI']}
+          initialGroupedBy={{key: 'Status', name: 'Status'}}
           headerOptions={{
             enableSearch: true, enableFilter: true,
             enableGrouping: true,
@@ -33,6 +34,12 @@ export function GridViewListExample() {
             customButtons: [{text: 'Upload', props: {
               onClick: () => console.log('Clicked')
             }}]
+          }}
+          panelChildren={{
+            group: {
+              top: <div>AAA</div>,
+              footer: <div>BBB</div>
+            }
           }}
           styles={{contentContainer: {maxHeight: 500, overflowY: 'auto'}}}
           renderAs="list"

@@ -1,6 +1,6 @@
 import type { IRow } from "./IGridView";
 import type { Dispatch, SetStateAction } from 'react';
-import type { ICommonPanel } from "./ICommonPanel";
+import type { ICommonPanel, IPanelChildrenPosition } from "./ICommonPanel";
 import type { FilterComponent } from '../types/Common';
 import type { RangeType } from "../../helpers/enums";
 export interface FilterOption {
@@ -24,7 +24,7 @@ interface IDateSliderCtx {
     setFromDate: Dispatch<SetStateAction<Date>>;
     setToDate: Dispatch<SetStateAction<Date>>;
 }
-export interface IPanelFilterProps extends ICommonPanel<SelectedItemsMap>, IDateSliderCtx {
+export interface IPanelFilterProps extends ICommonPanel<SelectedItemsMap>, IDateSliderCtx, IPanelChildrenPosition {
     setActualFilteredValues: Dispatch<SetStateAction<SelectedItemsMap>>;
     actualFilteredValues: SelectedItemsMap;
     filterOptionsMatrix: FilterOption[][];

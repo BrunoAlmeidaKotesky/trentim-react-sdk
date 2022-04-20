@@ -6,7 +6,7 @@ import {usePanelFilterController} from './hooks/usePanelFilterController';
 function PanelFilter() {
     const {JSX, state, handlers} = usePanelFilterController();
     const {actualFilteredValues, panelTitle, isOpen, filterOptionsMatrix, availableFilters} = state;
-    const {FluentPanel, PrimaryButton, Dropdown, TagPicker, DefaultButton, Label} = JSX;
+    const {FluentPanel, PrimaryButton, Dropdown, TagPicker, DefaultButton, Label, top, footer} = JSX;
     const { onClose, onCancel, getDefaultDropdownSelectedKeys, onAddOrRemoveToMap, 
             getDefaultSelectedTag, getDefaultSelectedSlider } = handlers;
 
@@ -14,7 +14,9 @@ function PanelFilter() {
     return (
         <React.Suspense fallback={<div>...</div>}>
             <FluentPanel 
-                onRenderFooter={_ => (<div style={{padding: 20}}>
+                onRenderFooter={_ => (<>
+                {!!footer ? footer : null}
+                <div style={{padding: 20}}>
                     <React.Suspense fallback={'...'}>
                         <PrimaryButton onClick={() => handlers.onApply(actualFilteredValues)} styles={{root: {marginRight: 8}}}>
                             Aplicar
@@ -23,9 +25,10 @@ function PanelFilter() {
                     <React.Suspense fallback={'...'}>
                         <DefaultButton onClick={onCancel}>Cancelar</DefaultButton>
                     </React.Suspense>
-                  </div>)}
+                  </div></>)}
                 isFooterAtBottom={true}
                 onDismiss={onClose} isOpen={isOpen}>
+                {!!top ? top : null}
                 <h2>{panelTitle}</h2>
                 {availableFilters?.map((filter, idx) => {
                     return (<React.Suspense key={filter?.key + "-" + idx} fallback={'...'}>

@@ -1,4 +1,5 @@
 import type { Paths } from "../types/UtilityTypes";
+import type {ReactNode} from "react";
 
 /**This interface is used to represent objects that can be used to convert ISO string formats to a locale string from a date. */
 export interface IDateConversionOptions {
@@ -9,6 +10,7 @@ export interface IDateConversionOptions {
     formatOptions?: Intl.DateTimeFormatOptions;
 }
 
+export type IPanelChildrenPosition = {footer?: ReactNode, top: ReactNode};
 
 export type DeepKey4<T> = Paths<T, 4>;
 export type ColumnKey<T> = keyof T | DeepKey4<T>;

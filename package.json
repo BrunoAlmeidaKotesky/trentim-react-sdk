@@ -24,7 +24,7 @@
     "storybook-at": "start-storybook -p",
     "commit": "git add -u && git add -A && git commit --allow-empty -m",
     "commit-amend": "git add -u && git add -A && git commit --amend --allow-empty --no-edit",
-    "publish-push": "yarn publish --non-interactive --tag beta && git push && git push --tags",
+    "publish-push": "yarn publish --non-interactive && git push && git push --tags",
     "test": "jest --coverage --no-cache --runInBand --passWithNoTests",
     "test-watch": "jest --watch --verbose --runInBand",
     "sync-file-deps": "node sync-file-deps.js",
@@ -34,8 +34,13 @@
     "release": "yarn test && yarn run build && git add -u && git add -A && git commit --allow-empty -m \"Build changes\" && yarn version && yarn run publish-push",
     "upgrade-release": "yarn upgrade && yarn run release"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "React",
+    "SDK",
+    "@fluentui/react",
+    "Microsoft UI Fabric"
+  ],
+  "author": "Bruno Almeida Kotesky",
   "license": "MIT",
   "peerDependencies": {
     "@fluentui/react": "8.52.3",

@@ -13,7 +13,7 @@ export declare class CacheHandler implements ICacheHandler {
     setCache<T>(key: string, object: T, opt: ICacheOptions): void;
     getCache<T>(key: string, { type }: Pick<ICacheOptions, 'type'>): ICacheResponse<T>;
     private parseCache;
-    removeCacheKey(key: string): void;
+    removeCacheKey(key: string, { type }: Pick<ICacheOptions, 'type'>): void;
     setRefreshDate(date: Date, dateType: 'minutes' | 'hours' | 'days' | 'seconds', timeSpan: number): string;
 }
 export {};
