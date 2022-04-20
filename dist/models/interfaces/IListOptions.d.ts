@@ -3,8 +3,8 @@ import type { ReactNode } from "react";
 import type { IconClickCaller } from "../../helpers/enums";
 import type { IGridClickActions, IRow } from "./IGridView";
 import type { ColumnKey } from './ICommon';
-declare type ButtonTypes = 'PrimaryButton' | 'DefaultButton' | 'CustomButton';
-interface ICustomButtons {
+export declare type ButtonTypes = 'PrimaryButton' | 'DefaultButton' | 'CustomButton';
+export interface ICustomButtons {
     /**Default `fluent-ui` Button props. */
     props: IButtonProps;
     /**The flex position of your button. */
@@ -52,4 +52,3 @@ export interface IListOptionsProps<T> extends Partial<IGridClickActions> {
     };
 }
 export declare type IConfigurableHeader<T = any> = Omit<IListOptionsProps<T>, 'onSearchItemChange' | 'onClickSearchIcon' | 'setIsFilterPanelOpen' | 'setRenderAs' | 'setGroupBy' | 'setIsGroupPanelOpen' | 'onFilterIconClick' | 'onSearchBoxClick' | 'onGroupIconClick'>;
-export {};

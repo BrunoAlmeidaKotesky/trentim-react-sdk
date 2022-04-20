@@ -4,8 +4,8 @@ import type { IconClickCaller } from "../../helpers/enums";
 import type { IGridClickActions, IRow } from "./IGridView";
 import type { ColumnKey } from './ICommon';
 
-type ButtonTypes = 'PrimaryButton' | 'DefaultButton' | 'CustomButton';
-interface ICustomButtons {
+export type ButtonTypes = 'PrimaryButton' | 'DefaultButton' | 'CustomButton';
+export interface ICustomButtons {
     /**Default `fluent-ui` Button props. */
     props: IButtonProps,
     /**The flex position of your button. */
@@ -14,7 +14,7 @@ interface ICustomButtons {
     className?: string,
     /**Text to display on the button. */
     text: string;
-    renderAs?:  ButtonTypes;
+    renderAs?: ButtonTypes;
     onRenderCustomButton?: (props?: IButtonProps) => ReactNode;
 };
 export interface IListOptionsProps<T> extends Partial<IGridClickActions> {
