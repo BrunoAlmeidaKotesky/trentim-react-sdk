@@ -70,6 +70,7 @@
     "babel-loader": "^8.1.0",
     "babel-preset-react-app": "^6.1.0",
     "chokidar": "^3.4.0",
+    "chromatic": "^6.5.4",
     "circular-dependency-plugin": "^4.0.0",
     "clean-webpack-plugin": "^4.0.0",
     "css-loader": "^1.0.1",
