@@ -41,7 +41,7 @@ export type TColumn<T> = IColumn & {
 
 export type IFluentDetailsListProps = Omit<IDetailsListProps, 'columns' | 'items' | 'onRenderItemColumn' | 'onRenderRow'| 'layoutMode' | 'onRenderDetailsHeader'>; 
 
-export interface IGridListProps<T extends any> extends IGridHandler<T>, IGridViewStyles {
+export interface IGridListProps<T extends any> extends IGridHandler<T> {
     /**Use this to overwrite the default props `IDetailListProps` from Microsoft's `@fluent-ui` */
     detailsListProps?: IFluentDetailsListProps;
     /**if `renderAs` is set to `card`, you need to provide the card props. */
@@ -70,8 +70,11 @@ export interface IGridListProps<T extends any> extends IGridHandler<T>, IGridVie
      * ```
     */
     columns: TColumn<T>[];
-    /**The list of items to be displayed. If you intend to display a list like a tree/folder model, you need to use the `rowsAsNode` instead.*/
-    rows?: IRow<T>[];
+    /**The list of items to be displayed.
+     * 
+     * The items should be of type `IRow<T>[]`, which means any parsable interface that contains an `Id` property.
+    */
+    rows: IRow<T>[];
     /**The label to be displayed on the top of the filter Panel. */
     filterPanelTitle?: string;
     /**The label to be displayed on the top of the group Panel. */
@@ -92,6 +95,8 @@ export interface IGridListProps<T extends any> extends IGridHandler<T>, IGridVie
      * `top` will be rendered on the top of the panel, `footer` will be rendered on the bottom of the panel.
     */
     panelChildren?: IPanelChildren;
+    /**Custom styles to the component container and root. */
+    styles?: IGridViewStyles;
 }
 
 export interface IPanelChildren {
@@ -148,9 +153,9 @@ export interface IGridHandler<T> extends IGridClickActions {
     onSearchBoxItemsFiltered?: (filtered?: IRow<T>[]) => void;
 }
 
-interface IGridViewStyles {
-    styles?: {
-        root?: React.CSSProperties;
-        contentContainer?: React.CSSProperties;
-    }
+export interface IGridViewStyles {
+    /**The root <div> of the whole component, including the header and list/cards. */
+    root?: React.CSSProperties;
+    /**The container of the `<DetailsList />` or `<Card />` list. */
+    contentContainer?: React.CSSProperties;
 }

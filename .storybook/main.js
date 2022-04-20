@@ -1,16 +1,24 @@
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const createCompiler = require('@storybook/addon-docs/mdx-compiler-plugin');
-const path = require('path');
 
-module.exports = {
+const config = {
   stories: [
     '../src/**/*.stories.@(ts|tsx|mdx)',
     '../stories/**/*.stories.@(ts|tsx|mdx)',
   ],
   addons: [
+    {
+      name: '@storybook/addon-docs',
+      options: {
+        configureJSX: true,
+        babelOptions: {
+          babelrc: true
+        },
+        sourceLoaderOptions: null,
+        transcludeMarkdown: true,
+      },
+    },
     '@storybook/addon-essentials',
-    '@storybook/addon-docs/register',
-    '@storybook/addon-docs',
     '@storybook/addon-controls',
     'storybook-addon-react-docgen',
   ],
@@ -30,37 +38,22 @@ module.exports = {
         extensions: config.resolve.extensions,
       }),
     ];
+    config.resolve.extensions.push('.mdx');
 
-    config.module.rules.push({
-      // 2a. Load `.stories.mdx` / `.story.mdx` files as CSF and generate
-      //     the docs page from the markdown
-      test: /\.(stories|story)\.mdx$/,
-      use: [
-        {
-          loader: 'babel-loader',
-          // may or may not need this line depending on your app's setup
-          options: {
-            plugins: ['@babel/plugin-transform-react-jsx'],
-          },
-        },
-        {
-          loader: '@mdx-js/loader',
-          options: {
-            compilers: [createCompiler({})],
-          },
-          include: [path.resolve(__dirname, 'stories')]
-        },
-      ],
-    });
-    // 2b. Run `source-loader` on story files to show their source code
-    //     automatically in `DocsPage` or the `Source` doc block.
-    config.module.rules.push({
-      test: /\.(stories|story)\.[tj]sx?$/,
-      loader: require.resolve('@storybook/source-loader'),
-      exclude: [/node_modules/],
-      enforce: 'pre',
-    });
+    // config.module.rules.push({
+    //   test: /\.mdx$/,
+    //   use: [
+
+    //     {
+    //       loader: '@mdx-js/loader',
+    //       options: {
+    //         compilers: [createCompiler({})],
+    //       },
+    //     },
+    //   ]
+    // });
 
     return config;
   }
 }
+module.exports = config;

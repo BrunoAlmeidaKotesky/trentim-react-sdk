@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { GridView } from '../src/GridView/index';
-import {simpleRow} from '../dev/constants';
+import { GridView } from '../../src/GridView/index';
+import {simpleRow} from '../../dev/constants';
 import {Meta, ArgTypes, Args} from '@storybook/react/types-6-0';
 import {
   Title,
@@ -51,7 +51,7 @@ const argTypes: Partial<ArgTypes<Args>> = {
 }
 
 export default {
-    title: 'GridView',
+    title: 'Components/GridView',
     component: GridView,
     argTypes,
     parameters: {

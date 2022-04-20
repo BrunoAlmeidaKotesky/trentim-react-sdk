@@ -1,8 +1,8 @@
 import * as React from 'react';
-import {ConditionalWrapper} from '../src/ConditionalWrapper/index';
+import {ConditionalWrapper} from '../../src/ConditionalWrapper/index';
 
 export default {
-    title: 'ConditionalWrapper',
+    title: 'Components/ConditionalWrapper',
     component: ConditionalWrapper,
     argTypes: {
         condition: {
