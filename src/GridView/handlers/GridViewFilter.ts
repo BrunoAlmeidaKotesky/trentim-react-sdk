@@ -14,6 +14,8 @@ export class GridViewFilter {
 
         if(selectedItems.size === 0) {
             setActualRows(allRows);
+            if(!!onItemsFiltered) 
+                onItemsFiltered(allRows);
             return setIsFilterPanel(false);
         }
         const groupedMaps = GridViewMapper.groupMaps(selectedItems);
