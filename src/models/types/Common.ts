@@ -5,11 +5,12 @@ import type { IGroup } from "@fluentui/react/lib/DetailsList";
 
 export type FilterComponent = 'Dropdown' | 'SearchBox' | 'DateSlider' | 'PeoplePicker';
 export type KeyAndName = `${string};${string}`;
+export type CancelActivation = 'cancel' | 'dismiss' | 'not-selected';
 
 type ApplyFilterParams<T> = { allRows: IRow<T>[]; setActualRows: Dispatch<SetStateAction<IRow[]>>; setIsFilterPanel: Dispatch<SetStateAction<boolean>>; };
 type OnItemsFiltered<T> = (filtered?: IRow<T>[]) => void;
 
-type CustomFilterParams<T> = {applyCustomFilter?: ApplyCustomFilter<T>, onItemsFiltered?: OnItemsFiltered<T>};
+type CustomFilterParams<T> = {applyCustomFilter?: ApplyCustomFilter<T>, onItemsFiltered?: OnItemsFiltered<T>, onFilterPanelCancel: (activatedBy: CancelActivation) => void};
 export type ApplyFilter<T> = (params: ApplyFilterParams<T> & CustomFilterParams<T>) => (selectedItems: SelectedItemsMap) => void;
 
 interface IGroupingParams {
@@ -19,6 +20,7 @@ interface IGroupingParams {
     setGroups: Dispatch<SetStateAction<IGroup[]>>;
     setIsGroupPanel: Dispatch<SetStateAction<boolean>>;
     onItemsGrouped: (opt?: {selectedKey: string, setGroups: Dispatch<SetStateAction<IGroup[]>>}) => void;
+    onGroupPanelCancel: (activatedBy: CancelActivation) => void;
 }
 export type ApplyGrouping = (paramns: IGroupingParams) => (keyAndName: KeyAndName) => void;
 

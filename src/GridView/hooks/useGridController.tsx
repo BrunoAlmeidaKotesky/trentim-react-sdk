@@ -93,7 +93,8 @@ export function useGridController<T extends BaseType>(props: IGridListProps<T>) 
             emptyGroupLabel: props?.emptyGroupLabel,
             setIsGroupPanel,
             setGroups,
-            onItemsGrouped: props?.onItemsGrouped
+            onItemsGrouped: props?.onItemsGrouped,
+            onGroupPanelCancel: props?.onGroupPanelCancel
         })(`${props?.initialGroupedBy?.key};${props?.initialGroupedBy?.name}`);
     }, [props?.initialGroupedBy?.key, actualRows, cols]);
 
@@ -116,10 +117,19 @@ export function useGridController<T extends BaseType>(props: IGridListProps<T>) 
             setActualRows, 
             setIsFilterPanel, 
             applyCustomFilter: props?.applyCustomFilter, 
-            onItemsFiltered: props?.onItemsFiltered
+            onItemsFiltered: props?.onItemsFiltered,
+            onFilterPanelCancel: props?.onFilterPanelCancel
         }),
-        onCancel: () => { setIsFilterPanel(false); },
-        onClose: () =>  { setIsFilterPanel(false); },
+        onCancel: () => { 
+            setIsFilterPanel(false);
+            if(props?.onFilterPanelCancel) 
+                props?.onFilterPanelCancel('cancel');
+        },
+        onClose: () =>  { 
+            setIsFilterPanel(false); 
+            if(props?.onFilterPanelCancel)
+                props?.onFilterPanelCancel('dismiss');
+        },
         panelTitle: props?.filterPanelTitle ?? 'Filtrar',
         actualFilteredValues,
         setActualFilteredValues,
@@ -132,8 +142,16 @@ export function useGridController<T extends BaseType>(props: IGridListProps<T>) 
 
     const groupPanelConfig: IGroupPanel = {
         isOpen: isGroupPanelOpen,
-        onCancel: () => { setIsGroupPanel(false); },
-        onClose: () =>  { setIsGroupPanel(false); },
+        onCancel: () => { 
+            setIsGroupPanel(false);
+            if(props?.onGroupPanelCancel)
+                props?.onGroupPanelCancel('cancel');
+        },
+        onClose: () =>  { 
+            setIsGroupPanel(false); 
+            if(props?.onGroupPanelCancel)
+                props?.onGroupPanelCancel('dismiss');
+        },
         onOpen: () => { setIsGroupPanel(true); },
         panelTitle: props?.groupPanelTitle ?? 'Agrupar',
         setSelectedGroupKeys,
@@ -145,7 +163,8 @@ export function useGridController<T extends BaseType>(props: IGridListProps<T>) 
             emptyGroupLabel: props?.emptyGroupLabel,
             setIsGroupPanel,
             setGroups,
-            onItemsGrouped: props?.onItemsGrouped
+            onItemsGrouped: props?.onItemsGrouped,
+            onGroupPanelCancel: props?.onGroupPanelCancel
         }),
         top: props?.panelChildren?.group?.top,
         footer: props?.panelChildren?.group?.footer

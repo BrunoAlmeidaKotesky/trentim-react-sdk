@@ -4,6 +4,7 @@ import type { Dispatch, SetStateAction } from "react";
 import type { IGroup } from "@fluentui/react/lib/DetailsList";
 export declare type FilterComponent = 'Dropdown' | 'SearchBox' | 'DateSlider' | 'PeoplePicker';
 export declare type KeyAndName = `${string};${string}`;
+export declare type CancelActivation = 'cancel' | 'dismiss' | 'not-selected';
 declare type ApplyFilterParams<T> = {
     allRows: IRow<T>[];
     setActualRows: Dispatch<SetStateAction<IRow[]>>;
@@ -13,6 +14,7 @@ declare type OnItemsFiltered<T> = (filtered?: IRow<T>[]) => void;
 declare type CustomFilterParams<T> = {
     applyCustomFilter?: ApplyCustomFilter<T>;
     onItemsFiltered?: OnItemsFiltered<T>;
+    onFilterPanelCancel: (activatedBy: CancelActivation) => void;
 };
 export declare type ApplyFilter<T> = (params: ApplyFilterParams<T> & CustomFilterParams<T>) => (selectedItems: SelectedItemsMap) => void;
 interface IGroupingParams {
@@ -25,6 +27,7 @@ interface IGroupingParams {
         selectedKey: string;
         setGroups: Dispatch<SetStateAction<IGroup[]>>;
     }) => void;
+    onGroupPanelCancel: (activatedBy: CancelActivation) => void;
 }
 export declare type ApplyGrouping = (paramns: IGroupingParams) => (keyAndName: KeyAndName) => void;
 interface ISearchParams {

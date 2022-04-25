@@ -25,7 +25,7 @@ export function GridViewListExample() {
             {key: 'GerenteProjeto.Nested.Value.Another.MoreNest', name: 'Modificado', fieldName: 'GerenteProjeto.Nested.Value.Another.MoreNest', minWidth: 100, maxWidth: 200, hideColumn: true}
           ]}
           hiddenFilterKeys={['NumeroPI']}
-          initialGroupedBy={{key: 'Status', name: 'Status'}}
+          // initialGroupedBy={{key: 'Status', name: 'Status'}}
           headerOptions={{
             enableSearch: true, enableFilter: true,
             enableGrouping: true,
@@ -41,6 +41,8 @@ export function GridViewListExample() {
               footer: <div>BBB</div>
             }
           }}
+          onGroupPanelCancel={by => console.log(by)}
+          onFilterPanelCancel={by => console.log(by)}
           styles={{contentContainer: {maxHeight: 500, overflowY: 'auto'}}}
           renderAs="list"
           onFilterIconClick={() => {console.log("Before Filter")}}

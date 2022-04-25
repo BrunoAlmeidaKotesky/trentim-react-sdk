@@ -6,7 +6,7 @@ import type { FilterOption, IAvailableFilters } from '../../models/interfaces/IP
 
 export class GridViewFilter {
 
-    static onApplyFilter: ApplyFilter<IRow<any>> = ({allRows, setActualRows, setIsFilterPanel, applyCustomFilter, onItemsFiltered}) => (selectedItems) => {
+    static onApplyFilter: ApplyFilter<IRow<any>> = ({allRows, setActualRows, setIsFilterPanel, applyCustomFilter, onItemsFiltered, onFilterPanelCancel}) => (selectedItems) => {
         if(!!applyCustomFilter) {
             const groupedMaps = GridViewMapper.groupMaps(selectedItems);
             return applyCustomFilter({allRows, setActualRows, setIsFilterPanel, selectedItems, groupedMaps});
@@ -16,6 +16,8 @@ export class GridViewFilter {
             setActualRows(allRows);
             if(!!onItemsFiltered) 
                 onItemsFiltered(allRows);
+            if(!!onFilterPanelCancel)
+                onFilterPanelCancel('not-selected');
             return setIsFilterPanel(false);
         }
         const groupedMaps = GridViewMapper.groupMaps(selectedItems);

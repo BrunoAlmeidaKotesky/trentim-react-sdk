@@ -3,7 +3,7 @@ import type { ICardProps } from "./IInfoCardProps";
 import type { IPanelChildrenPosition } from './ICommonPanel';
 import type { IConfigurableHeader } from "./IListOptions";
 import type { ColumnKey, IDateConversionOptions } from './ICommon';
-import type { ApplyCustomFilter, FilterComponent } from '../types/Common';
+import type { ApplyCustomFilter, FilterComponent, CancelActivation } from '../types/Common';
 import type { Dispatch, SetStateAction } from "react";
 
 /**It should represent any object with primitive data types. 
@@ -48,7 +48,9 @@ export interface IGridListProps<T extends any> extends IGridHandler<T> {
     cardProps?: ICardProps;
     /**Configure the header behavior, such as to enable filter and other functionalities. */
     headerOptions: IConfigurableHeader<T>;
-    /**If the grid will be rendered as a list or as a collection of `<Card />` component */
+    /**If the grid will be rendered as a list or as a collection of `<Card />` component 
+     * @default list
+    */
     renderAs: 'list' | 'card';
     /**The column model to be applied to the list.  
      * It extends the Microsoft `@fluent-ui` `IColumn` interface.
@@ -116,6 +118,14 @@ export interface IGridClickActions {
     onSearchBoxClick?: (e?: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement, Element>) => void;
     /**A callback function that will be called when the grouping button is clicked, it **will not** overwrite the default grouping behavior.*/
     onGroupIconClick?: () => void;
+    /**A additional callback to be called either when the filter panel is cancelled by clicking on cancel button, close button or clicking on apply button
+     * with no filter applied.
+     */
+    onFilterPanelCancel?: (activatedBy?: CancelActivation) => void;
+    /**A additional callback to be called either when the group panel is cancelled by clicking on cancel button, close button or clicking on apply button 
+     * with no grouping applied.
+    */
+    onGroupPanelCancel?: (activatedBy?: CancelActivation) => void;
 }
 
 /**Represents all the functions that can be used. */
