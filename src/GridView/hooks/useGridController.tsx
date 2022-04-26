@@ -99,7 +99,6 @@ export function useGridController<T extends BaseType>(props: IGridListProps<T>) 
     }, [props?.initialGroupedBy?.key, actualRows, cols]);
 
     useEffect(() => { setActualRows(props?.rows); setAllRows(props?.rows) }, [props?.rows]);
-
     useEffect(() => {
         setCols(columns => [...columns.map(c => ({...c, onColumnClick: onColumnClick(actualRows)}))]);
     }, [actualRows?.length]);
@@ -193,7 +192,11 @@ export function useGridController<T extends BaseType>(props: IGridListProps<T>) 
         },
         onFilterIconClick: props?.onFilterIconClick,
         onGroupIconClick: props?.onGroupIconClick,
-        onSearchBoxClick: props?.onSearchBoxClick
+        onSearchBoxClick: props?.onSearchBoxClick,
+        cardButtonProps: props?.headerOptions?.cardButtonProps,
+        filterButtonProps: props?.headerOptions?.filterButtonProps,
+        groupButtonProps: props?.headerOptions?.groupButtonProps,
+        searchBoxProps: props?.headerOptions?.searchBoxProps,
     }
 
     return {

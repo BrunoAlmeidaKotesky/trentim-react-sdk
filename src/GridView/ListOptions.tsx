@@ -22,7 +22,7 @@ export const ListOptions = () => {
             filterButtonProps,
             groupButtonProps
         }
-    }, []);
+    }, [filterButtonProps, filterButtonProps, groupButtonProps, searchBoxProps]);
 
     const omittedTextFieldProps = useMemo(() => {
         delete searchBoxProps?.['placeholder'];
@@ -30,7 +30,7 @@ export const ListOptions = () => {
         delete searchBoxProps?.['onFocus'];
         delete searchBoxProps?.['onBlur'];
         return searchBoxProps;
-    }, []);
+    }, [filterButtonProps, filterButtonProps, groupButtonProps, searchBoxProps]);
 
     const defaultStyles = useMemo<Record<string, CSSProperties>>(() =>({
         container: {
