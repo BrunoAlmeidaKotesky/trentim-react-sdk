@@ -1,10 +1,10 @@
-import type { IColumn, IDetailsListProps, IGroup } from "@fluentui/react/lib/DetailsList";
 import type { ICardProps } from "./IInfoCardProps";
 import type { IPanelChildrenPosition } from './ICommonPanel';
 import type { IConfigurableHeader } from "./IListOptions";
 import type { ColumnKey, IDateConversionOptions } from './ICommon';
 import type { ApplyCustomFilter, FilterComponent, CancelActivation } from '../types/Common';
 import type { Dispatch, SetStateAction } from "react";
+import type { IColumn, IDetailsListProps, IGroup } from "@fluentui/react";
 
 /**It should represent any object with primitive data types. 
  * Please use the `Id` property to uniquely identify the object, it helps to avoid duplicates and correctly apply the filter.
@@ -36,8 +36,6 @@ export type TColumn<T> = IColumn & {
      * @default false */
     hideColumn?: boolean;
 }
-
-
 
 export type IFluentDetailsListProps = Omit<IDetailsListProps, 'columns' | 'items' | 'onRenderItemColumn' | 'onRenderRow'| 'layoutMode' | 'onRenderDetailsHeader'>; 
 

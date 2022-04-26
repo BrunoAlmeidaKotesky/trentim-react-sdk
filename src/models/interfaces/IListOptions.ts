@@ -3,6 +3,7 @@ import type {ReactNode} from "react";
 import type { IconClickCaller } from "../../helpers/enums";
 import type { IGridClickActions, IRow } from "./IGridView";
 import type { ColumnKey } from './ICommon';
+import type { ITextFieldProps } from "@fluentui/react/lib/TextField";
 
 export type ButtonTypes = 'PrimaryButton' | 'DefaultButton' | 'CustomButton';
 export interface ICustomButtons {
@@ -17,7 +18,30 @@ export interface ICustomButtons {
     renderAs?: ButtonTypes;
     onRenderCustomButton?: (props?: IButtonProps) => ReactNode;
 };
-export interface IListOptionsProps<T> extends Partial<IGridClickActions> {
+
+export interface IHeaderButtonProps extends Omit<Partial<IButtonProps>, 'onClick'> {}
+export interface IHeaderTextFieldProps extends Omit<Partial<ITextFieldProps>, 'onBlur' | 'onFocus' | 'onKeyDown' | 'placeholder'> {}
+
+export interface IOverridableGridOptions {
+    /**Use this property if you want to overwrite some of the default `DefaultButton` `IButtonProps` properties of the filter button component. 
+     *
+     * Some properties cannot be overridden, and will be ignored. */
+    filterButtonProps?: IHeaderButtonProps;
+    /**Use this property if you want to overwrite some of the default `DefaultButton` `IButtonProps` properties of the group button component. 
+     *
+     * Some properties cannot be overridden, and will be ignored. */
+    groupButtonProps?: IHeaderButtonProps;
+    /**Use this property if you want to overwrite some of the default `DefaultButton` `IButtonProps` properties of the card button component. 
+     *
+     * Some properties cannot be overridden, and will be ignored. */
+    cardButtonProps?: IHeaderButtonProps;
+    /**Use this property if you want to overwrite the some of the default `ITextFieldProps` from `TextField` component of the SearchBox. 
+     * 
+     * Some properties cannot be overridden, and will be ignored. */
+    searchBoxProps?: IHeaderTextFieldProps;
+}
+
+export interface IListOptionsProps<T> extends Partial<IGridClickActions>, IOverridableGridOptions {
     /**
      * If set to `true`, the filter panel will be displayed, and all the automatic filters logic will be applied to the list.
      * @defaultvalue `true`
@@ -54,4 +78,5 @@ export interface IListOptionsProps<T> extends Partial<IGridClickActions> {
 }
 
 export type IConfigurableHeader<T = any> = Omit<IListOptionsProps<T>, 
-    'onSearchItemChange' | 'onClickSearchIcon' | 'setIsFilterPanelOpen' | 'setRenderAs' | 'setGroupBy'| 'setIsGroupPanelOpen' | 'onFilterIconClick' | 'onSearchBoxClick' | 'onGroupIconClick' >;
+    'onSearchItemChange' | 'onClickSearchIcon' | 'setIsFilterPanelOpen' | 'setRenderAs' | 'setGroupBy' | 
+    'setIsGroupPanelOpen' | 'onFilterIconClick' | 'onSearchBoxClick' | 'onGroupIconClick' | 'onGroupPanelCancel' | 'onFilterPanelCancel' >;

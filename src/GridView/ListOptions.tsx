@@ -1,16 +1,38 @@
 import * as React from 'react';
-import { CSSProperties } from 'react';
+import { CSSProperties, useMemo } from 'react';
 import { DefaultButton, PrimaryButton, TextField } from '@fluentui/react'
 import {GroupPanelContext, ListOptionsContext} from './Contexts';
 import { IconClickCaller } from '../helpers/enums';
 
 export const ListOptions = () => {
-    const { customButtons, enableFilter, enableSearch, searchKeys, onSearchItemChange, 
-            setIsFilterPanelOpen, defaultButtonsOrder, searchBoxPlaceholder, enableCardView, 
-            setRenderAs, enableGrouping, onClickSearchIcon, onFilterIconClick, onGroupIconClick, onSearchBoxClick} = React.useContext(ListOptionsContext);
+    const { 
+        customButtons, enableFilter, enableSearch, searchKeys, onSearchItemChange, 
+        setIsFilterPanelOpen, defaultButtonsOrder, searchBoxPlaceholder, enableCardView, 
+        setRenderAs, enableGrouping, onClickSearchIcon, onFilterIconClick, onGroupIconClick, onSearchBoxClick,
+        cardButtonProps, filterButtonProps, searchBoxProps, groupButtonProps
+    } = React.useContext(ListOptionsContext);
     const {onOpen} = React.useContext(GroupPanelContext);
 
-    const defaultStyles: Record<string, CSSProperties> = {
+    const omittedButtonProps = useMemo(() => {
+        delete cardButtonProps?.['onClick'];
+        delete filterButtonProps?.['onClick'];
+        delete groupButtonProps?.['onClick'];
+        return {
+            cardButtonProps,
+            filterButtonProps,
+            groupButtonProps
+        }
+    }, []);
+
+    const omittedTextFieldProps = useMemo(() => {
+        delete searchBoxProps?.['placeholder'];
+        delete searchBoxProps?.['onKeyDown'];
+        delete searchBoxProps?.['onFocus'];
+        delete searchBoxProps?.['onBlur'];
+        return searchBoxProps;
+    }, []);
+
+    const defaultStyles = useMemo<Record<string, CSSProperties>>(() =>({
         container: {
             display: 'flex',
             flexDirection: 'row',
@@ -18,19 +40,21 @@ export const ListOptions = () => {
             justifyContent: 'end',
             margin: '8px 0'
         }
-    }
+    }), []);
 
     return (
     <div data-class-name="grid-view-header-container" style={defaultStyles.container}>
         {enableGrouping &&
-        <DefaultButton 
+        <DefaultButton
+            {...omittedButtonProps?.groupButtonProps}
             onClick={_ => {
                 if(!!onGroupIconClick)
                 onGroupIconClick();
                 onOpen();
             }} styles={{label: {fontSize: 14}, root: {order: defaultButtonsOrder?.group}}} iconProps={{iconName: 'GroupList'}} />}
-        {enableCardView && 
-        <DefaultButton 
+        {enableCardView &&
+        <DefaultButton
+            {...omittedButtonProps?.cardButtonProps}
             onClick={_ => setRenderAs()} styles={{label: {fontSize: 14}, root: {order: defaultButtonsOrder?.card}}} iconProps={{iconName: 'GridViewMedium'}} />}
         {customButtons?.length > 0 && customButtons?.map((b, idx) => {
             switch (b?.renderAs) {
@@ -45,6 +69,7 @@ export const ListOptions = () => {
         })}
         {(enableSearch && searchKeys) && 
         <TextField
+            {...omittedTextFieldProps}
             placeholder={searchBoxPlaceholder}
             onKeyDown={(e) => {
                 if (e.key === 'Enter') {
@@ -63,13 +88,14 @@ export const ListOptions = () => {
                 }
             }} 
             styles={{root: {width: 320, order: defaultButtonsOrder?.search}, icon: {color: '[theme: themePrimary, default: #0078D4]'}}} />}
-        {enableFilter && 
-        <DefaultButton 
+        {enableFilter &&
+        <DefaultButton
+            {...omittedButtonProps?.filterButtonProps}
             onClick={_ => {
                 if(!!onFilterIconClick) 
                     onFilterIconClick();
                 setIsFilterPanelOpen(true);
-            }} 
+            }}
             styles={{label: {fontSize: 14}, root: {order: defaultButtonsOrder?.filter}}} iconProps={{iconName: 'Filter'}} />}
     </div>);
 }

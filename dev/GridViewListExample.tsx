@@ -33,7 +33,10 @@ export function GridViewListExample() {
             searchBoxPlaceholder: "Pesquisar",
             customButtons: [{text: 'Upload', props: {
               onClick: () => console.log('Clicked')
-            }}]
+            }}],
+            groupButtonProps: {
+              disabled: false
+            }
           }}
           panelChildren={{
             group: {
