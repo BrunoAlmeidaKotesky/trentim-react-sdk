@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Suspense, useEffect, useLayoutEffect, useRef, useState }  from 'react';
 
-export type IBaseFrame = React.ComponentPropsWithRef<'iframe'> & {
+export type IBaseFrame = React.ComponentProps<'iframe'> & {
     refDepencyList?: React.DependencyList;
     refChanged?: (ref?:  React.MutableRefObject<HTMLIFrameElement>) => void;
 }
@@ -22,7 +22,7 @@ export function IFrame(props: IFrameProps) {
 
     return (
         <Suspense fallback={fallback || 'loading...'}>
-            <IFrameImplementation ref={props.ref} {...rest} />
+            <IFrameImplementation ref={props?.ref} {...rest} />
         </Suspense>
     );
 }
@@ -52,10 +52,8 @@ function IFrameImplementation(props: IBaseFrame) {
     }, []);
 
     useEffect(() => {
-        if (iFrameRef?.current) {
+        if (iFrameRef?.current) 
             props?.refChanged?.(iFrameRef);
-            props.ref = iFrameRef;
-        }
     }, [iFrameRef?.current, props?.refDepencyList]);
 
 

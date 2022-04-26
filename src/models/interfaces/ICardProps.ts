@@ -1,6 +1,6 @@
 import type { CSSProperties } from 'react';
 import type { BaseButton } from '@fluentui/react/lib/Button';
-import type { IDateConversionOptions } from './ICommon';
+import type { IDateConversionOptions } from '../types/Common';
 
 export type CircleIndicator = {title: string, color?: string};
 export interface IRightColumn {
@@ -9,16 +9,19 @@ export interface IRightColumn {
     /**All the possible values to be set on the right side of the card. */
     values: {title: string, style: CSSProperties}[];
 }
-export interface IInfoCardProps {
+export interface ICardProps {
     /**An option to the footer of the card. */
     circleIndicator?: CircleIndicator;
     /**The title of the card. */
     cardTitle: string;
     /**The subtitle of the card. */
     cardSubtitle?: string;
+    /**The width of the card.*/
     width?: string;
-    /**@default '150px' */
+    /**The height of the card.
+     * @default '150px' */
     height?: string; 
+    /**Information to be displayed on the right side of the card.*/
     cardRightColInformation?: IRightColumn;
     /** The possible icons names are available on OfficeUiIcons.
      * @external https://uifabricicons.azurewebsites.net/
@@ -30,18 +33,13 @@ export interface IInfoCardProps {
     /**An event to be triggered when the user clicks on the card. */
     onCardClick?: (e?: any) => void | Promise<void>;
     /**Set this if you want the card to set to `true` or `false` the user selection.
-     * @default
-     * ```css
-     * .card {
-     *      user-select: none;
-     *  }
-     *```
+     * @default true
      */
     enableUserSelect?: boolean;
 }
 
 type IGridCardRightCol = Pick<IRightColumn, 'containerStyle'> & {keys: {title: string, style?: CSSProperties, dateConversionOptions?: IDateConversionOptions}[]};
-export type ICardProps = Omit<IInfoCardProps, 'cardTitle' | 'cardSubtitle' | 'cardRightColInformation'> & {
+export type IGridCardProps = Omit<ICardProps, 'cardTitle' | 'cardSubtitle' | 'cardRightColInformation'> & {
     /**The style to be applied on the root container of the card(s). */
     containerStyle?: CSSProperties;
     /**A key from your `IRow` to be used on the title. */

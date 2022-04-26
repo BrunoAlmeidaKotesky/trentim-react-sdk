@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { PrimaryButton } from '@fluentui/react/lib/Button';
-import { IInfoCardProps } from '../models/interfaces/IInfoCardProps';
+import { ICardProps } from '../models/interfaces/ICardProps';
 import { CSSProperties } from 'react';
 
 /**
@@ -9,7 +9,7 @@ import { CSSProperties } from 'react';
  * @param props - IInfoCardProps
  * @returns JSX.Element
  */
-const InfoCard = React.memo((props: IInfoCardProps) => {
+export function Card(props: ICardProps) {
     const styles: Record<string, CSSProperties> = {
         card: {
             backgroundColor: "rgb(255, 255, 255)",
@@ -106,6 +106,4 @@ const InfoCard = React.memo((props: IInfoCardProps) => {
             </div>
         </div>
     );
-});
-
-export default InfoCard;
+}

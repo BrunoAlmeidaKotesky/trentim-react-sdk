@@ -2,14 +2,14 @@ import * as React from 'react';
 import { useEffect, Dispatch, SetStateAction, useMemo, lazy } from 'react';
 import { Utils } from '../../helpers/Utils';
 import { IRow } from '../../models/interfaces/IGridView';
-import { IInfoCardProps, ICardProps } from '../../models/interfaces/IInfoCardProps';
+import { ICardProps, IGridCardProps } from '../../models/interfaces/ICardProps';
 
 interface IGridCardHandler {
     renderAs: 'card' | 'list';
     enableGrouping: boolean;
     shouldRenderCard: boolean;
     actualRows: IRow[];
-    cardProps: ICardProps;
+    cardProps: IGridCardProps;
     setShouldRenderCard: Dispatch<SetStateAction<boolean>>;
     setEnableGrouping: Dispatch<SetStateAction<boolean>>;
     onRenderCustomComponent: (item: IRow) => React.ReactNode;
@@ -40,7 +40,7 @@ export function useGridCardRendering({
 
     const Card = useMemo(() => {
         if (!shouldRenderCard) return null;
-        return lazy(() => import('../../Card/Card').then((module) => ({ default: module?.default })));
+        return lazy(() => import('../../Card/Card').then((module) => ({ default: module?.Card })));
     }, [shouldRenderCard]);
 
     const CardsList = useMemo(() => {
@@ -64,7 +64,7 @@ export function useGridCardRendering({
                 ...cIndicator,
                 title: titleValue
             };
-            const newCardProps: IInfoCardProps = {
+            const newCardProps: ICardProps = {
                 ...cardProps,
                 cardTitle,
                 cardSubtitle,

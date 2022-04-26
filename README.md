@@ -5,11 +5,12 @@ This is an Alpha version, which everything still can be changed.
 This repo will become a private repository in the future.
 
 ### Components
-* Datatable - (Probably going to be removed.)
 * GridView
 * Card
 * ConditionalWrapper
 * IFrame
+* UploadButton
+
 ### Utils
 * FileUtils
 * WebpartAddons

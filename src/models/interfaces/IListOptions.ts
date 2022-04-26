@@ -1,12 +1,10 @@
 import type { IButtonProps } from "@fluentui/react/lib/Button";
-import type {ReactNode} from "react";
 import type { IconClickCaller } from "../../helpers/enums";
 import type { IGridClickActions, IRow } from "./IGridView";
-import type { ColumnKey } from './ICommon';
+import type { ColumnKey, ICustomButtonConfig } from '../types/Common';
 import type { ITextFieldProps } from "@fluentui/react/lib/TextField";
 
-export type ButtonTypes = 'PrimaryButton' | 'DefaultButton' | 'CustomButton';
-export interface ICustomButtons {
+export interface ICustomButtons extends ICustomButtonConfig {
     /**Default `fluent-ui` Button props. */
     props: IButtonProps,
     /**The flex position of your button. */
@@ -15,8 +13,6 @@ export interface ICustomButtons {
     className?: string,
     /**Text to display on the button. */
     text: string;
-    renderAs?: ButtonTypes;
-    onRenderCustomButton?: (props?: IButtonProps) => ReactNode;
 };
 
 export interface IHeaderButtonProps extends Omit<Partial<IButtonProps>, 'onClick'> {}
