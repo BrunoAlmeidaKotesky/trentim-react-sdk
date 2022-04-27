@@ -69,7 +69,6 @@
   ],
   "compileOnSave": false,
   "files": [
-    "./src/DataTable/index.ts",
     "./src/GridView/index.ts",
     "./src/helpers/index.ts",
     "./src/hooks/index.ts",

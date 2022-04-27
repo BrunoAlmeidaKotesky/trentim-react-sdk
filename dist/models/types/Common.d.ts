@@ -2,6 +2,9 @@ import type { SelectedItemsMap } from "../interfaces/IPanelFilter";
 import type { IRow, TColumn } from "../interfaces/IGridView";
 import type { Dispatch, SetStateAction } from "react";
 import type { IGroup } from "@fluentui/react/lib/DetailsList";
+import type { Paths } from "../types/UtilityTypes";
+import type { ReactNode } from "react";
+import type { IButtonProps } from "@fluentui/react/lib/Button";
 export declare type FilterComponent = 'Dropdown' | 'SearchBox' | 'DateSlider' | 'PeoplePicker';
 export declare type KeyAndName = `${string};${string}`;
 export declare type CancelActivation = 'cancel' | 'dismiss' | 'not-selected';
@@ -48,4 +51,30 @@ interface IApplyCustomFilterParams<T> extends ApplyFilterParams<T> {
     selectedItems: SelectedItemsMap;
 }
 export declare type ApplyCustomFilter<T> = (params: IApplyCustomFilterParams<T>) => void;
+/**This interface is used to represent objects that can be used to convert ISO string formats to a locale string from a date. */
+export interface IDateConversionOptions {
+    /**If se to `true`, it will automatically convert the string ISO dates to your locale date. */
+    shouldConvertToLocaleString?: boolean;
+    locales?: string | string[];
+    /**Use this if you want to overwrite the behavior of the default `Intl.DateTimeFormatOptions` applied. */
+    formatOptions?: Intl.DateTimeFormatOptions;
+}
+export declare type IPanelChildrenPosition = {
+    footer?: ReactNode;
+    top: ReactNode;
+};
+export declare type DeepKey4<T> = Paths<T, 4>;
+export declare type ColumnKey<T> = keyof T | DeepKey4<T>;
+export declare type ButtonTypes = 'PrimaryButton' | 'DefaultButton' | 'CustomButton';
+export interface ICustomButtonConfig {
+    /**How to render the button.
+     *
+     * If you want to use `CustomButton`, you will need to provide the `onRenderCustomButton` prop.
+    */
+    renderAs?: ButtonTypes;
+    /**
+     * Use this if you are using `renderAs` to `CustomButton`.
+     */
+    onRenderCustomButton?: (props?: IButtonProps) => ReactNode;
+}
 export {};

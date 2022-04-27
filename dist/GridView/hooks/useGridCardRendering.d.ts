@@ -1,13 +1,13 @@
 import * as React from 'react';
 import { Dispatch, SetStateAction } from 'react';
 import { IRow } from '../../models/interfaces/IGridView';
-import { ICardProps } from '../../models/interfaces/IInfoCardProps';
+import { IGridCardProps } from '../../models/interfaces/ICardProps';
 interface IGridCardHandler {
     renderAs: 'card' | 'list';
     enableGrouping: boolean;
     shouldRenderCard: boolean;
     actualRows: IRow[];
-    cardProps: ICardProps;
+    cardProps: IGridCardProps;
     setShouldRenderCard: Dispatch<SetStateAction<boolean>>;
     setEnableGrouping: Dispatch<SetStateAction<boolean>>;
     onRenderCustomComponent: (item: IRow) => React.ReactNode;

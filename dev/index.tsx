@@ -3,7 +3,6 @@ import * as ReactDOM from 'react-dom';
 import { initializeIcons, loadTheme } from '@fluentui/react';
 import { GridViewListExample } from './GridViewListExample';
 import { GridViewCardExample } from './GridViewCardExample';
-import { DataTableExample } from './DataTableExample';
 
 let hmrUpdate: undefined | (() => void);
 loadTheme({
@@ -60,7 +59,6 @@ const Demo = (): JSX.Element => {
       backgroundImage: 'linear-gradient(45deg, #85FFBD 0%, #FFFB7D 100%)'
     }}>
       <div style={{ display: "grid", placeItems: "center", margin: "0 auto", height: "100%" }}>
-        <DataTableExample/>
         <GridViewListExample/>
         <GridViewCardExample/>
       </div>

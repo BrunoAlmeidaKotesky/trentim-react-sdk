@@ -1,8 +1,7 @@
-import type { ICardProps } from "./IInfoCardProps";
+import type { IGridCardProps } from "./ICardProps";
 import type { IPanelChildrenPosition } from './ICommonPanel';
 import type { IConfigurableHeader } from "./IListOptions";
-import type { ColumnKey, IDateConversionOptions } from './ICommon';
-import type { ApplyCustomFilter, FilterComponent, CancelActivation } from '../types/Common';
+import type { ApplyCustomFilter, FilterComponent, CancelActivation, ColumnKey, IDateConversionOptions } from '../types/Common';
 import type { Dispatch, SetStateAction } from "react";
 import type { IColumn, IDetailsListProps, IGroup } from "@fluentui/react";
 /**It should represent any object with primitive data types.
@@ -36,7 +35,7 @@ export interface IGridListProps<T extends any> extends IGridHandler<T> {
     /**Use this to overwrite the default props `IDetailListProps` from Microsoft's `@fluent-ui` */
     detailsListProps?: IFluentDetailsListProps;
     /**if `renderAs` is set to `card`, you need to provide the card props. */
-    cardProps?: ICardProps;
+    cardProps?: IGridCardProps;
     /**Configure the header behavior, such as to enable filter and other functionalities. */
     headerOptions: IConfigurableHeader<T>;
     /**If the grid will be rendered as a list or as a collection of `<Card />` component

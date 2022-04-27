@@ -57,7 +57,7 @@ export function useGridController<T extends BaseType>(props: IGridListProps<T>) 
         actualRows,
         onItemClick,
         cardProps: props?.cardProps,
-        enableGrouping,
+        enableGrouping: props?.headerOptions?.enableGrouping,
         onRenderCustomComponent: props?.onRenderCustomComponent,
         setEnableGrouping,
         setShouldRenderCard,

@@ -19,7 +19,7 @@ export function useGridCardRendering({
     renderAs, 
     setEnableGrouping, 
     setShouldRenderCard, 
-    enableGrouping, 
+    enableGrouping,
     actualRows, 
     shouldRenderCard, 
     cardProps, 
