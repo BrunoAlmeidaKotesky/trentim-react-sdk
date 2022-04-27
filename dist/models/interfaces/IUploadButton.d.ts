@@ -14,5 +14,5 @@ export interface IUploadButton extends Omit<ICustomButtonConfig, 'onRenderCustom
     /**A function to render any custom component as the button.
      *
      * The `onClick` from the callback function needs to be passed to the component. */
-    onRenderCustomButton: (onClick: (ev?: any) => void) => JSX.Element;
+    onRenderCustomButton?: (onClick: (ev?: any) => void) => JSX.Element;
 }
