@@ -2,8 +2,8 @@ import { useEffect, useRef } from "react";
 
 /**
  * 
- * @param callback - A callback with a pointer event as parameter.
- * @param cancelableCb - A callback with a pointer event as parameter, which can be used to stop the execution of the first callback.
+ * @param callback - A callback with a pointer event as it's parameter.
+ * @param cancelableCb - A callback with a pointer event as it's parameter, which can be used to stop the execution of the first callback.
  * @returns innerRef - A ref to be used on some element.
  * 
  * @example

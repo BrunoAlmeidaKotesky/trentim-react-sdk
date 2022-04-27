@@ -1,5 +1,5 @@
 import { Meta } from '@storybook/addon-docs'
-import ExampleComponent from './ExampleComponent'
+import {DebounceExample} from './ExamplesComponents'
 
 <Meta title="Hooks/useDebounce" />
 
@@ -21,6 +21,11 @@ import ExampleComponent from './ExampleComponent'
 | value | true | The value to be debounced of any type. | <code>T</code> |
 | delay | true | time to delay the event. | <code language="typescript">number</code> |
 
+* Function Signature:
+```ts dark
+function useDebounce<T>(value: T, delay: number): T
+```
+
 ##### Usage:
 ```tsx dark
 import {useDebounce} from 'trentim-react-sdk/dist/hooks';
@@ -37,4 +42,4 @@ function Component() {
 
 ##### Real time example:
 
-<ExampleComponent />
+<DebounceExample />

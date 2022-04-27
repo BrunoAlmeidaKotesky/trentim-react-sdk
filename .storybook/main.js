@@ -20,7 +20,6 @@ const config = {
     },
     '@storybook/addon-essentials',
     '@storybook/addon-controls',
-    'storybook-addon-react-live-edit',
     'storybook-addon-react-docgen',
   ],
   typescript: {

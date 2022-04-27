@@ -1,0 +1,37 @@
+import { Meta } from '@storybook/addon-docs'
+import {PreviousExample} from './ExamplesComponents'
+
+<Meta title="Hooks/usePrevious" />
+
+# usePrevious
+A hook to be used to memorize the previous value of a state/variable before the last render.
+
+* Return Value: The previous value of the state/variable. `T`
+
+* Parameters:
+
+| *Name* | *Required* | *Description* | *Type* |
+|--------|-------------|----------------|--------|
+| value | true | Any value of type `T`. | <code>T</code> |
+
+* Function Signature:
+```ts dark
+function usePrevious<T>(value: T): T
+```
+
+##### Real time example:
+
+<PreviousExample />
+
+* Code:
+```tsx dark
+import {usePrevious} from 'trentim-react-sdk/dist/hooks'
+function Example() {
+    const [counter, setCounter] = useState(0);
+    const prevCount = usePrevious(counter);
+    return (
+        <button onClick={() => setCounter(p => p + 1)}>
+            Current: {counter}, Previous: {prevCount}
+        </button>);
+}
+``` 
