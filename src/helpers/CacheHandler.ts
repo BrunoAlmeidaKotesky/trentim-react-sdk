@@ -54,7 +54,7 @@ export class CacheHandler implements ICacheHandler {
         else sessionStorage.removeItem(key);
     }
 
-    public setRefreshDate(date: Date, dateType: 'minutes' | 'hours'  | 'days' | 'seconds', timeSpan: number) {
+    private setRefreshDate(date: Date, dateType: 'minutes' | 'hours'  | 'days' | 'seconds', timeSpan: number) {
         let refreshDate = date;
         switch (dateType) {
             case 'seconds':

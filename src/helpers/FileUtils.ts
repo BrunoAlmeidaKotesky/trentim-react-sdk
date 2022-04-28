@@ -43,16 +43,15 @@ export class FileUtils {
    * @param xmlText  - String of the whole content of the XML file
    * @param {String=} fileName - the name of the XML file. 
    */
-  public downloadXml(xmlText: string, fileName?: string): void {
+  public downloadXml(xmlText: string, fileName: string): void {
     if (xmlText) {
       let xmlTag = document.createElement('a');
-      let filename = fileName || 'undefinedName.xml';
-      filename = this.fileNameValidator(filename, '.xml');
+      fileName = this.fileNameValidator(fileName, '.xml');
       let xmlBlob = new Blob([xmlText], { type: 'application/octet-stream' });
       let objUrl = URL.createObjectURL(xmlBlob);
 
       xmlTag.setAttribute('href', objUrl);
-      xmlTag.setAttribute('download', filename);
+      xmlTag.setAttribute('download', fileName);
 
       xmlTag.dataset.downloadurl = ['text/plain', xmlTag.download, xmlTag.href].join(':');
       xmlTag.draggable = true;

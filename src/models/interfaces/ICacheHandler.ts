@@ -21,17 +21,13 @@ export interface ICacheHandler {
      * @param object - Any objected that can be parsed
      * @param options - The type of the storage: `localStorage` | `sessionStorage` 
      */
-    setCache<T>(key: string, object: T, {type}: ICacheOptions): void;
+    setCache<T>(key: string, object: T, options: ICacheOptions): void;
     /**
      * @param key - The gey to get the cached value
      * @param options - The type of the storage: `localStorage` | `sessionStorage` 
      * @returns return an `ICachedResponse` object, where the `value` is the original value.
      */
     getCache<T>(key: string, {type}: Pick<ICacheOptions, 'type'>): ICacheResponse<T>;
-    /**
-     * @param date - The date to set when the object will need to be refreshed. 
-     */
-    setRefreshDate(date: Date, dateType: 'seconds' | 'minutes' | 'hours'  | 'days', timeSpan: number): void;
     /**
      * @param key - The key name to remove from the storage 
      */
