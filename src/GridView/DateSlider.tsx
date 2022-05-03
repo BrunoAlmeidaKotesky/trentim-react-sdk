@@ -27,6 +27,7 @@ function DateSliderComponent(props: IDateSliderProps) {
         if(val === RangeType.NONE) {
             props.onRecordDateRange(null, null, RangeType.NONE);
             setCurSlider(RangeType.NONE);
+            setDisplayDatePicker(false);
         }
         else if(val === RangeType.WEEK) {
             const lastWeek = new Date();
