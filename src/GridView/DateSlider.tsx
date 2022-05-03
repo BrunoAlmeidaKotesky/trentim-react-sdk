@@ -54,7 +54,7 @@ function DateSliderComponent(props: IDateSliderProps) {
 
     useEffect(() => {
         if(dateValue?.size > 0 && currentSlider === RangeType.CUSTOM)
-            props.onRecordDateRange(dateValue.get(props?.itemKey)?.fromDate, dateValue.get(props?.itemKey)?.toDate, RangeType.CUSTOM);
+            props.onRecordDateRange(dateValue?.get(props?.itemKey)?.fromDate, dateValue.get(props?.itemKey)?.toDate, RangeType.CUSTOM);
     }, [currentSlider, dateValue]);
 
     useEffect(() => {
@@ -93,27 +93,27 @@ function DateSliderComponent(props: IDateSliderProps) {
     {displayDatePicker && 
         <div>
             <DatePicker
-                maxDate={dateValue.get(props?.itemKey)?.toDate}
+                maxDate={dateValue?.get(props?.itemKey)?.toDate}
                 strings={dateStrings}
-                value={dateValue.get(props?.itemKey)?.fromDate}
+                value={dateValue?.get(props?.itemKey)?.fromDate}
                 formatDate={(date) => date?.toLocaleDateString()}
                 onSelectDate={(d) => {
                     setFilterDate(p => {
                         const newMap = new Map(p);
-                        newMap.set(props?.itemKey, {fromDate: d, toDate: dateValue.get(props?.itemKey)?.toDate});
+                        newMap.set(props?.itemKey, {fromDate: d, toDate: dateValue?.get(props?.itemKey)?.toDate});
                         return newMap;
                     });
                     setCurSlider(RangeType.CUSTOM);
                 }}
                 label="De"/>
             <DatePicker
-                minDate={dateValue.get(props?.itemKey)?.fromDate}
+                minDate={dateValue?.get(props?.itemKey)?.fromDate}
                 strings={dateStrings}
                 formatDate={(date) => date?.toLocaleDateString()}
                 onSelectDate={(d) => {
                     setFilterDate(p => {
                         const newMap = new Map(p);
-                        newMap.set(props?.itemKey, {fromDate: dateValue.get(props?.itemKey)?.fromDate, toDate: d});
+                        newMap.set(props?.itemKey, {fromDate: dateValue?.get(props?.itemKey)?.fromDate, toDate: d});
                         return newMap;
                     });
                     setCurSlider(RangeType.CUSTOM);
