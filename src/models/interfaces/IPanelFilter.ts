@@ -21,10 +21,8 @@ export interface IAvailableFilters {
 }
 
 interface IDateSliderCtx {
-    fromDate: Date;
-    toDate: Date;
-    setFromDate: Dispatch<SetStateAction<Date>>;
-    setToDate: Dispatch<SetStateAction<Date>>;
+    dateValue: Map<string, {fromDate: Date, toDate: Date}>;
+    setFilterDate: Dispatch<SetStateAction<Map<string, {fromDate: Date, toDate: Date}>>>;
 }
 
 export interface IPanelFilterProps extends ICommonPanel<SelectedItemsMap>, IDateSliderCtx, IPanelChildrenPosition {

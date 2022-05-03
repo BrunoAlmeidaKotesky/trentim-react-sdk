@@ -27,8 +27,7 @@ export function useGridController<T extends BaseType>(props: IGridListProps<T>) 
     const [actualRows, setActualRows] = useState<IRow<T>[]>(props?.rows ?? []);
     const [isFilterPanelOpen, setIsFilterPanel] = useState(false);
     const [isGroupPanelOpen, setIsGroupPanel] = useState(false);
-    const [fromDate, setFromDate] = useState<Date>(null);
-    const [toDate, setToDate] = useState(new Date());
+    const [dateValue, setFilterDate] = useState<Map<string, {fromDate: Date, toDate: Date}>>(null);
     const [searchCb, currentSearchBoxItems] = useRefWithCallback<IRow[]>([]);
     const [memoizedAvailableFilter, setAvailableFilters] = useState<IAvailableFilters[]>([]);
 
@@ -132,7 +131,7 @@ export function useGridController<T extends BaseType>(props: IGridListProps<T>) 
         panelTitle: props?.filterPanelTitle ?? 'Filtrar',
         actualFilteredValues,
         setActualFilteredValues,
-        fromDate, toDate, setFromDate, setToDate,
+        dateValue, setFilterDate,
         filterOptionsMatrix,
         availableFilters: memoizedAvailableFilter,
         top: props?.panelChildren?.filter?.top,

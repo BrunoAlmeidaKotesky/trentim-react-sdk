@@ -24,7 +24,7 @@ export function GridViewListExample() {
             {key: 'GerenteProjeto.Title', name: 'Gerente do Projeto', fieldName: 'GerenteProjeto.Title', minWidth: 100, maxWidth: 200, isResizable: true, renderFilterAs: 'PeoplePicker'},
             {key: 'DonoProjeto.Title', name: 'Dono do Projeto', fieldName: 'DonoProjeto.Title', minWidth: 100, maxWidth: 200, isResizable: true, renderFilterAs: 'PeoplePicker'},
             {key: 'DataInicio', name: 'Data Início', fieldName: 'DataInicio', minWidth: 100, maxWidth: 200, isResizable: true, dateConversionOptions: {shouldConvertToLocaleString: true}, renderFilterAs: 'DateSlider'},
-            {key: 'GerenteProjeto.Nested.Value.Another.MoreNest', name: 'Modificado', fieldName: 'GerenteProjeto.Nested.Value.Another.MoreNest', minWidth: 100, maxWidth: 200, hideColumn: true}
+            {key: 'Modified', name: 'Modificado', fieldName: 'Modified', minWidth: 100, maxWidth: 200, hideColumn: false, dateConversionOptions: {shouldConvertToLocaleString: true}, renderFilterAs: 'DateSlider'}
           ]}
           hiddenFilterKeys={['NumeroPI']}
           // initialGroupedBy={{key: 'Status', name: 'Status'}}

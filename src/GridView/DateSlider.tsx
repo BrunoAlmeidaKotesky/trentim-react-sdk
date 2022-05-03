@@ -8,40 +8,54 @@ import { FilterPanelContext } from './Contexts';
 
 function DateSliderComponent(props: IDateSliderProps) {
     const [displayDatePicker, setDisplayDatePicker] = useState(false);
-    const {fromDate, toDate, setFromDate, setToDate} = useContext(FilterPanelContext);
+    const [currentSlider, setCurSlider] = useState<RangeType>(RangeType.NONE);
+    const {dateValue, setFilterDate} = useContext(FilterPanelContext);
     const formatSliderValue = (num: number): string => num === 0 ? 'Nenhum' : num === 1 ? 'Última Semana' : num === 2 ? 'Último Mês' : num === 3 ? 'Últimos Ano' : '';
     const onSliderChange: ISliderProps['onChanged'] = (_, val) => {
-        if(val === 4)
+        if(val === RangeType.CUSTOM) {
             setDisplayDatePicker(true);
+            setCurSlider(RangeType.CUSTOM);
+        }
         else {
             setDisplayDatePicker(false);
-            setFromDate(null);
-            setToDate(new Date());
+            setFilterDate(p => {
+                const copyMap = new Map(p);
+                copyMap.set(props?.itemKey, {fromDate: null, toDate: new Date()});
+                return copyMap;
+            })
         }
-        if(val === 0) {
+        if(val === RangeType.NONE) {
             props.onRecordDateRange(null, null, RangeType.NONE);
+            setCurSlider(RangeType.NONE);
         }
-        else if(val === 1) {
+        else if(val === RangeType.WEEK) {
             const lastWeek = new Date();
             lastWeek.setDate(lastWeek.getDate() - 7);
+            setCurSlider(RangeType.WEEK);
             props.onRecordDateRange(lastWeek, new Date(), RangeType.WEEK);
         }
-        else if(val === 2) {
+        else if(val === RangeType.MONTH) {
             const lastMonth = new Date();
             lastMonth.setMonth(lastMonth.getMonth() - 1);
+            setCurSlider(RangeType.MONTH);
             props.onRecordDateRange(lastMonth, new Date(), RangeType.MONTH);
         }
-        else if(val === 3) {
+        else if(val === RangeType.YEAR) {
             const lastYear = new Date();
             lastYear.setFullYear(lastYear.getFullYear() - 1);
+            setCurSlider(RangeType.YEAR);
             props.onRecordDateRange(lastYear, new Date(), RangeType.YEAR);
         }
     }
 
     useEffect(() => {
-        if(fromDate && toDate)
-            props.onRecordDateRange(fromDate, toDate, RangeType.CUSTOM);
-    }, [fromDate, toDate]);
+        setCurSlider(props.defaultSliderValue);
+    }, [props?.defaultSliderValue]);
+
+    useEffect(() => {
+        if(dateValue?.size > 0 && currentSlider === RangeType.CUSTOM)
+            props.onRecordDateRange(dateValue.get(props?.itemKey)?.fromDate, dateValue.get(props?.itemKey)?.toDate, RangeType.CUSTOM);
+    }, [currentSlider, dateValue]);
 
     useEffect(() => {
         if(props?.defaultSliderValue === 4 && !displayDatePicker)
@@ -79,22 +93,32 @@ function DateSliderComponent(props: IDateSliderProps) {
     {displayDatePicker && 
         <div>
             <DatePicker
-                maxDate={toDate}
+                maxDate={dateValue.get(props?.itemKey)?.toDate}
                 strings={dateStrings}
-                value={fromDate}
+                value={dateValue.get(props?.itemKey)?.fromDate}
                 formatDate={(date) => date?.toLocaleDateString()}
                 onSelectDate={(d) => {
-                    setFromDate(d);
+                    setFilterDate(p => {
+                        const newMap = new Map(p);
+                        newMap.set(props?.itemKey, {fromDate: d, toDate: dateValue.get(props?.itemKey)?.toDate});
+                        return newMap;
+                    });
+                    setCurSlider(RangeType.CUSTOM);
                 }}
                 label="De"/>
             <DatePicker
-                minDate={fromDate}
+                minDate={dateValue.get(props?.itemKey)?.fromDate}
                 strings={dateStrings}
                 formatDate={(date) => date?.toLocaleDateString()}
                 onSelectDate={(d) => {
-                    setToDate(d);
+                    setFilterDate(p => {
+                        const newMap = new Map(p);
+                        newMap.set(props?.itemKey, {fromDate: dateValue.get(props?.itemKey)?.fromDate, toDate: d});
+                        return newMap;
+                    });
+                    setCurSlider(RangeType.CUSTOM);
                 }}
-                value={toDate}
+                value={dateValue?.get(props?.itemKey)?.toDate}
                 label="Até"/>
         </div>
     }

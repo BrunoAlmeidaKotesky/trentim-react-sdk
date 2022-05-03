@@ -60,6 +60,7 @@ function PanelFilter() {
                             onResolveSuggestions={handlers.onResolveTagSuggestion(filterOptionsMatrix[idx])} /></div> :
                         (filter.renderAs === 'DateSlider') ?
                         <DateSlider
+                            itemKey={filter?.key}
                             defaultSliderValue={getDefaultSelectedSlider(filter?.key)}
                             onRecordDateRange={handlers.onRecordDateChange(filter?.key)}
                             key={filter?.key + "-" + idx}

@@ -6,7 +6,7 @@ import type { ITag } from '@fluentui/react/lib/Pickers';
 import type { IPersonaProps } from '@fluentui/react/lib/Persona';
 
 export function usePanelFilterController() {
-    const { isOpen, onClose, panelTitle, onCancel, onApply, actualFilteredValues, setActualFilteredValues, onOpen, filterOptionsMatrix, availableFilters, top, footer } = useContext(FilterPanelContext);
+    const { isOpen, onClose, panelTitle, onCancel, onApply, actualFilteredValues, setActualFilteredValues, onOpen, filterOptionsMatrix, availableFilters, top, footer, setFilterDate } = useContext(FilterPanelContext);
     const [FluentPanel, Dropdown, PrimaryButton, DefaultButton, TagPicker, Label] = useMemo(() => {
         const Panel = lazy(() => import('@fluentui/react/lib/Panel').then(({ Panel }) => ({ default: Panel })));
         const DropDown = lazy(() => import('@fluentui/react/lib/Dropdown').then(({ Dropdown }) => ({ default: Dropdown })));
@@ -116,7 +116,7 @@ export function usePanelFilterController() {
     }
 
     const onRecordDateChange = (key: string) => (from: Date, to: Date, type: RangeType) => {
-        if(from && to && type !== RangeType.NONE)
+        if((from || to) && type !== RangeType.NONE)
             onAddOrRemoveToMap(key, {
                 key: key,
                 text: `${from?.toISOString()} - ${to?.toISOString()}`,
@@ -128,6 +128,10 @@ export function usePanelFilterController() {
         else {
             const copyMap = new Map(actualFilteredValues);
             copyMap.delete(key);
+            setFilterDate(p => {
+                p.delete(key);
+                return p;
+            });
             setActualFilteredValues(copyMap);
         }
     }
