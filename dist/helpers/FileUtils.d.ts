@@ -28,7 +28,7 @@ export declare class FileUtils {
      * @param xmlText  - String of the whole content of the XML file
      * @param {String=} fileName - the name of the XML file.
      */
-    downloadXml(xmlText: string, fileName?: string): void;
+    downloadXml(xmlText: string, fileName: string): void;
     private fileNameValidator;
     /**
      * Takes any `Blob` object or inherited objects from this interface and convert it to a base64 string.
