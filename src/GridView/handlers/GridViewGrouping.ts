@@ -7,7 +7,7 @@ import type { IRow } from '../../models/interfaces/IGridView';
 export class GridViewGrouping {
 
     static onApplyGrouping: ApplyGrouping = ({ 
-        setGroups, setIsGroupPanel, onItemsGrouped, onGroupPanelCancel, groupByFields, startIndex, level, items, emptyGroupLabel, setActualRows
+        setGroups, setIsGroupPanel, onItemsGrouped, onGroupPanelCancel, groupByFields, startIndex, level, items, emptyGroupLabel, setActualRows, cols
     }) => {
         const selectedKey = groupByFields?.[0]?.name?.split(';')?.[0];
         if (!groupByFields?.[0] || selectedKey === '@NONE') {
@@ -18,7 +18,7 @@ export class GridViewGrouping {
                 onItemsGrouped({ selectedKey, setGroups });
             return setGroups(undefined);
         }
-        const {groups, updatedItemsOrder} = GridViewGrouping.buildGroups({emptyGroupLabel, groupByFields, items, level, startIndex});
+        const {groups, updatedItemsOrder} = GridViewGrouping.buildGroups({emptyGroupLabel, groupByFields, items, level, startIndex, cols});
 
         setGroups(groups);
         setActualRows(updatedItemsOrder);
@@ -31,7 +31,7 @@ export class GridViewGrouping {
      * 
      * This method supports multiple grouping levels and multiple groups, but the GridView component it self does not implement it yet.
     */
-    static buildGroups: BuildGroups = ({ emptyGroupLabel, groupByFields, items, level, startIndex }) => {
+    static buildGroups: BuildGroups = ({ emptyGroupLabel, groupByFields, items, level, startIndex, cols }) => {
         const defaultEmptyLabel = emptyGroupLabel ?? 'Sem itens definidos';
 
         // Group array which stores the configured grouping
@@ -41,13 +41,17 @@ export class GridViewGrouping {
         if (groupByFields) {
             const groupField = groupByFields[level];
             const groupKey = groupField?.name?.split(';')[0];
+            const keyDateConverterOptions = cols?.find(i => i?.key === groupKey)?.dateConversionOptions;
+            const isKeyADate = keyDateConverterOptions?.shouldConvertToLocaleString;
             const groupFieldName = groupField?.name?.split(';')[1];
             // Check if grouping is configured
             if (groupByFields && groupByFields.length > 0) {
                 // Create grouped items object
                 const groupedItems = {};
                 items.forEach(item => {
-                    let groupName = Utils.getNestedObject(item, groupKey.split('.')) as string ?? defaultEmptyLabel;
+                    let groupName = Utils.getNestedObject(item, groupKey?.split('.')) as string ?? defaultEmptyLabel;
+                    if (isKeyADate)
+                        groupName = Utils.convertIsoToLocaleString(groupName, keyDateConverterOptions?.locales, keyDateConverterOptions?.formatOptions);
                     // Check if the group name exists
                     // Check if group name is a number, this can cause sorting issues
                     if (typeof groupName === "number") 
@@ -88,7 +92,8 @@ export class GridViewGrouping {
                             items: groupedItems[groupItems], 
                             groupByFields,
                             startIndex,
-                            level: level + 1
+                            level: level + 1,
+                            cols
                         });
                         subGroup?.updatedItemsOrder?.forEach((item) => {
                             updatedItemsOrder.push(item);

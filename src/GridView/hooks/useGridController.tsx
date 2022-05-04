@@ -97,7 +97,8 @@ export function useGridController<T extends BaseType>(props: IGridListProps<T>) 
             groupByFields: [{name: fieldName, order: GroupOrder.ascending}],
             setActualRows,
             level: 0,
-            startIndex: 0
+            startIndex: 0,
+            cols
         });
     }, [props?.initialGroupedBy?.key, actualRows, cols]);
 
@@ -169,7 +170,8 @@ export function useGridController<T extends BaseType>(props: IGridListProps<T>) 
             setActualRows,
             groupByFields: [{name: selectedKeys, order: GroupOrder.ascending}],
             level: 0,
-            startIndex: 0
+            startIndex: 0,
+            cols
         }),
         top: props?.panelChildren?.group?.top,
         footer: props?.panelChildren?.group?.footer
