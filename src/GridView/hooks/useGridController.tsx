@@ -6,7 +6,7 @@ import { useGridCardRendering } from './useGridCardRendering';
 import {GridViewFilter} from '../handlers/GridViewFilter';
 import {GridViewGrouping} from '../handlers/GridViewGrouping';
 import {GridViewMapper} from '../handlers/GridViewMapper';
-import { IconClickCaller } from '../../helpers/enums';
+import { IconClickCaller, GroupOrder } from '../../helpers/enums';
 import type { IGridListProps, IRow, TColumn, BaseType } from '../../models/interfaces/IGridView';
 import type { IListOptionsProps } from '../../models/interfaces/IListOptions';
 import type { IAvailableFilters, IPanelFilterProps, SelectedItemsMap } from '../../models/interfaces/IPanelFilter';
@@ -86,15 +86,19 @@ export function useGridController<T extends BaseType>(props: IGridListProps<T>) 
 
     useEffect(() => {
         if(!props?.initialGroupedBy?.key) return;
+        const fieldName: KeyAndName = `${props?.initialGroupedBy?.key};${props?.initialGroupedBy?.name}`;
         GridViewGrouping.onApplyGrouping({
-            actualRows,
-            cols,
             emptyGroupLabel: props?.emptyGroupLabel,
             setIsGroupPanel,
             setGroups,
             onItemsGrouped: props?.onItemsGrouped,
-            onGroupPanelCancel: props?.onGroupPanelCancel
-        })(`${props?.initialGroupedBy?.key};${props?.initialGroupedBy?.name}`);
+            onGroupPanelCancel: props?.onGroupPanelCancel,
+            items: actualRows,
+            groupByFields: [{name: fieldName, order: GroupOrder.ascending}],
+            setActualRows,
+            level: 0,
+            startIndex: 0
+        });
     }, [props?.initialGroupedBy?.key, actualRows, cols]);
 
     useEffect(() => { setActualRows(props?.rows); setAllRows(props?.rows) }, [props?.rows]);
@@ -155,14 +159,17 @@ export function useGridController<T extends BaseType>(props: IGridListProps<T>) 
         setSelectedGroupKeys,
         selectedGroupKeys,
         options: GridViewFilter.filterFromColumns(props?.hiddenGroupKeys as string[], cols)?.map(c => ({key: c?.key, text: c?.name})) ?? [],
-        onApply: GridViewGrouping.onApplyGrouping({
-            actualRows,
-            cols,
+        onApply: (selectedKeys: KeyAndName) => GridViewGrouping.onApplyGrouping({
             emptyGroupLabel: props?.emptyGroupLabel,
             setIsGroupPanel,
             setGroups,
             onItemsGrouped: props?.onItemsGrouped,
-            onGroupPanelCancel: props?.onGroupPanelCancel
+            onGroupPanelCancel: props?.onGroupPanelCancel,
+            items: actualRows,
+            setActualRows,
+            groupByFields: [{name: selectedKeys, order: GroupOrder.ascending}],
+            level: 0,
+            startIndex: 0
         }),
         top: props?.panelChildren?.group?.top,
         footer: props?.panelChildren?.group?.footer

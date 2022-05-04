@@ -11,3 +11,8 @@ export enum IconClickCaller {
     CLICK,
     ENTER
 }
+
+export enum GroupOrder {
+    ascending = 1,
+    descending
+}

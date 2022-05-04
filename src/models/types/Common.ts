@@ -1,7 +1,6 @@
 import type { SelectedItemsMap } from "../interfaces/IPanelFilter";
-import type { IRow, TColumn } from "../interfaces/IGridView";
+import type { IRow } from "../interfaces/IGridView";
 import type { Dispatch, SetStateAction } from "react";
-import type { IGroup } from "@fluentui/react/lib/DetailsList";
 import type { Paths } from "../types/UtilityTypes";
 import type { ReactNode } from "react";
 import type { IButtonProps } from "@fluentui/react/lib/Button";
@@ -15,17 +14,6 @@ type OnItemsFiltered<T> = (filtered?: IRow<T>[]) => void;
 
 type CustomFilterParams<T> = { applyCustomFilter?: ApplyCustomFilter<T>, onItemsFiltered?: OnItemsFiltered<T>, onFilterPanelCancel: (activatedBy: CancelActivation) => void };
 export type ApplyFilter<T> = (params: ApplyFilterParams<T> & CustomFilterParams<T>) => (selectedItems: SelectedItemsMap) => void;
-
-interface IGroupingParams {
-    emptyGroupLabel: string;
-    actualRows: IRow[];
-    cols: TColumn<any>[];
-    setGroups: Dispatch<SetStateAction<IGroup[]>>;
-    setIsGroupPanel: Dispatch<SetStateAction<boolean>>;
-    onItemsGrouped: (opt?: { selectedKey: string, setGroups: Dispatch<SetStateAction<IGroup[]>> }) => void;
-    onGroupPanelCancel: (activatedBy: CancelActivation) => void;
-}
-export type ApplyGrouping = (paramns: IGroupingParams) => (keyAndName: KeyAndName) => void;
 
 interface ISearchParams {
     allRows: IRow[];

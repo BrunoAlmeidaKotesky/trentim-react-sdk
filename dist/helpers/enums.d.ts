@@ -9,3 +9,7 @@ export declare enum IconClickCaller {
     CLICK = 0,
     ENTER = 1
 }
+export declare enum GroupOrder {
+    ascending = 1,
+    descending = 2
+}

@@ -4,15 +4,8 @@ import * as json from './MOCK_DATA.json';
 
 type JsonType = typeof json[0];
 export function GridViewListExample() {
-  const [data, setData] = React.useState<JsonType[]>(json);
   const [isGroupingDisabled, setGroupingDisabled] = React.useState(false);
   const [isFilterDisabled, setFilterDisabled] = React.useState(false);
-
-  React.useEffect(() => {
-    setTimeout(() => {
-      setData(p => p.filter(i => i.Status === 'Procedente'));
-    }, 6500);
-  }, []);
 
   return (
       <div style={{width: '80%'}}>
@@ -58,7 +51,7 @@ export function GridViewListExample() {
           onSearchBoxClick={() => {console.log("Before Search")}}
           onItemsFiltered={() => setGroupingDisabled(true)}
           onItemsGrouped={() => setFilterDisabled(true)}
-          rows={data}
+          rows={json}
           onItemClick={(i) => console.log(i.Id)}
           />
       </div>

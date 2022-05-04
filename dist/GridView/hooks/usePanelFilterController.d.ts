@@ -18,7 +18,7 @@ export declare function usePanelFilterController(): {
         onAddOrRemoveToMap: (rootItemKey: string, option: FilterOption) => void;
         onClose: () => void;
         onCancel: () => void;
-        onApply: (map: import("../../models/interfaces/IPanelFilter").SelectedItemsMap) => void;
+        onApply: (mapOrKey: import("../../models/interfaces/IPanelFilter").SelectedItemsMap) => void;
         onOpen: () => void;
         setActualFilteredValues: import("react").Dispatch<import("react").SetStateAction<import("../../models/interfaces/IPanelFilter").SelectedItemsMap>>;
         onChangeTags: (options: FilterOption[]) => (tags: ITag[]) => void;
