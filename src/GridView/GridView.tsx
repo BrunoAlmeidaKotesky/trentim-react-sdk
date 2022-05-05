@@ -3,18 +3,20 @@ import { useGridController } from './hooks/useGridController';
 import { FilterPanelContext, GroupPanelContext, ListOptionsContext } from './Contexts';
 import { CheckboxVisibility, CollapseAllVisibility, DetailsList, DetailsListLayoutMode } from '@fluentui/react/lib/DetailsList';
 import { Sticky, StickyPositionType } from '@fluentui/react/lib/Sticky';
-import type { IGridListProps, BaseType } from '../models/interfaces/IGridView';
+import type { IGridListProps, BaseType, IGridViewRefHandler } from '../models/interfaces/IGridView';
 import PanelFilter from './PanelFilter';
 import GroupPanel from './GroupPanel';
 import { ListOptions } from './ListOptions';
 import { Suspense } from 'react';
 
-/** An enhanced version of the `DetailsList` component, with automatic filtering, sorting, grouping, properties searching with many other features to customize.
- * 
- * The component can also be rendered as a collection of `Card` components, with the same functionalities.
- */
-export function GridView<T extends BaseType>(props: IGridListProps<T>) {
-    const {state, handlers, JSX} = useGridController(props);
+declare module "react" {
+    function forwardRef<T, P = {}>(
+      render: (props: P, ref: React.Ref<T>) => React.ReactElement | null
+    ): (props: P & React.RefAttributes<T>) => React.ReactElement | null;
+  }
+
+function GridViewInner<T extends BaseType>(props: IGridListProps<T>, ref: React.ForwardedRef<IGridViewRefHandler<T>>) {
+    const {state, handlers, JSX} = useGridController(props, ref);
     const {CardsList} = JSX;
     const {actualRows, visibleCols, isFilterPanelOpen, filterPanelConfig, groupPanelConfig, listConfig, shouldRenderCard, isGroupPanelOpen, groups} = state;
     const {onItemClick} = handlers;
@@ -67,3 +69,9 @@ export function GridView<T extends BaseType>(props: IGridListProps<T>) {
         </FilterPanelContext.Provider>
         </GroupPanelContext.Provider>);
 }
+
+/** An enhanced version of the `DetailsList` component, with automatic filtering, sorting, grouping, properties searching with many other features to customize.
+ * 
+ * The component can also be rendered as a collection of `Card` components, with the same functionalities.
+ */
+export const GridView = React.forwardRef(GridViewInner);

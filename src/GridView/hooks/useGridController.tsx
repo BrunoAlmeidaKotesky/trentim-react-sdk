@@ -1,21 +1,28 @@
 import * as React from 'react';
 import {useRefWithCallback} from '../../hooks/useRefWithCallback';
 import { Utils } from '../../helpers/Utils';
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useImperativeHandle, useCallback } from 'react';
 import { useGridCardRendering } from './useGridCardRendering';
 import {GridViewFilter} from '../handlers/GridViewFilter';
 import {GridViewGrouping} from '../handlers/GridViewGrouping';
 import {GridViewMapper} from '../handlers/GridViewMapper';
 import { IconClickCaller, GroupOrder } from '../../helpers/enums';
-import type { IGridListProps, IRow, TColumn, BaseType } from '../../models/interfaces/IGridView';
+import type { IGridListProps, IRow, TColumn, BaseType, IGridViewRefHandler } from '../../models/interfaces/IGridView';
 import type { IListOptionsProps } from '../../models/interfaces/IListOptions';
 import type { IAvailableFilters, IPanelFilterProps, SelectedItemsMap } from '../../models/interfaces/IPanelFilter';
 import type { IGroupPanel } from '../../models/interfaces/IGroupPanel';
 import type { IGroup } from '@fluentui/react/lib/DetailsList';
 import type { KeyAndName } from '../../models/types/Common';
 
+
+declare module "react" {
+    function forwardRef<T, P = {}>(
+      render: (props: P, ref: React.Ref<T>) => React.ReactElement | null
+    ): (props: P & React.RefAttributes<T>) => React.ReactElement | null;
+  }
+
 /** TO-DO: Use `useReducer` with context for better code splitting. */
-export function useGridController<T extends BaseType>(props: IGridListProps<T>) {
+export function useGridController<T extends BaseType>(props: IGridListProps<T>, ref: React.ForwardedRef<IGridViewRefHandler<T>>) {
     const [renderAs, setRenderAs] = useState<typeof props.renderAs>(props?.renderAs || 'list');
     const [shouldRenderCard, setShouldRenderCard] = useState(props?.renderAs === 'card');
     const [cols, setCols] = useState(props?.columns);
@@ -100,7 +107,33 @@ export function useGridController<T extends BaseType>(props: IGridListProps<T>) 
             startIndex: 0,
             cols
         });
-    }, [props?.initialGroupedBy, props?.unstable_groupByDependencies]);
+    }, [props?.initialGroupedBy?.key]);
+
+    useEffect(() => {
+        if(props?.getCurrentRows)
+            props?.getCurrentRows(actualRows);
+    }, [actualRows]);
+
+    const reGroupInitialGroup = useCallback(() => {
+        const fieldName: KeyAndName = `${props?.initialGroupedBy?.key};${props?.initialGroupedBy?.name}`;
+        GridViewGrouping.onApplyGrouping({
+            emptyGroupLabel: props?.emptyGroupLabel,
+            setIsGroupPanel,
+            setGroups,
+            onItemsGrouped: props?.onItemsGrouped,
+            onGroupPanelCancel: props?.onGroupPanelCancel,
+            items: actualRows,
+            groupByFields: [{name: fieldName, order: GroupOrder.ascending}],
+            setActualRows,
+            level: 0,
+            startIndex: 0,
+            cols
+        });
+    }, [actualRows, cols, props?.emptyGroupLabel, props?.initialGroupedBy?.key]);
+    
+    useImperativeHandle(ref, () => ({
+        reGroupInitialGroup
+    }), [actualRows]);
 
     useEffect(() => { setActualRows(props?.rows); setAllRows(props?.rows) }, [props?.rows]);
     useEffect(() => {

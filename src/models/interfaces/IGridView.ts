@@ -88,14 +88,10 @@ export interface IGridListProps<T extends any> extends IGridHandler<T> {
      * 
      * Even if the `enableGrouping` property is set to `false`, the `groupByKey` property will be used to group the items.
     */
-    initialGroupedBy?: {key: ColumnKey<T>; name: string};
-    /**
-     * __@note This property is not in a stable release.__
-     * 
-     * Use this property if you want to call the Groping Algorithm when this dependency changes, this is related to `initialGroupedBy` property.
-     * This means that the initial grouping will be called more than once, which can potentially cause an infinite loop if not handled correctly.
-     */
-    unstable_groupByDependencies?: any;
+    initialGroupedBy?: {
+        key: ColumnKey<T>; 
+        name: string, 
+    };
     /**Use this property if you want to render custom components inside grouping or filtering panel. 
      * 
      * `top` will be rendered on the top of the panel, `footer` will be rendered on the bottom of the panel.
@@ -165,6 +161,8 @@ export interface IGridHandler<T> extends IGridClickActions {
     onItemsGrouped?: (opt?: {selectedKey: string, setGroups: Dispatch<SetStateAction<IGroup[]>>}) => void;
     /**A callback that will be called after the items were filtered from the search box. */
     onSearchBoxItemsFiltered?: (filtered?: IRow<T>[]) => void;
+    /** Get the current state of the visible rows. */
+    getCurrentRows?: (current: IRow<T>[]) => void;
 }
 
 export interface IGridViewStyles {
@@ -172,4 +170,16 @@ export interface IGridViewStyles {
     root?: React.CSSProperties;
     /**The container of the `<DetailsList />` or `<Card />` list. */
     contentContainer?: React.CSSProperties;
+}
+
+/**
+ * Imperative handlers available for the grid view.
+ */
+//@ts-ignore
+export interface IGridViewRefHandler<T = any> {
+    /**Call this function if you want to trigger the initial grouping again. 
+     * 
+     * Since the `initialGroupedBy` observers only when the `initialGroupedBy.key` is changed, it keeps the same initial rows state, so calling this function will be necessary.
+    */
+    reGroupInitialGroup?: () => void;
 }
