@@ -2,7 +2,7 @@ import type { IGridCardProps } from "./ICardProps";
 import type { IPanelChildrenPosition } from './ICommonPanel';
 import type { IConfigurableHeader } from "./IListOptions";
 import type { ApplyCustomFilter, FilterComponent, CancelActivation, ColumnKey, IDateConversionOptions } from '../types/Common';
-import type { Dispatch, SetStateAction } from "react";
+import type { Dispatch, SetStateAction, DependencyList } from "react";
 import type { IColumn, IDetailsListProps, IGroup } from "@fluentui/react";
 
 /**It should represent any object with primitive data types. 
@@ -89,6 +89,13 @@ export interface IGridListProps<T extends any> extends IGridHandler<T> {
      * Even if the `enableGrouping` property is set to `false`, the `groupByKey` property will be used to group the items.
     */
     initialGroupedBy?: {key: ColumnKey<T>; name: string};
+    /**
+     * __@note This property is not in a stable release.__
+     * 
+     * Use this property if you want to call the Groping Algorithm when this dependency changes, this is related to `initialGroupedBy` property.
+     * This means that the initial grouping will be called more than once, which can potentially cause an infinite loop if not handled correctly.
+     */
+    unstable_groupByDependencies?: DependencyList;
     /**Use this property if you want to render custom components inside grouping or filtering panel. 
      * 
      * `top` will be rendered on the top of the panel, `footer` will be rendered on the bottom of the panel.

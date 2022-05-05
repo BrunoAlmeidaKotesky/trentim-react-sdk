@@ -100,7 +100,7 @@ export function useGridController<T extends BaseType>(props: IGridListProps<T>) 
             startIndex: 0,
             cols
         });
-    }, [props?.initialGroupedBy]);
+    }, [props?.initialGroupedBy, props?.unstable_groupByDependencies]);
 
     useEffect(() => { setActualRows(props?.rows); setAllRows(props?.rows) }, [props?.rows]);
     useEffect(() => {
