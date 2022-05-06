@@ -5,30 +5,30 @@ import * as json from './MOCK_DATA.json';
 
 type JsonType = typeof json[0];
 export function GridViewListExample() {
-  const [items, setItems] = React.useState<JsonType[]>(json);
+  const [items, ] = React.useState<JsonType[]>(json);
   const ref = React.useRef<IGridViewRefHandler<JsonType>>();
-  const [currentGridRows, setCurrentGridRows] = React.useState<JsonType[]>([]);
+  //const [currentGridRows, setCurrentGridRows] = React.useState<JsonType[]>([]);
   const [isGroupingDisabled, setGroupingDisabled] = React.useState(false);
   const [isFilterDisabled, setFilterDisabled] = React.useState(false);
   
-  React.useEffect(() => {
-    //set the items to a randonly selected subset of the json data of 250 items.
-    setTimeout(() => {
-      setItems(_json => _json.slice(Math.floor(Math.random() * 250), Math.floor(Math.random() * 250) + 250));
-    }, 2200);
-  }, []);
+  // React.useEffect(() => {
+  //   
+  //   setTimeout(() => {
+  //     setItems(_json => _json.slice(Math.floor(Math.random() * 250), Math.floor(Math.random() * 250) + 250));
+  //   }, 2200);
+  // }, []);
 
-  React.useEffect(() => {
-    if(currentGridRows?.length <= 300) {
-      ref.current.reGroupInitialGroup();
-    }
-  }, [currentGridRows?.length]);
+  // React.useEffect(() => {
+  //   if(currentGridRows?.length <= 300) {
+  //     ref.current.reGroupInitialGroup();
+  //   }
+  // }, [currentGridRows?.length]);
 
   return (
       <div style={{width: '80%'}}>
         <GridView<JsonType>
           ref={ref}
-          getCurrentRows={r => setCurrentGridRows(r)}
+          //getCurrentRows={r => setCurrentGridRows(r)}
           columns={[
             {key: 'Title', name: 'Nome Do Projeto', fieldName: 'Title', minWidth: 100, maxWidth: 200, isResizable: true, renderFilterAs: 'SearchBox'},
             {key: 'NumeroPI', name: 'PI', fieldName: 'NumeroPI', minWidth: 100, maxWidth: 200, isResizable: true},
@@ -39,7 +39,7 @@ export function GridViewListExample() {
             {key: 'Modified', name: 'Modificado', fieldName: 'Modified', minWidth: 100, maxWidth: 200, hideColumn: false, dateConversionOptions: {shouldConvertToLocaleString: true}, renderFilterAs: 'DateSlider'}
           ]}
           hiddenFilterKeys={['NumeroPI']}
-          initialGroupedBy={{key: 'Status', name: 'Status'}}
+          //initialGroupedBy={{key: 'Status', name: 'Status'}}
           headerOptions={{
             enableSearch: true, enableFilter: true,
             enableGrouping: true,

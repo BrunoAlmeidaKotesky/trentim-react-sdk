@@ -7,19 +7,20 @@ import type { IRow } from '../../models/interfaces/IGridView';
 export class GridViewGrouping {
 
     static onApplyGrouping: ApplyGrouping = ({ 
-        setGroups, setIsGroupPanel, onItemsGrouped, onGroupPanelCancel, groupByFields, startIndex, level, items, emptyGroupLabel, setActualRows, cols
+        setGroups, setIsGroupPanel, onItemsGrouped, onGroupPanelCancel, groupByFields, startIndex, level, items, emptyGroupLabel, setActualRows, setIsGrouping, cols
     }) => {
         const selectedKey = groupByFields?.[0]?.name?.split(';')?.[0];
         if (!groupByFields?.[0] || selectedKey === '@NONE') {
             setIsGroupPanel(false);
+            setIsGrouping({active: false, key: null});
             if (!!onGroupPanelCancel)
                 onGroupPanelCancel('not-selected');
             if (!!onItemsGrouped)
                 onItemsGrouped({ selectedKey, setGroups });
             return setGroups(undefined);
         }
+        setIsGrouping({active: true, key: selectedKey});
         const {groups, updatedItemsOrder} = GridViewGrouping.buildGroups({emptyGroupLabel, groupByFields, items, level, startIndex, cols});
-
         setGroups(groups);
         setActualRows(updatedItemsOrder);
         setIsGroupPanel(false);
@@ -118,4 +119,3 @@ export class GridViewGrouping {
         };
     }
 }
-

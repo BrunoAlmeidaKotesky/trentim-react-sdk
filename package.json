@@ -66,6 +66,7 @@
     "@types/enzyme": "^3.1.15",
     "@types/enzyme-adapter-react-16": "^1.0.3",
     "@types/jest": "^26.0.15",
+    "@types/lodash": "^4.14.182",
     "@types/node": "^10.12.2",
     "@types/react": "^16.7.6",
     "@types/react-dom": "^16.0.9",
@@ -161,6 +162,7 @@
     "output": "./coverage/junit.xml"
   },
   "dependencies": {
-    "@fluentui/react": "8.52.3"
+    "@fluentui/react": "8.52.3",
+    "lodash": "^4.17.21"
   }
 }

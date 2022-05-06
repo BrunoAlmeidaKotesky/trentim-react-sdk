@@ -14,7 +14,6 @@ import type { IGroupPanel } from '../../models/interfaces/IGroupPanel';
 import type { IGroup } from '@fluentui/react/lib/DetailsList';
 import type { KeyAndName } from '../../models/types/Common';
 
-
 declare module "react" {
     function forwardRef<T, P = {}>(
       render: (props: P, ref: React.Ref<T>) => React.ReactElement | null
@@ -26,6 +25,7 @@ export function useGridController<T extends BaseType>(props: IGridListProps<T>, 
     const [renderAs, setRenderAs] = useState<typeof props.renderAs>(props?.renderAs || 'list');
     const [shouldRenderCard, setShouldRenderCard] = useState(props?.renderAs === 'card');
     const [cols, setCols] = useState(props?.columns);
+    const [isGroping, setIsGrouping] = useState<{active: boolean, key: string}>({active: false, key: null});
     const [groups, setGroups] = useState<IGroup[]>(undefined);
     const [enableGrouping, setEnableGrouping] = useState(props?.headerOptions?.enableGrouping ?? false);
     const [actualFilteredValues, setActualFilteredValues] = useState<SelectedItemsMap>(new Map());
@@ -42,13 +42,19 @@ export function useGridController<T extends BaseType>(props: IGridListProps<T>, 
     useEffect(() => { setRenderAs(props?.renderAs); }, [props?.renderAs]);
 
     const onItemClick = (item: IRow<T>) => !!props?.onItemClick && props?.onItemClick(item);
-    const onColumnClick = (currentRows: IRow<T>[]) => (_: any, column: TColumn<T>): void => {
+    const onColumnClick = (currentRows: IRow<T>[]) => async (_: any, column: TColumn<T>): Promise<void> => {
         if(!column) return;
         let isSortedDescending = column?.isSortedDescending;
         if (column?.isSorted) 
           isSortedDescending = !isSortedDescending;
-    
-        const sortedItems = Utils.copyAndSort(currentRows, column?.key, isSortedDescending);
+        let sortedItems = currentRows;
+        if (isGroping?.active) {
+            const {orderBy} = await import('lodash');
+            const groupKey = isGroping?.key;
+            sortedItems = orderBy(sortedItems, [groupKey, column?.key], ['asc', isSortedDescending ? 'desc' : 'asc']);
+        } 
+        else  
+            sortedItems = Utils.copyAndSort(sortedItems, column?.key, isSortedDescending);
         setActualRows(sortedItems);
         setCols(c => c.map(col => {
             col.isSorted = col.key === column?.key;
@@ -105,7 +111,8 @@ export function useGridController<T extends BaseType>(props: IGridListProps<T>, 
             setActualRows,
             level: 0,
             startIndex: 0,
-            cols
+            cols,
+            setIsGrouping
         });
     }, [props?.initialGroupedBy?.key]);
 
@@ -127,7 +134,8 @@ export function useGridController<T extends BaseType>(props: IGridListProps<T>, 
             setActualRows,
             level: 0,
             startIndex: 0,
-            cols
+            cols,
+            setIsGrouping
         });
     }, [actualRows, cols, props?.emptyGroupLabel, props?.initialGroupedBy?.key]);
     
@@ -138,7 +146,7 @@ export function useGridController<T extends BaseType>(props: IGridListProps<T>, 
     useEffect(() => { setActualRows(props?.rows); setAllRows(props?.rows) }, [props?.rows]);
     useEffect(() => {
         setCols(columns => [...columns.map(c => ({...c, onColumnClick: onColumnClick(actualRows)}))]);
-    }, [actualRows?.length]);
+    }, [actualRows?.length, isGroping?.active]);
 
     useEffect(() => {
         setAvailableFilters([...GridViewFilter.buildFilters(allRows, cols, props?.hiddenFilterKeys as string[])]);   
@@ -204,7 +212,8 @@ export function useGridController<T extends BaseType>(props: IGridListProps<T>, 
             groupByFields: [{name: selectedKeys, order: GroupOrder.ascending}],
             level: 0,
             startIndex: 0,
-            cols
+            cols,
+            setIsGrouping
         }),
         top: props?.panelChildren?.group?.top,
         footer: props?.panelChildren?.group?.footer
