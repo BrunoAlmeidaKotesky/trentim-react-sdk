@@ -5,6 +5,7 @@ import { useOuterClick } from '../../src/hooks/useOuterClick';
 import { usePrevious } from '../../src/hooks/usePrevious';
 import { useWindowSize } from '../../src/hooks/useWindowSize';
 import { useRefWithCallback } from '../../src/hooks/useRefWithCallback';
+import { useEvent } from '../../src/hooks/useEvent';
 
 export function DebounceExample() {
     const [value, setValue] = useState<string>('');
@@ -24,7 +25,7 @@ export function OuterClickExample() {
     const buttonRef = useOuterClick<HTMLButtonElement>(
         (_pointerEv) => setClickLabel('outside'),
         (pointerEv) => {
-            if(pointerEv.target?.['id'] === 'outer-hook-cancel-button') {
+            if (pointerEv.target?.['id'] === 'outer-hook-cancel-button') {
                 setClickLabel('cancelled');
                 return true;
             }
@@ -33,19 +34,19 @@ export function OuterClickExample() {
     );
 
     return (
-        <div style={{justifyContent: 'space-around', display: 'flex'}}>
+        <div style={{ justifyContent: 'space-around', display: 'flex' }}>
             <button
-                style={{...style, backgroundColor: 'rgb(112, 219, 223)'}}
+                style={{ ...style, backgroundColor: 'rgb(112, 219, 223)' }}
                 ref={buttonRef}
                 onClick={() => setClickLabel('inside')}>
                 {clickLabel === 'inside' ?
                     'Clicked inside' : clickLabel === 'outside' ?
-                    'Clicked outside' : clickLabel === 'cancelled' ? 
-                    'Callback was ignored.' : 'Not clicked'}
+                        'Clicked outside' : clickLabel === 'cancelled' ?
+                            'Callback was ignored.' : 'Not clicked'}
             </button>
             <button
-                id="outer-hook-cancel-button" 
-                style={{...style, backgroundColor: '#ba6f6f'}}>Ignore outside click callback.</button>
+                id="outer-hook-cancel-button"
+                style={{ ...style, backgroundColor: '#ba6f6f' }}>Ignore outside click callback.</button>
         </div>
     );
 }
@@ -60,22 +61,38 @@ export function PreviousExample() {
 }
 
 export function SizeExample() {
-    const {height, width} = useWindowSize();
+    const { height, width } = useWindowSize();
     return <div>Current size: {width} x {height}</div>
 }
 
 export function RefExample1() {
     const [refCallback, ref, toggle] = useRefWithCallback<HTMLSpanElement>(null);
     const onClick = useCallback(() => {
-        if (ref.current) 
+        if (ref.current)
             ref.current.style.backgroundColor = `rgb(${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)})`;
     }, [toggle]);
 
-  return (
-    <div>
-        <button onClick={onClick}>Change color</button>
-        <br/>
-        <div ref={refCallback} style={{width: '100%', height: 10}}></div>
-    </div>
-  );
+    return (
+        <div>
+            <button onClick={onClick}>Change color</button>
+            <br />
+            <div ref={refCallback} style={{ width: '100%', height: 10 }}></div>
+        </div>
+    );
 }
+
+export function Chat() {
+    const [message, setMessage] = useState<string>('');
+
+    const onSend = useEvent(() => {
+        alert(`Sending message: ${message}`);
+    });
+
+    return (
+    <div style={{display: 'flex', gap: 8}}>
+        <input type="text" value={message} onChange={(e) => setMessage(e.target.value)} />
+        <ChatConfirm onSend={onSend} />
+    </div>);
+}
+
+const ChatConfirm = ({ onSend }: { onSend: () => void }) => <button onClick={onSend}>Send</button>
