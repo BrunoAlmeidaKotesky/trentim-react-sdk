@@ -7,6 +7,7 @@ import {GridViewFilter} from '../handlers/GridViewFilter';
 import {GridViewGrouping} from '../handlers/GridViewGrouping';
 import {GridViewMapper} from '../handlers/GridViewMapper';
 import { IconClickCaller, GroupOrder } from '../../helpers/enums';
+import * as orderBy from 'lodash-es/orderBy';
 import type { IGridListProps, IRow, TColumn, BaseType, IGridViewRefHandler } from '../../models/interfaces/IGridView';
 import type { IListOptionsProps } from '../../models/interfaces/IListOptions';
 import type { IAvailableFilters, IPanelFilterProps, SelectedItemsMap } from '../../models/interfaces/IPanelFilter';
@@ -42,16 +43,15 @@ export function useGridController<T extends BaseType>(props: IGridListProps<T>, 
     useEffect(() => { setRenderAs(props?.renderAs); }, [props?.renderAs]);
 
     const onItemClick = (item: IRow<T>) => !!props?.onItemClick && props?.onItemClick(item);
-    const onColumnClick = (currentRows: IRow<T>[]) => async (_: any, column: TColumn<T>): Promise<void> => {
+    const onColumnClick = (currentRows: IRow<T>[]) => (_: any, column: TColumn<T>): void => {
         if(!column) return;
         let isSortedDescending = column?.isSortedDescending;
         if (column?.isSorted) 
           isSortedDescending = !isSortedDescending;
         let sortedItems = currentRows;
         if (isGroping?.active) {
-            const {orderBy} = await import('lodash');
             const groupKey = isGroping?.key;
-            sortedItems = orderBy(sortedItems, [groupKey, column?.key], ['asc', isSortedDescending ? 'desc' : 'asc']);
+            sortedItems = orderBy?.default(sortedItems, [groupKey, column?.key], ['asc', isSortedDescending ? 'desc' : 'asc']);
         } 
         else  
             sortedItems = Utils.copyAndSort(sortedItems, column?.key, isSortedDescending);
