@@ -38,7 +38,7 @@ function GridViewInner<T extends BaseType>(props: IGridListProps<T>, ref: React.
                         items={actualRows} columns={visibleCols}
                         groups={groups}
                         groupProps={{
-                            isAllGroupsCollapsed: props?.detailsListProps?.groups ? props?.detailsListProps?.groups?.filter(gr => !gr?.isCollapsed)?.length === 0 : true,
+                            isAllGroupsCollapsed: true,
                             collapseAllVisibility: CollapseAllVisibility.visible,
                             onRenderHeader: (props, defaultRender) => {
                                 if (!props.group!.name)

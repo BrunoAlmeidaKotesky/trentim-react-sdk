@@ -84,6 +84,7 @@ export class GridViewGrouping {
                         key: groupItems === "undefined" ? defaultEmptyLabel : groupItems,
                         startIndex: startIndex,
                         count: totalItems,
+                        isCollapsed: true
                     };
                     // Check if child grouping available
                     if (groupByFields[level + 1]) {
