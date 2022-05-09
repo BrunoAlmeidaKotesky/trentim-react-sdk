@@ -8,6 +8,7 @@ import {GridViewGrouping} from '../handlers/GridViewGrouping';
 import {GridViewMapper} from '../handlers/GridViewMapper';
 import { IconClickCaller, GroupOrder } from '../../helpers/enums';
 import * as orderBy from 'lodash-es/orderBy';
+import * as set from 'lodash-es/set';
 import type { IGridListProps, IRow, TColumn, BaseType, IGridViewRefHandler } from '../../models/interfaces/IGridView';
 import type { IListOptionsProps } from '../../models/interfaces/IListOptions';
 import type { IAvailableFilters, IPanelFilterProps, SelectedItemsMap } from '../../models/interfaces/IPanelFilter';
@@ -51,6 +52,14 @@ export function useGridController<T extends BaseType>(props: IGridListProps<T>, 
         let sortedItems = currentRows;
         if (isGroping?.active) {
             const groupKey = isGroping?.key;
+            const keyPath = groupKey?.split('.');
+            const isRowANumber = sortedItems.some(i => typeof Utils.getNestedObject(i, keyPath) === 'number');
+            if (isRowANumber)
+                sortedItems = sortedItems.map(r => {
+                    const strValue = Utils.getNestedObject(r, keyPath)?.toString();
+                    set?.default(r, keyPath, strValue);
+                    return r;
+                });
             sortedItems = orderBy?.default(sortedItems, [groupKey, column?.key], ['asc', isSortedDescending ? 'desc' : 'asc']);
         } 
         else  
