@@ -1,0 +1,43 @@
+import { Meta } from '@storybook/addon-docs'
+import { MeasureExample } from './MeasureComponent';
+
+<Meta title="Decorators/Measurement" />
+
+# Measurement
+
+Decorate a method with this decorator to measure the execution time of the method.
+
+* Parameters:
+
+| *Name* | *Required* | *Description* | *Type* | *Default* |
+| ----------- | ----------- | ----------- | ----------- |
+| disable | false | If true, the measure is disabled. | <code>boolean</code> | <code>false</code> |
+| logCss | false | Custom `console.log` css if desired. | <code>string</code> | <code>color: white; background-color: #3e88ef</code> |
+
+
+* Example:
+
+__Examples:__
+<MeasureExample />
+
+```ts dark
+class Example {
+    @Measure()
+    public longLog(): number {
+        let finalValue = 0;
+        for (let i = 0; i < 100000000; i++) {
+            finalValue += i;
+        }
+        return finalValue;
+    }
+
+    @Measure(false, 'color: white; background-color: rgb(132, 229, 217)')
+    public logWithCss() {
+        let finalValue = 0;
+        for (let i = 0; i < 100000000; i++) {
+            finalValue += i;
+        }
+        return finalValue;
+    }
+}
+```
