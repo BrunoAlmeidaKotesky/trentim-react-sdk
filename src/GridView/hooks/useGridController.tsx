@@ -7,7 +7,7 @@ import { GridViewFilter } from '../handlers/GridViewFilter';
 import { GridViewGrouping } from '../handlers/GridViewGrouping';
 import { GridViewMapper } from '../handlers/GridViewMapper';
 import { IconClickCaller, GroupOrder } from '../../helpers/enums';
-import { sort } from 'fast-sort';
+import { createNewSortInstance } from 'fast-sort';
 import type { IGridListProps, IRow, TColumn, BaseType, IGridViewRefHandler } from '../../models/interfaces/IGridView';
 import type { IListOptionsProps } from '../../models/interfaces/IListOptions';
 import type { IAvailableFilters, IPanelFilterProps, SelectedItemsMap } from '../../models/interfaces/IPanelFilter';
@@ -44,6 +44,9 @@ export function useGridController<T extends BaseType>(props: IGridListProps<T>, 
 
     const onItemClick = (item: IRow<T>) => !!props?.onItemClick && props?.onItemClick(item);
     const onColumnClick = (currentRows: IRow<T>[]) => (_: any, column: TColumn<T>): void => {
+        const naturalSort = createNewSortInstance({
+            comparer: new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' }).compare,
+        });
         if (!column) return;
         let isSortedDescending = column?.isSortedDescending;
         if (column?.isSorted)
@@ -58,12 +61,12 @@ export function useGridController<T extends BaseType>(props: IGridListProps<T>, 
             const groupKeyPath = groupKey?.split('.');
 
             if (sortType === 'asc')
-                sortedItems = sort(sortedItems).by({
+                sortedItems = naturalSort(sortedItems).by({
                     asc: [u => Utils.getNestedObject(u, groupKeyPath)?.toString(), u => Utils.getNestedObject(u, columnKeys)?.toString()],
                 })
             else if (sortType === 'desc')
-                sortedItems = sort(sortedItems).by({
-                    desc: [u => Utils.getNestedObject(u, groupKeyPath)?.toString(), u => Utils.getNestedObject(u, columnKeys)?.toString()],
+                sortedItems = naturalSort(sortedItems).by({
+                    desc: [u => Utils.getNestedObject(u, groupKeyPath)?.toString(), u => Utils.getNestedObject(u, columnKeys)?.toString()]
                 })
             GridViewGrouping.onApplyGrouping({
                 emptyGroupLabel: props?.emptyGroupLabel,
@@ -88,11 +91,11 @@ export function useGridController<T extends BaseType>(props: IGridListProps<T>, 
             return;
         }
         if(sortType === 'asc')
-            sortedItems = sort(sortedItems).by({
+            sortedItems = naturalSort(sortedItems).by({
                 asc: u => Utils.getNestedObject(u, columnKeys)?.toString(),
             });
         else if(sortType === 'desc')
-            sortedItems = sort(sortedItems).by({
+            sortedItems = naturalSort(sortedItems).by({
                 desc: u => Utils.getNestedObject(u, columnKeys)?.toString(),
             });
         setActualRows(sortedItems);
