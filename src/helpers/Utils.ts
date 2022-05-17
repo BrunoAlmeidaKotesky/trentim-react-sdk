@@ -1,5 +1,3 @@
-import { PropertyPath } from 'lodash';
-import * as set from 'lodash-es/set';
 
 export class Utils {
 
@@ -14,17 +12,6 @@ export class Utils {
         return new Intl.DateTimeFormat(locales, formatOptions).format(new Date(date));
     }
 
-    /**
-     * @TO-DO: Add documentation
-     */
-    public static copyAndSort<T>(items: T[], columnKey: string, isSortedDescending?: boolean): T[] {
-        return items.slice(0).sort((a: T, b: T) => {
-            const aValue = Utils.getNestedObject(a, columnKey?.split('.'));
-            const bValue = Utils.getNestedObject(b, columnKey?.split('.'));
-            return ((isSortedDescending ? aValue < bValue : aValue > bValue) ? 1 : -1);
-        });
-    }
-
     /**Get a value from a deep nested object.
      * 
      * @param obj The object to search in.
@@ -35,16 +22,6 @@ export class Utils {
      */
     public static getNestedObject<Path, ReturnV extends any, Obj extends Record<any, any>>(nestedObj: Obj, pathArr: Path[]): ReturnV {
         return pathArr?.reduce((obj, key) => (obj && obj[key] !== 'undefined') ? obj[key] : undefined, nestedObj) as ReturnV;
-    }
-
-    /**Set the value of a deep nested object by an path of keys separated by dots `.`
-     * 
-     * This methods does not use an native implementation of the function, but instead uses the `set` function from `lodash` library.
-     * 
-     * @note Only the `set` function is loaded from the `lodash` library.
-    */
-    public static setNestedObject<Obj extends Record<any, any>>(nestedObj: Obj, pathArr: PropertyPath, value: any) {
-        return set?.default(nestedObj, pathArr, value);
     }
 
     /**@TO-DO: Add documentation */

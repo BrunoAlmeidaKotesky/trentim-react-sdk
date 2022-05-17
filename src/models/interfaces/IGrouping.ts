@@ -17,7 +17,7 @@ export interface IGrouping {
 export interface IApplyGroupingParams {
     emptyGroupLabel: string;
     setGroups: Dispatch<SetStateAction<IGroup[]>>;
-    setIsGrouping: Dispatch<SetStateAction<{active: boolean, key: string}>>;
+    setIsGrouping: Dispatch<SetStateAction<{active: boolean, key: string, name: string}>>;
     setActualRows: Dispatch<SetStateAction<IRow[]>>;
     setIsGroupPanel: Dispatch<SetStateAction<boolean>>;
     onItemsGrouped: (opt?: { selectedKey: string, setGroups: Dispatch<SetStateAction<IGroup[]>> }) => void;

@@ -1,0 +1,3 @@
+export declare type Handler<E = any, Args extends any[] = any[], C = any, R = any> = (err: E, context: C, ...args: Args) => R;
+export declare function Catch<Error = any, Args extends any[] = any[], Ctx = any, Returned = any>(ErrorClassConstructor: Function, handler: Handler<Error, Args, Ctx, Returned>): (_target: any, _key: string, descriptor: PropertyDescriptor) => PropertyDescriptor;
+export declare function DefaultCatch<Error = any, Args extends any[] = any[], Ctx = any, Returned = any>(handler: Handler<Error, Args, Ctx, Returned>): (_target: any, _key: string, descriptor: PropertyDescriptor) => PropertyDescriptor;

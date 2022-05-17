@@ -10,16 +10,17 @@ export class GridViewGrouping {
         setGroups, setIsGroupPanel, onItemsGrouped, onGroupPanelCancel, groupByFields, startIndex, level, items, emptyGroupLabel, setActualRows, setIsGrouping, cols
     }) => {
         const selectedKey = groupByFields?.[0]?.name?.split(';')?.[0];
+        const selectedName = groupByFields?.[0]?.name?.split(';')?.[1];
         if (!groupByFields?.[0] || selectedKey === '@NONE') {
             setIsGroupPanel(false);
-            setIsGrouping({active: false, key: null});
+            setIsGrouping({active: false, key: null, name: null});
             if (!!onGroupPanelCancel)
                 onGroupPanelCancel('not-selected');
             if (!!onItemsGrouped)
                 onItemsGrouped({ selectedKey, setGroups });
             return setGroups(undefined);
         }
-        setIsGrouping({active: true, key: selectedKey});
+        setIsGrouping({active: true, key: selectedKey, name: selectedName});
         const {groups, updatedItemsOrder} = GridViewGrouping.buildGroups({emptyGroupLabel, groupByFields, items, level, startIndex, cols});
         setGroups(groups);
         setActualRows(updatedItemsOrder);

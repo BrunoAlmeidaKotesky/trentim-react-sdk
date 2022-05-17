@@ -1,14 +1,13 @@
 import * as React from 'react';
-import {useRefWithCallback} from '../../hooks/useRefWithCallback';
+import { useRefWithCallback } from '../../hooks/useRefWithCallback';
 import { Utils } from '../../helpers/Utils';
 import { useState, useEffect, useMemo, useImperativeHandle, useCallback } from 'react';
 import { useGridCardRendering } from './useGridCardRendering';
-import {GridViewFilter} from '../handlers/GridViewFilter';
-import {GridViewGrouping} from '../handlers/GridViewGrouping';
-import {GridViewMapper} from '../handlers/GridViewMapper';
+import { GridViewFilter } from '../handlers/GridViewFilter';
+import { GridViewGrouping } from '../handlers/GridViewGrouping';
+import { GridViewMapper } from '../handlers/GridViewMapper';
 import { IconClickCaller, GroupOrder } from '../../helpers/enums';
-import * as orderBy from 'lodash-es/orderBy';
-import * as set from 'lodash-es/set';
+import { sort } from 'fast-sort';
 import type { IGridListProps, IRow, TColumn, BaseType, IGridViewRefHandler } from '../../models/interfaces/IGridView';
 import type { IListOptionsProps } from '../../models/interfaces/IListOptions';
 import type { IAvailableFilters, IPanelFilterProps, SelectedItemsMap } from '../../models/interfaces/IPanelFilter';
@@ -18,16 +17,16 @@ import type { KeyAndName } from '../../models/types/Common';
 
 declare module "react" {
     function forwardRef<T, P = {}>(
-      render: (props: P, ref: React.Ref<T>) => React.ReactElement | null
+        render: (props: P, ref: React.Ref<T>) => React.ReactElement | null
     ): (props: P & React.RefAttributes<T>) => React.ReactElement | null;
-  }
+}
 
 /** TO-DO: Use `useReducer` with context for better code splitting. */
 export function useGridController<T extends BaseType>(props: IGridListProps<T>, ref: React.ForwardedRef<IGridViewRefHandler<T>>) {
     const [renderAs, setRenderAs] = useState<typeof props.renderAs>(props?.renderAs || 'list');
     const [shouldRenderCard, setShouldRenderCard] = useState(props?.renderAs === 'card');
     const [cols, setCols] = useState(props?.columns);
-    const [isGroping, setIsGrouping] = useState<{active: boolean, key: string}>({active: false, key: null});
+    const [isGroping, setIsGrouping] = useState<{ active: boolean, key: string, name: string }>({ active: false, key: null, name: null });
     const [groups, setGroups] = useState<IGroup[]>(undefined);
     const [enableGrouping, setEnableGrouping] = useState(props?.headerOptions?.enableGrouping ?? false);
     const [actualFilteredValues, setActualFilteredValues] = useState<SelectedItemsMap>(new Map());
@@ -36,7 +35,7 @@ export function useGridController<T extends BaseType>(props: IGridListProps<T>, 
     const [actualRows, setActualRows] = useState<IRow<T>[]>(props?.rows ?? []);
     const [isFilterPanelOpen, setIsFilterPanel] = useState(false);
     const [isGroupPanelOpen, setIsGroupPanel] = useState(false);
-    const [dateValue, setFilterDate] = useState<Map<string, {fromDate: Date, toDate: Date}>>(null);
+    const [dateValue, setFilterDate] = useState<Map<string, { fromDate: Date, toDate: Date }>>(null);
     const [searchCb, currentSearchBoxItems] = useRefWithCallback<IRow[]>([]);
     const [memoizedAvailableFilter, setAvailableFilters] = useState<IAvailableFilters[]>([]);
 
@@ -45,30 +44,62 @@ export function useGridController<T extends BaseType>(props: IGridListProps<T>, 
 
     const onItemClick = (item: IRow<T>) => !!props?.onItemClick && props?.onItemClick(item);
     const onColumnClick = (currentRows: IRow<T>[]) => (_: any, column: TColumn<T>): void => {
-        if(!column) return;
+        if (!column) return;
         let isSortedDescending = column?.isSortedDescending;
-        if (column?.isSorted) 
-          isSortedDescending = !isSortedDescending;
+        if (column?.isSorted)
+            isSortedDescending = !isSortedDescending;
         let sortedItems = currentRows;
+        const sortType: 'asc' | 'desc' = isSortedDescending ? 'desc' : 'asc';
+        const columnKeys = column?.key?.split('.');
         if (isGroping?.active) {
             const groupKey = isGroping?.key;
-            const keyPath = groupKey?.split('.');
-            const isRowANumber = sortedItems.some(i => typeof Utils.getNestedObject(i, keyPath) === 'number');
-            if (isRowANumber)
-                sortedItems = sortedItems.map(r => {
-                    const strValue = Utils.getNestedObject(r, keyPath)?.toString();
-                    set?.default(r, keyPath, strValue);
-                    return r;
-                });
-            sortedItems = orderBy?.default(sortedItems, [groupKey, column?.key], ['asc', isSortedDescending ? 'desc' : 'asc']);
-        } 
-        else  
-            sortedItems = Utils.copyAndSort(sortedItems, column?.key, isSortedDescending);
+            if (groupKey === column?.key)
+                return;
+            const groupKeyPath = groupKey?.split('.');
+
+            if (sortType === 'asc')
+                sortedItems = sort(sortedItems).by({
+                    asc: [u => Utils.getNestedObject(u, groupKeyPath)?.toString(), u => Utils.getNestedObject(u, columnKeys)?.toString()],
+                })
+            else if (sortType === 'desc')
+                sortedItems = sort(sortedItems).by({
+                    desc: [u => Utils.getNestedObject(u, groupKeyPath)?.toString(), u => Utils.getNestedObject(u, columnKeys)?.toString()],
+                })
+            GridViewGrouping.onApplyGrouping({
+                emptyGroupLabel: props?.emptyGroupLabel,
+                setIsGroupPanel,
+                setGroups,
+                onItemsGrouped: props?.onItemsGrouped,
+                onGroupPanelCancel: props?.onGroupPanelCancel,
+                items: sortedItems,
+                groupByFields: [{ name: `${groupKeyPath.join('.')};${isGroping?.name}`, order: GroupOrder.ascending }],
+                setActualRows,
+                level: 0,
+                startIndex: 0,
+                cols,
+                setIsGrouping
+            });
+            setCols(c => c.map(col => {
+                col.isSorted = col.key === column?.key;
+                if (col?.isSorted)
+                    col.isSortedDescending = isSortedDescending;
+                return col;
+            }));
+            return;
+        }
+        if(sortType === 'asc')
+            sortedItems = sort(sortedItems).by({
+                asc: u => Utils.getNestedObject(u, columnKeys)?.toString(),
+            });
+        else if(sortType === 'desc')
+            sortedItems = sort(sortedItems).by({
+                desc: u => Utils.getNestedObject(u, columnKeys)?.toString(),
+            });
         setActualRows(sortedItems);
         setCols(c => c.map(col => {
             col.isSorted = col.key === column?.key;
-            if (col?.isSorted) 
-              col.isSortedDescending = isSortedDescending;
+            if (col?.isSorted)
+                col.isSortedDescending = isSortedDescending;
             return col;
         }));
     }
@@ -86,7 +117,7 @@ export function useGridController<T extends BaseType>(props: IGridListProps<T>, 
     });
 
     useEffect(() => {
-        if(!props?.columns?.length) return;
+        if (!props?.columns?.length) return;
         const columns = props?.columns;
         const convertedColumns = columns.map(c => {
             if (c?.key?.includes('.') || c?.fieldName?.includes('.')) {
@@ -107,7 +138,7 @@ export function useGridController<T extends BaseType>(props: IGridListProps<T>, 
     }, [props?.columns]);
 
     useEffect(() => {
-        if(!props?.initialGroupedBy?.key) return;
+        if (!props?.initialGroupedBy?.key) return;
         const fieldName: KeyAndName = `${props?.initialGroupedBy?.key};${props?.initialGroupedBy?.name}`;
         GridViewGrouping.onApplyGrouping({
             emptyGroupLabel: props?.emptyGroupLabel,
@@ -116,7 +147,7 @@ export function useGridController<T extends BaseType>(props: IGridListProps<T>, 
             onItemsGrouped: props?.onItemsGrouped,
             onGroupPanelCancel: props?.onGroupPanelCancel,
             items: actualRows,
-            groupByFields: [{name: fieldName, order: GroupOrder.ascending}],
+            groupByFields: [{ name: fieldName, order: GroupOrder.ascending }],
             setActualRows,
             level: 0,
             startIndex: 0,
@@ -126,7 +157,7 @@ export function useGridController<T extends BaseType>(props: IGridListProps<T>, 
     }, [props?.initialGroupedBy?.key]);
 
     useEffect(() => {
-        if(props?.getCurrentRows)
+        if (props?.getCurrentRows)
             props?.getCurrentRows(actualRows);
     }, [actualRows]);
 
@@ -139,7 +170,7 @@ export function useGridController<T extends BaseType>(props: IGridListProps<T>, 
             onItemsGrouped: props?.onItemsGrouped,
             onGroupPanelCancel: props?.onGroupPanelCancel,
             items: actualRows,
-            groupByFields: [{name: fieldName, order: GroupOrder.ascending}],
+            groupByFields: [{ name: fieldName, order: GroupOrder.ascending }],
             setActualRows,
             level: 0,
             startIndex: 0,
@@ -147,18 +178,18 @@ export function useGridController<T extends BaseType>(props: IGridListProps<T>, 
             setIsGrouping
         });
     }, [actualRows, cols, props?.emptyGroupLabel, props?.initialGroupedBy?.key]);
-    
+
     useImperativeHandle(ref, () => ({
         reGroupInitialGroup
     }), [actualRows]);
 
     useEffect(() => { setActualRows(props?.rows); setAllRows(props?.rows) }, [props?.rows]);
     useEffect(() => {
-        setCols(columns => [...columns.map(c => ({...c, onColumnClick: onColumnClick(actualRows)}))]);
-    }, [actualRows?.length, isGroping?.active]);
+        setCols(columns => [...columns.map(c => ({ ...c, onColumnClick: onColumnClick(actualRows) }))]);
+    }, [actualRows?.length, isGroping?.active, isGroping?.key, isGroping?.name]);
 
     useEffect(() => {
-        setAvailableFilters([...GridViewFilter.buildFilters(allRows, cols, props?.hiddenFilterKeys as string[])]);   
+        setAvailableFilters([...GridViewFilter.buildFilters(allRows, cols, props?.hiddenFilterKeys as string[])]);
     }, [allRows?.length, cols?.length, props?.hiddenGroupKeys?.length]);
 
     const filterOptionsMatrix = useMemo(() => memoizedAvailableFilter.map(f => GridViewMapper.mapFilterOptions(f?.options)), [memoizedAvailableFilter]);
@@ -166,21 +197,21 @@ export function useGridController<T extends BaseType>(props: IGridListProps<T>, 
     const filterPanelConfig: IPanelFilterProps = {
         isOpen: isFilterPanelOpen,
         onApply: GridViewFilter.onApplyFilter({
-            allRows, 
-            setActualRows, 
-            setIsFilterPanel, 
-            applyCustomFilter: props?.applyCustomFilter, 
+            allRows,
+            setActualRows,
+            setIsFilterPanel,
+            applyCustomFilter: props?.applyCustomFilter,
             onItemsFiltered: props?.onItemsFiltered,
             onFilterPanelCancel: props?.onFilterPanelCancel
         }),
-        onCancel: () => { 
+        onCancel: () => {
             setIsFilterPanel(false);
-            if(props?.onFilterPanelCancel) 
+            if (props?.onFilterPanelCancel)
                 props?.onFilterPanelCancel('cancel');
         },
-        onClose: () =>  { 
-            setIsFilterPanel(false); 
-            if(props?.onFilterPanelCancel)
+        onClose: () => {
+            setIsFilterPanel(false);
+            if (props?.onFilterPanelCancel)
                 props?.onFilterPanelCancel('dismiss');
         },
         panelTitle: props?.filterPanelTitle ?? 'Filtrar',
@@ -195,21 +226,21 @@ export function useGridController<T extends BaseType>(props: IGridListProps<T>, 
 
     const groupPanelConfig: IGroupPanel = {
         isOpen: isGroupPanelOpen,
-        onCancel: () => { 
+        onCancel: () => {
             setIsGroupPanel(false);
-            if(props?.onGroupPanelCancel)
+            if (props?.onGroupPanelCancel)
                 props?.onGroupPanelCancel('cancel');
         },
-        onClose: () =>  { 
-            setIsGroupPanel(false); 
-            if(props?.onGroupPanelCancel)
+        onClose: () => {
+            setIsGroupPanel(false);
+            if (props?.onGroupPanelCancel)
                 props?.onGroupPanelCancel('dismiss');
         },
         onOpen: () => { setIsGroupPanel(true); },
         panelTitle: props?.groupPanelTitle ?? 'Agrupar',
         setSelectedGroupKeys,
         selectedGroupKeys,
-        options: GridViewFilter.filterFromColumns(props?.hiddenGroupKeys as string[], cols)?.map(c => ({key: c?.key, text: c?.name})) ?? [],
+        options: GridViewFilter.filterFromColumns(props?.hiddenGroupKeys as string[], cols)?.map(c => ({ key: c?.key, text: c?.name })) ?? [],
         onApply: (selectedKeys: KeyAndName) => GridViewGrouping.onApplyGrouping({
             emptyGroupLabel: props?.emptyGroupLabel,
             setIsGroupPanel,
@@ -218,7 +249,7 @@ export function useGridController<T extends BaseType>(props: IGridListProps<T>, 
             onGroupPanelCancel: props?.onGroupPanelCancel,
             items: actualRows,
             setActualRows,
-            groupByFields: [{name: selectedKeys, order: GroupOrder.ascending}],
+            groupByFields: [{ name: selectedKeys, order: GroupOrder.ascending }],
             level: 0,
             startIndex: 0,
             cols,
@@ -230,7 +261,7 @@ export function useGridController<T extends BaseType>(props: IGridListProps<T>, 
 
     const listConfig: IListOptionsProps<any> = {
         ...props?.headerOptions,
-        onSearchItemChange: GridViewFilter.onSearchItemChange({allRows, searchCb, setActualRows, onSearchBoxItemsFiltered: props?.onSearchBoxItemsFiltered}),
+        onSearchItemChange: GridViewFilter.onSearchItemChange({ allRows, searchCb, setActualRows, onSearchBoxItemsFiltered: props?.onSearchBoxItemsFiltered }),
         setRenderAs: () => renderAs === 'card' ? setRenderAs('list') : setRenderAs('card'),
         setIsFilterPanelOpen: (value) => { setIsFilterPanel(value); },
         setIsGroupPanelOpen: (value) => { setIsGroupPanel(value); },
@@ -239,12 +270,12 @@ export function useGridController<T extends BaseType>(props: IGridListProps<T>, 
         enableCardView: props?.headerOptions?.enableCardView ?? false,
         enableGrouping,
         onClickSearchIcon: (callerType, text, key) => {
-            if(callerType === IconClickCaller.CLICK)
+            if (callerType === IconClickCaller.CLICK)
                 return setActualRows(currentSearchBoxItems?.current as IRow<T>[]);
-            if(callerType === IconClickCaller.ENTER) {
-                if(!text)
+            if (callerType === IconClickCaller.ENTER) {
+                if (!text)
                     return setActualRows(allRows);
-                const filteredItems = GridViewFilter.onSearchItemChange({allRows, searchCb, setActualRows, onSearchBoxItemsFiltered: props?.onSearchBoxItemsFiltered})(text, key);
+                const filteredItems = GridViewFilter.onSearchItemChange({ allRows, searchCb, setActualRows, onSearchBoxItemsFiltered: props?.onSearchBoxItemsFiltered })(text, key);
                 searchCb(filteredItems);
                 setActualRows(filteredItems as IRow<T>[]);
             }

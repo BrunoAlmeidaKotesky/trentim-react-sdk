@@ -17,6 +17,7 @@ export interface IApplyGroupingParams {
     setIsGrouping: Dispatch<SetStateAction<{
         active: boolean;
         key: string;
+        name: string;
     }>>;
     setActualRows: Dispatch<SetStateAction<IRow[]>>;
     setIsGroupPanel: Dispatch<SetStateAction<boolean>>;
