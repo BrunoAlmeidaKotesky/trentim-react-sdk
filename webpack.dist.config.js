@@ -82,7 +82,7 @@ const config = {
       "@hooks": path.resolve(__dirname, 'dist/hooks'),
       "@models": path.resolve(__dirname, 'dist/models')
     },
-    extensions: [".webpack.js", ".web.js", ".ts", ".tsx", ".js", ".jsx"]
+    extensions: [".webpack.js", ".web.js", ".ts", ".tsx", ".js", ".jsx", ".module.css", ".css", ".scss", ".module.scss"]
   },
   node: {
     // universal app? place here your conditional imports for node env

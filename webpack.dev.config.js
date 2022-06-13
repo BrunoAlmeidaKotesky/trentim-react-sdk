@@ -57,7 +57,7 @@ const config = {
   },
   resolve: {
     alias: {},
-    extensions: [".webpack.js", ".web.js", ".ts", ".tsx", ".js", ".jsx", ".mdx"]
+    extensions: [".webpack.js", ".web.js", ".ts", ".tsx", ".js", ".jsx", ".mdx", ".module.css", ".css", ".scss", ".module.scss"]
   },
   module: {
     rules: loaders.module.rules,
