@@ -142,7 +142,8 @@ export function useGridController<T extends BaseType>(props: IGridListProps<T>, 
 
     useEffect(() => {
         if (!props?.initialGroupedBy?.key) return;
-        const fieldName: KeyAndName = `${props?.initialGroupedBy?.key};${props?.initialGroupedBy?.name}`;
+        const initialGroupKey = props?.initialGroupedBy?.key as string;
+        const fieldName = initialGroupKey + ";" + props?.initialGroupedBy?.name as KeyAndName;
         GridViewGrouping.onApplyGrouping({
             emptyGroupLabel: props?.emptyGroupLabel,
             setIsGroupPanel,
@@ -165,7 +166,8 @@ export function useGridController<T extends BaseType>(props: IGridListProps<T>, 
     }, [actualRows]);
 
     const reGroupInitialGroup = useCallback(() => {
-        const fieldName: KeyAndName = `${props?.initialGroupedBy?.key};${props?.initialGroupedBy?.name}`;
+        const initialGroupKey = props?.initialGroupedBy?.key as string;
+        const fieldName = initialGroupKey + ";" + props?.initialGroupedBy?.name as KeyAndName;
         GridViewGrouping.onApplyGrouping({
             emptyGroupLabel: props?.emptyGroupLabel,
             setIsGroupPanel,

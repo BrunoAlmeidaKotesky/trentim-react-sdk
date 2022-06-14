@@ -1,6 +1,5 @@
 const autoprefixer = require('autoprefixer');
 const path = require('path');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
   module: {
@@ -171,29 +170,6 @@ module.exports = {
         use: 'ts-loader',
         exclude: /node_modules/,
         include: [path.resolve(__dirname, 'src'), path.resolve(__dirname, 'dev'), path.resolve(__dirname, 'stories'), path.resolve(__dirname, '.storybook')]
-      },
-      {
-        test: /\.module\.s(a|c)ss$/,
-        loader: [
-          MiniCssExtractPlugin.loader,
-          {
-            loader: 'css-loader',
-          },
-          {
-            loader: 'sass-loader',
-          }
-        ]
-      },
-      {
-        test: /\.s(a|c)ss$/,
-        exclude: /\.module.(s(a|c)ss)$/,
-        loader: [
-          MiniCssExtractPlugin.loader,
-          'css-loader',
-          {
-            loader: 'sass-loader',
-          }
-        ]
       }
     ]
   }

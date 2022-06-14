@@ -101,7 +101,6 @@
     "less": "^3.9.0",
     "less-loader": "^4.1.0",
     "mime-types": "^2.1.30",
-    "mini-css-extract-plugin": "2.4.6",
     "node-sass": "^7.0.1",
     "nodemon": "^2.0.15",
     "postcss-cli": "^4.1.0",

@@ -1,5 +1,4 @@
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const config = {
   stories: [
@@ -39,31 +38,6 @@ const config = {
       }),
     ];
     config.resolve.extensions.push('.mdx');
-
-    config.module.rules.push({
-      test: /\.module\.s(a|c)ss$/,
-      loader: [
-        MiniCssExtractPlugin.loader,
-        {
-          loader: 'css-loader',
-        },
-        {
-          loader: 'sass-loader',
-        }
-      ]
-    },
-      {
-        test: /\.s(a|c)ss$/,
-        exclude: /\.module.(s(a|c)ss)$/,
-        loader: [
-          MiniCssExtractPlugin.loader,
-          'css-loader',
-          {
-            loader: 'sass-loader',
-          }
-        ]
-      });
-
     return config;
   }
 }
