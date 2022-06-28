@@ -5,7 +5,7 @@ export declare class FileUtils {
     mime?: IMimeConverter;
     constructor(mime?: IMimeConverter);
     /**
-    * Take an object Url, or an url of an image an convert it back to a File object.
+    * Take an stored object url and convert it back to a File object.
     *
     * @param url - The first input number
     * @param fileInfo - The second input number
@@ -23,19 +23,11 @@ export declare class FileUtils {
     * */
     urlToFile(url: string, fileInfo: IFileInfo, fetchOptions?: RequestInit): Promise<File>;
     /**
-     * Downloads in the browser an XML File of the same given string.
-     *
-     * @param xmlText  - String of the whole content of the XML file
-     * @param {String=} fileName - the name of the XML file.
-     */
-    downloadXml(xmlText: string, fileName: string): void;
-    private fileNameValidator;
-    /**
      * Takes any `Blob` object or inherited objects from this interface and convert it to a base64 string.
      * @param blob - Any Blob object, such as `File` and other inherited objects from this interface.
      * @returns A promise of the base64 string.
      */
-    static blobToBase64: (blob: Blob, config?: IBlobStringWriter) => Promise<string>;
+    blobToBase64: (blob: Blob, config?: IBlobStringWriter) => Promise<string>;
     private checkIfHasMime;
     /**
      * Convert's a base 64 string to some of the possible return values from `ConversionOptions` class.
