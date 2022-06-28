@@ -6,7 +6,7 @@ export class FileUtils {
 
   constructor(public mime?: IMimeConverter) { }
   /**
-  * Take an object Url, or an url of an image an convert it back to a File object.
+  * Take an stored object url and convert it back to a File object.
   * 
   * @param url - The first input number
   * @param fileInfo - The second input number
@@ -37,49 +37,13 @@ export class FileUtils {
       return null;
     }
   }
-  /**
-   * Downloads in the browser an XML File of the same given string.
-   * 
-   * @param xmlText  - String of the whole content of the XML file
-   * @param {String=} fileName - the name of the XML file. 
-   */
-  public downloadXml(xmlText: string, fileName: string): void {
-    if (xmlText) {
-      let xmlTag = document.createElement('a');
-      fileName = this.fileNameValidator(fileName, '.xml');
-      let xmlBlob = new Blob([xmlText], { type: 'application/octet-stream' });
-      let objUrl = URL.createObjectURL(xmlBlob);
-
-      xmlTag.setAttribute('href', objUrl);
-      xmlTag.setAttribute('download', fileName);
-
-      xmlTag.dataset.downloadurl = ['text/plain', xmlTag.download, xmlTag.href].join(':');
-      xmlTag.draggable = true;
-      xmlTag.classList.add('dragout');
-      xmlTag.click();
-      setTimeout(() => {
-        window.URL.revokeObjectURL(objUrl);
-        xmlTag?.remove();
-      }, 200);
-    }
-  }
-
-  private fileNameValidator(fileName: string, ext: string): string {
-    if (!ext.startsWith('.'))
-      ext = "." + ext;
-    if (fileName) {
-      if (!fileName.endsWith(ext))
-        return fileName + ext;
-      return fileName;
-    }
-  }
 
   /**
    * Takes any `Blob` object or inherited objects from this interface and convert it to a base64 string.
    * @param blob - Any Blob object, such as `File` and other inherited objects from this interface.
    * @returns A promise of the base64 string.
    */
-   static blobToBase64 = async (blob: Blob, config?: IBlobStringWriter): Promise<string> => {
+   public blobToBase64 = async (blob: Blob, config?: IBlobStringWriter): Promise<string> => {
     const readAs = config?.readAs ?? 'DataURL';
     try {
         return new Promise((resolve, reject) => {

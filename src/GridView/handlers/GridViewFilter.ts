@@ -30,10 +30,10 @@ export class GridViewFilter {
                     if(isDate) {
                         const from: Date = value?.data?.from;
                         const to: Date = value?.data?.to;
-                        const rDate: Date = new Date(Utils.getNestedObject(r, mapKey.split('.')));
+                        const rDate: Date = new Date(Utils.getNestedObject(r, mapKey));
                         return rDate >= from && rDate <= to;
                     }
-                    return Utils.getNestedObject(r, mapKey.split('.')) === value?.text;
+                    return Utils.getNestedObject(r, mapKey) === value?.text;
                 });
                 if(ORrowsFromThisKey.length > 0 && !filteredRows?.map(r => r?.Id)?.includes(value?.data?.Id))
                     filteredRows.push(...ORrowsFromThisKey);
@@ -44,7 +44,7 @@ export class GridViewFilter {
         for(const [mapKey, map] of groupedMaps.entries()) {
             const allMapValues = [...map.values()];
             const newFilteredItems = filteredRows.filter(r => {
-                const rowValue = Utils.getNestedObject(r, mapKey.split('.'));
+                const rowValue = Utils.getNestedObject(r, mapKey);
                 return allMapValues.some(v => {
                     if(v?.data?.from && v?.data?.to) {
                         const from: Date = v?.data?.from;
@@ -73,7 +73,7 @@ export class GridViewFilter {
         for (let index = 0; index < columnsToFilter.length; index++) {
             const col = columnsToFilter[index];
             const renderAs = col?.renderFilterAs ?? 'Dropdown';
-            const keys = col?.key?.split('.') ?? col.fieldName?.split('.'); 
+            const keys = col?.key ?? col.fieldName; 
             const options: FilterOption[] = allRows?.filter(d => d)?.map((data, idx) => {
                 let stringObject = Utils.getNestedObject(data, keys)?.toString();
                 if (col?.dateConversionOptions?.shouldConvertToLocaleString)
@@ -108,7 +108,7 @@ export class GridViewFilter {
         for (const key of keys) {
             const filterFrom = allFilteredRows?.length > 0 ? allFilteredRows : allRows;
             const filteredValues = filterFrom.filter(item => {
-                const foundValues: string = Utils.getNestedObject(item, (key as string)?.split('.'))?.toString();
+                const foundValues: string = Utils.getNestedObject(item, (key as string))?.toString();
                 return foundValues?.toLowerCase()?.startsWith(searchText?.toLowerCase());
             });
             allFilteredRows.push(...filteredValues);

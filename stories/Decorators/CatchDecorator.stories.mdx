@@ -1,0 +1,40 @@
+import { Meta } from '@storybook/addon-docs'
+
+<Meta title="Decorators/CatchDecorator" />
+
+# Catch / DefaultCatch
+
+This decorator has the same functionality and implementation is from [Catch Decorator TS](https://www.npmjs.com/package/catch-decorator-ts), created by [Velid Aljić](https://github.com/valjic1), but with a few more customizable types.
+
+Since it's default implementation comes from another package, you can read it's documentation [here](https://github.com/valjic1/catch-decorator-ts/blob/master/README.md).
+
+The only nottable difference comes from the custom `handler` type:
+
+```ts dark
+type Handler<E = any, Args extends any[] = any[], C = any, R = any> = (err: E, context: C, ...args: Args) => R
+function DefaultCatch<Error = any, Args extends any[] = any[], Ctx = any, Returned = any>(handler: Handler<Error, Args, Ctx, Returned>)
+
+//Example:
+    import { Catch, DefaultCatch, Handler } from 'trentim-react-sdk/dist/decorators';
+    class DummyError extends Error {}
+
+    //Complete type example
+    const defaultErrorHandler: Handler<DummyError, [Request, Response, NextFunction, string], any, void> = (err, ctx, req, res, next, id) =>
+    next(err);
+    const databaseErrorHandler: Handler = (err, ctx, req, res, next, id) => res.send({ error: err });
+
+    class UserController {
+        private repository;
+
+        constructor() {
+            this.load = this.load.bind(this);
+        }
+
+        @DefaultCatch(defaultErrorHandler)
+        @Catch(DatabaseError, databaseErrorHandler)
+        async load(req: Request, res: Response, next: NextFunction, id: string) {
+            const user = await this.userRepository.fetch(id);
+            res.send({ user });
+        }
+    }
+```

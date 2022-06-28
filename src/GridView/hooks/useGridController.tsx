@@ -53,20 +53,18 @@ export function useGridController<T extends BaseType>(props: IGridListProps<T>, 
             isSortedDescending = !isSortedDescending;
         let sortedItems = currentRows;
         const sortType: 'asc' | 'desc' = isSortedDescending ? 'desc' : 'asc';
-        const columnKeys = column?.key?.split('.');
+        const columnKeys = column?.key;
         if (isGroping?.active) {
             const groupKey = isGroping?.key;
             if (groupKey === column?.key)
                 return;
-            const groupKeyPath = groupKey?.split('.');
-
             if (sortType === 'asc')
                 sortedItems = naturalSort(sortedItems).by({
-                    asc: [u => Utils.getNestedObject(u, groupKeyPath)?.toString(), u => Utils.getNestedObject(u, columnKeys)?.toString()],
+                    asc: [u => Utils.getNestedObject(u, groupKey as any)?.toString(), u => Utils.getNestedObject(u, columnKeys as any)?.toString()],
                 })
             else if (sortType === 'desc')
                 sortedItems = naturalSort(sortedItems).by({
-                    desc: [u => Utils.getNestedObject(u, groupKeyPath)?.toString(), u => Utils.getNestedObject(u, columnKeys)?.toString()]
+                    desc: [u => Utils.getNestedObject(u, groupKey as any)?.toString(), u => Utils.getNestedObject(u, columnKeys as any)?.toString()]
                 })
             GridViewGrouping.onApplyGrouping({
                 emptyGroupLabel: props?.emptyGroupLabel,
@@ -75,7 +73,7 @@ export function useGridController<T extends BaseType>(props: IGridListProps<T>, 
                 onItemsGrouped: props?.onItemsGrouped,
                 onGroupPanelCancel: props?.onGroupPanelCancel,
                 items: sortedItems,
-                groupByFields: [{ name: `${groupKeyPath.join('.')};${isGroping?.name}`, order: GroupOrder.ascending }],
+                groupByFields: [{ name: `${groupKey};${isGroping?.name}`, order: GroupOrder.ascending }],
                 setActualRows,
                 level: 0,
                 startIndex: 0,
@@ -92,11 +90,11 @@ export function useGridController<T extends BaseType>(props: IGridListProps<T>, 
         }
         if(sortType === 'asc')
             sortedItems = naturalSort(sortedItems).by({
-                asc: u => Utils.getNestedObject(u, columnKeys)?.toString(),
+                asc: u => Utils.getNestedObject(u, columnKeys as any)?.toString(),
             });
         else if(sortType === 'desc')
             sortedItems = naturalSort(sortedItems).by({
-                desc: u => Utils.getNestedObject(u, columnKeys)?.toString(),
+                desc: u => Utils.getNestedObject(u, columnKeys as any)?.toString(),
             });
         setActualRows(sortedItems);
         setCols(c => c.map(col => {
@@ -125,7 +123,7 @@ export function useGridController<T extends BaseType>(props: IGridListProps<T>, 
         const convertedColumns = columns.map(c => {
             if (c?.key?.includes('.') || c?.fieldName?.includes('.')) {
                 c.onRender = (item, _2) => {
-                    const fieldValue: string = Utils.getNestedObject(item, c?.fieldName?.split('.'));
+                    const fieldValue: string = Utils.getNestedObject(item, c?.fieldName);
                     return <span>{fieldValue}</span>;
                 }
                 return c;

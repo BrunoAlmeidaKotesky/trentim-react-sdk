@@ -1,0 +1,13 @@
+import { Meta } from '@storybook/addon-docs'
+
+<Meta title="Changelog" />
+
+## Changelog
+
+### v1.4.4
+
+- Added the first change log.
+- Documentation for the `Decorators`, `Utils` and `FileUtils` added.
+- `Utils` class method types changed:
+    - `getDeepKeys` and `getNestedObject` now have an advanced type inference for the given and returned paths.
+    - `getNestedObject` second parameter changed from a `string[]` to a `string`, which by default it's type is inferred from the base object.
