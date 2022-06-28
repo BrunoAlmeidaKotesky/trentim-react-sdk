@@ -27,8 +27,13 @@ export class Utils {
         ReturnV extends any = unknown,
         Obj extends Record<any, any> = Record<any, any>>
         (nestedObj: Obj, path: Path): ReturnV {
-        const pathAsArray = path?.split(".") ?? [];
-        return pathAsArray?.reduce((obj, key) => (obj && obj[key as string] !== 'undefined') ? obj[key as string] : undefined, nestedObj) as ReturnV;
+        const pathAsArray = path?.split(".");
+        try {
+            return pathAsArray?.reduce((obj, key) => (obj && obj[key as string] !== 'undefined') ? obj[key as string] : undefined, nestedObj) as ReturnV;
+        } catch (e) {
+            console.error(e);
+            return undefined;
+        }
     }
 
     /**

@@ -88,11 +88,13 @@ export function Card(props: ICardProps) {
                     </div>
                 </div>
                 <div data-class-name="card-top-right" style={props?.cardRightColInformation?.containerStyle ?? styles.rightCol}>
-                    {props?.cardRightColInformation?.values?.length > 0 && props?.cardRightColInformation?.values.map((value, idx) => (
-                        <div key={value?.title ?? idx} style={value?.style ?? styles.plantName}>
-                            <span>{value?.title}</span>
-                        </div>
-                    ))}
+                    {props?.cardRightColInformation?.values?.length > 0 && props?.cardRightColInformation?.values.map((value, idx) => {
+                        typeof value?.title === 'string' && (
+                            <div key={value?.title ?? idx} style={value?.style ?? styles.plantName}>
+                                <span>{value?.title}</span>
+                            </div>
+                        )
+                    })}
                 </div>
             </div>
             <div data-class-name="card-bottom" style={styles.bottom}>

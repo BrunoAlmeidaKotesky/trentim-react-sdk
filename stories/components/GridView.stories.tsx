@@ -47,6 +47,21 @@ const argTypes: Partial<ArgTypes<Args>> = {
     },
     onRowClick: {
         action: 'onRowClick'
+    },
+    cardProps: {
+        defaultValue: {
+            cardTitleKey: 'Title',
+            cardSubtitleKey: 'NumeroPI',
+            enableUserSelect: true,
+            circleIndicator: true,
+            height: 200,
+            rightColumn: {
+                keys: [{title: 'NumeroPI'}, {title: 'GerenteProjeto.Title'}, {title: 'DataInicio', dateConversionOptions: {
+                 shouldConvertToLocaleString: true
+               }}]
+            }
+        }
+
     }
 }
 
@@ -106,6 +121,18 @@ export const CardGridView = (args) => {
         headerOptions={headerOptions}
         renderAs="card"
         {...args}
+        cardProps={{
+            cardTitleKey: 'Title',
+            cardSubtitleKey: 'NumeroPI',
+            enableUserSelect: true,
+            circleIndicator: true,
+            height: 200,
+            rightColumn: {
+                keys: [{title: 'NumeroPI'}, {title: 'GerenteProjeto.Title'}, {title: 'DataInicio', dateConversionOptions: {
+                 shouldConvertToLocaleString: true
+               }}]
+            }
+        }}
         onRowClick={args.onRowClick}
         hiddenFilterKeys={['NumeroPI']}
         columns={[
