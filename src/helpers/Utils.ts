@@ -1,4 +1,4 @@
-import type {Paths} from '../models/types/UtilityTypes';
+import type { Paths, TypeFrom } from 'bakutils-types';
 
 export class Utils {
 
@@ -34,6 +34,26 @@ export class Utils {
             console.error(e);
             return undefined;
         }
+    }
+
+    public static setDeepValue = <
+    Obj extends Record<any, any>,
+    Path extends string = Paths<Obj, 4>
+    >(obj: Obj, path: Path, value: TypeFrom<Obj, Path>): Obj => {
+        if (Object(obj) !== obj) return obj; // When obj is not an object
+        // If not yet an array, get the keys from the string-path
+        if (!Array.isArray(path)) 
+            (path as any) = path?.toString()?.match(/[^.[\]]+/g) || []; 
+        ((path as any)?.slice(0,-1) as any[]).reduce((a, c, i) => // Iterate all of them except the last one
+             Object(a[c]) === a[c] // Does the key exist and is its value an object?
+                 // Yes: then follow that path
+                 ? a[c] 
+                 // No: create the key. Is the next key a potential array-index?
+                 : a[c] = Math.abs(path[i+1] as any)>>0 === +path[i+1] 
+                       ? [] // Yes: assign a new array object
+                       : {}, // No: assign a new plain object
+             obj)[path[path.length-1]] = value; // Finally assign the value to the last key
+        return obj; // Return the top-level object to allow chaining
     }
 
     /**
