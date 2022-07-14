@@ -1,6 +1,5 @@
 ﻿const fs = require('fs');
 const path = require('path');
-const webpack = require('webpack');
 const nodeExternals = require('webpack-node-externals');
 const package_ = JSON.parse(fs.readFileSync('./package.json', 'utf8'));
 const loaders = require('./webpack.loaders');
@@ -20,13 +19,13 @@ const multipleModule = (
   // Multiple module exports of the /src/<Module name>/index.ts
   moduleNames
     .reduce((acc, entry) => {
-      // if (entry === 'components') {
-      //   //Acess each folder from components and add it's index.ts to acc
-      //   const subModuleNames = getModuleNames(`./src/${entry}`);
-      //   subModuleNames.forEach(subModuleName => {
-      //     acc[subModuleName] = `./src/${entry}/${subModuleName}/index.ts`;
-      //   });
-      // }
+      if (entry === 'components') {
+        //Acess each folder from components and add it's index.ts to acc
+        const subModuleNames = getModuleNames(`./src/${entry}`);
+        subModuleNames.forEach(subModuleName => {
+          acc[subModuleName] = `./src/${subModuleName}/index.ts`;
+        });
+      }
       acc[entry] = `./src/${entry}`;
       return acc;
     }, {})
@@ -77,10 +76,10 @@ const config = {
   resolve: {
     alias: {
       //Include alias with @ for src/helpers, src/components, src/hooks and src/models
-      "@helpers": path.resolve(__dirname, 'dist/helpers'),
-      "@components": path.resolve(__dirname, 'dist/components'),
-      "@hooks": path.resolve(__dirname, 'dist/hooks'),
-      "@models": path.resolve(__dirname, 'dist/models')
+      "helpers": path.resolve(__dirname, 'dist/helpers/index.js'),
+      "hooks": path.resolve(__dirname, 'dist/hooks/index.js'),
+      "models": path.resolve(__dirname, 'dist/models/index.js'),
+      "decorators": path.resolve(__dirname, 'dist/Decorators/index.js')
     },
     extensions: [".webpack.js", ".web.js", ".ts", ".tsx", ".js", ".jsx", ".module.css", ".css", ".scss", ".module.scss"]
   },

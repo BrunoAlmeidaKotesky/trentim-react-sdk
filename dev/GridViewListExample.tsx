@@ -3,10 +3,10 @@ import { GridView } from '../src/GridView/GridView';
 import type { IGridViewRefHandler } from '../src/models/interfaces/IGridView';
 import * as json from './MOCK_DATA.json';
 
-type JsonType = typeof json[0];
+type JsonType = NonNullable<typeof json[0]>;
 export function GridViewListExample() {
   const [items, ] = React.useState<JsonType[]>(json);
-  const ref = React.useRef<IGridViewRefHandler<JsonType>>();
+  const ref = React.useRef<IGridViewRefHandler<JsonType>>(null);
   //const [currentGridRows, setCurrentGridRows] = React.useState<JsonType[]>([]);
   const [isGroupingDisabled, setGroupingDisabled] = React.useState(false);
   const [isFilterDisabled, setFilterDisabled] = React.useState(false);

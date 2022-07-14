@@ -1,6 +1,6 @@
 import { ConversionOptions } from "./ConverterOptions";
 import type { IBlobStringWritter as IBlobStringWriter, IFileInfo } from "../models/interfaces/IFileInfo";
-import type { IMimeConverter } from "../models/interfaces/IMimeConverter";
+import type { IMimeConverter } from "@models/interfaces/IMimeConverter";
 export declare class FileUtils {
     mime?: IMimeConverter;
     constructor(mime?: IMimeConverter);

@@ -1,6 +1,6 @@
 {
   "name": "trentim-react-sdk",
-  "version": "1.5.0",
+  "version": "1.5.1",
   "description": "Trentim internal SDK for ReactJS projects, with UI components, helpers, hooks and more.",
   "repository": {
     "type": "git",
@@ -8,7 +8,13 @@
   },
   "private": false,
   "sideEffects": false,
-  "main": "./dist/index.js",
+  "exports": {
+    ".": "./dist/index.js",
+    "./hooks": "./dist/hooks/index.js",
+    "./helpers": "./dist/helper/index.js",
+    "./models": "./dist/models/index.js",
+    "./decorators": "./dist/decorators/index.js"
+  },
   "typings": "./dist/index.d.ts",
   "scripts": {
     "install-deps": "yarn install && yarn sync-file-deps && yarn install",
@@ -45,7 +51,6 @@
   "author": "Bruno Almeida Kotesky",
   "license": "MIT",
   "peerDependencies": {
-    "@fluentui/react": "8.52.3",
     "react": "^16.9.0",
     "react-dom": "^16.9.0"
   },

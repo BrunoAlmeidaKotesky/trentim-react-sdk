@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { PrimaryButton } from '@fluentui/react/lib/Button';
-import { ICardProps } from '../models/interfaces/ICardProps';
+import { ICardProps } from '@models/interfaces/ICardProps';
 import { CSSProperties } from 'react';
 
 /**

@@ -48,35 +48,23 @@
       "jest",
       "webpack-env"
     ],
-    "baseUrl": ".",
+    "baseUrl": "./",
     "paths": {
-      "@models/*": [
-        "src/models/*"
-      ],
-      "@helpers/*": [
-        "src/helpers/*"
-      ],
-      "@components/*": [
-        "src/components/*"
-      ],
-      "@hooks/*": [
-        "src/hooks/*"
-      ],
-      "@decorators/*": [
-        "src/Decorators/*"
-      ]
+      "@models/*": ["src/models/*"],
+      "@helpers/*": ["src/helpers/*"],
+      "@components/*": ["src/components/*"],
+      "@hooks/*": ["src/hooks/*"],
+      "@decorators/*": ["src/Decorators/*"]
     }
   },
-  "exclude": [
-    "node_modules"
+  "include": [
+    "src/**/*"
   ],
-  "compileOnSave": false,
-  "files": [
-    "./src/GridView/index.ts",
-    "./src/helpers/index.ts",
-    "./src/hooks/index.ts",
-    "./src/IFrame/index.ts",
-    "./src/models/index.ts",
-    "./src/UploadButton/index.ts"
-  ]
+  "exclude": [
+    "node_modules",
+    ".storybook",
+    "stories",
+    "dev"
+  ],
+  "compileOnSave": false
 }
