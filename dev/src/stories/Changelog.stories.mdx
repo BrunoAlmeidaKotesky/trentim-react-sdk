@@ -16,7 +16,11 @@ To import all the functionalities of the library, you only need to import from t
     import {GridView, Utils} from 'trentim-react-sdk';
 ```
 
-
+#### Changes:
+- All the utilities types are now exported from the `bakutils-types` module, which is a separate package.
+- All the imports now comes from `trentim-react-sdk` only.
+- The way how files are bundled is now changed to use `vite` instead of `webpack4` boilerplate from `dyna-ts-react-module-boilerplate`.
+- For now, the storybook documentation doesnt support automatically generated types from the components, but it will be re-added soon.
 
 ### v1.5.0 & v1.5.1
 - Just internal changes from some tests, nothing changed on behaviour.

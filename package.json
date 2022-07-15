@@ -13,7 +13,10 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "build-storybook": "build-storybook --docs --loglevel verbose",
+    "release": "yarn build && git add -u && git add -A && git commit --allow-empty -m \"Build changes\" && yarn version && yarn run publish-push",
+    "upgrade-release": "yarn upgrade && yarn run release",
+    "chromatic": "npx chromatic -d storybook-static/"
   },
   "files": [
     "dist"
