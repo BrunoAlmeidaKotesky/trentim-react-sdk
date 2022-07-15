@@ -1,0 +1,37 @@
+import { Meta } from '@storybook/addon-docs'
+
+<Meta title="Changelog" />
+
+## Changelog
+
+### v2.0.0
+**Current new version!**
+Although this is a major release, not many aspects from functionalities have changed.
+The main goal of this release is to change the internal way of how the library is bundled and structured, 
+changing from all the complicated and manual webpack4 configuration to a simple and easy to use configuration using `vite`, from both the library itself and the development/test environment.
+With an easy to deploy, test and way faster build process, it will be a lot easier for us to maintain the library.
+
+To import all the functionalities of the library, you only need to import from the library itself, and not the `dist` folder anymore:
+```ts
+    import {GridView, Utils} from 'trentim-react-sdk';
+```
+
+
+
+### v1.5.0 & v1.5.1
+- Just internal changes from some tests, nothing changed on behaviour.
+
+### v1.4.6
+- Fixed problem from `1.4.5` for real 😅
+
+### v1.4.5
+
+- Fixed `GridView` not working due to undefined values being passed to `Utils.getNestedObject`
+
+### v1.4.4
+
+- Added the first change log.
+- Documentation for the `Decorators`, `Utils` and `FileUtils` added.
+- `Utils` class method types changed:
+    - `getDeepKeys` and `getNestedObject` now have an advanced type inference for the given and returned paths.
+    - `getNestedObject` second parameter changed from a `string[]` to a `string`, which by default it's type is inferred from the base object.

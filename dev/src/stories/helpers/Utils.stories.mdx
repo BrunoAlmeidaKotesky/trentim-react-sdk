@@ -1,0 +1,98 @@
+import { Meta } from '@storybook/addon-docs'
+
+<Meta title="Helpers/Utils" />
+
+# Utils
+
+This is an `generic` utility class with helpers static methods that are used *internally* on the library itself.
+It contains object manipulation methods, and some other useful functions.
+
+## Methods:
+
+##### convertIsoToLocalestring:
+Tries to convert an ISO `string` to the locale format if possible.
+It's not very different from the native `Intl.DateTimeFormat` function, 
+but the difference is that it actually does an verification to make sure the string is an ISO string, and if not, it returns the original string.
+
+* Return Value: The converted string or the original one if it couldn't be converted. `string`
+
+* Parameters:
+
+| *Name* | *Required* | *Description* | *Type* |
+| ----------- | ----------- | ----------- | ----------- |
+| date | true | A string on the ISO format `.toISOstring()`| <code>`string`</code> |
+| locales | false | The desired locales, the default is pt-BR | <code>`string[]` \| `string`</code> |
+| formatOptions | false | Use this parameter if you want to overwrite the default formatting options from `Intl`. | <code>`Intl.DateTimeFormatOptions`</code> |
+
+##### getNestedObject:
+The the value from a deep nested object, given it's path inside the object hierarchy.
+The path string is automatically inferred from the given object, due to the type `Path` extending the utility type `Paths<Obj, 8>`, but it can be changed if desired as it's first generic type parameter.
+
+* Return Value: The value found at the path. <code>unknown</code>
+
+* Parameters:
+
+| *Name* | *Required* | *Description* | *Type* |
+| ----------- | ----------- | ----------- | ----------- |
+| nestedObj | true | The object to search the value in. | <code>`Record<any, any>`</code> |
+| path | true | The path to the value as a string separated by '.' | <code>`Path`</code> |
+
+* Signature:
+```ts dark
+//Note: Not actually a function, but a static method from Utils. `Utils.getNestedObject`
+function getNestedObject<
+        Path extends Paths<Obj, 8>,
+        ReturnV extends any = unknown,
+        Obj extends Record<any, any> = Record<any, any>>
+        (nestedObj: Obj, path: Path): ReturnV
+```
+
+* Example:
+```ts dark
+import {IExample} from './types';
+
+const myObject: IExample = {
+    data: {
+        name: "John",
+        company: {
+            address: {
+                zipCode: "12345-678"
+            }
+        }
+    },
+    status: 200
+}
+
+//The path string is automatically inferred from the given object, due to the utility type `Paths<Obj, 8>`, but it can be changed if desired as it's first generic type parameter.
+const zipCode = Utils.getNestedObject(myObject, 'data.company.address.zipCode'); //Return value is unknown if not set manually.
+const zipCode2 = Utils.getNestedObject(myObject, 'data.company.address.zipCode') as string; //Return type known if set manually, string.
+```
+
+##### getDeepKeys:
+
+This is similar to `Object.keys`, but it traverses through the whole object hierarchy and separates the nested keys by dots.
+
+* Return Value: The keys array, separated by dots.
+
+* Parameters:
+
+| *Name* | *Required* | *Description* | *Type* |
+| ----------- | ----------- | ----------- | ----------- |
+| obj | true | The object to get the keys from. | <code>`Record<any, any>`</code> |
+
+* Signature:
+```ts dark
+//Note: Not actually a function, but a static method from Utils. `Utils.getDeepKeys`
+function getDeepKeys<
+    ResultKeys extends Array<Paths<Obj, 8>>, 
+    Obj extends Record<any, any> = Record<any, any>>
+    (obj: Obj): ResultKeys | string[]
+```
+
+* Example:
+```ts dark
+const deepObject = {a: {b: 2, c: {d: {e: {f: {g: {h: {i: {j: 'Finally, J Value'}}}}}}}}, k: 'K value'};
+/**Returns: string[] | ("a" | "b" | "a.b" | "a.c" | "a.c.d" | "a.c.d.e" | "a.c.d.e.f" | "a.c.d.e.f.g" | "a.c.d.e.f.g.h" | "a.c.d.e.f.g.h.i" | "a.c.d.e.f.g.h.i.j")[] */
+const inferredKeys = Utils.getDeepKeys(deepObject);
+const manuallyKeys = Utils.getDeepKeys<string[]>(deepObject); //Returns string[]
+```

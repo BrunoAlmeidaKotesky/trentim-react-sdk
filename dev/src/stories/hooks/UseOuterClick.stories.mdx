@@ -1,0 +1,65 @@
+import { Meta } from '@storybook/addon-docs'
+import {OuterClickExample} from './ExamplesComponents'
+
+<Meta title="Hooks/useOuterClick" />
+
+# useOuterClick
+
+Use this hook if you need to detect clicks outside of a component when you were previosly clicking inside of it.
+
+* Return Value: A React <code>ref</code> object. ```React.MutableRefObject<R>```
+
+* Parameters:
+
+| *Name* | *Required* | *Description* | *Type* |
+|--------|-------------|----------------|--------|
+| callback | true | A callback with a pointer event as it's parameter. | <code>(ev?: PointerEvent) => any</code> |
+| cancelableCb | false | A callback with a pointer event as it's parameter, which can be used to stop the execution of the first callback.. | <code language="typescript">cancelableCb?: (ev: PointerEvent) => boolean</code> |
+
+* Function Signature:
+```ts dark
+function useOuterClick<R extends HTMLElement = HTMLElement>(callback: (ev?: PointerEvent) => any, cancelableCb?: (ev: PointerEvent) => boolean): React.MutableRefObject<R>
+```
+
+##### Real time example:
+
+<OuterClickExample/>
+
+* Code: 
+```tsx dark
+import {useOuterClick} from 'trentim-react-sdk/dist/hooks';
+
+function Example() {
+    const [clickLabel, setClickLabel] = useState<'outside' | 'inside' | 'cancelled'>(null);
+    const style = {
+        width: 200, height: 35, display: 'grid', placeItems: 'center'
+    }
+    const buttonRef = useOuterClick<HTMLButtonElement>(
+        (_pointerEv) => setClickLabel('outside'),
+        (pointerEv) => {
+            if(pointerEv.target?.['id'] === 'outer-hook-cancel-button') {
+                setClickLabel('cancelled');
+                return true;
+            }
+            return false;
+        }
+    );
+
+    return (
+        <div style={{justifyContent: 'space-around', display: 'flex'}}>
+            <button
+                style={{...style, backgroundColor: 'rgb(112, 219, 223)'}}
+                ref={buttonRef}
+                onClick={() => setClickLabel('inside')}>
+                {clickLabel === 'inside' ?
+                    'Clicked inside' : clickLabel === 'outside' ?
+                    'Clicked outside' : clickLabel === 'cancelled' ? 
+                    'Callback was ignored.' : 'Not clicked'}
+            </button>
+            <button
+                id="outer-hook-cancel-button" 
+                style={{...style, backgroundColor: '#ba6f6f'}}>Ignore outside click callback.</button>
+        </div>
+    );
+}
+```

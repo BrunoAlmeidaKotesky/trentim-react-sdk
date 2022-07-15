@@ -1,0 +1,129 @@
+import { Meta } from '@storybook/addon-docs'
+
+<Meta title="Helpers/CacheHandler" />
+
+# CacheHandler
+An utility class for controlling browser cache, from local or session storage.
+
+* Constructor:
+```ts dark
+/*The same interface from JSON, but it can also be from some other JSON parser libraries, such as npm module flatted for allowing circular objects. */
+interface IDependencyJson extends Omit<JSON, 'readonly [Symbol.toStringTag]: string'> { };
+constructor CacheHandler(_json?: IDependencyJson): CacheHandler
+```
+
+* Interfaces:
+```ts dark
+export interface ICacheOptions {
+    type: 'local'|'session';
+    timeConfig: {
+        dateType: 'minutes'|'hours'|'days';
+        timeSpan: number;
+    }
+}
+
+export interface ICacheResponse<T> {
+    /**The parsed value from storage */
+    value: T;
+    /**The date when the cache was set*/
+    requestedAt: string;
+    /**The date to specify when to expire the cache */
+    expireDate: string;
+}
+
+export interface ICacheHandler {
+    /**
+     * @param key - Name of the storage key
+     * @param object - Any objected that can be parsed
+     * @param options - The type of the storage: `localStorage` | `sessionStorage` 
+     */
+    setCache<T>(key: string, object: T, options: ICacheOptions): void;
+    /**
+     * @param key - The gey to get the cached value
+     * @param options - The type of the storage: `localStorage` | `sessionStorage` 
+     * @returns return an `ICachedResponse` object, where the `value` is the original value.
+     */
+    getCache<T>(key: string, {type}: Pick<ICacheOptions, 'type'>): ICacheResponse<T>;
+    /**
+     * This method is not public, but it is used internally to check if the cache is expired.
+     * @param date - The date to set when the object will need to be refreshed. 
+     */
+    setRefreshDate(date: Date, dateType: 'seconds' | 'minutes' | 'hours'  | 'days', timeSpan: number): void;
+    /**
+     * @param key - The key name to remove from the storage 
+     */
+    removeCacheKey(key: string, {type}: Pick<ICacheOptions, 'type'>): void;
+}
+```
+
+## Methods:
+
+##### setCache:
+Set an object to be cached on local storage or session storage.
+
+| *Name* | *Required* | *Description* | *Type* |
+| ----------- | ----------- | ----------- | ----------- |
+| key | true | Storage key name | ```string``` |
+| options | true | Configuration to the cache, `type` can be `local` or `session` for storage. `timeConfig` is an object that you can specify the `dateType` and `timeSpan` | ```ICacheOptions``` |
+
+* Usage:
+```ts dark
+import {parse, stringify} from 'flatted'; //Optional external module.
+import {CacheHandler} from 'trentim-react-sdk/dist/helpers';
+
+interface ICachedItem {items: any[], id: number, name: string; }
+const cacheHandler = new CacheHandler({parse, stringify}); //Optional module injection, if you want to use your own JSON parser.
+const cachedObject: ICachedItem = {items: [], name: 'Example', id: 1};
+//Five minutes from now.
+cacheHandler.setCache<ICachedItem>(cacheKey, cachedObject, {type: 'local', timeConfig: { dateType: 'minutes', timeSpan: 5}});
+```
+
+##### getCache:
+Get the cached object from local storage or session storage as an ```ICacheResponse<T>``` interface.
+
+| *Name* | *Required* | *Description* | *Type* |
+| ----------- | ----------- | ----------- | ----------- |
+| key | true | Storage key name | ```string``` |
+| type | true | An object containing a `type` property to determine the type of the storage. | ```Pick<ICacheOptions, 'type'>``` |
+
+* Usage:
+```ts dark
+import {CacheHandler} from 'trentim-react-sdk/dist/helpers';
+
+async function getItemsWithCache(): Promise<ICachedItem> {
+    const cacheKey = 'mycache-key';
+    const cachedItems = cacheHandler.getCache<ICachedItem>(cacheKey, {type: 'local'});
+    //Cache has not expired yet.
+    if(cachedItems && new Date(cachedItems.expireDate) >= new Date())
+        return cachedItems?.value;
+    //Cache has expired or is empty.
+    else if ((cachedItems?.value && new Date(cachedItems?.expireDate) < new Date()) || !cachedItems?.value) {
+        //Remove previous cached item.
+        cacheHandler.removeCacheKey(cacheKey, {type: 'local'});
+        const newData = await fetchData();
+        cacheHandler.setCache<ICachedItem>(cacheKey, newData, {type: 'local', timeConfig: {
+            dateType: 'seconds',
+            timeSpan: 30
+        }});
+        return mergedDocs;
+    }
+}
+```
+
+##### removeCacheKey:
+Remove a key from the storage.
+
+| *Name* | *Required* | *Description* | *Type* |
+| ----------- | ----------- | ----------- | ----------- |
+| key | true | Storage key name | ```string``` |
+| type | true | An object containing a `type` property to determine the type of the storage. | ```Pick<ICacheOptions, 'type'>``` |
+
+* Usage:
+```ts dark
+import {CacheHandler} from 'trentim-react-sdk/dist/helpers';
+
+const cacheHandler = new CacheHandler();
+const cacheKey = 'mycache-key';
+cacheHandler.setCache<number[]>('myCache', [1,2,3,4], {type: 'session'});
+cacheHandler.removeCacheKey(cacheKey, {type: 'session'});
+```
