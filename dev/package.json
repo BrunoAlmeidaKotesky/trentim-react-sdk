@@ -7,8 +7,9 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
+    "chromatic": "npx chromatic -d storybook-static/",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "build-storybook": "build-storybook --docs --loglevel verbose"
   },
   "dependencies": {
     "@fluentui/react": "^8.81.0",
