@@ -15,6 +15,7 @@
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook --docs --loglevel verbose",
     "release": "yarn build && git add -u && git add -A && git commit --allow-empty -m \"Build changes\" && yarn version && yarn run publish-push",
+    "publish-push": "yarn publish --non-interactive && git push && git push --tags",
     "upgrade-release": "yarn upgrade && yarn run release",
     "chromatic": "npx chromatic -d storybook-static/"
   },
