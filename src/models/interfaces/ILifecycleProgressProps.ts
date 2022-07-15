@@ -1,3 +1,4 @@
+import type {IFocusTrapCalloutProps} from '@fluentui/react/lib/Callout';
 
 export interface IInfoColumn {
     infoColumnBgColor?: string;
@@ -39,6 +40,9 @@ export interface ILifecycleProgressProps<StageData = any> extends IInfoColumn, I
     /**@default false */
     showCalloutOnClick?: boolean;
     calloutContent?: React.ReactNode;
+    calloutProps?: IFocusTrapCalloutProps;
+    /**@default black */
+    textColor?: string;
 }
 
 export type LifecycleCallout = {isVisible: boolean, calloutIdx: number};

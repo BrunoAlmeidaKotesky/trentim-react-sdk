@@ -13,37 +13,37 @@ declare module "react" {
 
 function LifecycleProgressInner<StageData>(props: ILifecycleProgressProps<StageData>, ref:  React.ForwardedRef<ILifecycleProgressRef>) {
     const [{isVisible, calloutIdx}, setCallout] = React.useState<LifecycleCallout>({isVisible: false, calloutIdx: null});
-    const currentBlockRef = React.useRef<HTMLDivElement>(null);
+    const {onStageClick, calloutProps, ...other} = props;
 
     React.useImperativeHandle(ref, () => ({
         setCallout
-    }), [currentBlockRef]);
+    }), []);
 
-    return (
-        <LifecycleRow {...props}>
-            <InformationColumn {...props} />
-            <StagesColumn {...props}>
+    return (<>
+        <LifecycleRow {...other}>
+            <InformationColumn {...other} />
+            <StagesColumn {...other}>
                 {props.stages.map((stage, index) => (<>
-                    <StageBlock {...props}
-                        ref={currentBlockRef}
+                    <StageBlock {...other}
+                        className={`indicator-${index}`}
                         onClick={(ev) => { 
-                            props.onStageClick(index, stage?.data, ev);
-                            if(props.showCalloutOnClick && !isVisible && !calloutIdx)
+                            onStageClick(index, stage?.data, ev);
+                            if(other.showCalloutOnClick && !isVisible && (!calloutIdx || calloutIdx !== index))
                                 setCallout({isVisible: true, calloutIdx: index});
                         }} 
-                        isFirstColumn={index === 0} isLastColumn={index === props.stages.length - 1} key={index}>
-                        <StageIndicator active={stage?.active} indicatorColor={props?.indicatorColor} />
-                        <span style={{fontSize: 14, lineHeight: 30, padding: '0 12px', cursor: 'pointer', fontWeight: stage?.active  ? 'bold' : 'normal'}}>{stage?.label}</span>
+                        isFirstColumn={index === 0} isLastColumn={index === other.stages.length - 1} key={index}>
+                        <StageIndicator active={stage?.active} indicatorColor={other?.indicatorColor} />
+                        <span style={{fontSize: 14, padding: '0 12px', cursor: 'pointer', fontWeight: stage?.active  ? 'bold' : 'normal', color: other?.textColor ?? 'black'}}>{stage?.label}</span>
                     </StageBlock>
-                    {isVisible && 
-                    <FocusTrapCallout
-                        role="dialog" target={currentBlockRef} setInitialFocus             
-                        onDismiss={() => setCallout({isVisible: false, calloutIdx: null})}>{props?.calloutContent}
-                    </FocusTrapCallout>}
                 </>))}
             </StagesColumn>
         </LifecycleRow>
-    );
+        {isVisible && 
+            <FocusTrapCallout
+                role="dialog" target={`.indicator-${calloutIdx}`} setInitialFocus             
+                onDismiss={() => setCallout({isVisible: false, calloutIdx: null})} {...calloutProps}>{other?.calloutContent}
+            </FocusTrapCallout>}
+    </>);
 }
 
 export const LifecycleProgress = React.forwardRef(LifecycleProgressInner);

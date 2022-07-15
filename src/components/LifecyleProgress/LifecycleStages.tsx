@@ -15,13 +15,12 @@ const pseudoCss = (type: 'after'| 'before', ...content: string[]) => {
         height: 4px;
         width: 50%;
         position: absolute;
-        right: 0;
         top: -4px;
         ${content}
     `;
     if (type === 'after')
-        return css`::after { ${baseCss} }`;
-    return css`::before { ${baseCss} }`;
+        return css`::after {right: 0; ${baseCss}}`;
+    return css`::before {left: 0; ${baseCss}}`;
 }
 
 export const StageBlock = styled.div<StageBlockComponent>`
@@ -42,7 +41,7 @@ export const StageIndicator = styled.span<StageIndicatorComponent>`
     width: 24px;
     height: 24px;
     border-radius: 24px;
-    background-color: ${p =>p?.active ? p?.indicatorColor ?? '#00BCF2' : '#fff'};
+    background-color: ${p => p?.indicatorColor ?? '#fff'};
     border: 4px solid ${p =>p?.active ? p?.indicatorColor ?? '#00BCF2' : '#c4c4c4'};
     position: absolute;
     top: -14px;
