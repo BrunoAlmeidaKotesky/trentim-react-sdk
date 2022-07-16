@@ -17,24 +17,25 @@ export interface IStageColumn extends IStageBlock {
 }
 
 export interface IStageBlock {
-    /**@default #efefef */
     stageBgColor?: string;
-    /**@default 4px solid #c4c4c4 */
     stageBorderTop?: string;
 }
 
 export interface ILifecycleStages<T = any> {
     label: string;
     active: boolean;
+    completed: boolean;
     data?: T;
 }
 
 export interface ILifecycleProgressProps<StageData = any> extends IInfoColumn, IStageColumn {
-    /**@default 56px */
+    /**@default 60px */
     containerHeight?: string;
     /**@default #00BCF2 */
-    /**@default 42px */
+    /**@default 46px */
     columnsHeight?: string;
+    /**@default #fff */
+    containerBgColor?: string;
     stages: ILifecycleStages<StageData>[];
     onStageClick: (curIndex: number, data?: StageData, event?: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
     /**@default false */
@@ -48,6 +49,6 @@ export interface ILifecycleProgressProps<StageData = any> extends IInfoColumn, I
 export type LifecycleCallout = {isVisible: boolean, calloutIdx: number};
 export type ILifecycleProgressRef = {setCallout: React.Dispatch<React.SetStateAction<LifecycleCallout>>};
 export type StageColumnComponent = Pick<ILifecycleProgressProps, 'gridTemplateColumn' | 'columnsHeight'>;
-export type StageBlockComponent = Pick<ILifecycleProgressProps, 'stageBgColor' | 'stageBorderTop' | 'columnsHeight'> & {isFirstColumn: boolean, isLastColumn: boolean};
-export type StageIndicatorComponent = Pick<IStageColumn, 'indicatorColor'> & {active: boolean};
+export type StageBlockComponent = Pick<ILifecycleProgressProps, 'stageBgColor' | 'stageBorderTop' | 'columnsHeight'> & {isFirstColumn: boolean, isLastColumn: boolean, completed: boolean, active: boolean};
+export type StageIndicatorComponent = Pick<IStageColumn, 'indicatorColor'> & {active: boolean, completed: boolean};
 export type InfoColumnComponent = Pick<ILifecycleProgressProps, 'infoColumnBgColor' | 'infoColumnTxtColor' | 'infoColumnMaxWidth' | 'columnsHeight'>

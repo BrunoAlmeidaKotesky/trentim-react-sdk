@@ -5,7 +5,7 @@ export const StagesColumn = styled.div<StageColumnComponent>`
     display: grid;
     grid-template-columns: ${p => p?.gridTemplateColumn ?? 'repeat(auto-fit, minmax(200px, 1fr))'};
     background: #efefef;
-    height: ${p => p?.columnsHeight ?? '42px'};
+    height: ${p => p?.columnsHeight ?? '46px'};
     width: 100%;
 `;
 
@@ -28,24 +28,31 @@ export const StageBlock = styled.div<StageBlockComponent>`
     flex-direction: column;
     justify-content: flex-end;
     align-items: center;
-    height: ${p => p?.columnsHeight ?? '42px'};
+    height: ${p => p?.columnsHeight ?? '46px'};
     border-top: ${p => p?.stageBorderTop ?? '4px solid #e2e2e2'};
     position: relative;
-    background-color: ${p => p?.stageBgColor ?? '#fff'};
+    background-color: ${p => p?.stageBgColor ?? '#efefef'};
     width: 100%;
-    ${p => !p?.isFirstColumn && pseudoCss('before', 'border-left: 4px solid #e2e2e2')}
-    ${p => !p?.isLastColumn && pseudoCss('after', p?.stageBorderTop ?? '4px solid #e2e2e2')}
+    ${p => !p?.isFirstColumn && pseudoCss('before', (p?.completed || p?.active) ? `background-color: ${p?.stageBgColor ?? '#00BCF2'}` : '')}
+    ${p => !p?.isLastColumn && pseudoCss('after', p?.completed ? `background-color: ${p?.stageBgColor ?? '#00BCF2'}` : '')}
 `;
+
+const stageIndicatorBgColor = (completed: boolean, defaultColor: string) => {
+    if(completed)
+        return defaultColor || '#00BCF2';
+    return '#fff';
+}
 
 export const StageIndicator = styled.span<StageIndicatorComponent>`
     width: 24px;
     height: 24px;
     border-radius: 24px;
-    background-color: ${p => p?.indicatorColor ?? '#fff'};
-    border: 4px solid ${p =>p?.active ? p?.indicatorColor ?? '#00BCF2' : '#c4c4c4'};
+    background-color: ${p => stageIndicatorBgColor(p?.completed, p?.indicatorColor)};
+    border: 4px solid ${p => (p?.active || p?.completed) ? p?.indicatorColor ?? '#00BCF2' : '#c4c4c4'};
     position: absolute;
     top: -14px;
     left: calc(50% - 14px);
+    cursor: pointer;
     z-index: 5;
     ${p => p?.active && css`
         ::after {

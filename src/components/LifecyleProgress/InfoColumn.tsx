@@ -10,6 +10,6 @@ export const InformationColumn = styled.div<InfoColumnComponent>`
     box-sizing: border-box;
     max-width: ${p => p?.infoColumnMaxWidth ?? '200px'};
     width: 100%;
-    height: ${p => p?.columnsHeight ?? '42px'};
+    top: 4px;
     padding: 2px 0 0 8px;
 `;
