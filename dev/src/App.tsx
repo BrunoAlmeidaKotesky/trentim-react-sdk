@@ -14,7 +14,7 @@ function App() {
           <Route path="/" index element={<Home />} />
           <Route path="/grids" element={<Grids />} />
           <Route path="/basics" element={<Basics />} />
-          <Route path="/lifecycle" element={<LifecycleTests/>}/>
+          <Route path="/lifecycle" element={<LifecycleTests height='100%' width='100%'/>}/>
         </Routes>
       </BrowserRouter>
     </div >
