@@ -4,8 +4,14 @@ import { Meta } from '@storybook/addon-docs'
 
 ## Changelog
 
-### v2.1.0
+### v2.2.0
 **Current new version!**
+Fixed the `react` and `react-dom` dependencies to correctly use `^16.9.0` by default, which the core library uses, changing to the classic `jsxRuntime` on vite.
+
+### v2.1.1
+- Fixed how `LifecycleProgress` renders the keys from it's children.
+
+### v2.1.0
 - Created a new component called `LifecycleProgress`, in which it was used and implemented in a non-generic way internally in our company, and now is public and generic.
 Please view the documentation for more information.
 

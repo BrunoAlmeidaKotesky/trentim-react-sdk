@@ -26,7 +26,7 @@ function LifecycleProgressInner<StageData>(props: ILifecycleProgressProps<StageD
                 {props.infoContent}
             </InformationColumn>
             <StagesColumn {...other}>
-                {props.stages.map((stage, index) => (<>
+                {props.stages.map((stage, index) => (
                     <StageBlock {...other}
                         className={`indicator-${index}`} completed={stage?.completed} active={stage?.active}
                         onClick={(ev) => { 
@@ -40,7 +40,7 @@ function LifecycleProgressInner<StageData>(props: ILifecycleProgressProps<StageD
                         </StageIndicator>
                         <span style={{fontSize: 14, padding: '0 12px', cursor: 'pointer', fontWeight: stage?.active  ? 'bold' : 'normal', color: other?.textColor ?? 'black'}}>{stage?.label}</span>
                     </StageBlock>
-                </>))}
+                ))}
             </StagesColumn>
         </LifecycleRow>
         {isVisible && 
