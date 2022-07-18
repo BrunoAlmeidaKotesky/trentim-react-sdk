@@ -53,6 +53,6 @@ export interface ILifecycleProgressProps<StageData = any> extends IInfoColumn, I
 export type LifecycleCallout = {isVisible: boolean, calloutIdx: number};
 export type ILifecycleProgressRef = {setCallout: React.Dispatch<React.SetStateAction<LifecycleCallout>>};
 export type StageColumnComponent = Pick<ILifecycleProgressProps, 'gridTemplateColumn' | 'columnsHeight'>;
-export type StageBlockComponent = Pick<ILifecycleProgressProps, 'stageBgColor' | 'stageBorderTop' | 'columnsHeight'> & {isFirstColumn: boolean, isLastColumn: boolean, completed: boolean, active: boolean};
+export type StageBlockComponent = Pick<ILifecycleProgressProps, 'stageBgColor' | 'indicatorColor' | 'stageBorderTop' | 'columnsHeight'> & {isFirstColumn: boolean, isLastColumn: boolean, completed: boolean, active: boolean};
 export type StageIndicatorComponent = Pick<IStageColumn, 'indicatorColor'> & {active: boolean, completed: boolean};
 export type InfoColumnComponent = Pick<ILifecycleProgressProps, 'infoColumnBgColor' | 'infoColumnTxtColor' | 'infoColumnMaxWidth' | 'columnsHeight'>

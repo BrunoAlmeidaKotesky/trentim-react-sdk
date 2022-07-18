@@ -33,8 +33,8 @@ export const StageBlock = styled.div<StageBlockComponent>`
     position: relative;
     background-color: ${p => p?.stageBgColor ?? '#efefef'};
     width: 100%;
-    ${p => !p?.isFirstColumn && pseudoCss('before', (p?.completed || p?.active) ? `background-color: ${p?.stageBgColor ?? '#00BCF2'}` : '')}
-    ${p => !p?.isLastColumn && pseudoCss('after', p?.completed ? `background-color: ${p?.stageBgColor ?? '#00BCF2'}` : '')}
+    ${p => !p?.isFirstColumn && pseudoCss('before', (p?.completed || p?.active) ? `background-color: ${p?.indicatorColor ?? '#00BCF2'}` : '')}
+    ${p => !p?.isLastColumn && pseudoCss('after', p?.completed ? `background-color: ${p?.indicatorColor ?? '#00BCF2'}` : '')}
 `;
 
 const stageIndicatorBgColor = (completed: boolean, defaultColor: string) => {
