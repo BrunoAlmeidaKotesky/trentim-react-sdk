@@ -44,11 +44,11 @@ const stageIndicatorBgColor = (completed: boolean, defaultColor: string) => {
 }
 
 export const StageIndicator = styled.span<StageIndicatorComponent>`
-    width: ${p => p?.active ? '20px' : '24px'};
-    height: ${p => p?.active ? '20px' : '24px'};
+    width: ${p => (p?.active || (!p?.active && !p?.completed)) ? '20px' : '24px'};
+    height: ${p => (p?.active || (!p?.active && !p?.completed)) ? '20px' : '24px'};
     border-radius: 24px;
     background-color: ${p => stageIndicatorBgColor(p?.completed, p?.indicatorColor)};
-    border: ${p => (p?.active || p?.completed) ? '4px solid ' + p?.indicatorColor ?? '#00BCF2' : '4px solid #c4c4c4'};
+    border: ${p => (p?.completed) ? 'unset' : (p?.active) ? `4px solid ${p?.indicatorColor ?? '#00BCF2'}` : '4px solid #c4c4c4'};
     position: absolute;
     top: -14px;
     left: calc(50% - 14px);
