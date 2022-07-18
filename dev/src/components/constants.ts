@@ -1,3 +1,5 @@
+import { ILifecycleStages } from "../../../src/models/interfaces/ILifecycleProgressProps";
+
 export const simpleRow = [
 {
     "GerenteProjeto": {
@@ -225,4 +227,58 @@ export const simpleRow = [
     "DescricaoPI": "D",
     "Setor": "a"
 }
+];
+
+export interface SubStage {
+    name: string;
+    description: string;
+    completed: boolean;
+    active: boolean;
+}
+export const mockStages: ILifecycleStages<SubStage[]>[] = [
+    {
+        active: false, 
+        label: "Iniciação", 
+        data: [
+            {name: '1A. Business Case', description: 'Lorem Ipsum', active: false, completed: false}, 
+            {name: '1B. Revisão Comitê Executivo', description: 'Lorem Ispum', active: false, completed: true},
+            {name: '1C. Revisão Comitê Financeiro', description: 'Lorem Ipsum', active: false, completed: true},
+        ], 
+        completed: true
+    },
+    {
+        active: false,
+        label: "Seleção",
+        completed: true,
+        data: [
+            {name: '2A. Seleção de Projetos', description: 'Lorem Ipsum', active: false, completed: true},
+            {name: '2B. Revisão Comitê Executivo', description: 'Lorem Ipsum', active: false, completed: true}, 
+        ]
+    },
+    {
+        active: false,
+        label: "Planejamento",
+        completed: true,
+        data: [
+            {name: '3A. Planejamento', description: 'Lorem Ipsum', active: false, completed: true},
+        ]
+    },
+    {
+        active: true,
+        label: "Execução",
+        completed: false,
+        data: [
+            {name: '4A. Execução de Projetos', description: 'Lorem Ipsum', active: true, completed: true},
+            {name: '4B. Revisão Comitê Executivo', description: 'Lorem Ipsum', active: false, completed: true},
+        ]
+    },
+    {
+        active: false,
+        label: "Encerramento",
+        completed: false,
+        data: [
+            {name: '5A. Encerramento', description: 'Lorem Ipsum', active: false, completed: true},
+            {name: '5B. Revisão Comitê Executivo', description: 'Lorem Ipsum', active: false, completed: true}
+        ]
+    }
 ];

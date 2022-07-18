@@ -26,6 +26,10 @@ export interface ILifecycleStages<T = any> {
     active: boolean;
     completed: boolean;
     data?: T;
+    /**
+     * If not set, it will show callout only if the prop `showCalloutOnClick` is set to `true` and the stage is `active`.
+     */
+    showCallout?: boolean;
 }
 
 export interface ILifecycleProgressProps<StageData = any> extends IInfoColumn, IStageColumn {
@@ -37,7 +41,7 @@ export interface ILifecycleProgressProps<StageData = any> extends IInfoColumn, I
     /**@default #fff */
     containerBgColor?: string;
     stages: ILifecycleStages<StageData>[];
-    onStageClick: (curIndex: number, data?: StageData, event?: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
+    onStageClick: (currentStage: ILifecycleStages<StageData>, curIndex: number, event?: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
     /**@default false */
     showCalloutOnClick?: boolean;
     calloutContent?: React.ReactNode;

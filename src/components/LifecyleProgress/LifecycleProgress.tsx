@@ -30,8 +30,8 @@ function LifecycleProgressInner<StageData>(props: ILifecycleProgressProps<StageD
                     <StageBlock {...other}
                         className={`indicator-${index}`} completed={stage?.completed} active={stage?.active}
                         onClick={(ev) => { 
-                            onStageClick(index, stage?.data, ev);
-                            if(other.showCalloutOnClick && !isVisible && (!calloutIdx || calloutIdx !== index))
+                            onStageClick(stage, index, ev);
+                            if(other.showCalloutOnClick && !isVisible && (!calloutIdx || calloutIdx !== index) && (stage?.showCallout || stage?.active))
                                 setCallout({isVisible: true, calloutIdx: index});
                         }} 
                         isFirstColumn={index === 0} isLastColumn={index === other.stages.length - 1} key={index}>
