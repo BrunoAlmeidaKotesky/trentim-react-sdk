@@ -9,7 +9,7 @@ export const ListOptions = () => {
         customButtons, enableFilter, enableSearch, searchKeys, onSearchItemChange, 
         setIsFilterPanelOpen, defaultButtonsOrder, searchBoxPlaceholder, enableCardView, 
         setRenderAs, enableGrouping, onClickSearchIcon, onFilterIconClick, onGroupIconClick, onSearchBoxClick,
-        cardButtonProps, filterButtonProps, searchBoxProps, groupButtonProps
+        cardButtonProps, filterButtonProps, searchBoxProps, groupButtonProps, leftHeaderSpace
     } = React.useContext(ListOptionsContext);
     const {onOpen} = React.useContext(GroupPanelContext);
 
@@ -44,6 +44,7 @@ export const ListOptions = () => {
 
     return (
     <div data-class-name="grid-view-header-container" style={defaultStyles.container}>
+        {!!leftHeaderSpace && leftHeaderSpace}
         {enableGrouping &&
         <DefaultButton
             {...omittedButtonProps?.groupButtonProps}
@@ -87,7 +88,7 @@ export const ListOptions = () => {
                         onClickSearchIcon(IconClickCaller.CLICK);
                 }
             }} 
-            styles={{root: {width: 320, order: defaultButtonsOrder?.search}, icon: {color: '[theme: themePrimary, default: #0078D4]'}}} />}
+            styles={{root: {width: omittedTextFieldProps?.styles?.['root']?.width || 320, order: defaultButtonsOrder?.search}, icon: {color: '[theme: themePrimary, default: #0078D4]'}}} />}
         {enableFilter &&
         <DefaultButton
             {...omittedButtonProps?.filterButtonProps}

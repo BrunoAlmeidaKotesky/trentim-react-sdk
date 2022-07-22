@@ -290,6 +290,7 @@ export function useGridController<T extends BaseType>(props: IGridListProps<T>, 
         filterButtonProps: props?.headerOptions?.filterButtonProps,
         groupButtonProps: props?.headerOptions?.groupButtonProps,
         searchBoxProps: props?.headerOptions?.searchBoxProps,
+        leftHeaderSpace: props?.headerOptions?.leftHeaderSpace
     }
 
     return {

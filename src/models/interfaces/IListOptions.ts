@@ -71,6 +71,9 @@ export interface IListOptionsProps<T> extends Partial<IGridClickActions>, IOverr
         filter: number;
         card: number;
     }
+    /**Use this property if you want use the available left space of the header elements, which is followed by the default buttons.*/
+    leftHeaderSpace?: React.ReactNode;
+    
 }
 
 export type IConfigurableHeader<T = any> = Omit<IListOptionsProps<T>, 
