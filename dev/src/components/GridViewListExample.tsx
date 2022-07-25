@@ -1,5 +1,5 @@
 import {useState, useRef} from 'react';
-import { GridView } from '../../../src/components/GridView/index';
+import { GridView } from 'trentim-react-sdk';
 import type { IGridViewRefHandler } from 'trentim-react-sdk';
 import json from './MOCK_DATA.json';
 
@@ -41,11 +41,20 @@ export function GridViewListExample() {
           hiddenFilterKeys={['NumeroPI']}
           //initialGroupedBy={{key: 'Status', name: 'Status'}}
           headerOptions={{
-            leftHeaderSpace: <span style={{}}>Central de Projetos</span>,
+            leftHeaderSpace: <span style={{
+              fontWeight: '700',
+              flexWrap: 'wrap',
+              flex: 'auto',
+              textAlign: 'initial',
+              paddingLeft: '8px'
+            }}>Central de Projetos</span>,
             enableSearch: true, enableFilter: true,
             enableGrouping: true,
             searchKeys: ['Title', 'Status', 'NumeroPI'],
             searchBoxPlaceholder: "Pesquisar",
+            searchBoxProps: {
+              styles: { root: { width: 200 }}
+            },
             customButtons: [{text: 'Upload', props: {
               onClick: () => console.log('Clicked')
             }}],
