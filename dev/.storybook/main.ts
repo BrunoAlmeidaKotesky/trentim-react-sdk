@@ -1,7 +1,8 @@
 import type { StorybookViteConfig } from '@storybook/builder-vite';
+import reactDocgenTypescript from "@joshwooding/vite-plugin-react-docgen-typescript";
 import { mergeConfig } from 'vite';
 
-const config = {
+const config: StorybookViteConfig = {
   stories: [
     '../src/**/*.stories.@(ts|tsx|mdx)',
     '../stories/**/*.stories.@(ts|tsx|mdx)'
@@ -19,6 +20,10 @@ const config = {
     reactDocgenTypescriptOptions: {
       shouldExtractLiteralValuesFromEnum: true,
       propFilter: (prop) => (prop.parent ? !/node_modules/.test(prop.parent.fileName) : true),
+      compilerOptions: {
+        allowSyntheticDefaultImports: false,
+        esModuleInterop: false
+      }
     },
   },
   framework: 'react',
@@ -30,6 +35,8 @@ const config = {
   },
   viteFinal: async (config) => {
     const resolve = (await import('../vite.config')).default;
+    //@ts-ignore;
+    resolve.plugins = [...resolve.plugins, reactDocgenTypescript()]
     return mergeConfig(config, {
       resolve,
     });

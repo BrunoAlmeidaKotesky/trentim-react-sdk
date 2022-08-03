@@ -75,4 +75,33 @@ export class Utils {
         }
         return keys;
     }
+
+    /**
+     * Get the search parameters from the URL as an object.
+     * You can type the possible search parameters as it's first type parameter.
+     * @param asLowerCase If true, the keys of the returned object will be lowercased.
+     * 
+     * @returns The search parameters as an object.
+     * 
+     * @example
+     * ```typescript
+     * const searchParams = Utils.getSearchParams<'projectid'|'username'>(true); //Record<'projectid' | 'username', string>
+     * ```
+     */
+    static getSearchParamsAsObject<
+        Keys extends string,
+        AsLowerCase extends boolean = false | true
+    >(asLowerCase: AsLowerCase): Record<AsLowerCase extends true ? Lowercase<Keys> : Keys, string> {
+        try {
+            const search = location.search.substring(1);
+            const pathMap: Record<string, string> = JSON.parse('{"' + decodeURI(search).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g, '":"') + '"}');
+            const keys = Object.keys(pathMap);
+            const values = Object.values(pathMap);
+            const result: Record<Keys, string> = {} as Record<Keys, string>;
+            for (let idx = 0; idx < keys.length; idx++) {
+                const key = keys[idx];
+                result[key] = asLowerCase ? values[idx].toLowerCase() : values[idx];
+            }
+        } catch(e) { return null; }
+    }
 }

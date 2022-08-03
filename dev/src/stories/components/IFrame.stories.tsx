@@ -4,7 +4,6 @@ import type { ComponentStory, Meta } from '@storybook/react';
 
 export default {
     title: 'Components/IFrame',
-    component: IFrame,
     argTypes: {
         src: {
             name: 'src',
