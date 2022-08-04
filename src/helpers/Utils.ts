@@ -102,6 +102,7 @@ export class Utils {
                 const key = keys[idx];
                 result[key] = asLowerCase ? values[idx].toLowerCase() : values[idx];
             }
+            return result as Record<AsLowerCase extends true ? Lowercase<Keys> : Keys, string>;
         } catch(e) { return null; }
     }
 }
