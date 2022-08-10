@@ -30,10 +30,10 @@ export class GridViewFilter {
                     if(isDate) {
                         const from: Date = value?.data?.from;
                         const to: Date = value?.data?.to;
-                        const rDate: Date = new Date(Utils.getNestedObject(r, mapKey));
+                        const rDate: Date = new Date(Utils.getDeepValue(r, mapKey));
                         return rDate >= from && rDate <= to;
                     }
-                    return Utils.getNestedObject(r, mapKey) === value?.text;
+                    return Utils.getDeepValue(r, mapKey) === value?.text;
                 });
                 if(ORrowsFromThisKey.length > 0 && !filteredRows?.map(r => r?.Id)?.includes(value?.data?.Id))
                     filteredRows.push(...ORrowsFromThisKey);
@@ -44,7 +44,7 @@ export class GridViewFilter {
         for(const [mapKey, map] of groupedMaps.entries()) {
             const allMapValues = [...map.values()];
             const newFilteredItems = filteredRows.filter(r => {
-                const rowValue = Utils.getNestedObject(r, mapKey);
+                const rowValue = Utils.getDeepValue(r, mapKey);
                 return allMapValues.some(v => {
                     if(v?.data?.from && v?.data?.to) {
                         const from: Date = v?.data?.from;
@@ -75,7 +75,7 @@ export class GridViewFilter {
             const renderAs = col?.renderFilterAs ?? 'Dropdown';
             const keys = col?.key ?? col.fieldName; 
             const options: FilterOption[] = allRows?.filter(d => d)?.map((data, idx) => {
-                let stringObject = Utils.getNestedObject(data, keys)?.toString();
+                let stringObject = Utils.getDeepValue(data, keys)?.toString();
                 if (col?.dateConversionOptions?.shouldConvertToLocaleString)
                     stringObject = Utils.convertIsoToLocaleString(stringObject, col?.dateConversionOptions?.locales, col?.dateConversionOptions?.formatOptions);
                 return {
@@ -108,7 +108,7 @@ export class GridViewFilter {
         for (const key of keys) {
             const filterFrom = allFilteredRows?.length > 0 ? allFilteredRows : allRows;
             const filteredValues = filterFrom.filter(item => {
-                const foundValues: string = Utils.getNestedObject(item, (key as string))?.toString();
+                const foundValues: string = Utils.getDeepValue(item, (key as string))?.toString();
                 return foundValues?.toLowerCase()?.startsWith(searchText?.toLowerCase());
             });
             allFilteredRows.push(...filteredValues);

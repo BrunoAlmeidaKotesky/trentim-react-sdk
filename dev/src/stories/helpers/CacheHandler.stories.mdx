@@ -69,7 +69,7 @@ Set an object to be cached on local storage or session storage.
 * Usage:
 ```ts dark
 import {parse, stringify} from 'flatted'; //Optional external module.
-import {CacheHandler} from 'trentim-react-sdk/dist/helpers';
+import {CacheHandler} from 'trentim-react-sdk';
 
 interface ICachedItem {items: any[], id: number, name: string; }
 const cacheHandler = new CacheHandler({parse, stringify}); //Optional module injection, if you want to use your own JSON parser.
@@ -88,7 +88,7 @@ Get the cached object from local storage or session storage as an ```ICacheRespo
 
 * Usage:
 ```ts dark
-import {CacheHandler} from 'trentim-react-sdk/dist/helpers';
+import {CacheHandler} from 'trentim-react-sdk';
 
 async function getItemsWithCache(): Promise<ICachedItem> {
     const cacheKey = 'mycache-key';
@@ -120,7 +120,7 @@ Remove a key from the storage.
 
 * Usage:
 ```ts dark
-import {CacheHandler} from 'trentim-react-sdk/dist/helpers';
+import {CacheHandler} from 'trentim-react-sdk';
 
 const cacheHandler = new CacheHandler();
 const cacheKey = 'mycache-key';

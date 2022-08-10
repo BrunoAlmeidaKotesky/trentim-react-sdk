@@ -1,8 +1,24 @@
-import { Meta } from '@storybook/addon-docs'
-
-<Meta title="Changelog" />
-
 ## Changelog
+
+### v3.0.0 - Current new release!
+This new major version focus on some aspects from the last previous released component `<LifecycleProgress>`, breaking name changes from some API methods, a new React hook, new types and some fixes.
+Please view the storybook for more details of the new added features.
+
+##### Breaking Changes
+- The class `WebpartUtils` has been renamed to `SPFxUtils`, since it makes more sense, and more functionalities focused on the SPFx implementation can be added. Although the name change, no method has been changed for now.
+- The name of the method `getNestedObject` from `Utils` has been renamed to `getDeepValue`, to be more concise with the name of the other methods `getDeepKeys` and `setDeepValue`.
+- The properties `columnsHeight`, `containerHeight`, `gridTemplateColumn` and `infoColumnMaxWidth` from `<LifecycleProgress>` component has been removed.
+
+##### Changes and Additions
+- The stages items from `<LifecycleProgress>` no longer use the column grid layout for it's second column, now it's a flex layout where the columns grows in just one direction/row, and with a scroll if necessary.
+- The optional `leftColumnHeight`, `rightColumnHeight`, `infoColumnWidth`, `stageMinWidth` and `stageHeight` properties added to the `ILifecycleProgressProps` interface.
+- Adaptable height of the `<LifecycleProgress>` when the scroll is necessary.
+- Two new utility types have been added: `CSSSizeUnit` and `CSSNumberFormat`, which both are used internally on `ILifecycleProgressProps`.
+- A new custom React hooks called `useIsOverflow` has been added. Which can be used to determine whether an element is being overflowed or not.
+- Fixed the problem from the method `getSearchParamsAsObject` from the `Utils` class where the values of the keys were being lowercased instead of the actual keys.
+
+### v2.3.1
+- Fixed the dumbest mistake of `2.3.0`, where the method `getSearchParamsAsObject` didn't return.
 
 ### v2.3.0
 - Added a new utility method `getSearchParamsAsObject` to the `Utils` class.
@@ -54,12 +70,12 @@ To import all the functionalities of the library, you only need to import from t
 
 ### v1.4.5
 
-- Fixed `GridView` not working due to undefined values being passed to `Utils.getNestedObject`
+- Fixed `GridView` not working due to undefined values being passed to `Utils.getDeepValue`
 
 ### v1.4.4
 
 - Added the first change log.
 - Documentation for the `Decorators`, `Utils` and `FileUtils` added.
 - `Utils` class method types changed:
-    - `getDeepKeys` and `getNestedObject` now have an advanced type inference for the given and returned paths.
-    - `getNestedObject` second parameter changed from a `string[]` to a `string`, which by default it's type is inferred from the base object.
+    - `getDeepKeys` and `getDeepValue` now have an advanced type inference for the given and returned paths.
+    - `getDeepValue` second parameter changed from a `string[]` to a `string`, which by default it's type is inferred from the base object.

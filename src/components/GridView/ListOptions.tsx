@@ -50,7 +50,7 @@ export const ListOptions = () => {
             {...omittedButtonProps?.groupButtonProps}
             onClick={_ => {
                 if(!!onGroupIconClick)
-                onGroupIconClick();
+                    onGroupIconClick();
                 onOpen();
             }} styles={{label: {fontSize: 14}, root: {order: defaultButtonsOrder?.group}}} iconProps={{iconName: 'GroupList'}} />}
         {enableCardView &&

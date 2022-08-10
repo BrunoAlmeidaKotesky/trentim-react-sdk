@@ -1,15 +1,14 @@
 import styled from 'styled-components';
 import type { InfoColumnComponent } from '@/models/interfaces/ILifecycleProgressProps';
 
-export const InformationColumn = styled.div<InfoColumnComponent>`
+export const InformationColumn = styled.div.attrs<InfoColumnComponent>(() => ({className: 'info-column'}))<InfoColumnComponent>`
     background-color: ${p => p?.infoColumnBgColor ?? '#00BCF2'};
     color: ${p => p?.infoColumnTxtColor ?? '#fff'};
-    position: relative;
-    min-height: 1px;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-    max-width: ${p => p?.infoColumnMaxWidth ?? '200px'};
-    width: 100%;
-    top: 4px;
-    padding: 2px 0 0 8px;
+    display: flex;
+    flex-direction: column;
+    height: ${p => p?.leftColumnHeight ?? '59px'};
+    margin-top: auto;
+    padding-left: 14px;
+    font-size: 14px;
+    place-content: center;
 `;

@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { LifecycleProgress } from "../../../src/components/LifecyleProgress/LifecycleProgress";
+import { LifecycleProgress } from "../../../src/components/LifecyleProgress";
 import { ILifecycleProgressProps, ILifecycleProgressRef } from "../../../src/models/interfaces/ILifecycleProgressProps";
 import { initializeIcons } from '@fluentui/font-icons-mdl2';
 import {mockStages, SubStage} from './constants';
@@ -11,22 +11,29 @@ export function LifecycleTests({height, width}: {width?: string, height?: string
     const [calloutStateItems, setCalloutStateItems] = useState<JSX.Element>(null);
     const lifeCycleProps: ILifecycleProgressProps<SubStage[]> = {
         infoContent: (
-        <div>
-            <p style={{
+        <div style={{
+            textAlign: 'left',
+            display: 'flex',
+            flexFlow: 'column'
+        }}>
+            <span style={{
                 fontFamily: 'Segoe UI,Tahoma,Geneva,Verdana,sans-serif',
                 fontStyle: 'normal',
                 fontSize: 14,
                 color: '#fff',
-                margin: 0
-            }}>Project Process</p>
-            <p style={{
+                margin: 0,
+                lineHeight: 1,
+                marginBottom: 8
+            }}>Project Process</span>
+            <span style={{
                fontFamily: 'Segoe UI,Tahoma,Geneva,Verdana,sans-serif',
                fontStyle: 'normal',
                fontWeight: 400,
                fontSize: 14,
                color: '#fff',
-               margin: 0 
-            }}>Active for 7 Days</p>
+               margin: 0 ,
+               lineHeight: 1
+            }}>Active for 7 Days</span>
         </div>),
         onStageClick: (stage) => {
             setCalloutStateItems(<>

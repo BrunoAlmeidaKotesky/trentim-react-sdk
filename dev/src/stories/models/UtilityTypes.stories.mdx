@@ -2,9 +2,26 @@ import { Meta } from '@storybook/addon-docs'
 
 <Meta title="Models/UtilityTypes" />
 
-## Utility Types
+## Utility Types from `bakutils-types`
 
 We provide a few set of utility types that can be used to make your coding experience easier. 
 Some of this types are used internally on this library, such as the property `columns` on `GridView` for example.
 
 Since all the types comes from the library [bakutils-types](https://www.npmjs.com/package/bakutils-types), all the documentation will be there.
+
+#### Other utility types
+
+__CSSSizeUnit__
+```ts dark
+export type CSSSizeUnit = 'px' | '%' | 'em' | 'rem' | 'pt';
+```
+
+__CSSNumberFormat__
+```ts dark
+export type CSSNumberFormat = `${number}${CSSSizeUnit}`;
+```
+
+* Example:
+```ts dark	
+    const componentWidth: CSSNumberFormat = '20px';
+```

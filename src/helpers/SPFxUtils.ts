@@ -2,7 +2,7 @@
  * Target can be either a class name or an Node or HTMLElement
  */
 type Target = string | HTMLElement | Node;
-export class WebpartAddons {
+export class SPFxUtils {
 
     private changeElementProperty (element: HTMLElement, elementsToChange: Map<keyof CSSStyleDeclaration, any>): void {
         if(element?.style) {
@@ -37,7 +37,7 @@ export class WebpartAddons {
             return canChange ? canChange : this.changeNodeRecursive(childCanvasChild, finalTarget, elementsToChange);
         }
         catch (err) {
-            console.error('[WebpartAddons] - changeElementProperty - Error while changing the node property', err);
+            console.error('[SPFxUtils] - changeElementProperty - Error while changing the node property', err);
             return false;
         }
     }

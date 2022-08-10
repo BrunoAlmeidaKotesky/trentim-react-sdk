@@ -1,5 +1,5 @@
 export {CacheHandler} from './CacheHandler';
 export {FileUtils} from './FileUtils';
-export {WebpartAddons} from './WebpartAddons';
+export {SPFxUtils} from './SPFxUtils';
 export {ConversionOptions} from './ConverterOptions';
 export {Utils} from './Utils';

@@ -24,7 +24,7 @@ but the difference is that it actually does an verification to make sure the str
 | locales | false | The desired locales, the default is pt-BR | <code>`string[]` \| `string`</code> |
 | formatOptions | false | Use this parameter if you want to overwrite the default formatting options from `Intl`. | <code>`Intl.DateTimeFormatOptions`</code> |
 
-##### getNestedObject:
+##### getDeepValue:
 The the value from a deep nested object, given it's path inside the object hierarchy.
 The path string is automatically inferred from the given object, due to the type `Path` extending the utility type `Paths<Obj, 8>`, but it can be changed if desired as it's first generic type parameter.
 
@@ -39,8 +39,8 @@ The path string is automatically inferred from the given object, due to the type
 
 * Signature:
 ```ts dark
-//Note: Not actually a function, but a static method from Utils. `Utils.getNestedObject`
-function getNestedObject<
+//Note: Not actually a function, but a static method from Utils. `Utils.getDeepValue`
+function getDeepValue<
         Path extends Paths<Obj, 8>,
         ReturnV extends any = unknown,
         Obj extends Record<any, any> = Record<any, any>>
@@ -64,8 +64,8 @@ const myObject: IExample = {
 }
 
 //The path string is automatically inferred from the given object, due to the utility type `Paths<Obj, 8>`, but it can be changed if desired as it's first generic type parameter.
-const zipCode = Utils.getNestedObject(myObject, 'data.company.address.zipCode'); //Return value is unknown if not set manually.
-const zipCode2 = Utils.getNestedObject(myObject, 'data.company.address.zipCode') as string; //Return type known if set manually, string.
+const zipCode = Utils.getDeepValue(myObject, 'data.company.address.zipCode'); //Return value is unknown if not set manually.
+const zipCode2 = Utils.getDeepValue(myObject, 'data.company.address.zipCode') as string; //Return type known if set manually, string.
 ```
 
 ##### getDeepKeys:

@@ -21,7 +21,7 @@ export class Utils {
      * 
      * Theoretically, this function can be used to get the value from an `number[]` as the type of the `pathArr`, but I've not tested it.
      */
-    public static getNestedObject<
+    public static getDeepValue<
         /**Inferred string path from the given object  */
         Path extends Paths<Obj, 8>,
         ReturnV extends any = unknown,
@@ -37,8 +37,8 @@ export class Utils {
     }
 
     public static setDeepValue = <
-    Obj extends Record<any, any>,
-    Path extends string = Paths<Obj, 4>
+        Obj extends Record<any, any>,
+        Path extends string = Paths<Obj, 4>
     >(obj: Obj, path: Path, value: TypeFrom<Obj, Path>): Obj => {
         if (Object(obj) !== obj) return obj; // When obj is not an object
         // If not yet an array, get the keys from the string-path
@@ -100,7 +100,10 @@ export class Utils {
             const result: Record<Keys, string> = {} as Record<Keys, string>;
             for (let idx = 0; idx < keys.length; idx++) {
                 const key = keys[idx];
-                result[key] = asLowerCase ? values[idx].toLowerCase() : values[idx];
+                if(asLowerCase)
+                    result[key?.toLowerCase()] = values[idx];
+                else
+                    result[key] = values[idx];
             }
             return result as Record<AsLowerCase extends true ? Lowercase<Keys> : Keys, string>;
         } catch(e) { return null; }

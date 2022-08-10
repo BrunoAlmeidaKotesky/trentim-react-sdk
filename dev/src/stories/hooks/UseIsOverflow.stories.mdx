@@ -1,0 +1,38 @@
+import { Meta } from '@storybook/addon-docs'
+
+<Meta title="Hooks/useIsOverflow" />
+
+# useIsOverflow
+
+Use this function to detect if an HTML element is overflowing.
+
+* Return Value: true or false if the element is overflowing.
+
+* Function Signature: 
+``` ts dark
+function useIsOverflow<RefType extends HTMLElement = HTMLElement>(ref: React.MutableRefObject<RefType>, isVerticalOverflow?: boolean, callback?: (hasOverflow: boolean) => void): boolean
+```
+
+* Parameters:
+
+| *Name* | *Required* | *Description* | *Type* |
+|--------|-------------|----------------|--------|
+| ref | true | A `React.MutableRefObject<RefType>`, which means that `RefType` should extend `HTMLElement`. | <code>`React.MutableRefObject<RefType>`</code> |
+| isVerticalOverflow | false | If true, the function will check if the element is overflowing vertically. | <code>`boolean`</code> |
+| callback | false | A callback function that will be called everytime the validation is being made. | <code>`(hasOverflow: boolean) => void`</code> |
+
+* Example:
+``` tsx dark
+import {useIsOverflow} from 'trentim-react-sdk';
+import {useRef} from 'react';
+
+function SomeComponent() {
+    const ref = useRef<HTMLDivElement>(null);
+    const isOverflowing = useIsOverflow(ref, false, (hasOverflow) => {
+        console.log("Element is overflowing: " + hasOverflow);
+    });
+    //Than do something if isOverflowing is true...
+
+    return (<div ref={ref}>...<div>);
+}
+```

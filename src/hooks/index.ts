@@ -5,3 +5,4 @@ export {useOuterClick} from './useOuterClick';
 export {usePrevious} from './usePrevious';
 export {useRefWithCallback} from './useRefWithCallback';
 export {useEvent} from './useEvent';
+export {useIsOverflow} from './useIsOverflow';

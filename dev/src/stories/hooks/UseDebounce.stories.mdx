@@ -28,7 +28,7 @@ function useDebounce<T>(value: T, delay: number): T
 
 ##### Usage:
 ```tsx dark
-import {useDebounce} from 'trentim-react-sdk/dist/hooks';
+import {useDebounce} from 'trentim-react-sdk';
 function Component() {
   const [value, setValue] = useState<string>('');
   const debouncedValue = useDebounce<string>(value, 500);

@@ -56,15 +56,14 @@ export function useGridController<T extends BaseType>(props: IGridListProps<T>, 
         const columnKeys = column?.key;
         if (isGroping?.active) {
             const groupKey = isGroping?.key;
-            if (groupKey === column?.key)
-                return;
+            if (groupKey === column?.key) return;
             if (sortType === 'asc')
                 sortedItems = naturalSort(sortedItems).by({
-                    asc: [u => Utils.getNestedObject(u, groupKey as any)?.toString(), u => Utils.getNestedObject(u, columnKeys as any)?.toString()],
+                    asc: [u => Utils.getDeepValue(u, groupKey as any)?.toString(), u => Utils.getDeepValue(u, columnKeys as any)?.toString()],
                 })
             else if (sortType === 'desc')
                 sortedItems = naturalSort(sortedItems).by({
-                    desc: [u => Utils.getNestedObject(u, groupKey as any)?.toString(), u => Utils.getNestedObject(u, columnKeys as any)?.toString()]
+                    desc: [u => Utils.getDeepValue(u, groupKey as any)?.toString(), u => Utils.getDeepValue(u, columnKeys as any)?.toString()]
                 })
             GridViewGrouping.onApplyGrouping({
                 emptyGroupLabel: props?.emptyGroupLabel,
@@ -90,11 +89,11 @@ export function useGridController<T extends BaseType>(props: IGridListProps<T>, 
         }
         if(sortType === 'asc')
             sortedItems = naturalSort(sortedItems).by({
-                asc: u => Utils.getNestedObject(u, columnKeys as any)?.toString(),
+                asc: u => Utils.getDeepValue(u, columnKeys as any)?.toString(),
             });
         else if(sortType === 'desc')
             sortedItems = naturalSort(sortedItems).by({
-                desc: u => Utils.getNestedObject(u, columnKeys as any)?.toString(),
+                desc: u => Utils.getDeepValue(u, columnKeys as any)?.toString(),
             });
         setActualRows(sortedItems);
         setCols(c => c.map(col => {
@@ -123,7 +122,7 @@ export function useGridController<T extends BaseType>(props: IGridListProps<T>, 
         const convertedColumns = columns.map(c => {
             if (c?.key?.includes('.') || c?.fieldName?.includes('.')) {
                 c.onRender = (item, _2) => {
-                    const fieldValue: string = Utils.getNestedObject(item, c?.fieldName);
+                    const fieldValue: string = Utils.getDeepValue(item, c?.fieldName);
                     return <span>{fieldValue}</span>;
                 }
                 return c;

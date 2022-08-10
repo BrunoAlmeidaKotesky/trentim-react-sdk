@@ -49,15 +49,15 @@ export function useGridCardRendering({
         return actualRows?.map(row => {
             if (!!onRenderCustomComponent)
                 return onRenderCustomComponent(row);
-            let cardTitle: string = Utils.getNestedObject(row, cardProps?.cardTitleKey) || '';
-            let cardSubtitle: string = Utils.getNestedObject(row, cardProps?.cardSubtitleKey) || '';
+            let cardTitle: string = Utils.getDeepValue(row, cardProps?.cardTitleKey) || '';
+            let cardSubtitle: string = Utils.getDeepValue(row, cardProps?.cardSubtitleKey) || '';
             if (cardProps?.titleDateConversionOptions?.shouldConvertToLocaleString)
                 cardTitle = Utils.convertIsoToLocaleString(cardTitle, cardProps?.titleDateConversionOptions?.locales, cardProps?.titleDateConversionOptions?.formatOptions);
             if (cardProps?.subtitleDateConversionOptions?.shouldConvertToLocaleString)
                 cardSubtitle = Utils.convertIsoToLocaleString(cardSubtitle, cardProps?.subtitleDateConversionOptions?.locales, cardProps?.subtitleDateConversionOptions?.formatOptions);
             const rightCol = cardProps?.rightColumn;
             const cIndicator = cardProps?.circleIndicator;
-            let titleValue = Utils.getNestedObject(row, cIndicator?.title) as string;
+            let titleValue = Utils.getDeepValue(row, cIndicator?.title) as string;
             if (cIndicator?.dateConversionOptions?.shouldConvertToLocaleString)
                 titleValue = Utils.convertIsoToLocaleString(titleValue, cIndicator?.dateConversionOptions?.locales, cIndicator?.dateConversionOptions?.formatOptions);
             const circleIndicator = {
@@ -71,7 +71,7 @@ export function useGridCardRendering({
                 cardRightColInformation: rightCol?.keys && {
                     ...rightCol,
                     values: rightCol?.keys?.map(opt => {
-                        let title: string = Utils.getNestedObject(row, opt?.title);
+                        let title: string = Utils.getDeepValue(row, opt?.title);
                         if (opt?.dateConversionOptions?.shouldConvertToLocaleString)
                             title = Utils.convertIsoToLocaleString(title, opt?.dateConversionOptions?.locales, opt?.dateConversionOptions?.formatOptions);
                         return ({ title, style: opt?.style ?? { fontSize: 16, marginBottom: 4, fontWeight: 600 } });

@@ -51,7 +51,7 @@ export class GridViewGrouping {
                 // Create grouped items object
                 const groupedItems = {};
                 items.forEach(item => {
-                    let groupName = Utils.getNestedObject(item, groupKey) as string ?? defaultEmptyLabel;
+                    let groupName = Utils.getDeepValue(item, groupKey) as string ?? defaultEmptyLabel;
                     if (isKeyADate)
                         groupName = Utils.convertIsoToLocaleString(groupName, keyDateConverterOptions?.locales, keyDateConverterOptions?.formatOptions);
                     // Check if the group name exists
