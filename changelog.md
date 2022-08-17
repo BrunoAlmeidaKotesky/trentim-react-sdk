@@ -1,6 +1,9 @@
 ## Changelog
 
-### v3.0.0 - Current new release!
+### v3.0.3
+- Fixes for the height behavior of the `<LifecycleProgress>`.
+
+### v3.0.0
 This new major version focus on some aspects from the last previous released component `<LifecycleProgress>`, breaking name changes from some API methods, a new React hook, new types and some fixes.
 Please view the storybook for more details of the new added features.
 
