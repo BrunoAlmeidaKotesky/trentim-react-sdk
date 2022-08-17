@@ -1,0 +1,122 @@
+import { Meta } from '@storybook/addon-docs'
+
+<Meta title="Helpers/FileUtils" />
+
+# FileUtils
+
+An utility class specific to common file operations.
+
+## Constructor:
+Yo can provide an optional mime converter object of type `IMimeConverter`, like from the library `mime-types`.
+
+```ts dark
+import {contentType} from 'mime-types';
+class FileUtils {
+    constructor(public mime?: IMimeConverter) { }
+    //...
+}
+const fileUtils = new FileUtils({contentType});
+```
+
+## Methods:
+
+##### urlToFile:
+Take an stored object url and convert it back to a `File` object.
+
+* Return Value: The new `File` object. `Promise<File>`
+
+* Signature:
+```ts dark
+    function urlToFile(url: string, fileInfo: IFileInfo, fetchOptions: RequestInit = null): Promise<File>
+```	
+
+* Parameters:
+
+| *Name* | *Required* | *Description* | *Type* |
+| ----------- | ----------- | ----------- | ----------- |
+| url | true | The url of the file, like an blob: for example. | <code>string</code> |
+| fileInfo | true | The information of the new file object, like it's mime type, name and more. | <code>IFileInfo</code> |
+| fetchOptions | false | An optional `RequestInit` object from the native `fetch` library. | <code>RequestInit</code> |
+
+* Example:
+
+```ts dark
+const newFile = await fileUtils.urlToFile("blob:https://tenant.com/bd3df1f7-38c5-44db-9a97-aa956072ef02", {
+  fileName: "bird.png",
+  fileMime: "image/png",
+  lastModified: new Date().getTime()
+});
+```
+
+##### blobToBase64:
+Takes any `Blob` object or inherited objects from this interface and convert it to a base64 string.
+
+* Return Value: The base64 string. `Promise<string>`
+
+* Signature:
+```ts dark
+    function blobToBase64(blob: Blob, config?: IBlobStringWriter): Promise<string>
+```
+
+* Parameters:
+
+| *Name* | *Required* | *Description* | *Type* |
+| ----------- | ----------- | ----------- | ----------- |
+| blob | true | The blob to convert to base64. | <code>Blob</code> |
+| config | false | An optional configuration object. | <code>IBlobStringWriter</code> |
+
+
+##### convertBase64To:
+
+Convert's a base 64 string to some of the possible return values from `ConversionOptions` class.
+
+* Return Value: A instance of `ConversionOptions` class.
+
+* Signature:
+```ts dark
+    function convertBase64To(base64: string, fileName?: string, type?: string): ConversionOptions
+```
+
+* Parameters:
+
+| *Name* | *Required* | *Description* | *Type* |
+| ----------- | ----------- | ----------- | ----------- |
+| base64 | true | The base64 string to convert. | <code>string</code> |
+| fileName | false | The new name of the file. | <code>string</code> |
+| type | false | The new mime type of the file. | <code>string</code> |
+
+### ConversionOptions:
+
+The ClassConversionOptions has this simple implementation:
+    
+```ts dark
+import type { IMimeConverter } from "../models/interfaces/IMimeConverter";
+
+export class ConversionOptions {
+  constructor(private blob: Blob, private byteArrays: Uint8Array[], private mimeType: string, private mimeUtils?: IMimeConverter, private fileName?: string) { }
+  /**
+   * @returns Return the converted value as an blob Object
+   */
+  public getBlob(): Blob {
+    return this.blob;
+  }
+
+  public getFile(): File {
+    return new File([this.getBlob()], this?.fileName, { type: this?.mimeType });
+  }
+  /**
+   * @returns Return an array representation of the type `Uint8Array` from the given base64 value.
+   */
+  public getByteArray(): Uint8Array[] {
+    return this.byteArrays;
+  }
+  /**
+   *  Applies only if the a file name was given, if the npm module `mime-types` or an similar module was provided on the class constructor it will return the correct detected mime, otherwise it will return 'application/octet-stream' 
+   *   
+   * @returns The converted mime type, or null if the fileName parameter was not provided.
+   */
+  public getMimeType(): string | null {
+    return this.mimeUtils.contentType(this.mimeType) || this.mimeType;
+  }
+}
+```

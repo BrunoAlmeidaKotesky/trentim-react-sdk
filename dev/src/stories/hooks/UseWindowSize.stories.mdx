@@ -1,0 +1,33 @@
+import { Meta } from '@storybook/addon-docs'
+import {SizeExample} from './ExamplesComponents'
+
+<Meta title="Hooks/useWindowSize" />
+
+# useWindowSize
+*Inspired by* - https://joshwcomeau.com/react/the-perils-of-rehydration/
+
+Use this function to detect the size of the user screen whenever it changes.
+
+* Return Value: A `Size` object containing the width and height of the user screen. ```Size```
+
+* Function Signature: 
+``` ts dark
+interface Size {
+    width: number | undefined;
+    height: number | undefined;
+}
+function useWindowSize(): Size
+```
+
+##### Real time example:
+
+<SizeExample />
+
+* Code:
+```tsx dark
+import {useWindowSize} from 'trentim-react-sdk'
+function Example() {
+    const {height, width} = useWindowSize();
+    return <div>Current size: {width} x {height}</div>
+}
+```

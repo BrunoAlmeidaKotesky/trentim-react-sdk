@@ -1,0 +1,40 @@
+import { useLayoutEffect, useRef } from "react";
+
+type AnyFunction = (...args: any[]) => any;
+
+/**
+ * This is a user-level **premature** implementation of the the `useEvent` RFC proposal.https://github.com/reactjs/rfcs/blob/useevent/text/0000-useevent.md
+ * 
+ * Similar to useCallback, with a few subtle differences:
+ * - The returned function is a stable reference, and will always be the same between renders
+ * - No dependency lists required
+ * - Properties or state accessed within the callback will always be "current"
+ */
+export function useEvent<TCallback extends AnyFunction>(callback: TCallback): TCallback {
+    // Keep track of the latest callback:
+    const latestRef = useRef<TCallback>(useEventResultShouldNotBeCalledDuringRender as any);
+    useLayoutEffect(() => {
+        latestRef.current = callback;
+    }, [callback]);
+
+    // Create a stable callback that always calls the latest callback:
+    const stableRef = useRef<TCallback>(null as any);
+    if (!stableRef.current) {
+        stableRef.current = function (this: any) {
+            // eslint-disable-next-line prefer-rest-params
+            return latestRef?.current?.apply(this, arguments as any);
+        } as TCallback;
+    }
+
+    return stableRef.current;
+}
+
+/**
+ * Render methods should be pure, especially when concurrency is used,
+ * so we will throw this error if the callback is called while rendering.
+ */
+function useEventResultShouldNotBeCalledDuringRender() {
+    throw new Error(
+        "The callback from useEvent cannot be called while rendering; it should be wrapped in `useEffect` or `useLayoutEffect`."
+    );
+}

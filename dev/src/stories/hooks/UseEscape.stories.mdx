@@ -1,0 +1,28 @@
+import { Meta } from '@storybook/addon-docs'
+
+<Meta title="Hooks/useEscape" />
+
+# useDebounce
+A simple function that is triggered when the keyboard "Escape" key is pressed, anywhere in the document.
+ 
+* Parameters:
+
+| *Name* | *Required* | *Description* | *Type* |
+|--------|-------------|----------------|--------|
+| onEscape | true | A callback to be executed when the keyboard "Escape" key is pressed. | <code>Function</code> |
+
+* Function Signature:
+```ts dark
+function useEscape(onEscape: Function): void
+```
+
+##### Usage:
+```tsx dark
+import {useEscape} from 'trentim-react-sdk';
+function Component() {
+    useEscape(() => {
+        alert("Escape key pressed");
+    });
+    return <div>Hello</div>;
+}
+```
