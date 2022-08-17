@@ -10,7 +10,7 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "tsc && vite build && cp changelog.md changelog.mdx",
     "preview": "vite preview",
     "release": "yarn build && git add -u && git add -A && git commit --allow-empty -m \"Build changes\" && yarn version && yarn run publish-push",
     "publish-push": "yarn publish --non-interactive && git push && git push --tags",
