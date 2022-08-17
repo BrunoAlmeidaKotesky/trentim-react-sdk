@@ -1,6 +1,7 @@
 import type { StorybookViteConfig } from '@storybook/builder-vite';
 import reactDocgenTypescript from "@joshwooding/vite-plugin-react-docgen-typescript";
 import { mergeConfig } from 'vite';
+import markdownRawPlugin  from 'vite-raw-plugin';
 
 const config: StorybookViteConfig = {
   stories: [
@@ -36,7 +37,9 @@ const config: StorybookViteConfig = {
   viteFinal: async (config) => {
     const resolve = (await import('../vite.config')).default;
     //@ts-ignore;
-    resolve.plugins = [...resolve.plugins, reactDocgenTypescript()]
+    resolve.plugins = [...resolve.plugins, reactDocgenTypescript(), markdownRawPlugin({
+      fileRegex: /\.md$/
+    })]
     return mergeConfig(config, {
       resolve,
     });
