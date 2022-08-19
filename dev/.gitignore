@@ -32,6 +32,5 @@ npm-debug.log
 bash.exe.stackdump
 /yarn-error.log
 dev/MOCK_DATA2.ts
-storybook-static
 dist
 dist/*.*
