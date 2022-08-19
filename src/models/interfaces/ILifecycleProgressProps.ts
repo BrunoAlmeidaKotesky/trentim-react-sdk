@@ -49,8 +49,8 @@ export interface ILifecycleProgressProps<StageData = any> extends IInfoColumn, I
     showCalloutOnClick?: boolean;
     calloutContent?: React.ReactNode;
     calloutProps?: IFocusTrapCalloutProps;
-    /**@default black */
-    textColor?: string;
+    /**@default {fontSize: '14px', padding: '0px 12px 16px', cursor: pointer', fontWeight: 'normal', color: 'black'}*/
+    stageTextStyle?: React.CSSProperties;
 }
 
 export type LifecycleCallout = {isVisible: boolean, calloutIdx: number};

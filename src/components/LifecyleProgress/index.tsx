@@ -70,6 +70,9 @@ function LifecycleProgressInner<StageData>(props: ILifecycleProgressProps<StageD
 
     useEffect(() => verifyShouldUpdateHeight(stageColRef, true), []);
     useEffect(() => verifyShouldUpdateHeight(stageColRef), [isOverflow, props?.leftColumnHeight, props?.rightColumnHeight]);
+    const spanStyle = React.useCallback(() => props?.stageTextStyle ? 
+        props?.stageTextStyle : 
+        {fontSize: 14, padding: '0 12px 16px', cursor: 'pointer', color: 'black'}, [props?.stageTextStyle]);
 
     return (<>
         <LifecycleContainer {...other}>
@@ -90,7 +93,7 @@ function LifecycleProgressInner<StageData>(props: ILifecycleProgressProps<StageD
                         <StageIndicator active={stage?.active} completed={stage?.completed} indicatorColor={other?.indicatorColor}>
                             {stage?.completed && <Icon styles={{root: {width: '100%', backgroundColor: other?.indicatorColor}}} iconName='CheckMark' />}
                         </StageIndicator>
-                        <span style={{fontSize: 14, padding: '0 12px', cursor: 'pointer', fontWeight: stage?.active  ? 'bold' : 'normal', color: other?.textColor ?? 'black'}}>{stage?.label}</span>
+                        <span style={{...spanStyle(), fontWeight: stage?.active ? 'bold' : 'normal'}}>{stage?.label}</span>
                     </StageBlock>
                 ))}
             </StagesColumn>
