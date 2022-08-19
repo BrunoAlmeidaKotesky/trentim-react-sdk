@@ -6,7 +6,7 @@ import {mockStages, SubStage} from './constants';
 
 initializeIcons();
 
-export function LifecycleTests({height, width}: {width?: string, height?: string} = {height: '100%', width: '100%'}) {
+export function LifecycleTests({height}: {height?: string} = {height: '100%'}) {
     const calloutRef = useRef<ILifecycleProgressRef>(null);
     const [calloutStateItems, setCalloutStateItems] = useState<JSX.Element>(null);
     const lifeCycleProps: ILifecycleProgressProps<SubStage[]> = {
@@ -77,7 +77,7 @@ export function LifecycleTests({height, width}: {width?: string, height?: string
     }
 
     return (
-        <div style={{ width, height }}>
+        <div style={{ width: 1543, height, margin: '0 auto' }}>
             <LifecycleProgress ref={calloutRef} {...lifeCycleProps}/>
         </div>
     )

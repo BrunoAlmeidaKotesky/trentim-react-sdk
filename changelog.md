@@ -1,6 +1,10 @@
 ## Changelog
 
-### v3.0.0 - Current new release!
+### v3.1.0 - Current new release!
+This versions is an extension of the previous version minor fixes that are were all focused on `<LifeCycleProgress>` tiny fixes related to dynamic height due to the scroll behaviour.
+The difference is that the property `textColor` from `ILifecycleProgressProps` has been removed in order to provide a full customization to the span element with `stageTextStyle`.
+
+### v3.0.0
 This new major version focus on some aspects from the last previous released component `<LifecycleProgress>`, breaking name changes from some API methods, a new React hook, new types and some fixes.
 Please view the storybook for more details of the new added features.
 
