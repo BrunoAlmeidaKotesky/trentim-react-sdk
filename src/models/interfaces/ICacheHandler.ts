@@ -1,7 +1,7 @@
 export interface ICacheOptions {
     type: 'local'|'session';
     timeConfig: {
-        dateType: 'minutes'|'hours'|'days';
+        dateType: 'seconds'|'minutes'|'hours'|'days';
         timeSpan: number;
     }
 }

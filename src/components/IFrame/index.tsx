@@ -11,11 +11,11 @@ export type IFrameProps = IBaseFrame & {
 };
 
 
-/**The same thing as the <iframe>, but it can be lazy loaded and needs a fallback component.
+/**Same functionality from a normal iframe, but it can be lazy loaded and needs a fallback component.
  * 
  * You can also pass a callback with the ref of the iframe, and it's dependency list.
  * 
- * https://gist.github.com/threepointone/e73a87f7bbbebc78cf71744469ec5a15
+ * Reference: https://gist.github.com/threepointone/e73a87f7bbbebc78cf71744469ec5a15
  * */
 export function IFrame(props: IFrameProps) {
     const { fallback, ...rest } = props;
@@ -27,12 +27,9 @@ export function IFrame(props: IFrameProps) {
     );
 }
 
+type IFramePromise = null | {promise: null | Promise<void>, resolve: () => void; reject: () => void};
 function IFrameImplementation(props: IBaseFrame) {
-    const awaiter = useRef<null | {
-        promise: null | Promise<void>;
-        resolve: () => void;
-        reject: () => void;
-    }>(null);
+    const awaiter = useRef<IFramePromise>(null);
     const iFrameRef = useRef<HTMLIFrameElement>(null);
     const [_, triggerLoad] = useState(false)
     if (awaiter.current?.promise) {

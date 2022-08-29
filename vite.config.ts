@@ -2,6 +2,7 @@ import react from '@vitejs/plugin-react';
 import { resolve } from 'path';
 import { defineConfig } from 'vite';
 import dts from 'vite-plugin-dts';
+import { visualizer } from "rollup-plugin-visualizer";
 
 export default defineConfig({
     plugins: [
@@ -11,6 +12,10 @@ export default defineConfig({
         dts({
             insertTypesEntry: true,
         }),
+        visualizer({
+            gzipSize: true,
+            open: true
+        })
     ],
     resolve: {
         alias: {
@@ -36,8 +41,8 @@ export default defineConfig({
                     react: 'React',
                     'react-dom': 'ReactDOM',
                     'styled-components': 'styled',
-                },
-            },
+                }
+            }
         },
     },
 });

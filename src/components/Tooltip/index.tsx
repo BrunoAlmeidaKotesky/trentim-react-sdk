@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {TooltipWrapper} from './TooltipWrapper';
 import {TooltipContentContainer} from './TooltipContentContainer';
-import {TooltipDirection, TooltipDirectionValues} from './constants';
+import type { TooltipDirectionValues } from '@models/types/Common';
 
 export interface ITooltipProps {
     /**
@@ -14,11 +14,14 @@ export interface ITooltipProps {
      */
     content: React.ReactNode;
     /**
-     * @default TooltipDirection.BOTTOM_CENTER
+     * @default 'bottom_center'
      */
-    direction: TooltipDirection | TooltipDirectionValues;
+    direction: TooltipDirectionValues;
 }
 
+/**
+ * A component that displays a tooltip when the user hovers over an element.
+ */
 export function Tooltip(props: ITooltipProps) {
 
     return (
@@ -26,7 +29,7 @@ export function Tooltip(props: ITooltipProps) {
             className={`trsTooltipWrapper${props?.classKey ? `-${props.classKey}` : ''}`}>
             {props.children}
             <TooltipContentContainer
-                direction={props.direction as TooltipDirection}>
+                direction={props.direction}>
                 {props.content}
             </TooltipContentContainer>
         </TooltipWrapper>);

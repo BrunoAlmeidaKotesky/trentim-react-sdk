@@ -36,6 +36,13 @@ export class Utils {
         }
     }
 
+    /**
+     * 
+     * @param obj The object to search in.
+     * @param path The path to the value, as an array of keys, separated by dots.
+     * @param value The new value to bet set.
+     * @returns a new object with the value set, however the original object is also modified.
+     */
     public static setDeepValue = <
         Obj extends Record<any, any>,
         Path extends string = Paths<Obj, 4>

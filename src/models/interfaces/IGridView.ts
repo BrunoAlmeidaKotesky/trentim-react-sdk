@@ -45,7 +45,8 @@ export interface IGridListProps<T extends any> extends IGridHandler<T> {
     cardProps?: IGridCardProps;
     /**Configure the header behavior, such as to enable filter and other functionalities. */
     headerOptions: IConfigurableHeader<T>;
-    /**If the grid will be rendered as a list or as a collection of `<Card />` component 
+    /**
+     * If the grid will be rendered as a list or as a collection of `<Card />` component 
      * @default list
     */
     renderAs: 'list' | 'card';
