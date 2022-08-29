@@ -1,7 +1,7 @@
 import styled, { css } from "styled-components";
-import { TooltipDirection } from './constants';
+import type { TooltipDirectionValues } from '@models/types/Common';
 
-export const TooltipContentContainer = styled.span<{direction: TooltipDirection}>`
+export const TooltipContentContainer = styled.span<{direction: TooltipDirectionValues}>`
 //Delay the visibility of the tooltip by 1 second
 visibility: hidden;
 width: auto;
@@ -14,30 +14,30 @@ position: absolute;
 z-index: 1;
 ${({direction}) => {
     switch (direction) {
-        case TooltipDirection.TOP_CENTER:
-        case TooltipDirection.TOP_LEFT:
-        case TooltipDirection.TOP_RIGHT:
+        case 'top_center':
+        case 'top_left':
+        case 'top_right':
             return css`
                 bottom: 100%;
                 margin-bottom: 12px;
                 top: unset;
                 margin-left: -60px;
             `;
-        case TooltipDirection.BOTTOM_CENTER:
-        case TooltipDirection.BOTTOM_LEFT:
-        case TooltipDirection.BOTTOM_RIGHT:
+        case 'bottom_left':
+        case 'bottom_center':
+        case 'bottom_right':
             return css`
                 top: 100%;
                 bottom: unset;
                 margin-top: 12px;
                 margin-left: -60px;
             `;
-        case TooltipDirection.RIGHT:
+        case 'right':
             return css`
                 bottom: -100%;
                 margin-left: 12px;
             `;
-        case TooltipDirection.LEFT:
+        case 'left':
             return css`
                 bottom: -100%;
                 right: 100%;
@@ -50,17 +50,17 @@ ${({direction}) => {
 box-shadow: rgb(0 0 0 / 20%) 0px 0px 8px 0px, rgb(0 0 0 / 19%) 0px 6px 20px 0px;
 left: ${({direction}) => {
     switch (direction) {
-        case TooltipDirection.BOTTOM_CENTER:
-        case TooltipDirection.TOP_CENTER:
+        case 'bottom_center':
+        case 'top_center':
             return '50%';
-        case TooltipDirection.BOTTOM_LEFT:
-        case TooltipDirection.TOP_LEFT:
+        case 'bottom_left':
+        case 'top_left':
             return 'unset';
-        case TooltipDirection.BOTTOM_RIGHT:
-        case TooltipDirection.TOP_RIGHT:
-        case TooltipDirection.RIGHT:
+        case 'bottom_right':
+        case 'top_right':
+        case 'right':
             return '100%';
-        case TooltipDirection.LEFT:
+        case 'left':
             return 'calc(-110% - 10px)';
         default: return '50%';
     }
@@ -72,31 +72,31 @@ transition: opacity 1.2s;
     position: absolute;
     ${({direction}) => {
         switch (direction) {
-            case TooltipDirection.TOP_LEFT:
-            case TooltipDirection.TOP_RIGHT:
-            case TooltipDirection.TOP_CENTER:
+            case 'top_left':
+            case 'top_right':
+            case 'top_center':
                 return css`
                     top: 100%;
                     bottom: unset;
                     left: 50%;
                     transform: rotate(180deg);
                 `;
-            case TooltipDirection.BOTTOM_CENTER:
-            case TooltipDirection.BOTTOM_LEFT:
-            case TooltipDirection.BOTTOM_RIGHT:
+            case 'bottom_center':
+            case 'bottom_left':
+            case 'bottom_right':
                 return css`
                     bottom: 100%;
                     left: 50%;
                     top: unset;
                 `;
-            case TooltipDirection.RIGHT:
+            case 'right':
                 return css`
                     top: 45%;
                     left: unset;
                     right: 100%;
                     transform: rotate(270deg);
                 `;
-            case TooltipDirection.LEFT:
+            case 'left':
                 return css`
                     top: 45%;
                     left: 100%;

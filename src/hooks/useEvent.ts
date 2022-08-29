@@ -3,6 +3,8 @@ import { useLayoutEffect, useRef } from "react";
 type AnyFunction = (...args: any[]) => any;
 
 /**
+ * @deprecated **This feature will be removed in next major release, since this hook will be an official react hook in the future with better support.**
+ * 
  * This is a user-level **premature** implementation of the the `useEvent` RFC proposal.https://github.com/reactjs/rfcs/blob/useevent/text/0000-useevent.md
  * 
  * Similar to useCallback, with a few subtle differences:

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { ChangeEvent, useCallback, useState } from "react";
-import { useDebounce, useOuterClick, usePrevious, useWindowSize, useRefWithCallback, useEvent } from 'trentim-react-sdk';
+import { useDebounce, useOuterClick, usePrevious, useWindowSize, useRefWithCallback, useEvent, useFileUpload } from 'trentim-react-sdk';
 
 export function DebounceExample() {
     const [value, setValue] = useState<string>('');
@@ -92,3 +92,35 @@ export function Chat() {
 }
 
 const ChatConfirm = ({ onSend }: { onSend: () => void }) => <button onClick={onSend}>Send</button>
+
+
+export function UseFileEx() {
+    const { onUpload, elementRef, onDropFile, isDroppingFile } = useFileUpload();
+    const [currentFile, setFile] = useState<File>(null);
+    const [count, setCount] = React.useState(1);
+
+    React.useEffect(() => {
+
+        if (count % 4 === 0) {
+            onUpload((files) => {
+                console.log(`Clicked count is ${count}, files: `);
+                console.table(files);
+                setFile(files[0]);
+            }, ['image/*']);
+        }
+    }, [count]);
+
+    React.useEffect(() => {
+        onDropFile((droppedFiles) => {
+            console.log("Dropped files: ", droppedFiles);
+            setFile(droppedFiles[0]);
+        })
+    }, [isDroppingFile]);
+
+    return (<div style={{display: 'grid', margin: '0 auto', width: '80%', gap: 12}}>
+        <button onClick={() => onUpload((files) => { console.log(files); setFile(files[0]); }, ['image/*'])}>Upload file</button>
+        <button onClick={() => setCount(p => p + 1)}>Click four times to execute upload function</button>
+        <div style={{ width: '100%', height: 120, border: '2px dotted black', cursor: 'crosshair', borderRadius: 8 }} ref={elementRef as any}>Drop a file</div>
+        {currentFile && <img style={{width: '100%', height: 150, objectFit: 'fill'}} src={URL.createObjectURL(currentFile)} />}
+    </div>)
+}

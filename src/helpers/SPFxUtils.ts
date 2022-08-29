@@ -67,8 +67,8 @@ export class SPFxUtils {
      * @param serveUrl - An optional URL to use as the gulp serve address, by default it will be https://localhost:4321
      * @param liveReloadUrl - An optional URL to use as the live reload address, by default it will be `//localhost:35729/livereload.js?snipver=1`
      */
-    static registerLiveReload(manifest: Record<any, any>, serveUrl?: string, liveReloadUrl?: string) {
-        const pageUrl:string[] = manifest["loaderConfig"]["internalModuleBaseUrls"][0];
+    static registerLiveReload(manifest: IBaseManifest, serveUrl?: string, liveReloadUrl?: string) {
+        const pageUrl = manifest["loaderConfig"]["internalModuleBaseUrls"][0];
         if (pageUrl?.indexOf(serveUrl || "https://localhost:4321") !== -1) { 
           // create a new <script> element
           const script = document.createElement('script');
@@ -77,5 +77,13 @@ export class SPFxUtils {
           // add script to the head section of the page
           document.head.appendChild(script);  
         }
+    }
+}
+
+export interface IBaseManifest {
+    [key: string]: any;
+    loaderConfig: {
+        [key: string]: any;
+        internalModuleBaseUrls: string[][];
     }
 }

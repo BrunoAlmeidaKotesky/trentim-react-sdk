@@ -6,6 +6,8 @@ import type { IUploadButton } from '@models/interfaces/IUploadButton';
 import type { IIconProps } from '@fluentui/react/lib/Icon';
 
 /**
+ * @deprecated - **This component will be removed on the next major release, please use the new `useFileUpload` hook instead.**
+ * 
  * It's the same as `<PrimaryButton/>` or `<DefaultButton />`  from  `@fluentui/react` but it can be used as an file upload button.
  * 
  * The `onChange` event is called when the user selects one or more files.

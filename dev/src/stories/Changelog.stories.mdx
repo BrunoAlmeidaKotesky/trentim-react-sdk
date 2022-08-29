@@ -4,7 +4,20 @@ import { Meta } from '@storybook/addon-docs'
 
 ## Changelog
 
-### v3.1.0 - Current new release!
+### v3.2.0
+- Reduced the bundle size of the package, removing the unnecessary flunetui components from the final bundle, and not being lazy loaded anymore.
+- Added a new hook called `useFileUpload`, please read the documentation on the storybook page for more details.
+- The `direction` property from the `Tooltip` component does not support an enum anymore, instead it uses the raw string literals. (Since it was the same values)
+- Some functionalities has been marked as deprecated, since they are going to be removed in the next major version. These are the deprecated functionalities:
+    - UploadButton - Use the new hook `useFileUpload` instead, it's way more generic and works with any element.
+    - useEscape - This hook wasn't very useful.
+    - useEvent - Since this is going to be a official React Hook in the future, with way more advanced logic, we won't provide an basic version anymore.
+    - useRefWithCallback - This hook wasn't very useful and may be considered an 'anti-pattern'.
+    - The property `renderAs` from `GridView` is also going to be marked, but since it is not optional, it's not marked as deprecated yet.
+- The parameter `manifest` from `SPFxUtils.registerLiveReload` type is now an `IBaseManifest` interface.
+- Fixed the missing option in `ICacheOptions` `dateType` property.
+
+### v3.1.0
 This versions is an extension of the previous version minor fixes that are were all focused on `<LifeCycleProgress>` tiny fixes related to dynamic height due to the scroll behaviour.
 The difference is that the property `textColor` from `ILifecycleProgressProps` has been removed in order to provide a full customization to the span element with `stageTextStyle`.
 

@@ -6,3 +6,4 @@ export {usePrevious} from './usePrevious';
 export {useRefWithCallback} from './useRefWithCallback';
 export {useEvent} from './useEvent';
 export {useIsOverflow} from './useIsOverflow';
+export {useFileUpload} from './useFileUpload';

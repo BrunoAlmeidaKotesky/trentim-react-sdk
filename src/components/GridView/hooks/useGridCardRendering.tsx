@@ -40,7 +40,7 @@ export function useGridCardRendering({
 
     const Card = useMemo(() => {
         if (!shouldRenderCard) return null;
-        return lazy(() => import('../../Card/Card').then((module) => ({ default: module?.Card })));
+        return lazy(() => import('../../Card/index').then((module) => ({ default: module?.Card })));
     }, [shouldRenderCard]);
 
     const CardsList = useMemo(() => {

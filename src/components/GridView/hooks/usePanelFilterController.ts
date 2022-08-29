@@ -1,4 +1,4 @@
-import { lazy, useContext, useMemo, useRef, useEffect } from 'react';
+import { useContext, useRef, useEffect } from 'react';
 import { FilterPanelContext } from '../Contexts';
 import { RangeType } from '@helpers/enums';
 import type { FilterOption } from '@models/interfaces/IPanelFilter';
@@ -7,15 +7,6 @@ import type { IPersonaProps } from '@fluentui/react/lib/Persona';
 
 export function usePanelFilterController() {
     const { isOpen, onClose, panelTitle, onCancel, onApply, actualFilteredValues, setActualFilteredValues, onOpen, filterOptionsMatrix, availableFilters, top, footer, setFilterDate } = useContext(FilterPanelContext);
-    const [FluentPanel, Dropdown, PrimaryButton, DefaultButton, TagPicker, Label] = useMemo(() => {
-        const Panel = lazy(() => import('@fluentui/react/lib/Panel').then(({ Panel }) => ({ default: Panel })));
-        const DropDown = lazy(() => import('@fluentui/react/lib/Dropdown').then(({ Dropdown }) => ({ default: Dropdown })));
-        const PrimaryButton = lazy(() => import('@fluentui/react/lib/Button').then(({ PrimaryButton }) => ({ default: PrimaryButton })));
-        const DefaultButton = lazy(() => import('@fluentui/react/lib/Button').then(({ DefaultButton }) => ({ default: DefaultButton })));
-        const TagPicker = lazy(() => import('@fluentui/react/lib/Pickers').then(({ TagPicker }) => ({ default: TagPicker })));
-        const Label = lazy(() => import('@fluentui/react/lib/Label').then(({ Label }) => ({ default: Label })));
-        return [Panel, DropDown, PrimaryButton, DefaultButton, TagPicker, Label];
-    }, []);
     const lastAddedTag = useRef<FilterOption>(null);
 
     const onAddOrRemoveToMap = (rootItemKey: string, option: FilterOption) => {
@@ -184,14 +175,6 @@ export function usePanelFilterController() {
             onRecordDateChange,
             onChangePeople
         },
-        JSX: {
-            FluentPanel,
-            Dropdown,
-            PrimaryButton,
-            DefaultButton,
-            TagPicker,
-            Label,
-            top, footer
-        }
+        JSX: { top, footer }
     }
 }

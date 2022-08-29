@@ -62,3 +62,5 @@ export interface ICustomButtonConfig {
      */
     onRenderCustomButton?: (props?: IButtonProps) => ReactNode;
 }
+
+export type TooltipDirectionValues =  "bottom_center" | "bottom_left" | "bottom_right" | "right" | "left" | "top_left" | "top_right" | "top_center"
