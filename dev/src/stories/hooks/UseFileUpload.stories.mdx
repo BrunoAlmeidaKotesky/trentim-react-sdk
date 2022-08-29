@@ -1,0 +1,82 @@
+import { Meta } from '@storybook/addon-docs'
+import { Chat } from './ExamplesComponents'
+import {UseFileEx} from './ExamplesComponents'
+
+<Meta title="Hooks/useFileUpload" />
+
+# useFileUpload
+
+You can use this hook to easily handle file upload events without having to worry about the implementation details.
+Please note that this hook is under development and may have significant design changes in the future.
+
+Once instanciated, this function returns four objects:
+
+- __*onUpload*__: A function to manually trigger a file upload dialog, a `OnUploadFunc` type callback. It's independent from the other objects.
+- __*elementRef*__: A React ref object to be used as `ref` property to any tag element, to allow the `onDropFile` to be called properly.
+- __*onDropFile*__: Very similar to `onUpload`, but the difference is, that it needs an `elementRef` and `onUpload` cannot handle file drops automatically.
+- __*isDroppingFile*__: True if a file is being dropped on the element that was marked with the `ref={elementRef}`, so if true, you can call the `onDropFile` function safely.	
+
+* Function Signature:
+```ts dark
+declare function useFileUpload(): {
+  onUpload: OnUploadFunc;
+  elementRef: MutableRefObject<HTMLElement>;
+  onDropFile: (cb: FileChangeEv): void;
+  isDroppingFile: boolean;
+}
+```
+
+##### Real time example:
+On the following example, we show three use cases of the hook, always showing an image of that file (In case you upload a file of that type.).
+    
+- The first one is simply by calling `onUpload` on a `<button />` `onClick` event.
+- The second one is a situation where you can the `onUpload` without the need of an direct event click, it happens because of the effect being passed based on `count`.
+- The third one is the example of the use case of an automatic file drop handler, in this case you'll need to use the `elementRef` 
+    to mark the element that will receive the file drop, `isDroppingFile` state to known if it's being dropped and the actual function to be called when dropped `onDropFile`
+
+<UseFileEx />
+
+* Code:
+```tsx dark
+import {useFileUpload} from 'trentim-react-sdk';
+function UseFileEx() {
+    const { onUpload, elementRef, onDropFile, isDroppingFile } = useFileUpload();
+    const [currentFile, setFile] = useState<File>(null);
+    const [count, setCount] = React.useState(1);
+
+    React.useEffect(() => {
+
+        if (count % 4 === 0) {
+            onUpload((files) => {
+                console.log(`Clicked count is ${count}, files: `);
+                console.table(files);
+                setFile(files[0]);
+            })
+        }
+    }, [count]);
+
+    React.useEffect(() => {
+        onDropFile((droppedFiles) => {
+            console.log("Dropped files: ", droppedFiles);
+            setFile(droppedFiles[0]);
+        }, ['image/*'])
+    }, [isDroppingFile]);
+
+    return (
+    <div style={{display: 'grid', margin: '0 auto', width: '80%', gap: 12}}>
+        <button onClick={() => onUpload((files) => { console.log(files); setFile(files[0]); }, ['image/*'])}>Upload file</button>
+        <button onClick={() => setCount(p => p + 1)}>Click four times to execute upload function</button>
+        <div style={{ width: '100%', height: 120, border: '2px dotted black', cursor: 'crosshair', borderRadius: 8 }} ref={elementRef as any}>Drop a file</div>
+        {currentFile && <img style={{width: '100%', height: 150, objectFit: 'fill'}} src={URL.createObjectURL(currentFile)} />}
+    </div>)
+}
+```
+
+* Types: 
+
+```ts dark
+type FileChangeEv = (files: File[]) => void;
+type OnUploadFunc = (fileChangeCb: FileChangeEv, accepts?: string[]) => void;
+//Type for onDropFile: (cb: FileChangeEv) => void
+const elementRef: MutableRefObject<HTMLElement>;
+```

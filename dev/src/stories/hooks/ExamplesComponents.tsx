@@ -106,7 +106,7 @@ export function UseFileEx() {
                 console.log(`Clicked count is ${count}, files: `);
                 console.table(files);
                 setFile(files[0]);
-            })
+            }, ['image/*']);
         }
     }, [count]);
 
@@ -118,9 +118,9 @@ export function UseFileEx() {
     }, [isDroppingFile]);
 
     return (<div style={{display: 'grid', margin: '0 auto', width: '80%', gap: 12}}>
-        <button onClick={() => onUpload((files) => { console.log(files); setFile(files[0]); })}>Upload file</button>
+        <button onClick={() => onUpload((files) => { console.log(files); setFile(files[0]); }, ['image/*'])}>Upload file</button>
         <button onClick={() => setCount(p => p + 1)}>Click four times to execute upload function</button>
-        <div style={{ width: '100%', height: 120, border: '2px dotted white', cursor: 'crosshair', borderRadius: 8 }} ref={elementRef as any}>Drop a file</div>
-        {currentFile && <img src={URL.createObjectURL(currentFile)} />}
+        <div style={{ width: '100%', height: 120, border: '2px dotted black', cursor: 'crosshair', borderRadius: 8 }} ref={elementRef as any}>Drop a file</div>
+        {currentFile && <img style={{width: '100%', height: 150, objectFit: 'fill'}} src={URL.createObjectURL(currentFile)} />}
     </div>)
 }
