@@ -1,7 +1,7 @@
 import styled, { css } from "styled-components";
 import type { TooltipDirectionValues } from '@models/types/Common';
 
-export const TooltipContentContainer = styled.span<{direction: TooltipDirectionValues}>`
+export const TooltipContentContainer = styled.span<{direction: TooltipDirectionValues, left: string, afterLeft: string}>`
 //Delay the visibility of the tooltip by 1 second
 visibility: hidden;
 width: auto;
@@ -11,7 +11,7 @@ text-align: center;
 border-radius: 6px;
 padding: 5px 8px;
 position: absolute;
-z-index: 1;
+z-index: 9999;
 ${({direction}) => {
     switch (direction) {
         case 'top_center':
@@ -21,7 +21,6 @@ ${({direction}) => {
                 bottom: 100%;
                 margin-bottom: 12px;
                 top: unset;
-                margin-left: -60px;
             `;
         case 'bottom_left':
         case 'bottom_center':
@@ -30,46 +29,28 @@ ${({direction}) => {
                 top: 100%;
                 bottom: unset;
                 margin-top: 12px;
-                margin-left: -60px;
             `;
         case 'right':
             return css`
-                bottom: -100%;
+                top: -5px;
                 margin-left: 12px;
             `;
         case 'left':
             return css`
-                bottom: -100%;
-                right: 100%;
-                left: unset;
-                margin-left: unset;
+                right: 105%;
+                top: -5px;
                 margin-right: 12px;
             `;
     }
 }}
 box-shadow: rgb(0 0 0 / 20%) 0px 0px 8px 0px, rgb(0 0 0 / 19%) 0px 6px 20px 0px;
-left: ${({direction}) => {
-    switch (direction) {
-        case 'bottom_center':
-        case 'top_center':
-            return '50%';
-        case 'bottom_left':
-        case 'top_left':
-            return 'unset';
-        case 'bottom_right':
-        case 'top_right':
-        case 'right':
-            return '100%';
-        case 'left':
-            return 'calc(-110% - 10px)';
-        default: return '50%';
-    }
-}};
+left: ${({left}) => left}
 opacity: 0;
 transition: opacity 1.2s;
 ::after {
     content: "";
     position: absolute;
+    left: ${({afterLeft}) => afterLeft}
     ${({direction}) => {
         switch (direction) {
             case 'top_left':
@@ -78,7 +59,6 @@ transition: opacity 1.2s;
                 return css`
                     top: 100%;
                     bottom: unset;
-                    left: 50%;
                     transform: rotate(180deg);
                 `;
             case 'bottom_center':
@@ -86,7 +66,6 @@ transition: opacity 1.2s;
             case 'bottom_right':
                 return css`
                     bottom: 100%;
-                    left: 50%;
                     top: unset;
                 `;
             case 'right':
@@ -99,7 +78,6 @@ transition: opacity 1.2s;
             case 'left':
                 return css`
                     top: 45%;
-                    left: 100%;
                     right: unset;
                     transform: rotate(90deg);
                 `;

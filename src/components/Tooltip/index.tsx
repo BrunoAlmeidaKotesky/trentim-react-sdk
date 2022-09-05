@@ -1,35 +1,51 @@
 import * as React from 'react';
 import {TooltipWrapper} from './TooltipWrapper';
 import {TooltipContentContainer} from './TooltipContentContainer';
-import type { TooltipDirectionValues } from '@models/types/Common';
+import type {ITooltipProps, LeftTypes, TTDirectionMap} from '@models/interfaces/ITooltipProps';
 
-export interface ITooltipProps {
-    /**
-     * Use this property to better track the class name of the component, since it's use `styled-components`.
-     */
-    classKey?: React.Key;
-    children: React.ReactNode;
-    /**
-     * The content to display in the tooltip.
-     */
-    content: React.ReactNode;
-    /**
-     * @default 'bottom_center'
-     */
-    direction: TooltipDirectionValues;
-}
+/** A component that displays a tooltip when the user hovers over an element. */
+export const Tooltip = (props: ITooltipProps) => {
+    const wrapperRef = React.useRef<HTMLDivElement>(null);
+    const tooltipRef = React.useRef<HTMLDivElement>(null);
+    const [{left, afterLeft}, setLeft] = React.useState<LeftTypes>({left: '0px', afterLeft: '20%'});
 
-/**
- * A component that displays a tooltip when the user hovers over an element.
- */
-export function Tooltip(props: ITooltipProps) {
+    const enableParentOverflow = React.useMemo(() => {
+        if(props?.enableParentOverflow === null || props.enableParentOverflow === undefined) return false;
+        return props?.enableParentOverflow;
+    }, [props?.enableParentOverflow]);
+
+    React.useEffect(() => {
+        if(!(wrapperRef.current && tooltipRef.current)) return;
+        const wrapperWidth = wrapperRef?.current?.getBoundingClientRect().width;
+        const tooltipWidth = tooltipRef?.current?.getBoundingClientRect().width;
+        calculateDirectionLeft(`${Math.floor(wrapperWidth)}px`, `${Math.floor(tooltipWidth)}px`);
+    }, [wrapperRef, tooltipRef, props.direction]);
+
+    React.useEffect(() => {
+        if(enableParentOverflow) return;
+        if(!wrapperRef?.current?.parentElement) return;
+        wrapperRef.current.parentElement.style.overflow = 'unset';
+    }, [wrapperRef, enableParentOverflow]);
+
+    const calculateDirectionLeft = (wrapperWidth: string, tooltipWidth: string) => {
+        const calc = (elementToCalc: string) => `calc(${elementToCalc})`;
+        const directionMap: TTDirectionMap = new Map([
+            ['bottom_right', () => setLeft({ left: calc(`${wrapperWidth} - ${tooltipWidth}`), afterLeft: '70%'})],
+            ['bottom_center', () => setLeft({ left: calc(`${wrapperWidth} / 2 - ${tooltipWidth} / 2`), afterLeft: '50%'})],
+            ['bottom_left', () => setLeft({ left: '0px', afterLeft: '20%'})],
+            ['left', () => () => setLeft({left: 'unset', afterLeft: '100%'})],
+            ['right', () => setLeft({left: '100%', afterLeft: 'unset'})],
+            ['top_right', () => setLeft({left: calc(`${wrapperWidth} - ${tooltipWidth}`), afterLeft: '70%'})],
+            ['top_center', () => setLeft({left: calc(`${wrapperWidth} / 2 - ${tooltipWidth} / 2`), afterLeft: '50%'})],
+            ['top_left', () => setLeft({left: '0px', afterLeft: '20%'})]
+        ])
+        directionMap.get(props.direction)?.call(null);
+    }
 
     return (
-        <TooltipWrapper
-            className={`trsTooltipWrapper${props?.classKey ? `-${props.classKey}` : ''}`}>
+        <TooltipWrapper ref={wrapperRef} className={`trsTooltipWrapper${props?.classKey ? `-${props.classKey}` : ''}`}>
             {props.children}
-            <TooltipContentContainer
-                direction={props.direction}>
+            <TooltipContentContainer ref={tooltipRef} direction={props.direction} afterLeft={`${afterLeft};`} left={`${left};`}>
                 {props.content}
             </TooltipContentContainer>
         </TooltipWrapper>);

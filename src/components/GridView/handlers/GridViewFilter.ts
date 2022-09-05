@@ -73,7 +73,7 @@ export class GridViewFilter {
         for (let index = 0; index < columnsToFilter.length; index++) {
             const col = columnsToFilter[index];
             const renderAs = col?.renderFilterAs ?? 'Dropdown';
-            const keys = col?.key ?? col.fieldName; 
+            const keys = col?.key; 
             const options: FilterOption[] = allRows?.filter(d => d)?.map((data, idx) => {
                 let stringObject = Utils.getDeepValue(data, keys)?.toString();
                 if (col?.dateConversionOptions?.shouldConvertToLocaleString)

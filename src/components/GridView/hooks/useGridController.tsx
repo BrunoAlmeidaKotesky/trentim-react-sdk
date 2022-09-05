@@ -120,15 +120,15 @@ export function useGridController<T extends BaseType>(props: IGridListProps<T>, 
         if (!props?.columns?.length) return;
         const columns = props?.columns;
         const convertedColumns = columns.map(c => {
-            if (c?.key?.includes('.') || c?.fieldName?.includes('.')) {
+            if (c?.key?.includes('.')) {
                 c.onRender = (item, _2) => {
-                    const fieldValue: string = Utils.getDeepValue(item, c?.fieldName);
+                    const fieldValue: string = Utils.getDeepValue(item, c?.key);
                     return <span>{fieldValue}</span>;
                 }
                 return c;
             } else if (c?.dateConversionOptions?.shouldConvertToLocaleString) {
                 c.onRender = (item, _2) => {
-                    const fieldValue = Utils.convertIsoToLocaleString(item[c?.fieldName ?? c?.key], c?.dateConversionOptions?.locales, c?.dateConversionOptions?.formatOptions);
+                    const fieldValue = Utils.convertIsoToLocaleString(item[c?.key], c?.dateConversionOptions?.locales, c?.dateConversionOptions?.formatOptions);
                     return <span>{fieldValue}</span>;
                 }
             }

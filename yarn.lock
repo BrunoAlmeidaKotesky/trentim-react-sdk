@@ -2453,6 +2453,11 @@ uri-js@^4.2.2:
   dependencies:
     punycode "^2.1.0"
 
+vite-plugin-chunk-split@^0.2.7:
+  version "0.2.7"
+  resolved "https://registry.yarnpkg.com/vite-plugin-chunk-split/-/vite-plugin-chunk-split-0.2.7.tgz#fa2b902dc89462cfaaf084a1ad82ef8483acb42a"
+  integrity sha512-LZa5iQ5rtY1T3+dBRlqMm+g7u5j3e6Hydvt5GFxx4dXKl6j34hvFmH/H+1v1iwf9sh/B84285buSBPC9lXx8+g==
+
 vite-plugin-dts@^0.9.9:
   version "0.9.10"
   resolved "https://registry.yarnpkg.com/vite-plugin-dts/-/vite-plugin-dts-0.9.10.tgz#c039214ef3e645412ed8527c83eff0eea050b63d"
