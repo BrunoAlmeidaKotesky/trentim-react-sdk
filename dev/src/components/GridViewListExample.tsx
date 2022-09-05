@@ -1,7 +1,10 @@
 import {useState, useRef} from 'react';
 import { GridView } from 'trentim-react-sdk';
+import {Tooltip} from '../../../src/components/Tooltip';
 import type { IGridViewRefHandler } from 'trentim-react-sdk';
 import json from './MOCK_DATA.json';
+import { TooltipHost } from '@fluentui/react/lib/Tooltip';
+import { useId } from '@fluentui/react-hooks';
 
 type JsonType = NonNullable<typeof json[0]>;
 export function GridViewListExample() {
@@ -10,20 +13,8 @@ export function GridViewListExample() {
   //const [currentGridRows, setCurrentGridRows] = useState<JsonType[]>([]);
   const [isGroupingDisabled, setGroupingDisabled] = useState(false);
   const [isFilterDisabled, setFilterDisabled] = useState(false);
+  const tooltipId = useId('tooltip');
   
-  // useEffect(() => {
-  //   
-  //   setTimeout(() => {
-  //     setItems(_json => _json.slice(Math.floor(Math.random() * 250), Math.floor(Math.random() * 250) + 250));
-  //   }, 2200);
-  // }, []);
-
-  // useEffect(() => {
-  //   if(currentGridRows?.length <= 300) {
-  //     ref.current.reGroupInitialGroup();
-  //   }
-  // }, [currentGridRows?.length]);
-
   return (
       <div style={{width: '80%'}}>
         <GridView<JsonType>
@@ -77,6 +68,13 @@ export function GridViewListExample() {
           renderAs="list"
           onFilterIconClick={() => {console.log("Before Filter")}}
           onGroupIconClick={() => {console.log("Before Group")}}
+          onRenderItemColumn={(i, _idx, col) => {
+            if(col.key === 'Title')
+              return <Tooltip enableParentOverflow={true} content={<div>AAAA</div>} direction='top_right'><span>{i?.Title}</span></Tooltip>
+            if(col.key === 'Status')
+              return <TooltipHost id={tooltipId} content={<div aria-describedby={tooltipId}>AAAA</div>}><span>{i[col.key]}</span></TooltipHost>
+            return <span>{i[col.key]}</span>
+          }}
           onSearchBoxClick={() => {console.log("Before Search")}}
           onItemsFiltered={() => setGroupingDisabled(true)}
           onItemsGrouped={() => setFilterDisabled(true)}

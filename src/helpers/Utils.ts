@@ -19,7 +19,12 @@ export class Utils {
      * @param path The path to the value, as an array of keys, separated by dots.
      * @returns The value, if found.
      * 
-     * Theoretically, this function can be used to get the value from an `number[]` as the type of the `pathArr`, but I've not tested it.
+     * @example
+     * 
+     * ```ts
+     * const obj = {a: {b: {c: {d: 2}}}};
+     * const value = Utils.getDeepValue(obj, 'a.b.c.d'); //2 - And inferred as a number
+     * ```
      */
     public static getDeepValue<
         /**Inferred string path from the given object  */
@@ -41,7 +46,13 @@ export class Utils {
      * @param obj The object to search in.
      * @param path The path to the value, as an array of keys, separated by dots.
      * @param value The new value to bet set.
-     * @returns a new object with the value set, however the original object is also modified.
+     * @returns a new object with the value set, however the original object is **also modified**.
+     * 
+     * @example
+     * ```ts
+     * const obj = {a: {b: {c: 1}}};
+     * setDeepValue(obj, 'a.b.c', 2);
+     * ```
      */
     public static setDeepValue = <
         Obj extends Record<any, any>,
@@ -65,6 +76,14 @@ export class Utils {
 
     /**
      * This is similar to `Object.keys`, but it traverses through the whole object hierarchy and separates the nested keys by dots.
+     * @param obj The object to get the keys from.
+     * @return The array of all the existing keys.
+     * 
+     * @example
+     * ```ts
+     * const obj = {a: {b: {c: 1}}};
+     * const keys = Utils.getDeepKeys(obj); //['a', 'a.b', 'a.b.c'] - string[] | ("a" | "a.b" | "a.b.c")[]
+     * ``` 
      */
     public static getDeepKeys<
     ResultKeys extends Array<Paths<Obj, 8>>, 

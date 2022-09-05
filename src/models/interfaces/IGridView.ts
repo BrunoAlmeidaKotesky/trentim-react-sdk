@@ -24,7 +24,9 @@ export type TColumn<T> = IColumn & {
     */
    //Type of key should be either keyof T or DeepPath
     key: ColumnKey<T>;
-    /**If the desired value is from an nested object, provide the value with dots. 
+    /**
+     * @deprecated - This property no longer needs to be provided, since it has no actual effect.
+     * If the desired value is from an nested object, provide the value with dots. 
      * @example "file.name" will get the value from the file object.
     */
     fieldName?: ColumnKey<T>;
@@ -46,13 +48,14 @@ export interface IGridListProps<T extends any> extends IGridHandler<T> {
     /**Configure the header behavior, such as to enable filter and other functionalities. */
     headerOptions: IConfigurableHeader<T>;
     /**
+     * @remarks - This property is going to be deprecated in the future.
      * If the grid will be rendered as a list or as a collection of `<Card />` component 
      * @default list
     */
     renderAs: 'list' | 'card';
-    /**The column model to be applied to the list.  
+    /**The column model to be applied to the list.
      * It extends the Microsoft `@fluent-ui` `IColumn` interface.
-     * 
+     *
      * If you want to the values that are ISO dates to be automatically converted to locale strings, use the `dateConversionOptions` property.
      * If you want to change the type of the component to be used on the filter panel, use the `renderFilterAs` property.
      * @example
@@ -67,6 +70,15 @@ export interface IGridListProps<T extends any> extends IGridHandler<T> {
      *          locales: ['en-US']
      *      }
      *  }];
+     * ```
+     * 
+     * @note - You can use a `key` names that are not present on your interface for rendering custom columns, you just need to cast it to some other type, such as `any`:
+     * ```tsx
+     * //Icon does not exist on my inferred interface, use hiddenGroupKeys and hiddenFilterKeys, so it won't be rendered on the filter panel or the group panel.
+     * <GridView 
+     *  hiddenGroupKeys={['Icon']} hiddenFilterKeys={['Icon']}  
+     *  columns={[
+            {key: 'Icon' as any, name: 'Nome Do Projeto', fieldName: 'Title', minWidth: 100, maxWidth: 200, isResizable: true, renderFilterAs: 'SearchBox'}]} />
      * ```
     */
     columns: TColumn<T>[];
@@ -137,7 +149,7 @@ export interface IGridHandler<T> extends IGridClickActions {
      * 
      * This is different from `onRenderCustomComponent`, since this method is applied to the default `onRenderItemColumn` from `DetailsList` and not on the entire component.
      */
-    onRenderItemColumn?: <S>(item?: S, index?: number, column?: TColumn<S>) => React.ReactNode;
+    onRenderItemColumn: (item?: IRow<T>, index?: number, column?: TColumn<T>) => React.ReactNode;
     /**If you want to totally overwrite the component that is being rendered, independent of the `renderAs` value, use this rendering function. 
      *
      * This element will be applied to each item `IRow`, not the entire component. */

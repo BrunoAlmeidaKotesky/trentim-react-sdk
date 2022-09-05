@@ -4,6 +4,14 @@ import { Meta } from '@storybook/addon-docs'
 
 ## Changelog
 
+### v3.3.0
+This is a minor release that focus on fixing the `<Tooltip>` component bugs related to it's direction, so now it basically works as expected.
+- Added a optional property to `<Tooltip>` called `enableParentOverflow`, which is **not** recommended to be set to `true`, only if you **truly** need that to occurs.
+- Added a better documentation and examples to the `Utils` class methods.
+- The `fieldName` overwritten property from `<GridView>` has been marked as deprecated, and the component no longer uses it anywhere.
+- Changed `<Tooltip>` z-index from `1` to `9999`.
+- General fixes and changes to the `<Tooltip>` component.
+
 ### v3.2.0
 - Reduced the bundle size of the package, removing the unnecessary flunetui components from the final bundle, and not being lazy loaded anymore.
 - Added a new hook called `useFileUpload`, please read the documentation on the storybook page for more details.
