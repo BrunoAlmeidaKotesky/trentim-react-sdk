@@ -1,14 +1,14 @@
-import { CanvasCardContainer, CanvasCardItem, CardItemWrapper } from "./styles";
+import { StickerCardContainer, StickerCardItem, CardItemWrapper } from "./styles";
 import { CardHeader } from "./CardHeader";
-import { ICanvasCardProps } from "@models/interfaces/ICanvasCardProps";
-import { useCanvasCardController } from "./useCanvasCardController";
+import { IStickerCardProps } from "@models/interfaces/IStickerCardProps";
+import { useStickerCardController } from "./useStickerCardController";
 import CardSticker from "./CardSticker";
 import { useMemo } from "react";
 
-export function CanvasCard(props: ICanvasCardProps) {
+export function StickerCard(props: IStickerCardProps) {
     const {
         addSticker, changeOrder, deleteSticker, updateSticker, stickersState
-    } = useCanvasCardController(props);
+    } = useStickerCardController(props);
 
     const headerProps = useMemo(() => {
         const { onAddSticker, ...headerProps } = props?.headerProps;
@@ -16,15 +16,18 @@ export function CanvasCard(props: ICanvasCardProps) {
     }, [props?.headerProps]);
 
     return (
-        <CanvasCardContainer>
-            <CanvasCardItem cardBgColor={props?.cardBgColor}>
-                <CardHeader onAddSticker={() => {
-                    addSticker();
-                    props?.headerProps?.onAddSticker && props?.headerProps?.onAddSticker();
-                }} {...headerProps} isEditModeEnabled={props.isEditModeEnabled} />
-                <CardItemWrapper>
+        <StickerCardContainer className={props?.classNames?.root}>
+            <StickerCardItem cardBgColor={props?.cardBgColor} className={props?.classNames?.rootFirstChild}>
+                <CardHeader 
+                    className={props?.classNames?.header}
+                    onAddSticker={() => {
+                        addSticker();
+                        props?.headerProps?.onAddSticker && props?.headerProps?.onAddSticker();
+                    }} {...headerProps} isEditModeEnabled={props.isEditModeEnabled} />
+                <CardItemWrapper className={props?.classNames?.cardBodyWrapper}>
                     {stickersState?.length > 0 ? stickersState?.sort((a, b) => a.order - b.order).map(sticker => (
                         <CardSticker
+                            stickerClassName={props?.classNames?.cardStickerItem}
                             stickerBgColor={props?.stickerBgColor}
                             stickers={sticker}
                             key={sticker?.id}
@@ -35,7 +38,7 @@ export function CanvasCard(props: ICanvasCardProps) {
                     )) : 
                     props.onNoItemsRender ? props.onNoItemsRender() : <span style={{ color: '#333' }}>No items</span>}
                 </CardItemWrapper>
-            </CanvasCardItem>
-        </CanvasCardContainer>
+            </StickerCardItem>
+        </StickerCardContainer>
     )
 }

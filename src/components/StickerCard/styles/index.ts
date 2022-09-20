@@ -1,6 +1,6 @@
 import styled from "styled-components"
 
-export const CanvasCardContainer = styled.div`
+export const StickerCardContainer = styled.div`
     font-size: 14px;
     vertical-align: middle;
     box-shadow: 2px 4px 10px -5px rgba(0,0,0,.08);
@@ -8,7 +8,7 @@ export const CanvasCardContainer = styled.div`
     border-radius: 4px;
 `;
 
-export const CanvasCardItem = styled.div<{cardBgColor?: string}>`
+export const StickerCardItem = styled.div<{cardBgColor?: string}>`
     height: calc(100% - 20px);
     position: relative;
     padding: 0px;

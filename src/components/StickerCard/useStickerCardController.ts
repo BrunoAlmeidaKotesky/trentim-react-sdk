@@ -1,7 +1,7 @@
-import { ICanvasCardProps, IStickerItem } from "@models/interfaces/ICanvasCardProps";
+import { IStickerCardProps, IStickerItem } from "@models/interfaces/IStickerCardProps";
 import { useState, useEffect } from "react";
 
-export function useCanvasCardController(props: ICanvasCardProps) {
+export function useStickerCardController(props: IStickerCardProps) {
     const [stickersState, setStickers] = useState<IStickerItem[]>(props?.stickers);
     useEffect(() => setStickers(props?.stickers), [props.stickers]);
     useEffect(() => {

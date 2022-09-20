@@ -2,7 +2,7 @@ import {
     TextField, PrimaryButton, Dialog, DialogType, DialogFooter, DefaultButton, 
     CommandBar, DirectionalHint, ICommandBarItemProps 
 } from "@fluentui/react";
-import { ICardStickerProps } from "@models/interfaces/ICanvasCardProps";
+import { ICardStickerProps } from "@models/interfaces/IStickerCardProps";
 import { useState, useEffect, useMemo, memo } from "react";
 import { CardStickerWrapper } from "./styles";
 

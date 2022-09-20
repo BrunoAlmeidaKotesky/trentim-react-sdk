@@ -1,4 +1,4 @@
-import type { ICardHeaderProps } from "@models/interfaces/ICanvasCardProps";
+import type { ICardHeaderProps } from "@models/interfaces/IStickerCardProps";
 import { CommandBar, ICommandBarItemProps } from "@fluentui/react/lib/CommandBar"
 import { useCallback } from "react";
 
@@ -37,7 +37,7 @@ export const CardHeader = (props: ICardHeaderProps) => {
 
   return (
     <div
-      className='canvasCard-Header'
+      className={props?.className}
       style={{ backgroundColor: props.backgroundColor }}>
       <CommandBar
         styles={{
