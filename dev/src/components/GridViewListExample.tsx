@@ -3,8 +3,6 @@ import { GridView } from 'trentim-react-sdk';
 import {Tooltip} from '../../../src/components/Tooltip';
 import type { IGridViewRefHandler } from 'trentim-react-sdk';
 import json from './MOCK_DATA.json';
-import { TooltipHost } from '@fluentui/react/lib/Tooltip';
-import { useId } from '@fluentui/react-hooks';
 
 type JsonType = NonNullable<typeof json[0]>;
 export function GridViewListExample() {
@@ -13,7 +11,6 @@ export function GridViewListExample() {
   //const [currentGridRows, setCurrentGridRows] = useState<JsonType[]>([]);
   const [isGroupingDisabled, setGroupingDisabled] = useState(false);
   const [isFilterDisabled, setFilterDisabled] = useState(false);
-  const tooltipId = useId('tooltip');
   
   return (
       <div style={{width: '80%'}}>
@@ -70,14 +67,12 @@ export function GridViewListExample() {
           onGroupIconClick={() => {console.log("Before Group")}}
           onRenderItemColumn={(i, _idx, col) => {
             if(col.key === 'Title')
-              return <Tooltip enableParentOverflow={true} content={<div>AAAA</div>} direction='top_right'><span>{i?.Title}</span></Tooltip>
-            if(col.key === 'Status')
-              return <TooltipHost id={tooltipId} content={<div aria-describedby={tooltipId}>AAAA</div>}><span>{i[col.key]}</span></TooltipHost>
+              return <Tooltip content={<div>AAAA</div>} direction='top_right'><span>{i?.Title}</span></Tooltip>
             return <span>{i[col.key]}</span>
           }}
           onSearchBoxClick={() => {console.log("Before Search")}}
-          onItemsFiltered={() => setGroupingDisabled(true)}
-          onItemsGrouped={() => setFilterDisabled(true)}
+          //onItemsFiltered={() => setGroupingDisabled(true)}
+          //onItemsGrouped={() => setFilterDisabled(true)}
           rows={items}
           onItemClick={(i) => console.log(i.Id)}
           />

@@ -181,9 +181,8 @@ export function useGridController<T extends BaseType>(props: IGridListProps<T>, 
         });
     }, [actualRows, cols, props?.emptyGroupLabel, props?.initialGroupedBy?.key]);
 
-    useImperativeHandle(ref, () => ({
-        reGroupInitialGroup
-    }), [actualRows]);
+    //Expose the re-grouping method to be called when using the component passing a ref={} property.
+    useImperativeHandle(ref, () => ({ reGroupInitialGroup }), [actualRows]);
 
     useEffect(() => { setActualRows(props?.rows); setAllRows(props?.rows) }, [props?.rows]);
     useEffect(() => {

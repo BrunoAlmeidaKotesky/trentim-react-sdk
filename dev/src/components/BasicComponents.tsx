@@ -1,5 +1,6 @@
 import {Tooltip} from '../../../src/components/Tooltip';
 import {IFrame} from '../../../src/components/IFrame';
+import {CanvasCard} from '../../../src/components/CanvasCard';
 import { UploadButton } from '../../../src/components/UploadButton';
 import type { TooltipDirectionValues } from 'trentim-react-sdk';
 import { useState } from 'react';
@@ -28,6 +29,19 @@ export default function BaseComponents() {
             <Tooltip content="Tooltip" direction={button}>
                 <UploadButton accepts={['image/png']} buttonLabel={'Clicar'} />
             </Tooltip>
+            <div>
+                <CanvasCard 
+                    headerProps={{
+                        backgroundColor: 'rgb(246, 221, 255)',
+                        title: 'Teste',
+                        icon: 'Edit',
+                        addTitle: 'Adicionar',
+                        onAddSticker: () => { console.log()}
+                    }}
+                    stickers={[]}
+                    isEditModeEnabled={true}
+                    onStickersChanged={item => console.log(item)} />
+            </div>
         </div>
     );
 }

@@ -8,3 +8,4 @@ export * from './interfaces/IUploadButton';
 export * from './interfaces/ILifecycleProgressProps';
 export * from './types/Common';
 export * from './types/UtilityTypes';
+export * from './interfaces/ICanvasCardProps';

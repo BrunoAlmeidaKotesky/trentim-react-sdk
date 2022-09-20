@@ -4,9 +4,11 @@ import type { IRow, TColumn } from '@models/interfaces/IGridView';
 import type { ApplyFilter, SearchItem } from '@models/types/Common';
 import type { FilterOption, IAvailableFilters } from '@models/interfaces/IPanelFilter';
 
+//General algorithm for dealing with the filters in the Panel and SearchBox
 export class GridViewFilter {
 
     static onApplyFilter: ApplyFilter<IRow<any>> = ({allRows, setActualRows, setIsFilterPanel, applyCustomFilter, onItemsFiltered, onFilterPanelCancel}) => (selectedItems) => {
+        //If the user provided a custom filter algorithm, use it instead of the original, providing everything that are necessary to work properly.
         if(!!applyCustomFilter) {
             const groupedMaps = GridViewMapper.groupMaps(selectedItems);
             return applyCustomFilter({allRows, setActualRows, setIsFilterPanel, selectedItems, groupedMaps});
