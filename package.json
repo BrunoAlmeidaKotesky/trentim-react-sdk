@@ -1,7 +1,7 @@
 {
   "name": "trentim-react-sdk",
   "private": false,
-  "version": "3.4.0-beta4",
+  "version": "3.4.0-beta3",
   "description": "Trentim internal SDK for ReactJS projects, with UI components, helpers, hooks and more.",
   "license": "MIT",
   "repository": {
@@ -10,30 +10,22 @@
   },
   "scripts": {
     "dev": "vite",
-    "build:helpers": "export LIB_NAME=helpers && vite build",
-    "build:hooks": "export LIB_NAME=hooks && vite build",
-    "build": "yarn build:helpers && yarn build:hooks",
+    "build": "tsc && vite build",
     "preview": "vite preview",
     "release": "yarn build && git add -u && git add -A && git commit --allow-empty -m \"Build changes\" && yarn version && yarn run publish-push",
     "publish-push": "yarn publish --non-interactive && git push && git push --tags",
     "upgrade-release": "yarn upgrade && yarn run release"
   },
   "files": [
-    "dist/*",
-    "index.d.ts",
-    "hooks.d.ts",
-    "helpers.d.ts"
+    "dist"
   ],
+  "main": "./dist/index.umd.js",
   "module": "./dist/index.esm.js",
-  "types": "./index.d.ts",
+  "types": "./dist/index.d.ts",
   "exports": {
-    "./helpers": {
-      "import": "./dist/helpers/index.js",
-      "require": "./dist/helpers/index.cjs"
-    },
-    "./hooks": {
-      "import": "./dist/hooks/index.js",
-      "require": "./dist/hooks/index.cjs"
+    ".": {
+      "import": "./dist/index.es.js",
+      "require": "./dist/index.umd.js"
     }
   },
   "peerDependencies": {
