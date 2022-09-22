@@ -1,19 +1,21 @@
 import { CSSNumberFormat } from "../types/UtilityTypes";
 
-export interface IStickerItem {
-    id: number;
+export interface IStickerItem<T = any> {
+    id: number | string;
     title: string;
     order?: number;
+    data?: T;
 }
 
-export interface ICardStickerProps {
+export interface ICardStickerProps<T = any> {
     isEditEnabled?: boolean;
+    /**@default #feffb7 */
     stickerBgColor: string;
-    stickers: IStickerItem;
+    stickers: IStickerItem<T>;
     stickerClassName?: string;
-    onChange(item: IStickerItem): void;
-    onDelete(item: IStickerItem): void;
-    onChangeOrder(item: IStickerItem, way: "up" | "down"): void;
+    onChange(item: IStickerItem<T>): void;
+    onDelete(item: IStickerItem<T>): void;
+    onChangeOrder(item: IStickerItem<T>, way: "up" | "down"): void;
 }
 
 export type CardClassNames = {
@@ -23,7 +25,8 @@ export type CardClassNames = {
     cardBodyWrapper?: string;
     cardStickerItem?: string;
 }
-export interface IStickerCardProps {
+
+export interface IStickerCardProps<StickerData> extends IStickerCardEvents<StickerData> {
     /**Extra class name to be applied alongside with the styled names */
     classNames?: CardClassNames;
     /**@default inherit */
@@ -31,17 +34,38 @@ export interface IStickerCardProps {
     /**@default inherit */
     width?: CSSNumberFormat | 'inherit' | 'unset';
     headerProps: ICardHeader;
-    stickers: IStickerItem[];
+    stickers: IStickerItem<StickerData>[];
     /**@default #fff */
     cardBgColor?: string;
     isEditModeEnabled: boolean;
     /**@default #feffb7 */
     stickerBgColor?: string;
-    onStickersChanged(stickers: IStickerItem[]): void;  
+}
+
+export interface IStickerCardEvents<T> {
+    /**This function will be called when the state of the items has been ordered */
+    onStickerOrderChanged?: (stickers: IStickerItem<T>[], selectedSticker?: IStickerItem<string>) => void;
+    /**This function will be called whenever a sticker item is being edited. */
+    onStickerChanged?: (currentSticker: IStickerItem<T>) => void;
+    
+    /**This function will be called before the state of the stickers are changed.
+     * 
+     * It can be used to modify the sticker before it is added to the state.
+     */
+    onBeforeAddSticker?: (currentNewSticker: IStickerItem<T>) => IStickerItem<T>;
+    /**This function will be called before the removal of a sticker item. */
+    onBeforeDeleteSticker?: (sticker: IStickerItem<T>) => void;
+    /**This function will be called after a sticker is added. */
+    onStickerAdded?: (newStickers: IStickerItem<T>[], newIdx: number) => void;
+    /**If not set, the default render is a 
+     * ```tsx
+        <span style={{ color: '#333' }}>No items</span>
+     ```
+     */
     onNoItemsRender?: () => JSX.Element;
 }
 
-export type ICardHeader = Omit<ICardHeaderProps, 'isEditModeEnabled' | 'className'>; 
+export type ICardHeader = Omit<ICardHeaderProps, 'isEditModeEnabled' | 'className'| 'onAddSticker'>; 
 export interface ICardHeaderProps {
     className?: string;
     backgroundColor: string;

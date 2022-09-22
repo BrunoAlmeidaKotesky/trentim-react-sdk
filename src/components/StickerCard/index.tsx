@@ -5,27 +5,21 @@ import { useStickerCardController } from "./useStickerCardController";
 import CardSticker from "./CardSticker";
 import { useMemo } from "react";
 
-export function StickerCard(props: IStickerCardProps) {
+export function StickerCard<T extends any>(props: IStickerCardProps<T>) {
     const {
         addSticker, changeOrder, deleteSticker, updateSticker, stickersState
     } = useStickerCardController(props);
 
-    const headerProps = useMemo(() => {
-        const { onAddSticker, ...headerProps } = props?.headerProps;
-        return headerProps
-    }, [props?.headerProps]);
+    const headerProps = useMemo(() => { return props.headerProps }, [props?.headerProps]);
 
     return (
         <StickerCardContainer className={props?.classNames?.root}>
             <StickerCardItem cardBgColor={props?.cardBgColor} className={props?.classNames?.rootFirstChild}>
                 <CardHeader 
-                    className={props?.classNames?.header}
-                    onAddSticker={() => {
-                        addSticker();
-                        props?.headerProps?.onAddSticker && props?.headerProps?.onAddSticker();
-                    }} {...headerProps} isEditModeEnabled={props.isEditModeEnabled} />
+                    className={props?.classNames?.header} isEditModeEnabled={props.isEditModeEnabled}
+                    onAddSticker={() => { addSticker(); }} {...headerProps} />
                 <CardItemWrapper className={props?.classNames?.cardBodyWrapper}>
-                    {stickersState?.length > 0 ? stickersState?.sort((a, b) => a.order - b.order).map(sticker => (
+                    {stickersState?.length > 0 ? [...stickersState]?.sort((a, b) => a?.order - b?.order).map(sticker => (
                         <CardSticker
                             stickerClassName={props?.classNames?.cardStickerItem}
                             stickerBgColor={props?.stickerBgColor}

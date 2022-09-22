@@ -5,6 +5,8 @@ import { ICardProps } from '@models/interfaces/ICardProps';
 import { CSSProperties } from 'react';
 
 /**
+ * @deprecated - This component is going to be removed on the next major release.
+ * 
  * A card component that can be used in `GridView` automatically if `renderAs` is set to `card`.
  * 
  * @param props - IInfoCardProps

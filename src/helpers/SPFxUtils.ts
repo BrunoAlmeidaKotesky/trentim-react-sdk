@@ -2,6 +2,10 @@
  * Target can be either a class name or an Node or HTMLElement
  */
 type Target = string | HTMLElement | Node;
+
+/**
+ * @deprecated This class is going to be removed on the next major release, due to the lack of many use cases. The `registerLiveReload` is still going to be available as a single function.
+ */
 export class SPFxUtils {
 
     private changeElementProperty (element: HTMLElement, elementsToChange: Map<keyof CSSStyleDeclaration, any>): void {

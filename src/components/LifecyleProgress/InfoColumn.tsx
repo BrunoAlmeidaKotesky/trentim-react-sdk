@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import type { InfoColumnComponent } from '@/models/interfaces/ILifecycleProgressProps';
+import type { InfoColumnComponent } from '@models/interfaces/ILifecycleProgressProps';
 
 export const InformationColumn = styled.div.attrs<InfoColumnComponent>(() => ({className: 'info-column'}))<InfoColumnComponent>`
     background-color: ${p => p?.infoColumnBgColor ?? '#00BCF2'};

@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { LifecycleProgress } from "../../../src/components/LifecyleProgress";
+import { LifecycleProgress } from "../../../src/components/LifecyleProgress/Lifecycle";
 import { ILifecycleProgressProps, ILifecycleProgressRef } from "../../../src/models/interfaces/ILifecycleProgressProps";
 import { initializeIcons } from '@fluentui/font-icons-mdl2';
 import {mockStages, SubStage} from './constants';
