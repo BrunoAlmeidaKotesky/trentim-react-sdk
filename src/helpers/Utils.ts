@@ -120,7 +120,12 @@ export class Utils {
     >(asLowerCase: AsLowerCase): Record<AsLowerCase extends true ? Lowercase<Keys> : Keys, string> {
         try {
             const search = location.search.substring(1);
-            const pathMap: Record<string, string> = JSON.parse('{"' + decodeURI(search).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g, '":"') + '"}');
+            const pathAsString = '{"' + decodeURI(search)
+            .replace(/"/g, '\\"')
+            .replace(/&/g, '","')
+            .replace(/\//, '\\/')
+            .replace(/=/g, '":"') + '"}';
+            const pathMap: Record<string, string> = JSON.parse(pathAsString);
             const keys = Object.keys(pathMap);
             const values = Object.values(pathMap);
             const result: Record<Keys, string> = {} as Record<Keys, string>;
@@ -132,6 +137,6 @@ export class Utils {
                     result[key] = values[idx];
             }
             return result as Record<AsLowerCase extends true ? Lowercase<Keys> : Keys, string>;
-        } catch(e) { return null; }
+        } catch(e) { console.error('[TRS] - Failed to get Url params as an object', e); return null; }
     }
 }

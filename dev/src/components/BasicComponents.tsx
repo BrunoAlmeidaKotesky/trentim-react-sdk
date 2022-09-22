@@ -35,12 +35,14 @@ export default function BaseComponents() {
                     backgroundColor: 'rgb(246, 221, 255)',
                     title: 'Teste',
                     icon: 'Edit',
-                    addTitle: 'Adicionar',
-                    onAddSticker: () => { console.log()}
+                    addTitle: 'Adicionar'
                 }}
                 stickers={[]}
                 isEditModeEnabled={true}
-                onStickersChanged={item => console.log(item)} />
+                onStickersChanged={{
+                    when: 'lengthChanged',
+                    callback: (stickers) => console.log(stickers)
+                }} />
         </div>
     );
 }

@@ -79,6 +79,7 @@ const Sticker = ({ stickers, onChange, onChangeOrder, onDelete, isEditEnabled, s
             <TextField
               className='not-editable'
               multiline
+              styles={{root: {backgroundColor: stickerBgColor}, wrapper: {backgroundColor: stickerBgColor}}}
               rows={4}
               value={item?.title}
               readOnly={true}

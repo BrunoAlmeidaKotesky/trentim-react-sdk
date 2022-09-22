@@ -1,8 +1,10 @@
-import { Route, BrowserRouter, Link, Routes } from 'react-router-dom';
+import { Route, BrowserRouter, Link, Routes, useParams } from 'react-router-dom';
 import Grids from './components/Grids';
 import Basics from './components/BasicComponents';
 import './App.css'
 import { LifecycleTests } from './components/LifecycleTests';
+import { useEffect } from 'react';
+import {Utils} from '../../src/helpers/Utils';
 
 function App() {
 
@@ -22,6 +24,10 @@ function App() {
 }
 
 function Home() {
+  const params = useParams();
+  
+  useEffect(() => { console.log(Utils.getSearchParamsAsObject(true)) }, [params]);
+
   return (
     <ul>
       <li><Link to="/grids">Grids</Link></li>

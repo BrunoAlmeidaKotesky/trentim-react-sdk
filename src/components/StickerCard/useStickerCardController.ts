@@ -1,17 +1,17 @@
 import { IStickerCardProps, IStickerItem } from "@models/interfaces/IStickerCardProps";
 import { useState, useEffect } from "react";
 
-export function useStickerCardController(props: IStickerCardProps) {
+export function useStickerCardController<T extends any>(props: IStickerCardProps<T>) {
     const [stickersState, setStickers] = useState<IStickerItem[]>(props?.stickers);
     useEffect(() => setStickers(props?.stickers), [props.stickers]);
-    useEffect(() => {
-        if (props?.onStickersChanged)
-            props.onStickersChanged(stickersState);
-    }, [stickersState?.length]);
-
 
     const deleteSticker = (sticker: IStickerItem) => {
-        setStickers(stickersState?.filter((s) => s.id !== sticker?.id));
+        setStickers(stickersState?.filter((s) => {
+            const isNotEqual = s.id !== sticker.id;
+            if(!isNotEqual && props?.onBeforeDeleteSticker)
+                props.onBeforeDeleteSticker(s);
+            return isNotEqual;
+        }));
     }
 
     const addSticker = () => {
@@ -19,18 +19,27 @@ export function useStickerCardController(props: IStickerCardProps) {
         let order = 1;
         if (lastItem)
             order = lastItem.order + 1;
-        setStickers([...stickersState, {
-                title: '',
-                id: order,
-                order
-            }]
-        );
+        let newSticker: IStickerItem<T> = {
+            id: order,
+            title: null,
+            order,
+            data: null
+        }
+        if(props?.onBeforeAddSticker)
+            newSticker = props.onBeforeAddSticker(newSticker);
+        const newStickers = [...stickersState, newSticker];
+        setStickers(newStickers);
+        if(props?.onStickerAdded)
+            props.onStickerAdded(newStickers, newStickers?.length === 1 ? 0 : newStickers?.length - 1);
     }
 
     const updateSticker = (sticker: IStickerItem) => {
         const modifiedStickers = stickersState.map(s => {
-            if (s?.id === sticker?.id)
+            if (s?.id === sticker?.id) {
                 s = sticker;
+                if(props?.onStickerChanged && (sticker?.title !== null && sticker?.title !== undefined))
+                    props.onStickerChanged(s);
+            }
             return s;
         });
         setStickers(modifiedStickers);
@@ -54,7 +63,10 @@ export function useStickerCardController(props: IStickerCardProps) {
                 findItem.order = nextOrder;
             }
         }
-        setStickers(stickers.sort((a, b) => a?.order - b?.order));
+        const sorted = [...stickers].sort((a, b) => a?.order - b?.order);
+        setStickers(sorted);
+        if(props?.onStickerOrderChanged)
+            props.onStickerOrderChanged(sorted, selectedItem);
     };
 
     return { deleteSticker, updateSticker, addSticker, changeOrder, stickersState }
