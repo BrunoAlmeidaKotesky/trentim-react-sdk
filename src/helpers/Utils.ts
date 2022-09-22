@@ -137,6 +137,6 @@ export class Utils {
                     result[key] = values[idx];
             }
             return result as Record<AsLowerCase extends true ? Lowercase<Keys> : Keys, string>;
-        } catch(e) { console.error('[TRS] - Failed to get Url params as an object', e); return null; }
+        } catch(e) { console.error('[TRS] - Failed to get Url params as an object, ', e); return null; }
     }
 }

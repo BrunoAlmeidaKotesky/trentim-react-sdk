@@ -2,12 +2,17 @@ import {Tooltip} from '../../../src/components/Tooltip';
 import {IFrame} from '../../../src/components/IFrame';
 import { UploadButton } from '../../../src/components/UploadButton';
 import type { TooltipDirectionValues } from 'trentim-react-sdk';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { StickerCard } from '../../../src/components/StickerCard';
 
 export default function BaseComponents() {
     const [{button, frame}, setDirection] = useState<{frame: TooltipDirectionValues, button: TooltipDirectionValues}>({frame: 'bottom_center', button: 'bottom_center'});
-    const options: TooltipDirectionValues[] = ['bottom_center', 'bottom_left', 'bottom_right', 'right', 'left', 'top_right', 'top_center', 'top_left']; 
+    const [categories, setCategories] = useState([]);
+    const options: TooltipDirectionValues[] = ['bottom_center', 'bottom_left', 'bottom_right', 'right', 'left', 'top_right', 'top_center', 'top_left'];
+    
+    useEffect(() => {
+        setTimeout(() => { setCategories([{id: 6, title: 'Effect', order: 1, data: 'Group'}]) }, 4000);
+    }, []);
 
     return (
         <div>
@@ -37,12 +42,8 @@ export default function BaseComponents() {
                     icon: 'Edit',
                     addTitle: 'Adicionar'
                 }}
-                stickers={[]}
-                isEditModeEnabled={true}
-                onStickersChanged={{
-                    when: 'lengthChanged',
-                    callback: (stickers) => console.log(stickers)
-                }} />
+                stickers={categories}
+                isEditModeEnabled={true}/>
         </div>
     );
 }

@@ -79,7 +79,7 @@ const Sticker = ({ stickers, onChange, onChangeOrder, onDelete, isEditEnabled, s
             <TextField
               className='not-editable'
               multiline
-              styles={{root: {backgroundColor: stickerBgColor}, wrapper: {backgroundColor: stickerBgColor}}}
+              styles={{root: {backgroundColor: stickerBgColor ?? '#feffb7'}, fieldGroup: {backgroundColor: stickerBgColor ?? '#feffb7'}}}
               rows={4}
               value={item?.title}
               readOnly={true}
@@ -91,7 +91,7 @@ const Sticker = ({ stickers, onChange, onChangeOrder, onDelete, isEditEnabled, s
               dialogContentProps={{
                 type: DialogType.normal,
                 title: "Deletar item",
-                closeButtonAriaLabel: "Close",
+                closeButtonAriaLabel: "Fechar",
                 subText: "Tem certeza que deseja deletar esse item?",
               }}>
               <DialogFooter>

@@ -3,11 +3,8 @@ import Grids from './components/Grids';
 import Basics from './components/BasicComponents';
 import './App.css'
 import { LifecycleTests } from './components/LifecycleTests';
-import { useEffect } from 'react';
-import {Utils} from '../../src/helpers/Utils';
 
 function App() {
-
   return (
     <div className="App">
       <BrowserRouter>
@@ -23,11 +20,7 @@ function App() {
   )
 }
 
-function Home() {
-  const params = useParams();
-  
-  useEffect(() => { console.log(Utils.getSearchParamsAsObject(true)) }, [params]);
-
+function Home() {  
   return (
     <ul>
       <li><Link to="/grids">Grids</Link></li>

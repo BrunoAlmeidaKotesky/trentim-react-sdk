@@ -9,6 +9,7 @@ export interface IStickerItem<T = any> {
 
 export interface ICardStickerProps<T = any> {
     isEditEnabled?: boolean;
+    /**@default #feffb7 */
     stickerBgColor: string;
     stickers: IStickerItem<T>;
     stickerClassName?: string;
