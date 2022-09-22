@@ -1,5 +1,16 @@
 ## Changelog
 
+### v3.4.0
+This release adds a new component `<StickerCard>`, which is going to be the only card component on the future, and making `<Card />` deprecated. And talking about depreciation, some features were also marked as deprecated, and will be removed in the next major release.
+    
+- Fixed the bug where the `<LifecycleProgress>` prop types was not being shown when using the component.
+- Added a new component called `<StickerCard>`, please wait for our new Storybook page about this component with it's documentation.
+    - Maybe there will be some tiny changes on the hotfix releases.
+- `SPFxUtils` class has been marked as deprecated, due to the lack of real motive of being a separated class and the only thing used being the `registerLiveReload` method (Which is still going to exist as a isolated function).
+- `Utils.getSearchParamsAsObject` now logs when an error occurs while parsing the search params.
+
+For the moment there are not documentation for the new card component, but it will be added soon.
+
 ### v3.3.0
 This is a minor release that focus on fixing the `<Tooltip>` component bugs related to it's direction, so now it basically works as expected.
 - Added a optional property to `<Tooltip>` called `enableParentOverflow`, which is **not** recommended to be set to `true`, only if you **truly** need that to occurs.
