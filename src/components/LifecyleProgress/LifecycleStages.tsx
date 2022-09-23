@@ -64,6 +64,9 @@ export const StageIndicator = styled.span.attrs<StageIndicatorComponent>(() => (
     top: -14px;
     left: calc(50% - 14px);
     cursor: pointer;
+    font-size: 1.3em;
+    text-align: center;
+    color: ${p => p.completed ? 'white' : 'inherit'};;
     z-index: 5;
     ${p => p?.active && css`
         ::after {
