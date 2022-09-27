@@ -23,10 +23,11 @@ export function useStickerCardController<T extends any>(props: IStickerCardProps
             id: order,
             title: null,
             order,
-            data: null
+            data: null,
+            renderedOnce: true
         }
         if(props?.onBeforeAddSticker)
-            newSticker = props.onBeforeAddSticker(newSticker);
+            newSticker = {...props.onBeforeAddSticker(newSticker), renderedOnce: true};
         const newStickers = [...stickersState, newSticker];
         setStickers(newStickers);
         if(props?.onStickerAdded)

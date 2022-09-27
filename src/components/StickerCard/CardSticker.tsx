@@ -6,12 +6,12 @@ import { ICardStickerProps } from "@models/interfaces/IStickerCardProps";
 import { useState, useEffect, useMemo, memo } from "react";
 import { CardStickerWrapper } from "./styles";
 
-const Sticker = ({ stickers, onChange, onChangeOrder, onDelete, isEditEnabled, stickerBgColor }: ICardStickerProps) => {
-  const [editMode, setIsEditMode] = useState(isEditEnabled);
-  const [item, setItem] = useState(stickers);
+const Sticker = ({ sticker, onChange, onChangeOrder, onDelete, isEditEnabled, stickerBgColor, renderedNow }: ICardStickerProps) => {
+  const [editMode, setIsEditMode] = useState(isEditEnabled ? renderedNow : false);
+  const [item, setItem] = useState(sticker);
   const [confirmDelete, setConfirmDelete] = useState(false);
 
-  useEffect(() => { setItem(stickers); }, [stickers]);
+  useEffect(() => { setItem(sticker); }, [sticker]);
   useEffect(() => { onChange(item); }, [item]);
 
   const overflowItems = useMemo<ICommandBarItemProps[]>(() => {

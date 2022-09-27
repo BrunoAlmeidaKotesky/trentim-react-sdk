@@ -23,7 +23,8 @@ export function StickerCard<T extends any>(props: IStickerCardProps<T>) {
                         <CardSticker
                             stickerClassName={props?.classNames?.cardStickerItem}
                             stickerBgColor={props?.stickerBgColor}
-                            stickers={sticker}
+                            sticker={sticker}
+                            renderedNow={sticker.renderedOnce}
                             key={sticker?.id}
                             isEditEnabled={props?.isEditModeEnabled}
                             onChange={updateSticker}

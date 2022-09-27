@@ -5,13 +5,16 @@ export interface IStickerItem<T = any> {
     title: string;
     order?: number;
     data?: T;
+    /**This field is for internal control, please do not change this property */
+    readonly renderedOnce: boolean;
 }
 
 export interface ICardStickerProps<T = any> {
+    renderedNow: boolean;
     isEditEnabled?: boolean;
     /**@default #feffb7 */
     stickerBgColor: string;
-    stickers: IStickerItem<T>;
+    sticker: IStickerItem<T>;
     stickerClassName?: string;
     onChange(item: IStickerItem<T>): void;
     onDelete(item: IStickerItem<T>): void;
@@ -52,7 +55,7 @@ export interface IStickerCardEvents<T> {
      * 
      * It can be used to modify the sticker before it is added to the state.
      */
-    onBeforeAddSticker?: (currentNewSticker: IStickerItem<T>) => IStickerItem<T>;
+    onBeforeAddSticker?: (currentNewSticker: Omit<IStickerItem<T>, 'renderedOnce'>) => Omit<IStickerItem<T>, 'renderedOnce'>;
     /**This function will be called before the removal of a sticker item. */
     onBeforeDeleteSticker?: (sticker: IStickerItem<T>) => void;
     /**This function will be called after a sticker is added. */
