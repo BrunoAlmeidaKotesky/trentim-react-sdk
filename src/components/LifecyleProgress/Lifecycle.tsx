@@ -91,7 +91,7 @@ function LifecycleProgressInner<StageData = any>(props: ILifecycleProgressProps<
                         }} 
                         isFirstColumn={index === 0} isLastColumn={index === other.stages.length - 1} key={index}>
                         <StageIndicator active={stage?.active} completed={stage?.completed} indicatorColor={other?.indicatorColor}>
-                            {stage?.completed && <Icon styles={{root: {width: '100%', backgroundColor: other?.indicatorColor}}} iconName='CheckMark' />}
+                            {stage?.completed && <Icon styles={{root: {width: '100%' }}} iconName='CheckMark' />}
                         </StageIndicator>
                         <span style={{...spanStyle(), fontWeight: stage?.active ? 'bold' : 'normal'}}>{stage?.label}</span>
                     </StageBlock>

@@ -1,5 +1,8 @@
 ## Changelog
 
+### v.3.4.3
+- Fixed `<LifecycleProgress/>` `indicatorColor` background-color to not be applied on fluentui `<Icon/>` background.
+
 ### v3.4.2
 - When the `<StickerCard/>` is rendered with `isEditModeEnabled={true}`, only the new added stickers are going to have the TextField opened by default, pre-loaded `stickers` from state doesn't have the TextField opened by default.
 - Added a new **`readonly`** property to `IStickerItem<T>` named `renderedOnce` which is going to be set to `true` when the sticker is added for the first time, this property should not be changed, and `onBeforeAddSticker` will just ignore modifications on it.
