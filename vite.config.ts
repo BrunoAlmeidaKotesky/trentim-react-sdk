@@ -23,11 +23,12 @@ export default defineConfig({
             '@components': resolve(__dirname, 'src/components'),
             '@models': resolve(__dirname, 'src/models'),
             '@helpers': resolve(__dirname, 'src/helpers'),
-            '@decorators': resolve(__dirname, 'src/Decorators'),
+            '@decorators': resolve(__dirname, 'src/decorators'),
             '@hooks': resolve(__dirname, 'src/hooks')
         }
     },
     build: {
+        sourcemap: 'inline',
         lib: {
             entry: resolve(__dirname, 'src/index.ts'),
             name: 'trentim-react-sdk',

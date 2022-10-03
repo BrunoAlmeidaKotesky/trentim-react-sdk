@@ -1,6 +1,6 @@
 import {useState, useRef} from 'react';
 import { GridView } from 'trentim-react-sdk';
-import {Tooltip} from '../../../src/components/Tooltip';
+import {Tooltip} from 'trentim-react-sdk';
 import type { IGridViewRefHandler } from 'trentim-react-sdk';
 import json from './MOCK_DATA.json';
 
@@ -62,7 +62,6 @@ export function GridViewListExample() {
           onGroupPanelCancel={by => console.log(by)}
           onFilterPanelCancel={by => console.log(by)}
           styles={{contentContainer: {maxHeight: 500, overflowY: 'auto'}}}
-          renderAs="list"
           onFilterIconClick={() => {console.log("Before Filter")}}
           onGroupIconClick={() => {console.log("Before Group")}}
           onRenderItemColumn={(i, _idx, col) => {

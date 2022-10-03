@@ -2,7 +2,12 @@ import type { Paths, TypeFrom } from 'bakutils-types';
 
 export class Utils {
 
-    /**Tries to convert an ISO `string` to the locale format. */
+    /**Tries to convert an ISO `string` to the locale format. 
+     * @param date The date to convert.
+     * @param locale The locale to convert
+     * @param formatOptions `Intl.DateTimeFormatOptions` to use if desired.
+     * @returns The converted date or the original date string if the conversion was not possible.
+    */
     public static convertIsoToLocaleString(date: string, locales: string | string[] = 'pt-BR', formatOptions: Intl.DateTimeFormatOptions = undefined): string {
         //First check if the string can be converted to a date object.
         if (!(new Date(date) instanceof Date) && isNaN(new Date(date)?.getTime()))
@@ -42,7 +47,7 @@ export class Utils {
     }
 
     /**
-     * 
+     * Change the value of a property in a deep nested object, mutating the original object.
      * @param obj The object to search in.
      * @param path The path to the value, as an array of keys, separated by dots.
      * @param value The new value to bet set.
@@ -138,5 +143,18 @@ export class Utils {
             }
             return result as Record<AsLowerCase extends true ? Lowercase<Keys> : Keys, string>;
         } catch(e) { console.error('[TRS] - Failed to get Url params as an object, ', e); return null; }
+    }
+
+    /**The same method as `JSON.parse`, but it handles it when it fails, automatically returning null (If fallback value is not set).
+     * @param json The json string
+     * @param fallbackValue A value if the parse fails
+     * @returns the parsed json, or the fallback value if the parse fails.*/
+    static tryJSONParse: <Result, Fallback = null>(json: string, fallbackValue?: Fallback)=> (Result | Fallback | null) = 
+        (json, fallbackValue = null) => {
+            try { return JSON.parse(json); }
+            catch(e) {
+                console.error('[TRS] - ', e);
+                return fallbackValue as any; 
+            }
     }
 }

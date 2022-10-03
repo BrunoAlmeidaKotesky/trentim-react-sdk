@@ -2,7 +2,6 @@ import * as React from 'react';
 import { useRefWithCallback } from '@hooks/useRefWithCallback';
 import { Utils } from '@helpers/Utils';
 import { useState, useEffect, useMemo, useImperativeHandle, useCallback } from 'react';
-import { useGridCardRendering } from './useGridCardRendering';
 import { GridViewFilter } from '../handlers/GridViewFilter';
 import { GridViewGrouping } from '../handlers/GridViewGrouping';
 import { GridViewMapper } from '../handlers/GridViewMapper';
@@ -23,8 +22,6 @@ declare module "react" {
 
 /** TO-DO: Use `useReducer` with context for better code splitting. */
 export function useGridController<T extends BaseType>(props: IGridListProps<T>, ref: React.ForwardedRef<IGridViewRefHandler<T>>) {
-    const [renderAs, setRenderAs] = useState<typeof props.renderAs>(props?.renderAs || 'list');
-    const [shouldRenderCard, setShouldRenderCard] = useState(props?.renderAs === 'card');
     const [cols, setCols] = useState(props?.columns);
     const [isGroping, setIsGrouping] = useState<{ active: boolean, key: string, name: string }>({ active: false, key: null, name: null });
     const [groups, setGroups] = useState<IGroup[]>(undefined);
@@ -40,13 +37,14 @@ export function useGridController<T extends BaseType>(props: IGridListProps<T>, 
     const [memoizedAvailableFilter, setAvailableFilters] = useState<IAvailableFilters[]>([]);
 
     const visibleCols = useMemo(() => cols?.filter(c => !c?.hideColumn), [cols]);
-    useEffect(() => { setRenderAs(props?.renderAs); }, [props?.renderAs]);
+
+    useEffect(() => { setEnableGrouping(props?.headerOptions?.enableGrouping) }, [props?.headerOptions?.enableGrouping]);
+    const naturalSort = useCallback(createNewSortInstance({
+        comparer: new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' }).compare,
+    }), []);
 
     const onItemClick = (item: IRow<T>) => !!props?.onItemClick && props?.onItemClick(item);
     const onColumnClick = (currentRows: IRow<T>[]) => (_: any, column: TColumn<T>): void => {
-        const naturalSort = createNewSortInstance({
-            comparer: new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' }).compare,
-        });
         if (!column) return;
         let isSortedDescending = column?.isSortedDescending;
         if (column?.isSorted)
@@ -103,18 +101,6 @@ export function useGridController<T extends BaseType>(props: IGridListProps<T>, 
             return col;
         }));
     }
-
-    const CardsList = useGridCardRendering({
-        renderAs,
-        actualRows,
-        onItemClick,
-        cardProps: props?.cardProps,
-        enableGrouping: props?.headerOptions?.enableGrouping,
-        onRenderCustomComponent: props?.onRenderCustomComponent,
-        setEnableGrouping,
-        setShouldRenderCard,
-        shouldRenderCard
-    });
 
     useEffect(() => {
         if (!props?.columns?.length) return;
@@ -263,12 +249,10 @@ export function useGridController<T extends BaseType>(props: IGridListProps<T>, 
     const listConfig: IListOptionsProps<any> = {
         ...props?.headerOptions,
         onSearchItemChange: GridViewFilter.onSearchItemChange({ allRows, searchCb, setActualRows, onSearchBoxItemsFiltered: props?.onSearchBoxItemsFiltered }),
-        setRenderAs: () => renderAs === 'card' ? setRenderAs('list') : setRenderAs('card'),
         setIsFilterPanelOpen: (value) => { setIsFilterPanel(value); },
         setIsGroupPanelOpen: (value) => { setIsGroupPanel(value); },
         enableSearch: props?.headerOptions?.enableSearch ?? true,
         enableFilter: props?.headerOptions?.enableFilter ?? true,
-        enableCardView: props?.headerOptions?.enableCardView ?? false,
         enableGrouping,
         onClickSearchIcon: (callerType, text, key) => {
             if (callerType === IconClickCaller.CLICK)
@@ -284,7 +268,6 @@ export function useGridController<T extends BaseType>(props: IGridListProps<T>, 
         onFilterIconClick: props?.onFilterIconClick,
         onGroupIconClick: props?.onGroupIconClick,
         onSearchBoxClick: props?.onSearchBoxClick,
-        cardButtonProps: props?.headerOptions?.cardButtonProps,
         filterButtonProps: props?.headerOptions?.filterButtonProps,
         groupButtonProps: props?.headerOptions?.groupButtonProps,
         searchBoxProps: props?.headerOptions?.searchBoxProps,
@@ -300,10 +283,8 @@ export function useGridController<T extends BaseType>(props: IGridListProps<T>, 
             isFilterPanelOpen,
             isGroupPanelOpen,
             listConfig,
-            shouldRenderCard,
             groups
         },
-        handlers: { onItemClick },
-        JSX: { CardsList }
+        handlers: { onItemClick }
     }
 }

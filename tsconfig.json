@@ -58,7 +58,7 @@
         "src/hooks/*"
       ],
       "@decorators/*": [
-        "src/Decorators/*"
+        "src/decorators/*"
       ]
     },
   },

@@ -7,12 +7,10 @@ import type { IRow } from "@models/interfaces/IGridView";
 export const ListOptionsContext = createContext<IListOptionsProps<IRow>>({ 
     enableFilter: true, 
     enableSearch: true,
-    enableCardView: true,
     customButtons: [], 
     setIsFilterPanelOpen: undefined, 
     searchBoxPlaceholder: '',
-    setRenderAs: undefined, 
-    defaultButtonsOrder: { group: 0, search: 1, filter: 2, card: 3 },
+    defaultButtonsOrder: { group: 0, search: 1, filter: 2},
     setIsGroupPanelOpen: undefined,
     onClickSearchIcon: undefined
 });

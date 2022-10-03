@@ -7,18 +7,15 @@ import { IconClickCaller } from '@helpers/enums';
 export const ListOptions = () => {
     const { 
         customButtons, enableFilter, enableSearch, searchKeys, onSearchItemChange, 
-        setIsFilterPanelOpen, defaultButtonsOrder, searchBoxPlaceholder, enableCardView, 
-        setRenderAs, enableGrouping, onClickSearchIcon, onFilterIconClick, onGroupIconClick, onSearchBoxClick,
-        cardButtonProps, filterButtonProps, searchBoxProps, groupButtonProps, leftHeaderSpace
+        setIsFilterPanelOpen, defaultButtonsOrder, searchBoxPlaceholder, enableGrouping, onClickSearchIcon, onFilterIconClick, 
+        onGroupIconClick, onSearchBoxClick, filterButtonProps, searchBoxProps, groupButtonProps, leftHeaderSpace
     } = React.useContext(ListOptionsContext);
     const {onOpen} = React.useContext(GroupPanelContext);
 
     const omittedButtonProps = useMemo(() => {
-        delete cardButtonProps?.['onClick'];
         delete filterButtonProps?.['onClick'];
         delete groupButtonProps?.['onClick'];
         return {
-            cardButtonProps,
             filterButtonProps,
             groupButtonProps
         }
@@ -53,10 +50,6 @@ export const ListOptions = () => {
                     onGroupIconClick();
                 onOpen();
             }} styles={{label: {fontSize: 14}, root: {order: defaultButtonsOrder?.group}}} iconProps={{iconName: 'GroupList'}} />}
-        {enableCardView &&
-        <DefaultButton
-            {...omittedButtonProps?.cardButtonProps}
-            onClick={_ => setRenderAs()} styles={{label: {fontSize: 14}, root: {order: defaultButtonsOrder?.card}}} iconProps={{iconName: 'GridViewMedium'}} />}
         {customButtons?.length > 0 && customButtons?.map((b, idx) => {
             switch (b?.renderAs) {
                 case 'PrimaryButton':

@@ -1,4 +1,3 @@
-import type { IGridCardProps } from "./ICardProps";
 import type { IPanelChildrenPosition } from './ICommonPanel';
 import type { IConfigurableHeader } from "./IListOptions";
 import type { ApplyCustomFilter, FilterComponent, CancelActivation, ColumnKey, IDateConversionOptions } from '../types/Common';
@@ -43,16 +42,8 @@ export type IFluentDetailsListProps = Omit<IDetailsListProps, 'columns' | 'items
 export interface IGridListProps<T extends any> extends IGridHandler<T> {
     /**Use this to overwrite the default props `IDetailListProps` from Microsoft's `@fluent-ui` */
     detailsListProps?: IFluentDetailsListProps;
-    /**if `renderAs` is set to `card`, you need to provide the card props. */
-    cardProps?: IGridCardProps;
     /**Configure the header behavior, such as to enable filter and other functionalities. */
     headerOptions: IConfigurableHeader<T>;
-    /**
-     * @remarks - This property is going to be deprecated in the future.
-     * If the grid will be rendered as a list or as a collection of `<Card />` component 
-     * @default list
-    */
-    renderAs: 'list' | 'card';
     /**The column model to be applied to the list.
      * It extends the Microsoft `@fluent-ui` `IColumn` interface.
      *
@@ -143,17 +134,17 @@ export interface IGridClickActions {
 
 /**Represents all the functions that can be used. */
 export interface IGridHandler<T> extends IGridClickActions {
-    /**A custom event to be fired when a row is clicked or the card action button. */
+    /**A custom event to be fired when a row is clicked. */
     onItemClick?: (row: IRow<T>) => void;
     /**The same event from `IDetailsListProps` from `@fluent-ui` with generic types.
      * 
-     * This is different from `onRenderCustomComponent`, since this method is applied to the default `onRenderItemColumn` from `DetailsList` and not on the entire component.
+     * This is different from `onRenderCustomRow`, since this method is applied to the default `onRenderItemColumn` from `DetailsList` and not on the entire component.
      */
     onRenderItemColumn: (item?: IRow<T>, index?: number, column?: TColumn<T>) => React.ReactNode;
     /**If you want to totally overwrite the component that is being rendered, independent of the `renderAs` value, use this rendering function. 
      *
      * This element will be applied to each item `IRow`, not the entire component. */
-    onRenderCustomComponent?: (item: IRow<T>) => React.ReactNode;
+    onRenderCustomRow?: (item: IRow<T>) => React.ReactNode;
     /**If you want to overwrite the default filter algorithm that is applied to the filter panel, pass this callback.
      * 
      * This callback will be applied only to the filter algorithm of the panel, an not to the SearchBox for example, and it also doesn't changes the behavior of how the filter panel components are created.
@@ -179,9 +170,9 @@ export interface IGridHandler<T> extends IGridClickActions {
 }
 
 export interface IGridViewStyles {
-    /**The root <div> of the whole component, including the header and list/cards. */
+    /**The root <div> of the whole component, including the header and list. */
     root?: React.CSSProperties;
-    /**The container of the `<DetailsList />` or `<Card />` list. */
+    /**The container of the `<DetailsList />` list. */
     contentContainer?: React.CSSProperties;
 }
 
