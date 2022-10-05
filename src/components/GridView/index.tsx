@@ -1,5 +1,4 @@
-//@ts-ignore
-import * as React from 'react';
+import {forwardRef} from 'react';
 import { useGridController } from './hooks/useGridController';
 import { FilterPanelContext, GroupPanelContext, ListOptionsContext } from './Contexts';
 import { CheckboxVisibility, CollapseAllVisibility, DetailsList, DetailsListLayoutMode } from '@fluentui/react/lib/DetailsList';
@@ -69,4 +68,4 @@ function GridViewInner<T extends BaseType>(props: IGridListProps<T>, ref: React.
  * 
  * The component can also be rendered as a collection of `Card` components, with the same functionalities.
  */
-export const GridView = React.forwardRef(GridViewInner);
+export const GridView = forwardRef(GridViewInner);

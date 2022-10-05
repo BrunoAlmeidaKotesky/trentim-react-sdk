@@ -1,27 +1,27 @@
-import * as React from 'react';
 import {TooltipWrapper} from './TooltipWrapper';
 import {TooltipContentContainer} from './TooltipContentContainer';
 import type {ITooltipProps, LeftTypes, TTDirectionMap} from '@models/interfaces/ITooltipProps';
+import { useRef, useState, useMemo, useEffect } from 'react';
 
 /** A component that displays a tooltip when the user hovers over an element. */
 export const Tooltip = (props: ITooltipProps) => {
-    const wrapperRef = React.useRef<HTMLDivElement>(null);
-    const tooltipRef = React.useRef<HTMLDivElement>(null);
-    const [{left, afterLeft}, setLeft] = React.useState<LeftTypes>({left: '0px', afterLeft: '20%'});
+    const wrapperRef = useRef<HTMLDivElement>(null);
+    const tooltipRef = useRef<HTMLDivElement>(null);
+    const [{left, afterLeft}, setLeft] = useState<LeftTypes>({left: '0px', afterLeft: '20%'});
 
-    const enableParentOverflow = React.useMemo(() => {
+    const enableParentOverflow = useMemo(() => {
         if(props?.enableParentOverflow === null || props.enableParentOverflow === undefined) return false;
         return props?.enableParentOverflow;
     }, [props?.enableParentOverflow]);
 
-    React.useEffect(() => {
+    useEffect(() => {
         if(!(wrapperRef.current && tooltipRef.current)) return;
         const wrapperWidth = wrapperRef?.current?.getBoundingClientRect().width;
         const tooltipWidth = tooltipRef?.current?.getBoundingClientRect().width;
         calculateDirectionLeft(`${Math.floor(wrapperWidth)}px`, `${Math.floor(tooltipWidth)}px`);
     }, [wrapperRef, tooltipRef, props.direction]);
 
-    React.useEffect(() => {
+    useEffect(() => {
         if(enableParentOverflow) return;
         if(!wrapperRef?.current?.parentElement) return;
         wrapperRef.current.parentElement.style.overflow = 'unset';

@@ -101,7 +101,7 @@ export class GridViewFilter {
 
     static filterFromColumns = (hiddenKeys: string[], columns: TColumn<any>[]) => columns.filter(c => (!hiddenKeys?.includes(c?.key)));
 
-    static onSearchItemChange: SearchItem = ({allRows, searchCb, setActualRows, onSearchBoxItemsFiltered}) => (searchText, keys) => {
+    static onSearchItemChange: SearchItem = ({allRows, searchBoxItems, setActualRows, onSearchBoxItemsFiltered}) => (searchText, keys) => {
         const allFilteredRows: IRow[] = []; 
         if(!searchText) {
             setActualRows(allRows);
@@ -115,7 +115,7 @@ export class GridViewFilter {
             });
             allFilteredRows.push(...filteredValues);
         }
-        searchCb(allFilteredRows);
+        searchBoxItems.current = allFilteredRows;
         if(!!onSearchBoxItemsFiltered)
             onSearchBoxItemsFiltered(allFilteredRows);
         return allFilteredRows;

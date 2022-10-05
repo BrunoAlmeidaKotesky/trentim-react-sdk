@@ -1,7 +1,5 @@
-import * as React from 'react';
-import { useRefWithCallback } from '@hooks/useRefWithCallback';
 import { Utils } from '@helpers/Utils';
-import { useState, useEffect, useMemo, useImperativeHandle, useCallback } from 'react';
+import { useState, useEffect, useMemo, useImperativeHandle, useCallback, useRef } from 'react';
 import { GridViewFilter } from '../handlers/GridViewFilter';
 import { GridViewGrouping } from '../handlers/GridViewGrouping';
 import { GridViewMapper } from '../handlers/GridViewMapper';
@@ -33,7 +31,7 @@ export function useGridController<T extends BaseType>(props: IGridListProps<T>, 
     const [isFilterPanelOpen, setIsFilterPanel] = useState(false);
     const [isGroupPanelOpen, setIsGroupPanel] = useState(false);
     const [dateValue, setFilterDate] = useState<Map<string, { fromDate: Date, toDate: Date }>>(null);
-    const [searchCb, currentSearchBoxItems] = useRefWithCallback<IRow[]>([]);
+    const searchBoxItems = useRef<IRow[]>([]);
     const [memoizedAvailableFilter, setAvailableFilters] = useState<IAvailableFilters[]>([]);
 
     const visibleCols = useMemo(() => cols?.filter(c => !c?.hideColumn), [cols]);
@@ -248,7 +246,7 @@ export function useGridController<T extends BaseType>(props: IGridListProps<T>, 
 
     const listConfig: IListOptionsProps<any> = {
         ...props?.headerOptions,
-        onSearchItemChange: GridViewFilter.onSearchItemChange({ allRows, searchCb, setActualRows, onSearchBoxItemsFiltered: props?.onSearchBoxItemsFiltered }),
+        onSearchItemChange: GridViewFilter.onSearchItemChange({ allRows, searchBoxItems, setActualRows, onSearchBoxItemsFiltered: props?.onSearchBoxItemsFiltered }),
         setIsFilterPanelOpen: (value) => { setIsFilterPanel(value); },
         setIsGroupPanelOpen: (value) => { setIsGroupPanel(value); },
         enableSearch: props?.headerOptions?.enableSearch ?? true,
@@ -256,12 +254,11 @@ export function useGridController<T extends BaseType>(props: IGridListProps<T>, 
         enableGrouping,
         onClickSearchIcon: (callerType, text, key) => {
             if (callerType === IconClickCaller.CLICK)
-                return setActualRows(currentSearchBoxItems?.current as IRow<T>[]);
+                return setActualRows(searchBoxItems?.current as IRow<T>[]);
             if (callerType === IconClickCaller.ENTER) {
                 if (!text)
                     return setActualRows(allRows);
-                const filteredItems = GridViewFilter.onSearchItemChange({ allRows, searchCb, setActualRows, onSearchBoxItemsFiltered: props?.onSearchBoxItemsFiltered })(text, key);
-                searchCb(filteredItems);
+                const filteredItems = GridViewFilter.onSearchItemChange({ allRows, searchBoxItems, setActualRows, onSearchBoxItemsFiltered: props?.onSearchBoxItemsFiltered })(text, key);
                 setActualRows(filteredItems as IRow<T>[]);
             }
         },

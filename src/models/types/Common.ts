@@ -1,6 +1,6 @@
 import type { SelectedItemsMap } from "../interfaces/IPanelFilter";
-import type { IRow } from "../interfaces/IGridView";
-import type { Dispatch, SetStateAction } from "react";
+import type { BaseType, IRow } from "../interfaces/IGridView";
+import type { Dispatch, MutableRefObject, SetStateAction } from "react";
 import type { Paths } from "../types/UtilityTypes";
 import type { ReactNode } from "react";
 import type { IButtonProps } from "@fluentui/react/lib/Button";
@@ -18,9 +18,10 @@ export type ApplyFilter<T> = (params: ApplyFilterParams<T> & CustomFilterParams<
 interface ISearchParams {
     allRows: IRow[];
     setActualRows: Dispatch<SetStateAction<IRow[]>>;
-    searchCb: (value: IRow[]) => void;
+    searchBoxItems: MutableRefObject<IRow<BaseType>[]>;
     onSearchBoxItemsFiltered: (filtered?: IRow[]) => void;
 }
+
 export type SearchItem = (params: ISearchParams) => (searchText: string, keys: (keyof IRow)[]) => IRow[];
 
 interface IApplyCustomFilterParams<T> extends ApplyFilterParams<T> {

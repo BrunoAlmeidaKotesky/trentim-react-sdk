@@ -1,5 +1,3 @@
-//@ts-ignore
-import * as React from 'react';
 import { RangeType } from '@helpers/enums';
 import { Slider, ISliderProps } from '@fluentui/react/lib/Slider';
 import { DatePicker } from '@fluentui/react/lib/DatePicker';

@@ -1,6 +1,6 @@
 import {useDebounce, usePrevious} from '@hooks/index';
 import {describe, it, expect} from 'vitest';
-import { act, renderHook } from '@testing-library/react-hooks';
+import { renderHook } from '@testing-library/react-hooks';
 
 //Test every React hook from hooks
 describe('Test all hooks from hooks', () => {

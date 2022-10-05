@@ -1,6 +1,6 @@
-import * as React from 'react';
 import { IPersonaProps } from '@fluentui/react/lib/Persona';
 import { CompactPeoplePicker, IBasePickerSuggestionsProps, ValidationState } from '@fluentui/react/lib/Pickers';
+import { useRef, useState } from 'react';
 
 const suggestionProps: IBasePickerSuggestionsProps = {
     suggestionsHeaderText: 'Pessoas sugeridas',
@@ -20,8 +20,8 @@ interface IPeoplePickerProps {
 }
 
 export const PeoplePicker = (props: IPeoplePickerProps) => {
-    const [peopleList, setPeopleList] = React.useState<IPersonaProps[]>(props.people);
-    const picker = React.useRef(null);
+    const [peopleList, setPeopleList] = useState<IPersonaProps[]>(props.people);
+    const picker = useRef(null);
 
     const onFilterChanged = (filterText: string, currentPersonas: IPersonaProps[], limitResults?: number): IPersonaProps[] | Promise<IPersonaProps[]> => {
         if (!filterText)

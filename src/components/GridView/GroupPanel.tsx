@@ -1,7 +1,5 @@
-//@ts-ignore
-import * as React from 'react';
 import { ChoiceGroup, DefaultButton, Panel, PrimaryButton } from '@fluentui/react';
-import { useContext } from 'react';
+import { useContext, memo } from 'react';
 import { GroupPanelContext } from './Contexts';
 
 function GroupPanel() {
@@ -33,4 +31,4 @@ function GroupPanel() {
     );
 }
 
-export default React.memo(GroupPanel);
+export default memo(GroupPanel);

@@ -1,8 +1,6 @@
 import { RefObject, useCallback, useRef, useState } from "react";
 
 /**
- * @deprecated **This feature will be removed in next major release, due to the lack of real usage and some `anti-patterns` around it's functionality**
- * 
  * This hook can be used when using ref inside useCallbacks
  * 
  * Usage

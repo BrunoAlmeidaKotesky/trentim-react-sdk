@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { Suspense, useEffect, useLayoutEffect, useRef, useState }  from 'react';
 
 export type IBaseFrame = React.ComponentProps<'iframe'> & {
@@ -6,10 +5,7 @@ export type IBaseFrame = React.ComponentProps<'iframe'> & {
     refChanged?: (ref?:  React.MutableRefObject<HTMLIFrameElement>) => void;
 }
 
-export type IFrameProps = IBaseFrame & {
-    fallback?: JSX.Element;
-};
-
+export type IFrameProps = IBaseFrame & { fallback?: JSX.Element; };
 
 /**Same functionality from a normal iframe, but it can be lazy loaded and needs a fallback component.
  * 

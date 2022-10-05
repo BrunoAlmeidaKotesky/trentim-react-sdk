@@ -1,8 +1,8 @@
-import * as React from 'react';
 import {Panel, PrimaryButton, DefaultButton, Dropdown, Label, TagPicker} from '@fluentui/react';
 import {DateSlider} from './DateSlider';
 import {PeoplePicker} from './PeoplePicker';
 import {usePanelFilterController} from './hooks/usePanelFilterController';
+import { memo } from 'react';
 
 function PanelFilter() {
     const {JSX, state, handlers} = usePanelFilterController();
@@ -78,4 +78,4 @@ function PanelFilter() {
     );
 }
 
-export default React.memo(PanelFilter);
+export default memo(PanelFilter);

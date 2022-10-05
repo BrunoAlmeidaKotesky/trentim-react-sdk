@@ -1,5 +1,4 @@
-import * as React from 'react';
-import { CSSProperties, useMemo } from 'react';
+import { CSSProperties, useMemo, useContext } from 'react';
 import { DefaultButton, PrimaryButton, TextField } from '@fluentui/react'
 import {GroupPanelContext, ListOptionsContext} from './Contexts';
 import { IconClickCaller } from '@helpers/enums';
@@ -9,8 +8,8 @@ export const ListOptions = () => {
         customButtons, enableFilter, enableSearch, searchKeys, onSearchItemChange, 
         setIsFilterPanelOpen, defaultButtonsOrder, searchBoxPlaceholder, enableGrouping, onClickSearchIcon, onFilterIconClick, 
         onGroupIconClick, onSearchBoxClick, filterButtonProps, searchBoxProps, groupButtonProps, leftHeaderSpace
-    } = React.useContext(ListOptionsContext);
-    const {onOpen} = React.useContext(GroupPanelContext);
+    } = useContext(ListOptionsContext);
+    const {onOpen} = useContext(GroupPanelContext);
 
     const omittedButtonProps = useMemo(() => {
         delete filterButtonProps?.['onClick'];
