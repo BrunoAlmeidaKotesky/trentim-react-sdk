@@ -2,7 +2,7 @@ import type { IRow } from "./IGridView";
 import type { Dispatch, SetStateAction } from 'react';
 import type { ICommonPanel, IPanelChildrenPosition } from "./ICommonPanel";
 import type { FilterComponent } from '../types/Common';
-import type { RangeType } from "../../helpers/enums";
+import type { RangeType } from "@models/enums";
 
 export interface FilterOption {
     key: string | number;

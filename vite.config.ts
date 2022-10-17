@@ -3,6 +3,18 @@ import { resolve } from 'path';
 import { defineConfig } from 'vite';
 import dts from 'vite-plugin-dts';
 import { visualizer } from "rollup-plugin-visualizer";
+import fs from 'fs';
+
+const generateComponentsEntries = () => {
+    const components = fs.readdirSync(resolve(__dirname, 'src/components'));
+    const entries = {};
+    for (const component of components) {
+        const name = component.split('.')[0];
+        entries[name] = resolve(__dirname, `src/components/${component}`);
+    }
+    console.log(entries);
+    return entries;
+}
 
 export default defineConfig({
     plugins: [
@@ -10,11 +22,18 @@ export default defineConfig({
             jsxRuntime: 'classic'
         }),
         dts({
-            insertTypesEntry: true,
+            outputDir: 'dist',
+            beforeWriteFile: (path, content) => {
+                //console.log(path);
+                //const folderReg = /(\/models|\/helpers|\/hooks|\/decorators|\/components)/g;
+                //let filePath = path.replace('/src/', '/').replace(folderReg, '');
+                //console.log(filePath);
+                //return {filePath, content};
+            }
         }),
         visualizer({
             gzipSize: true,
-            open: true
+            open: false
         })
     ],
     resolve: {
@@ -28,12 +47,17 @@ export default defineConfig({
         }
     },
     build: {
-        sourcemap: 'inline',
         lib: {
-            entry: resolve(__dirname, 'src/index.ts'),
+            entry: {
+                ...generateComponentsEntries(),
+                helpers: resolve(__dirname, 'src/helpers/index.ts'),
+                decorators: resolve(__dirname, 'src/decorators/index.ts'),
+                hooks: resolve(__dirname, 'src/hooks/index.ts'),
+                models: resolve(__dirname, 'src/models/index.ts'),
+            },
             name: 'trentim-react-sdk',
-            formats: ['es', 'umd'],
-            fileName: (format) => `index.${format}.js`,
+            formats: ['es', 'cjs'],
+            fileName: (format) => `[name].${format}.js`,
         },
         rollupOptions: {
             external: ['react', 'react-dom', 'styled-components'],

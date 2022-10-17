@@ -1,4 +1,4 @@
-import {RangeType} from '../../helpers/enums';
+import {RangeType} from '@models/enums';
 
 export interface IDateSliderProps {
     label: string;

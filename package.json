@@ -18,12 +18,15 @@
     "test": "vitest",
     "coverage": "vitest run --coverage"
   },
+  "types": "./index.d.ts",
   "files": [
-    "dist"
+    "index.d.ts",
+    "models.d.ts",
+    "helpers.d.ts",
+    "hooks.d.ts",
+    "lifecycleprogress.d.ts",
+    "decorators.d.ts"
   ],
-  "main": "./dist/index.umd.js",
-  "module": "./dist/index.esm.js",
-  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "import": "./dist/index.es.js",

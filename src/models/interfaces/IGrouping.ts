@@ -2,7 +2,7 @@ import type { IGroup } from "@fluentui/react/lib/GroupedList";
 import type { IRow, TColumn } from "../interfaces/IGridView";
 import type { Dispatch, SetStateAction } from "react";
 import type { KeyAndName, CancelActivation } from '../types/Common';
-import type { GroupOrder } from '../../helpers/enums';
+import type { GroupOrder } from '@models/enums';
 
 export interface IGroupsItems {
     updatedItemsOrder: IRow[];

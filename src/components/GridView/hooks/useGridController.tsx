@@ -1,9 +1,9 @@
-import { Utils } from '@helpers/Utils';
+import { getDeepValue } from '@helpers/objectUtils';
 import { useState, useEffect, useMemo, useImperativeHandle, useCallback, useRef } from 'react';
 import { GridViewFilter } from '../handlers/GridViewFilter';
 import { GridViewGrouping } from '../handlers/GridViewGrouping';
 import { GridViewMapper } from '../handlers/GridViewMapper';
-import { IconClickCaller, GroupOrder } from '@helpers/enums';
+import { IconClickCaller, GroupOrder } from '@models/enums';
 import { createNewSortInstance } from 'fast-sort';
 import type { IGridListProps, IRow, TColumn, BaseType, IGridViewRefHandler } from '@models/interfaces/IGridView';
 import type { IListOptionsProps } from '@models/interfaces/IListOptions';
@@ -11,6 +11,7 @@ import type { IAvailableFilters, IPanelFilterProps, SelectedItemsMap } from '@mo
 import type { IGroupPanel } from '@models/interfaces/IGroupPanel';
 import type { IGroup } from '@fluentui/react/lib/DetailsList';
 import type { KeyAndName } from '@models/types/Common';
+import { convertIsoToLocaleString } from '@helpers/general';
 
 declare module "react" {
     function forwardRef<T, P = {}>(
@@ -55,11 +56,11 @@ export function useGridController<T extends BaseType>(props: IGridListProps<T>, 
             if (groupKey === column?.key) return;
             if (sortType === 'asc')
                 sortedItems = naturalSort(sortedItems).by({
-                    asc: [u => Utils.getDeepValue(u, groupKey as any)?.toString(), u => Utils.getDeepValue(u, columnKeys as any)?.toString()],
+                    asc: [u => getDeepValue(u, groupKey as any)?.toString(), u => getDeepValue(u, columnKeys as any)?.toString()],
                 })
             else if (sortType === 'desc')
                 sortedItems = naturalSort(sortedItems).by({
-                    desc: [u => Utils.getDeepValue(u, groupKey as any)?.toString(), u => Utils.getDeepValue(u, columnKeys as any)?.toString()]
+                    desc: [u => getDeepValue(u, groupKey as any)?.toString(), u => getDeepValue(u, columnKeys as any)?.toString()]
                 })
             GridViewGrouping.onApplyGrouping({
                 emptyGroupLabel: props?.emptyGroupLabel,
@@ -85,11 +86,11 @@ export function useGridController<T extends BaseType>(props: IGridListProps<T>, 
         }
         if(sortType === 'asc')
             sortedItems = naturalSort(sortedItems).by({
-                asc: u => Utils.getDeepValue(u, columnKeys as any)?.toString(),
+                asc: u => getDeepValue(u, columnKeys as any)?.toString(),
             });
         else if(sortType === 'desc')
             sortedItems = naturalSort(sortedItems).by({
-                desc: u => Utils.getDeepValue(u, columnKeys as any)?.toString(),
+                desc: u => getDeepValue(u, columnKeys as any)?.toString(),
             });
         setActualRows(sortedItems);
         setCols(c => c.map(col => {
@@ -106,13 +107,13 @@ export function useGridController<T extends BaseType>(props: IGridListProps<T>, 
         const convertedColumns = columns.map(c => {
             if (c?.key?.includes('.')) {
                 c.onRender = (item, _2) => {
-                    const fieldValue: string = Utils.getDeepValue(item, c?.key);
+                    const fieldValue: string = getDeepValue(item, c?.key);
                     return <span>{fieldValue}</span>;
                 }
                 return c;
             } else if (c?.dateConversionOptions?.shouldConvertToLocaleString) {
                 c.onRender = (item, _2) => {
-                    const fieldValue = Utils.convertIsoToLocaleString(item[c?.key], c?.dateConversionOptions?.locales, c?.dateConversionOptions?.formatOptions);
+                    const fieldValue = convertIsoToLocaleString(item[c?.key], c?.dateConversionOptions?.locales, c?.dateConversionOptions?.formatOptions);
                     return <span>{fieldValue}</span>;
                 }
             }

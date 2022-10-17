@@ -1,7 +1,7 @@
 
 import * as React from 'react';
 
-interface IConditionalWrapperProps {
+export interface IConditionalWrapperProps {
     /**The condition to render the wrapper or not. */
     condition: boolean;
     /**A function that accepts any JSX/React Node, with the wrapped component being the child. */

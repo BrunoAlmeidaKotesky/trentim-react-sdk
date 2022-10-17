@@ -1,7 +1,7 @@
 import { CSSProperties, useMemo, useContext } from 'react';
 import { DefaultButton, PrimaryButton, TextField } from '@fluentui/react'
 import {GroupPanelContext, ListOptionsContext} from './Contexts';
-import { IconClickCaller } from '@helpers/enums';
+import { IconClickCaller } from '@models/enums';
 
 export const ListOptions = () => {
     const { 

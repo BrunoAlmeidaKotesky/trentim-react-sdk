@@ -1,8 +1,9 @@
-import { Utils } from '@helpers/Utils';
-import { GroupOrder } from '@helpers/enums';
+import { getDeepValue } from '@helpers/objectUtils';
+import { GroupOrder } from '@models/enums';
 import type { IGroup } from "@fluentui/react/lib/DetailsList";
 import type { ApplyGrouping, BuildGroups } from "@models/interfaces/IGrouping";
 import type { IRow } from '@models/interfaces/IGridView';
+import { convertIsoToLocaleString } from '@helpers/general';
 
 export class GridViewGrouping {
 
@@ -51,9 +52,9 @@ export class GridViewGrouping {
                 // Create grouped items object
                 const groupedItems = {};
                 items.forEach(item => {
-                    let groupName = Utils.getDeepValue(item, groupKey) as string ?? defaultEmptyLabel;
+                    let groupName = getDeepValue(item, groupKey) as string ?? defaultEmptyLabel;
                     if (isKeyADate)
-                        groupName = Utils.convertIsoToLocaleString(groupName, keyDateConverterOptions?.locales, keyDateConverterOptions?.formatOptions);
+                        groupName = convertIsoToLocaleString(groupName, keyDateConverterOptions?.locales, keyDateConverterOptions?.formatOptions);
                     // Check if the group name exists
                     // Check if group name is a number, this can cause sorting issues
                     if (typeof groupName === "number") 

@@ -71,5 +71,3 @@ function IFrameImplementation(props: IBaseFrame) {
         />
     );
 }
-
-export default IFrame;

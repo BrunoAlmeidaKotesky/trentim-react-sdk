@@ -1,7 +1,6 @@
 import {useState, useRef} from 'react';
-import { GridView } from 'trentim-react-sdk';
-import {Tooltip} from 'trentim-react-sdk';
-import type { IGridViewRefHandler } from 'trentim-react-sdk';
+import { GridView, Tooltip } from 'trentim-react-sdk/components';
+import type { IGridViewRefHandler } from 'trentim-react-sdk/models';
 import json from './MOCK_DATA.json';
 
 type JsonType = NonNullable<typeof json[0]>;

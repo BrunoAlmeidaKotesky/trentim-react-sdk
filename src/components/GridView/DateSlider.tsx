@@ -1,4 +1,4 @@
-import { RangeType } from '@helpers/enums';
+import { RangeType } from '@models/enums';
 import { Slider, ISliderProps } from '@fluentui/react/lib/Slider';
 import { DatePicker } from '@fluentui/react/lib/DatePicker';
 import type { IDateSliderProps } from '@models/interfaces/IDateSlider';

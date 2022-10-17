@@ -1,8 +1,8 @@
 import { useRef, useState } from "react";
-import { LifecycleProgress } from "trentim-react-sdk";
-import { ILifecycleProgressProps, ILifecycleProgressRef } from "trentim-react-sdk";
+import { LifecycleProgress } from "trentim-react-sdk/lifecycleprogress";
 import { initializeIcons } from '@fluentui/font-icons-mdl2';
 import {mockStages, SubStage} from './constants';
+import { ILifecycleProgressProps, ILifecycleProgressRef } from "trentim-react-sdk/models";
 
 initializeIcons();
 

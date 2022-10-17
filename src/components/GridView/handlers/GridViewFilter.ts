@@ -1,8 +1,9 @@
-import { Utils } from '@helpers/Utils';
+import { getDeepValue } from '@helpers/objectUtils';
 import { GridViewMapper } from './GridViewMapper';
 import type { IRow, TColumn } from '@models/interfaces/IGridView';
 import type { ApplyFilter, SearchItem } from '@models/types/Common';
 import type { FilterOption, IAvailableFilters } from '@models/interfaces/IPanelFilter';
+import { convertIsoToLocaleString } from '@helpers/general';
 
 //General algorithm for dealing with the filters in the Panel and SearchBox
 export class GridViewFilter {
@@ -32,10 +33,10 @@ export class GridViewFilter {
                     if(isDate) {
                         const from: Date = value?.data?.from;
                         const to: Date = value?.data?.to;
-                        const rDate: Date = new Date(Utils.getDeepValue(r, mapKey));
+                        const rDate: Date = new Date(getDeepValue(r, mapKey));
                         return rDate >= from && rDate <= to;
                     }
-                    return Utils.getDeepValue(r, mapKey) === value?.text;
+                    return getDeepValue(r, mapKey) === value?.text;
                 });
                 if(ORrowsFromThisKey.length > 0 && !filteredRows?.map(r => r?.Id)?.includes(value?.data?.Id))
                     filteredRows.push(...ORrowsFromThisKey);
@@ -46,7 +47,7 @@ export class GridViewFilter {
         for(const [mapKey, map] of groupedMaps.entries()) {
             const allMapValues = [...map.values()];
             const newFilteredItems = filteredRows.filter(r => {
-                const rowValue = Utils.getDeepValue(r, mapKey);
+                const rowValue = getDeepValue(r, mapKey);
                 return allMapValues.some(v => {
                     if(v?.data?.from && v?.data?.to) {
                         const from: Date = v?.data?.from;
@@ -77,9 +78,9 @@ export class GridViewFilter {
             const renderAs = col?.renderFilterAs ?? 'Dropdown';
             const keys = col?.key; 
             const options: FilterOption[] = allRows?.filter(d => d)?.map((data, idx) => {
-                let stringObject = Utils.getDeepValue(data, keys)?.toString();
+                let stringObject = getDeepValue(data, keys)?.toString();
                 if (col?.dateConversionOptions?.shouldConvertToLocaleString)
-                    stringObject = Utils.convertIsoToLocaleString(stringObject, col?.dateConversionOptions?.locales, col?.dateConversionOptions?.formatOptions);
+                    stringObject = convertIsoToLocaleString(stringObject, col?.dateConversionOptions?.locales, col?.dateConversionOptions?.formatOptions);
                 return {
                     key: idx + "_" + col?.key,
                     text: stringObject,
@@ -110,7 +111,7 @@ export class GridViewFilter {
         for (const key of keys) {
             const filterFrom = allFilteredRows?.length > 0 ? allFilteredRows : allRows;
             const filteredValues = filterFrom.filter(item => {
-                const foundValues: string = Utils.getDeepValue(item, (key as string))?.toString();
+                const foundValues: string = getDeepValue(item, (key as string))?.toString();
                 return foundValues?.toLowerCase()?.startsWith(searchText?.toLowerCase());
             });
             allFilteredRows.push(...filteredValues);
