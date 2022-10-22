@@ -1,7 +1,7 @@
 {
   "name": "trentim-react-sdk",
   "private": false,
-  "version": "4.0.0-beta4",
+  "version": "4.0.0-beta5",
   "description": "Trentim internal SDK for ReactJS projects, with UI components, helpers, hooks and more.",
   "license": "MIT",
   "repository": {
@@ -22,6 +22,18 @@
   "files": [
     "dist",
     "index.d.ts",
+    "ConditionalWrapper.d.ts",
+    "GridView.d.ts",
+    "IFrame.d.ts",
+    "LifecyleProgress.d.ts",
+    "StickerCard.d.ts",
+    "Tooltip.d.ts",
+    "decorators.d.ts",
+    "helpers.d.ts",
+    "hooks.d.ts",
+    "index.d.ts",
+    "models.d.ts",
+    "styles.d.ts",
     "ConditionalWrapper.d.ts",
     "GridView.d.ts",
     "IFrame.d.ts",
