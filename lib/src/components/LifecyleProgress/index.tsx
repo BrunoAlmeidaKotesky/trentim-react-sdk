@@ -1,12 +1,12 @@
 import {useRef, useState, useImperativeHandle, ForwardedRef, useEffect, forwardRef, useCallback} from 'react';
-import {StageBlock, StagesColumn, StageIndicator} from './LifecycleStages';
-import {LifecycleContainer} from './LifecycleContainer';
-import {InformationColumn} from './InfoColumn';
+import {StageBlock, StagesColumn, StageIndicator} from '@components/LifecyleProgress/LifecycleStages';
+import {LifecycleContainer} from '@components/LifecyleProgress/LifecycleContainer';
+import {InformationColumn} from '@components/LifecyleProgress/InfoColumn';
 import {FocusTrapCallout} from '@fluentui/react/lib/Callout';
 import type {ILifecycleProgressProps, ILifecycleProgressRef, LifecycleCallout} from '@models/interfaces/ILifecycleProgressProps';
 import { Icon } from '@fluentui/react/lib/Icon';
-import {useIsOverflow} from '../../hooks/useIsOverflow';
-import type {CSSSizeUnit, CSSNumberFormat} from '../../models/types/UtilityTypes';
+import {useIsOverflow} from '@hooks/useIsOverflow';
+import type {CSSSizeUnit, CSSNumberFormat} from '@models/types/UtilityTypes';
 
 const getScrollSizes = (): [width: number, height: number] => {
     let el= document.createElement('div');

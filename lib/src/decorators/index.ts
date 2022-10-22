@@ -1,3 +1,3 @@
 
-export {Measure} from './Measure';
-export {Catch, DefaultCatch} from './Catch';
+export {Measure} from '@decorators/Measure';
+export {Catch, DefaultCatch} from '@decorators/Catch';

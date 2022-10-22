@@ -1,12 +1,12 @@
 import {forwardRef} from 'react';
-import { useGridController } from './hooks/useGridController';
-import { FilterPanelContext, GroupPanelContext, ListOptionsContext } from './Contexts';
+import { useGridController } from '@components/GridView/hooks/useGridController';
+import { FilterPanelContext, GroupPanelContext, ListOptionsContext } from '@components/GridView/Contexts';
 import { CheckboxVisibility, CollapseAllVisibility, DetailsList, DetailsListLayoutMode } from '@fluentui/react/lib/DetailsList';
 import { Sticky, StickyPositionType } from '@fluentui/react/lib/Sticky';
 import type { IGridListProps, BaseType, IGridViewRefHandler } from '@models/interfaces/IGridView';
-import PanelFilter from './PanelFilter';
-import GroupPanel from './GroupPanel';
-import { ListOptions } from './ListOptions';
+import PanelFilter from '@components/GridView/PanelFilter';
+import GroupPanel from '@components/GridView/GroupPanel';
+import { ListOptions } from '@components/GridView/ListOptions';
 
 declare module "react" {
     function forwardRef<T, P = {}>(

@@ -1,9 +1,9 @@
-import { RangeType } from '@models/enums';
+import { RangeType } from '@helpers/enums';
 import { Slider, ISliderProps } from '@fluentui/react/lib/Slider';
 import { DatePicker } from '@fluentui/react/lib/DatePicker';
 import type { IDateSliderProps } from '@models/interfaces/IDateSlider';
 import { useContext, useEffect, useState, memo, useMemo } from 'react';
-import { FilterPanelContext } from './Contexts';
+import { FilterPanelContext } from '@components/GridView/Contexts';
 
 function DateSliderComponent(props: IDateSliderProps) {
     const [displayDatePicker, setDisplayDatePicker] = useState(false);

@@ -1,9 +1,9 @@
 import { getDeepValue } from '@helpers/objectUtils';
 import { useState, useEffect, useMemo, useImperativeHandle, useCallback, useRef } from 'react';
-import { GridViewFilter } from '../handlers/GridViewFilter';
-import { GridViewGrouping } from '../handlers/GridViewGrouping';
-import { GridViewMapper } from '../handlers/GridViewMapper';
-import { IconClickCaller, GroupOrder } from '@models/enums';
+import { GridViewFilter } from '@components/GridView/handlers/GridViewFilter';
+import { GridViewGrouping } from '@components/GridView/handlers/GridViewGrouping';
+import { GridViewMapper } from '@components/GridView/handlers/GridViewMapper';
+import { IconClickCaller, GroupOrder } from '@helpers/enums';
 import { createNewSortInstance } from 'fast-sort';
 import type { IGridListProps, IRow, TColumn, BaseType, IGridViewRefHandler } from '@models/interfaces/IGridView';
 import type { IListOptionsProps } from '@models/interfaces/IListOptions';

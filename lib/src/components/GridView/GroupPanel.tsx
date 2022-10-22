@@ -1,6 +1,6 @@
 import { ChoiceGroup, DefaultButton, Panel, PrimaryButton } from '@fluentui/react';
 import { useContext, memo } from 'react';
-import { GroupPanelContext } from './Contexts';
+import { GroupPanelContext } from '@components/GridView/Contexts';
 
 function GroupPanel() {
     const { isOpen, panelTitle, onApply, onCancel, onClose, options, selectedGroupKeys, setSelectedGroupKeys, top, footer } = useContext(GroupPanelContext);

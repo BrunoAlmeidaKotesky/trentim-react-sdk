@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { TooltipContentContainer } from './TooltipContentContainer';
+import { TooltipContentContainer } from '@components/Tooltip/TooltipContentContainer';
 
 export const TooltipWrapper = styled.div`
     position: relative;

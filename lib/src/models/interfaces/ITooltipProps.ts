@@ -1,4 +1,4 @@
-import type { TooltipDirectionValues } from "../types/Common";
+import type { TooltipDirectionValues } from "@models/types/Common";
 
 export interface ITooltipProps {
     /**

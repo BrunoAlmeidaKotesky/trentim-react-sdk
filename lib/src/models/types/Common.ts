@@ -1,7 +1,7 @@
-import type { SelectedItemsMap } from "../interfaces/IPanelFilter";
-import type { BaseType, IRow } from "../interfaces/IGridView";
+import type { SelectedItemsMap } from "@models/interfaces/IPanelFilter";
+import type { BaseType, IRow } from "@models/interfaces/IGridView";
 import type { Dispatch, MutableRefObject, SetStateAction } from "react";
-import type { Paths } from "../types/UtilityTypes";
+import type { Paths } from "@models/types/UtilityTypes";
 import type { ReactNode } from "react";
 import type { IButtonProps } from "@fluentui/react/lib/Button";
 

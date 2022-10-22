@@ -1,7 +1,7 @@
 import {Panel, PrimaryButton, DefaultButton, Dropdown, Label, TagPicker} from '@fluentui/react';
-import {DateSlider} from './DateSlider';
-import {PeoplePicker} from './PeoplePicker';
-import {usePanelFilterController} from './hooks/usePanelFilterController';
+import {DateSlider} from '@components/GridView/DateSlider';
+import {PeoplePicker} from '@components/GridView/PeoplePicker';
+import {usePanelFilterController} from '@components/GridView/hooks/usePanelFilterController';
 import { memo } from 'react';
 
 function PanelFilter() {

@@ -1,6 +1,6 @@
 import { useContext, useRef, useEffect } from 'react';
-import { FilterPanelContext } from '../Contexts';
-import { RangeType } from '@models/enums';
+import { FilterPanelContext } from '@components/GridView/Contexts';
+import { RangeType } from '@helpers/enums';
 import type { FilterOption } from '@models/interfaces/IPanelFilter';
 import type { ITag } from '@fluentui/react/lib/Pickers';
 import type { IPersonaProps } from '@fluentui/react/lib/Persona';

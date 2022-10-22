@@ -1,6 +1,6 @@
-import type { IPanelChildrenPosition } from './ICommonPanel';
-import type { IConfigurableHeader } from "./IListOptions";
-import type { ApplyCustomFilter, FilterComponent, CancelActivation, ColumnKey, IDateConversionOptions } from '../types/Common';
+import type { IPanelChildrenPosition } from '@models/interfaces/ICommonPanel';
+import type { IConfigurableHeader } from '@models/interfaces/IListOptions';
+import type { ApplyCustomFilter, FilterComponent, CancelActivation, ColumnKey, IDateConversionOptions } from '@models/types/Common';
 import type { Dispatch, SetStateAction } from "react";
 import type { IColumn, IDetailsListProps, IGroup } from "@fluentui/react";
 

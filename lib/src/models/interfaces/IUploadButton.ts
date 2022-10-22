@@ -1,5 +1,5 @@
 import type { IButtonStyles } from "@fluentui/react/lib/Button";
-import type { ICustomButtonConfig } from "../types/Common";
+import type { ICustomButtonConfig } from "@models/types/Common";
 
 export interface IUploadButton extends Omit<ICustomButtonConfig, 'onRenderCustomButton'> {
     /**An array of accepted mime-types. */

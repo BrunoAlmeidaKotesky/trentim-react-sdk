@@ -1,7 +1,7 @@
 import type { IButtonProps } from "@fluentui/react/lib/Button";
-import type { IconClickCaller } from "@models/enums";
-import type { IGridClickActions, IRow } from "./IGridView";
-import type { ColumnKey, ICustomButtonConfig } from '../types/Common';
+import type { IconClickCaller } from "@helpers/enums";
+import type { IGridClickActions, IRow } from "@models/interfaces/IGridView";
+import type { ColumnKey, ICustomButtonConfig } from '@models/types/Common';
 import type { ITextFieldProps } from "@fluentui/react/lib/TextField";
 
 export interface ICustomButtons extends ICustomButtonConfig {

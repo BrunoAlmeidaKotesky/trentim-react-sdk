@@ -1,8 +1,8 @@
-import { StickerCardContainer, StickerCardItem, CardItemWrapper } from "./styles";
-import { CardHeader } from "./CardHeader";
+import { StickerCardContainer, StickerCardItem, CardItemWrapper } from "@components/StickerCard/styles";
+import { CardHeader } from "@components/StickerCard/CardHeader";
 import { IStickerCardProps } from "@models/interfaces/IStickerCardProps";
-import { useStickerCardController } from "./useStickerCardController";
-import CardSticker from "./CardSticker";
+import { useStickerCardController } from "@components/StickerCard/useStickerCardController";
+import CardSticker from "@components/StickerCard/CardSticker";
 import { useMemo } from "react";
 
 export function StickerCard<T extends any>(props: IStickerCardProps<T>) {

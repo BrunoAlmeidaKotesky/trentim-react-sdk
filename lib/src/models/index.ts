@@ -1,9 +1,8 @@
-export * from './interfaces/IGridView';
-export * from './types/UtilityTypes';
-export * from './interfaces/IListOptions';
-export * from './interfaces/IUploadButton';
-export * from './interfaces/ILifecycleProgressProps';
-export * from './types/Common';
-export * from './types/UtilityTypes';
-export * from './interfaces/IStickerCardProps';
-export {};
+export * from '@models/interfaces/IGridView';
+export * from '@models/types/UtilityTypes';
+export * from '@models/interfaces/IListOptions';
+export * from '@models/interfaces/IUploadButton';
+export * from '@models/interfaces/ILifecycleProgressProps';
+export * from '@models/types/Common';
+export * from '@models/types/UtilityTypes';
+export * from '@models/interfaces/IStickerCardProps';

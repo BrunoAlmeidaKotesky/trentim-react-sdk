@@ -1,5 +1,5 @@
-import * as React from 'react';
-import { useWindowSize } from './useWindowSize';
+import { useState, useLayoutEffect } from 'react';
+import { useWindowSize } from '@hooks/useWindowSize';
 
 type OverflowObserverHook = 
     <RefType extends HTMLElement = HTMLElement>(
@@ -8,7 +8,7 @@ type OverflowObserverHook =
     callback?: (hasOverflow: boolean, elementSizes?: {clientWidth: number, scrollWidth: number, clientHeight: number, scrollHeight: number}, setIsOverflow?: React.Dispatch<React.SetStateAction<boolean>>) => void) => boolean;
 
 export const useIsOverflow:OverflowObserverHook = (ref, isVerticalOverflow = false, callback) => {
-    const [isOverflow, setIsOverflow] = React.useState<boolean>(undefined);
+    const [isOverflow, setIsOverflow] = useState<boolean>(undefined);
     const {width} = useWindowSize();
 
     const effectCb = () => {
@@ -24,7 +24,7 @@ export const useIsOverflow:OverflowObserverHook = (ref, isVerticalOverflow = fal
             trigger();
     }
 
-    React.useLayoutEffect(effectCb, [ref, callback, isVerticalOverflow, width]);
+    useLayoutEffect(effectCb, [ref, callback, isVerticalOverflow, width]);
 
     return isOverflow;
 }

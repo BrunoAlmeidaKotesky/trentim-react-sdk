@@ -1,5 +1,5 @@
 import { getDeepValue } from '@helpers/objectUtils';
-import { GridViewMapper } from './GridViewMapper';
+import { GridViewMapper } from '@components/GridView/handlers/GridViewMapper';
 import type { IRow, TColumn } from '@models/interfaces/IGridView';
 import type { ApplyFilter, SearchItem } from '@models/types/Common';
 import type { FilterOption, IAvailableFilters } from '@models/interfaces/IPanelFilter';

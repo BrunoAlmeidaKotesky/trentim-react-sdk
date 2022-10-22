@@ -4,7 +4,7 @@ import {
 } from "@fluentui/react";
 import { ICardStickerProps } from "@models/interfaces/IStickerCardProps";
 import { useState, useEffect, useMemo, memo } from "react";
-import { CardStickerWrapper } from "./styles";
+import { CardStickerWrapper } from "@components/StickerCard/styles";
 
 const Sticker = ({ sticker, onChange, onChangeOrder, onDelete, isEditEnabled, stickerBgColor, renderedNow }: ICardStickerProps) => {
   const [editMode, setIsEditMode] = useState(isEditEnabled ? renderedNow : false);

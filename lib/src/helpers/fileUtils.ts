@@ -1,4 +1,4 @@
-import { ConversionOptions } from "./ConverterOptions";
+import { ConversionOptions } from "@helpers/ConverterOptions";
 import type { IBlobStringWritter as IBlobStringWriter, IFileInfo } from "@models/interfaces/IFileInfo";
 
 /**

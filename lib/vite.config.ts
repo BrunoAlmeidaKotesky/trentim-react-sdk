@@ -12,7 +12,6 @@ const generateComponentsEntries = () => {
         const name = component.split('.')[0];
         entries[name] = resolve(__dirname, `src/components/${component}`);
     }
-    console.log(entries);
     return entries;
 }
 
@@ -25,10 +24,47 @@ export default defineConfig({
             outputDir: 'dist',
             beforeWriteFile: (path, content) => {
                 //console.log(path);
-                //const folderReg = /(\/models|\/helpers|\/hooks|\/decorators|\/components)/g;
-                //let filePath = path.replace('/src/', '/').replace(folderReg, '');
-                //console.log(filePath);
-                //return {filePath, content};
+                //Replace by the name of the folder
+                let filePath = path;
+                const splittedPath = path.split('/').map(p => p);
+                const lastItem = splittedPath[splittedPath.length - 1];
+                const beforeLastItem = splittedPath[splittedPath.length - 2];
+                const component = splittedPath[splittedPath.length - 3];
+                if (lastItem === 'index.d.ts') {
+                    //Write an copy file, but at one upper level with the name of the beforeLastItem
+                    const createContent = (path: string) => `export * from './dist/${path}/index'`;
+                    let newContent = component.toLowerCase() === 'components' ? createContent(`components/${beforeLastItem}`) : createContent(beforeLastItem);
+                    fs.writeFileSync(`${__dirname}/${beforeLastItem}.d.ts`, newContent);
+                }
+                return { path, content };
+            },
+            afterBuild: () => {
+                //Copy every `[file].d.ts` from dist to the root of __dirname and then create a index.d.ts that ///references this files
+                const files = fs.readdirSync(resolve(__dirname));
+                const dtsFiles = files.filter(f => f.endsWith('.d.ts'));
+                const packageJson = require(resolve(__dirname, 'package.json'));
+                packageJson.files = ['dist'];
+                packageJson.exports = {};
+                for (const file of dtsFiles) {
+                    const destPath = resolve(__dirname, `${file}`);
+                    fs.copyFileSync(resolve(__dirname, file), destPath);
+                    //Then update package.json `files` to include all this files
+                    packageJson.files = [...packageJson.files, file];
+                    //update all package.json `exports` to include the keys with the file name with import and require
+                    const exports = packageJson.exports;
+                    exports[`./${file.replace('.d.ts', '')}`] = {
+                        import: `./dist/${file.replace('.d.ts', '.es.js')}`,
+                        require: `./dist/${file.replace('.d.ts', '.cjs.js')}`
+                    }
+                    fs.writeFileSync(resolve(__dirname, 'package.json'), JSON.stringify(packageJson, null, 2));
+                }
+                let indexContent = '';
+                for (const file of dtsFiles) {
+                    if (file !== 'index.d.ts')
+                        indexContent += `/// <reference path="${file}" />\n`;
+                }
+                fs.writeFileSync(resolve(__dirname, 'index.d.ts'), indexContent);
+
             }
         }),
         visualizer({
@@ -57,7 +93,7 @@ export default defineConfig({
             },
             name: 'trentim-react-sdk',
             formats: ['es', 'cjs'],
-            fileName: (format) => `[name].${format}.js`,
+            fileName: (format) => { return `[name].${format}.js` },
         },
         rollupOptions: {
             external: ['react', 'react-dom', 'styled-components'],

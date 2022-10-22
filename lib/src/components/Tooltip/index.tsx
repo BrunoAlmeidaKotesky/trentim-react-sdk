@@ -1,5 +1,5 @@
-import {TooltipWrapper} from './TooltipWrapper';
-import {TooltipContentContainer} from './TooltipContentContainer';
+import {TooltipWrapper} from '@components/Tooltip/TooltipWrapper';
+import {TooltipContentContainer} from '@components/Tooltip/TooltipContentContainer';
 import type {ITooltipProps, LeftTypes, TTDirectionMap} from '@models/interfaces/ITooltipProps';
 import { useRef, useState, useMemo, useEffect } from 'react';
 

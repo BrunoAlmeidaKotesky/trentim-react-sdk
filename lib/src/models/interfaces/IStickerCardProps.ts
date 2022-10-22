@@ -1,4 +1,4 @@
-import { CSSNumberFormat } from "../types/UtilityTypes";
+import { CSSNumberFormat } from "@models/types/UtilityTypes";
 
 export interface IStickerItem<T = any> {
     id: number | string;
