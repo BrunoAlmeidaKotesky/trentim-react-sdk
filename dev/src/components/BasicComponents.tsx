@@ -1,5 +1,5 @@
 import {Tooltip} from 'trentim-react-sdk/components';
-import {IFrame} from 'trentim-react-sdk/components';
+import {ApplyFilter} from 'trentim-react-sdk/lib/models';
 import type { TooltipDirectionValues } from 'trentim-react-sdk/models';
 import { useEffect, useState } from 'react';
 import { StickerCard } from 'trentim-react-sdk/components';
