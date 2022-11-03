@@ -1,8 +1,8 @@
-import {Tooltip} from 'trentim-react-sdk/components';
-import {ApplyFilter} from 'trentim-react-sdk/lib/models';
-import type { TooltipDirectionValues } from 'trentim-react-sdk/models';
+import {Tooltip} from '@components/Tooltip';
+import type { TooltipDirectionValues } from '@models/index';
 import { useEffect, useState } from 'react';
-import { StickerCard } from 'trentim-react-sdk/components';
+import { StickerCard } from '@components/StickerCard';
+import { IFrame } from '@components/IFrame';
 
 export default function BaseComponents() {
     const [direct, setDirection] = useState<TooltipDirectionValues>('bottom_center');

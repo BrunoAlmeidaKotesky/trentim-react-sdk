@@ -90,6 +90,7 @@ export default defineConfig({
                 decorators: resolve(__dirname, 'src/decorators/index.ts'),
                 hooks: resolve(__dirname, 'src/hooks/index.ts'),
                 models: resolve(__dirname, 'src/models/index.ts'),
+                index: resolve(__dirname,'src/index.ts'),
             },
             name: 'trentim-react-sdk',
             formats: ['es', 'cjs'],

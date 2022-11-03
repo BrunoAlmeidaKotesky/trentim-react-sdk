@@ -1,84 +1,48 @@
-import { useRef, useState } from "react";
-import { LifecycleProgress } from "trentim-react-sdk/lifecycleprogress";
+import { LifecycleProgress } from "@components/LifecycleProgress";
 import { initializeIcons } from '@fluentui/font-icons-mdl2';
-import {mockStages, SubStage} from './constants';
-import { ILifecycleProgressProps, ILifecycleProgressRef } from "trentim-react-sdk/models";
+import { Slider } from "@fluentui/react";
+import { useState } from "react";
+import { mockStages } from './constants';
 
 initializeIcons();
-
-export function LifecycleTests({height}: {height?: string} = {height: '100%'}) {
-    const calloutRef = useRef<ILifecycleProgressRef>(null);
-    const [calloutStateItems, setCalloutStateItems] = useState<JSX.Element>(null);
-    const lifeCycleProps: ILifecycleProgressProps<SubStage[]> = {
-        infoContent: (
-        <div style={{
-            textAlign: 'left',
-            display: 'flex',
-            flexFlow: 'column'
-        }}>
-            <span style={{
-                fontFamily: 'Segoe UI,Tahoma,Geneva,Verdana,sans-serif',
-                fontStyle: 'normal',
-                fontSize: 14,
-                color: '#fff',
-                margin: 0,
-                lineHeight: 1,
-                marginBottom: 8
-            }}>Project Process</span>
-            <span style={{
-               fontFamily: 'Segoe UI,Tahoma,Geneva,Verdana,sans-serif',
-               fontStyle: 'normal',
-               fontWeight: 400,
-               fontSize: 14,
-               color: '#fff',
-               margin: 0 ,
-               lineHeight: 1
-            }}>Active for 7 Days</span>
-        </div>),
-        onStageClick: (stage) => {
-            setCalloutStateItems(<>
-                {<div style={{display: 'grid', gridTemplateRows: '1fr', borderBottom: '1px solid #D8D8D8'}}>
-                    <div style={{display: 'flex', justifyContent: 'space-between', lineBreak: 'auto'}}><span>{stage?.label}</span><span>{stage.completed ? 'Finalizado' : ''}</span></div>
-                </div>}
-                <div style={{display: 'grid', gridTemplateRows: '1fr', borderBottom: '1px solid #D8D8D8', gap: 12, padding: '8px 0'}}>
-                    {stage?.data?.map(s => (
-                        <div style={{display: 'flex', justifyContent: 'space-between'}}>
-                            <span style={{fontWeight: s?.active ? 'bold' : 'normal'}}>{s.name}</span><span style={{fontWeight: s?.active ? 'bold' : 'normal'}}>{s?.description}</span>
-                        </div>
-                    ))}
-                </div>
-            </>);
-        },
-        stages: mockStages,
-        showCalloutOnClick: true,
-        calloutContent: 
-        (<div style={{
-            width: 300, backgroundColor: '#fff', display: 'flex', padding: 14,
-            flexDirection: 'column', alignItems: 'flex-start', border: '1px solid #D8D8D8', boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.5)'
-        }}>
-            <div style={{display: 'flex', flexDirection: 'column'}}>
-                
-                {calloutStateItems}
-                <div style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    padding: '7px 14px',
-                    gap: '10px',
-                    alignItems: 'center'
-                }}>
-                    <button style={{width: '100%'}}>Próximo estágio</button>
-                    <button style={{width: '100%'}} onClick={() => {
-                        if(calloutRef?.current?.setCallout)
-                            calloutRef.current.setCallout({isVisible : false, calloutIdx: null});
-                    }}>Paralisar projeto</button>
-                </div>
-            </div>
-        </div>)
-    }
+export function LifecycleTests({ height }: { height?: string } = { height: '100%' }) {
+    const [width, setWidth] = useState(1280);
 
     return (
-        <div style={{ width: 1543, height, margin: '0 auto' }}>
-            <LifecycleProgress ref={calloutRef} {...lifeCycleProps}/>
+        <div style={{ width: '100%', height, margin: '0 auto' }}>
+            <Slider min={0} max={3280} value={width} onChange={v => setWidth(v)}/>
+            <div style={{width, margin: 'auto', marginTop: 50}}>
+            <LifecycleProgress
+                leftColumnSubtitle="Atualizado em 23/10/2022"
+                leftColumnTitle="Ciclo de Vida do Projeto"
+                stages={mockStages}
+                indicatorColor="rgb(0, 99, 55)"
+                buttonColor="rgb(44, 201, 130)"
+                onStageClick={(stage, idx, setCallout, ev) => {
+                    console.log(stage, idx, setCallout, ev);
+                }}
+                showCalloutOnlyOnActive={false}
+                alwaysShowCallout={false}
+                calloutContent={<Callout/>} />
+            </div>
         </div>
     )
 }
+
+const Callout = () => (<div style={{
+    width: 300, backgroundColor: '#fff', display: 'flex', padding: 14,
+    flexDirection: 'column', alignItems: 'flex-start', border: '1px solid #D8D8D8', boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.5)'
+}}>
+    <div style={{ display: 'flex', flexDirection: 'column' }}>
+        <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            padding: '7px 14px',
+            gap: '10px',
+            alignItems: 'center'
+        }}>
+            <button style={{ width: '100%' }}>Próximo estágio</button>
+            <button style={{ width: '100%' }} onClick={() => {}}>Paralisar projeto</button>
+        </div>
+    </div>
+</div>)

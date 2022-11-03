@@ -13,7 +13,7 @@ export interface ICustomButtons extends ICustomButtonConfig {
     className?: string,
     /**Text to display on the button. */
     text: string;
-};
+}
 
 export interface IHeaderButtonProps extends Omit<Partial<IButtonProps>, 'onClick'> {}
 export interface IHeaderTextFieldProps extends Omit<Partial<ITextFieldProps>, 'onBlur' | 'onFocus' | 'onKeyDown' | 'placeholder'> {}

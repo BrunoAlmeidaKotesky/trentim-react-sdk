@@ -42,7 +42,7 @@
     "jsx": "react-jsx",
     "baseUrl": "./",
     "paths": {
-      "@/*": [
+      "@": [
         "src/*"
       ],
       "@models/*": [

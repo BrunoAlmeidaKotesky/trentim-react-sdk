@@ -1,9 +1,11 @@
-import { Route, BrowserRouter, Link, Routes, useParams } from 'react-router-dom';
+import { Route, BrowserRouter, Link, Routes } from 'react-router-dom';
 import Grids from './components/Grids';
 import Basics from './components/BasicComponents';
 import './App.css'
 import { LifecycleTests } from './components/LifecycleTests';
+import { initializeIcons } from '@fluentui/react';
 
+initializeIcons();
 function App() {
   return (
     <div className="App">

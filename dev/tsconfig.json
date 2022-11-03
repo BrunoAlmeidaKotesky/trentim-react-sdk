@@ -16,7 +16,28 @@
     "noImplicitAny": false,
     "strictNullChecks": false,
     "noEmit": true,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "baseUrl": "../lib",
+    "paths": {
+      "@": [
+        "src/*"
+      ],
+      "@models/*": [
+        "src/models/*"
+      ],
+      "@helpers/*": [
+        "src/helpers/*"
+      ],
+      "@components/*": [
+        "src/components/*"
+      ],
+      "@hooks/*": [
+        "src/hooks/*"
+      ],
+      "@decorators/*": [
+        "src/decorators/*"
+      ]
+    },
   },
   "include": ["src"],
   "references": [{ "path": "./tsconfig.node.json" }]

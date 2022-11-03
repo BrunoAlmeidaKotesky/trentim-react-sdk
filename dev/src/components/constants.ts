@@ -1,4 +1,4 @@
-import { ILifecycleStages } from "../../../src/models/interfaces/ILifecycleProgressProps";
+import { ILifecycleStages } from "@models/interfaces/ILifecycleProgressProps";
 
 export const simpleRow = [
 {
@@ -238,13 +238,14 @@ export interface SubStage {
 export const mockStages: ILifecycleStages<SubStage[]>[] = [
     {
         active: false, 
-        label: "Iniciação", 
+        label: "Um texto muito grande blablablablablas", 
         data: [
             {name: '1A. Business Case', description: 'Lorem Ipsum', active: false, completed: false}, 
             {name: '1B. Revisão Comitê Executivo', description: 'Lorem Ispum', active: false, completed: true},
             {name: '1C. Revisão Comitê Financeiro', description: 'Lorem Ipsum', active: false, completed: true},
         ], 
-        completed: true
+        completed: true,
+        order: 1
     },
     {
         active: false,
@@ -253,7 +254,8 @@ export const mockStages: ILifecycleStages<SubStage[]>[] = [
         data: [
             {name: '2A. Seleção de Projetos', description: 'Lorem Ipsum', active: false, completed: true},
             {name: '2B. Revisão Comitê Executivo', description: 'Lorem Ipsum', active: false, completed: true}, 
-        ]
+        ],
+        order: 2
     },
     {
         active: false,
@@ -261,7 +263,8 @@ export const mockStages: ILifecycleStages<SubStage[]>[] = [
         completed: true,
         data: [
             {name: '3A. Planejamento', description: 'Lorem Ipsum', active: false, completed: true},
-        ]
+        ],
+        order: 3
     },
     {
         active: true,
@@ -270,7 +273,9 @@ export const mockStages: ILifecycleStages<SubStage[]>[] = [
         data: [
             {name: '4A. Execução de Projetos', description: 'Lorem Ipsum', active: true, completed: true},
             {name: '4B. Revisão Comitê Executivo', description: 'Lorem Ipsum', active: false, completed: true},
-        ]
+        ],
+        order: 4,
+        showCallout: true
     },
     {
         active: false,
@@ -279,7 +284,9 @@ export const mockStages: ILifecycleStages<SubStage[]>[] = [
         data: [
             {name: '5A. Encerramento', description: 'Lorem Ipsum', active: false, completed: true},
             {name: '5B. Revisão Comitê Executivo', description: 'Lorem Ipsum', active: false, completed: true}
-        ]
+        ],
+        order: 5,
+        showCallout: true
     },
     {
         active: false,
@@ -288,7 +295,8 @@ export const mockStages: ILifecycleStages<SubStage[]>[] = [
         data: [
             {name: '6A. Conclusão', description: 'Lorem Ipsum', active: false, completed: false},
             {name: '6B. Revisão Comitê Executivo', description: 'Lorem Ipsum', active: false, completed: false}
-        ]
+        ],
+        order: 6
     },
     {
         active: false,
@@ -297,6 +305,7 @@ export const mockStages: ILifecycleStages<SubStage[]>[] = [
         data: [
             {name: '7A. Cancelamento', description: 'Lorem Ipsum', active: false, completed: false},
             {name: '7B. Revisão Comitê Executivo', description: 'Lorem Ipsum', active: false, completed: false}
-        ]
+        ],
+        order: 7
     }
 ];

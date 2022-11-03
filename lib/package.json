@@ -28,6 +28,7 @@
     "StickerCard.d.ts",
     "Tooltip.d.ts",
     "decorators.d.ts",
+    "dist.d.ts",
     "helpers.d.ts",
     "hooks.d.ts",
     "index.d.ts",
@@ -62,6 +63,10 @@
     "./decorators": {
       "import": "./dist/decorators.es.js",
       "require": "./dist/decorators.cjs.js"
+    },
+    "./dist": {
+      "import": "./dist/dist.es.js",
+      "require": "./dist/dist.cjs.js"
     },
     "./helpers": {
       "import": "./dist/helpers.es.js",
