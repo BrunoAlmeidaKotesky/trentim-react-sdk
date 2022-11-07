@@ -1,12 +1,12 @@
 import { IButtonStyles } from '@fluentui/react/lib/Button';
 import type { ICalloutProps } from '@fluentui/react/lib/Callout';
-import type { Dispatch, SetStateAction } from 'react';
+import type { Dispatch, ReactNode, SetStateAction } from 'react';
 
 export type LifecycleCallout = {isVisible: boolean, calloutIdx: number};
 export type ILifecycleProgressRef = {
     /**Not exactly necessary on v4, since with `showCalloutOnlyOnActive`, `alwaysShowCallout`, `ILifecycleStages['showCallout']`,
      * and `onStageClick` behavior will always make sure to hide or show the callout when necessary.`*/
-    setCallout: React.Dispatch<React.SetStateAction<LifecycleCallout>>
+    setCallout: Dispatch<SetStateAction<LifecycleCallout>>
 };
 
 export interface ILifecycleStages<T = any> {
@@ -19,7 +19,9 @@ export interface ILifecycleStages<T = any> {
      * and dynamically want to show/hide the callout depending on the stage.
      */
     showCallout?: boolean;
-    /**This property is preferred to be used internally only, controlling which items show be visible on the Progress. */
+    /**This property is used internally only, controlling which items show be visible on the Progress. 
+     * Please **do not change** this property when changing the state.
+    */
     hidden?: boolean;
 }
 
@@ -37,7 +39,7 @@ export interface ILifecycleProgressProps<StageData = any> {
     /**What will be rendered inside the `<Callout/>` component of the LifecycleProgress selected stage. 
      * Same as `calloutProps.children`
     */
-    calloutContent: React.ReactNode;
+    calloutContent: ReactNode;
     /**Default `@fluentui/react` `<Callout/>` props. */
     calloutProps?: ICalloutProps;
     /**The text to be rendered on the title of the left column */
@@ -55,11 +57,11 @@ export interface ILifecycleProgressProps<StageData = any> {
     /**Custom styles for the right arrow button*/
     rightScrollButtonStyles?: IButtonStyles;
     /**
-     * @default false
-     * If true, the callout will always be shown, even if on the currentStage the showCallout is falsy */
+     * If true, the callout will always be shown, even if on the currentStage the showCallout is falsy 
+     *@default false*/
     alwaysShowCallout?: boolean;
     /** 
-     * @default false
-     * If true, the callout will only be shown if the current clicked stage is active, ignoring `showCallout` from this and other stages.*/
+     * If true, the callout will only be shown if the current clicked stage is active, ignoring `showCallout` from this and other stages.
+    *@default false*/
     showCalloutOnlyOnActive?: boolean;
 }

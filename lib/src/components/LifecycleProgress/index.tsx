@@ -55,10 +55,8 @@ function LifecycleProgressInner<StageData = any>(props: ILifecycleProgressProps<
             if(props?.stages.length >= 2) return setGridRowNumber(2);
             else return setGridRowNumber(props?.stages.length);
         }
-        if(width <= 411) {
+        if(width <= 411)
             setGridRowNumber(1);
-            
-        }
         else setGridRowNumber(3);
     }
 
@@ -71,7 +69,8 @@ function LifecycleProgressInner<StageData = any>(props: ILifecycleProgressProps<
             const lastVisibleIdx = notHiddenIdxs[notHiddenIdxs.length - 1];
             const firstVisibleIdx = notHiddenIdxs[0];
             if(lastVisibleIdx === visibleStages.length - 1) return;
-            //The item in the firstVisibleIdx should be now be hidden and everything before it, and the next item after lastVisibleIdx should be visible.
+            /*The item in the firstVisibleIdx should be now be hidden and everything before it, 
+            and the next item after lastVisibleIdx should be visible.*/
             setVisibleStages(p => p.map((i, idx) => {
                 if(idx < firstVisibleIdx) return {...i, hidden: true};
                 if(idx === firstVisibleIdx) return {...i, hidden: true};
@@ -86,7 +85,8 @@ function LifecycleProgressInner<StageData = any>(props: ILifecycleProgressProps<
             const lastVisibleIdx = notHiddenIdxs[notHiddenIdxs.length - 1];
             const firstVisibleIdx = notHiddenIdxs[0];
             if(firstVisibleIdx === 0) return;
-            //The item in the lastVisibleIdx should be now be hidden and everything after it, and the next item before firstVisibleIdx should be visible.
+            /*The item in the lastVisibleIdx should be now be hidden and everything after it, 
+            and the next item before firstVisibleIdx should be visible. */
             setVisibleStages(p => p.map((i, idx) => {
                 if(idx > lastVisibleIdx) return {...i, hidden: true};
                 if(idx === lastVisibleIdx) return {...i, hidden: true};
@@ -117,7 +117,11 @@ function LifecycleProgressInner<StageData = any>(props: ILifecycleProgressProps<
     }
 
     useLayoutEffect(() => { setCSSVariables(); verifyGridRowNumber(); }, []);
-    useEffect(() => { setVisibleStages(p => props?.stages.map((i, idx) => ({...i, hidden: p[idx]?.hidden}))) }, [props.stages]);
+    useEffect(() => {
+        //Keep every prop from props.stage, but keep the hidden from visibleStages
+        const newStages = props.stages.map((i, idx) => ({...i, hidden: visibleStages[idx].hidden}));
+        setVisibleStages(newStages);
+    }, [props.stages]);
     useEffect(() => verifyGridRowNumber(), [lifecycleContainer?.current?.clientWidth, visibleStages.length]);
     useEffect(() => {
         if(gridRowNumber === 1) overflowStageText.current = true;
@@ -177,8 +181,7 @@ function LifecycleProgressInner<StageData = any>(props: ILifecycleProgressProps<
                                 active={item.active}
                                 completed={item?.completed}
                                 position={checkTilePosition(idx)}
-                                onStageClick={props.onStageClick}
-                            />
+                                onStageClick={props.onStageClick} />
                         ))}
                         </CalloutCtx.Provider>
                     </div>

@@ -7,6 +7,7 @@ import { mockStages } from './constants';
 initializeIcons();
 export function LifecycleTests({ height }: { height?: string } = { height: '100%' }) {
     const [width, setWidth] = useState(1280);
+    const [stages, setStages] = useState(mockStages);
 
     return (
         <div style={{ width: '100%', height, margin: '0 auto' }}>
@@ -15,13 +16,27 @@ export function LifecycleTests({ height }: { height?: string } = { height: '100%
             <LifecycleProgress
                 leftColumnSubtitle="Atualizado em 23/10/2022"
                 leftColumnTitle="Ciclo de Vida do Projeto"
-                stages={mockStages}
+                stages={stages}
                 indicatorColor="rgb(0, 99, 55)"
                 buttonColor="rgb(44, 201, 130)"
-                onStageClick={(stage, idx, setCallout, ev) => {
-                    console.log(stage, idx, setCallout, ev);
+                onStageClick={(stage, selectedIdx, setCallout, ev) => {
+                    console.log(stage, selectedIdx, setCallout, ev);
+                    if(stage.active) {
+                        const newState = stages.map((s, curIdx, arr) => {
+                            if(curIdx === selectedIdx)
+                                return {...s, active: false, completed: true};
+                            if(curIdx === selectedIdx + 1 && selectedIdx + 1 !== arr.length - 1)
+                                return {...s, active: true};
+                            if(curIdx === selectedIdx && curIdx === arr.length - 1)
+                                return {...s, active: false, completed: true}
+                            if(curIdx === arr.length - 1 && !(s.active || s.completed))
+                                return {...s, active: true, completed: false}
+                            return s;
+                        });
+                        setStages(newState);
+                    }
                 }}
-                showCalloutOnlyOnActive={false}
+                showCalloutOnlyOnActive={true}
                 alwaysShowCallout={false}
                 calloutContent={<Callout/>} />
             </div>

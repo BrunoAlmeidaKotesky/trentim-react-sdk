@@ -170,6 +170,9 @@
 	&.end.active:before {
 		background-color: var(--lifecycle-color);
 	}
+	&.end.completed::before {
+		background-color: var(--lifecycle-color);
+	}
 
 	&.middle.completed:before,
 	&.middle.completed:after {
