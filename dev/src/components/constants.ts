@@ -245,7 +245,6 @@ export const mockStages: ILifecycleStages<SubStage[]>[] = [
             {name: '1C. Revisão Comitê Financeiro', description: 'Lorem Ipsum', active: false, completed: true},
         ], 
         completed: true,
-        order: 1
     },
     {
         active: false,
@@ -255,7 +254,6 @@ export const mockStages: ILifecycleStages<SubStage[]>[] = [
             {name: '2A. Seleção de Projetos', description: 'Lorem Ipsum', active: false, completed: true},
             {name: '2B. Revisão Comitê Executivo', description: 'Lorem Ipsum', active: false, completed: true}, 
         ],
-        order: 2
     },
     {
         active: false,
@@ -264,7 +262,6 @@ export const mockStages: ILifecycleStages<SubStage[]>[] = [
         data: [
             {name: '3A. Planejamento', description: 'Lorem Ipsum', active: false, completed: true},
         ],
-        order: 3
     },
     {
         active: true,
@@ -274,7 +271,6 @@ export const mockStages: ILifecycleStages<SubStage[]>[] = [
             {name: '4A. Execução de Projetos', description: 'Lorem Ipsum', active: true, completed: true},
             {name: '4B. Revisão Comitê Executivo', description: 'Lorem Ipsum', active: false, completed: true},
         ],
-        order: 4,
         showCallout: true
     },
     {
@@ -285,7 +281,6 @@ export const mockStages: ILifecycleStages<SubStage[]>[] = [
             {name: '5A. Encerramento', description: 'Lorem Ipsum', active: false, completed: true},
             {name: '5B. Revisão Comitê Executivo', description: 'Lorem Ipsum', active: false, completed: true}
         ],
-        order: 5,
         showCallout: true
     },
     {
@@ -296,7 +291,6 @@ export const mockStages: ILifecycleStages<SubStage[]>[] = [
             {name: '6A. Conclusão', description: 'Lorem Ipsum', active: false, completed: false},
             {name: '6B. Revisão Comitê Executivo', description: 'Lorem Ipsum', active: false, completed: false}
         ],
-        order: 6
     },
     {
         active: false,
@@ -306,6 +300,5 @@ export const mockStages: ILifecycleStages<SubStage[]>[] = [
             {name: '7A. Cancelamento', description: 'Lorem Ipsum', active: false, completed: false},
             {name: '7B. Revisão Comitê Executivo', description: 'Lorem Ipsum', active: false, completed: false}
         ],
-        order: 7
     }
 ];
