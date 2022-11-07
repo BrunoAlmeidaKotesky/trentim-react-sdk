@@ -6,7 +6,6 @@
 /// <reference path="StickerCard.d.ts" />
 /// <reference path="Tooltip.d.ts" />
 /// <reference path="decorators.d.ts" />
-/// <reference path="dist.d.ts" />
 /// <reference path="helpers.d.ts" />
 /// <reference path="hooks.d.ts" />
 /// <reference path="models.d.ts" />

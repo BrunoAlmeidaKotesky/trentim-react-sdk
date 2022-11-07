@@ -1,4 +1,4 @@
-import * as React from 'react';
+
 import { ComponentStory, Meta } from '@storybook/react';
 import {Card, ICardProps} from 'trentim-react-sdk';
 

@@ -1,4 +1,4 @@
-import * as React from 'react';
+
 import { GridView } from 'trentim-react-sdk';
 import {Meta, ArgTypes, Args} from '@storybook/react/types-6-0';
 import {

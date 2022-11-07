@@ -19,6 +19,7 @@ export interface ICardStickerProps<T = any> {
     onChange(item: IStickerItem<T>): void;
     onDelete(item: IStickerItem<T>): void;
     onChangeOrder(item: IStickerItem<T>, way: "up" | "down"): void;
+    styles: CSSModuleClasses;
 }
 
 export type CardClassNames = {
@@ -30,7 +31,9 @@ export type CardClassNames = {
 }
 
 export interface IStickerCardProps<StickerData> extends IStickerCardEvents<StickerData> {
-    /**Extra class name to be applied alongside with the styled names */
+    /**
+     * @deprecated - Will be removed, since the library does not use styled-components anymore.
+     * Extra class name to be applied alongside the original classNames */
     classNames?: CardClassNames;
     /**@default inherit */
     height?: CSSNumberFormat | 'inherit' | 'unset';

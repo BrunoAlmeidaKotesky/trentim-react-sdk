@@ -1,3 +1,4 @@
+
 import type { ILifecycleStages, ILifecycleProgressProps } from '@models/interfaces/ILifecycleProgressProps';
 import { Icon } from '@fluentui/react/lib/Icon';
 import { useContext } from 'react';

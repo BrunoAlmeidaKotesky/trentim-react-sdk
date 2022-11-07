@@ -1,15 +1,11 @@
 import type { TooltipDirectionValues } from "@models/types/Common";
-
+import type { ReactNode } from "react";
 export interface ITooltipProps {
-    /**
-     * Use this property to better track the class name of the component, since it's use `styled-components`.
-     */
-    classKey?: React.Key;
-    children: React.ReactNode;
+    children: ReactNode;
     /**
      * The content to display in the tooltip.
      */
-    content: React.ReactNode;
+    content: ReactNode;
     /**
      * @default 'bottom_center'
      */
@@ -25,7 +21,3 @@ export interface ITooltipProps {
      */
     enableParentOverflow?: boolean;
 }
-
-export type LeftTypes = {left: string, afterLeft: string};
-type DirectionSetter = React.Dispatch<React.SetStateAction<LeftTypes>>;
-export type TTDirectionMap = Map<TooltipDirectionValues, DirectionSetter>;

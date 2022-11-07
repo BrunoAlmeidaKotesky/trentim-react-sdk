@@ -1,5 +1,5 @@
 
-import * as React from 'react';
+
 
 export interface IConditionalWrapperProps {
     /**The condition to render the wrapper or not. */

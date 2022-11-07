@@ -1,18 +1,22 @@
+
 import { 
-    TextField, PrimaryButton, Dialog, DialogType, DialogFooter, DefaultButton, 
-    CommandBar, DirectionalHint, ICommandBarItemProps 
+  TextField, PrimaryButton, Dialog, DialogType, DialogFooter, DefaultButton, 
+  CommandBar, DirectionalHint, ICommandBarItemProps 
 } from "@fluentui/react";
 import { ICardStickerProps } from "@models/interfaces/IStickerCardProps";
 import { useState, useEffect, useMemo, memo } from "react";
-import { CardStickerWrapper } from "@components/StickerCard/styles";
 
-const Sticker = ({ sticker, onChange, onChangeOrder, onDelete, isEditEnabled, stickerBgColor, renderedNow }: ICardStickerProps) => {
+const Sticker = ({ sticker, onChange, onChangeOrder, onDelete, isEditEnabled, stickerBgColor, renderedNow, styles }: ICardStickerProps) => {
   const [editMode, setIsEditMode] = useState(isEditEnabled ? renderedNow : false);
   const [item, setItem] = useState(sticker);
   const [confirmDelete, setConfirmDelete] = useState(false);
 
   useEffect(() => { setItem(sticker); }, [sticker]);
   useEffect(() => { onChange(item); }, [item]);
+  useEffect(() => {
+    const root = document.documentElement;
+    root?.style?.setProperty('--card-sticker-wrapper-bgcolor', stickerBgColor ?? '#feffb7');
+  }, [stickerBgColor]);
 
   const overflowItems = useMemo<ICommandBarItemProps[]>(() => {
     if (!isEditEnabled)
@@ -46,7 +50,7 @@ const Sticker = ({ sticker, onChange, onChangeOrder, onDelete, isEditEnabled, st
   }, [isEditEnabled, confirmDelete, editMode, item]);
 
   return (
-    <CardStickerWrapper stickerBgColor={stickerBgColor}>
+    <div className={styles.cardStickerWrapper}>
       {editMode ?
         (<TextField
           autoFocus={true}
@@ -102,6 +106,6 @@ const Sticker = ({ sticker, onChange, onChangeOrder, onDelete, isEditEnabled, st
                 <DefaultButton onClick={() => setConfirmDelete(false)} text="Não" />
               </DialogFooter>
             </Dialog></>)}
-    </CardStickerWrapper>);
+    </div>);
 }
 export default memo(Sticker);

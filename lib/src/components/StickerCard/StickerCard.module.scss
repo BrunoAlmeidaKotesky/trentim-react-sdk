@@ -1,22 +1,21 @@
-import styled from "styled-components"
 
-export const StickerCardContainer = styled.div`
+.stickerCardContainer {
     font-size: 14px;
     vertical-align: middle;
     box-shadow: 2px 4px 10px -5px rgba(0,0,0,.08);
     border: 1px solid #efefef;
     border-radius: 4px;
-`;
+}
 
-export const StickerCardItem = styled.div<{cardBgColor?: string}>`
+.stickerCardItem {
     height: calc(100% - 20px);
     position: relative;
     padding: 0px;
     border-radius: 3px 3px 0px 0px;
-    background-color: ${({cardBgColor}) => cardBgColor ?? '#fff'};
-`;
+    background-color: var(--sticker-card-item-bgcolor);
+}
 
-export const CardItemWrapper = styled.div`
+.cardItemStickerWrapper {
     padding: 12px;
     height: calc(100% - 40px);
     overflow: auto;
@@ -26,7 +25,7 @@ export const CardItemWrapper = styled.div`
     }
     &::-webkit-scrollbar-track {
     background: transparent;
-    border-radius: 6px;
+    border-radius: f6px;
     }
 
     &::-webkit-scrollbar-thumb {
@@ -36,11 +35,11 @@ export const CardItemWrapper = styled.div`
 
     &::-webkit-scrollbar-thumb:hover {
         background: #ccc;
-    }
-`;
+    } 
+}
 
-export const CardStickerWrapper = styled.div<{stickerBgColor?: string}>`
-    background-color: ${({stickerBgColor}) => stickerBgColor ?? '#feffb7'};
+.cardStickerWrapper {
+    background-color: var(--card-sticker-wrapper-bgcolor);
 	padding: 10px;
 	color: black;
 	margin: 0 0 8px;
@@ -55,4 +54,4 @@ export const CardStickerWrapper = styled.div<{stickerBgColor?: string}>`
         right: 10px;
         width: 44px;
   }
-`;
+}

@@ -1,4 +1,4 @@
-import * as React from 'react';
+
 import { Tooltip, ITooltipProps } from 'trentim-react-sdk';
 import {PrimaryButton} from '@fluentui/react';
 import type { ComponentStory, Meta } from '@storybook/react';

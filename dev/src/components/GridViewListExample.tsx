@@ -66,7 +66,7 @@ export function GridViewListExample() {
           onGroupIconClick={() => {console.log("Before Group")}}
           onRenderItemColumn={(i, _idx, col) => {
             if(col.key === 'Title')
-              return <Tooltip content={<div>AAAA</div>} direction='top_right'><span>{i?.Title}</span></Tooltip>
+              return <Tooltip content={<div>AAAA</div>} direction='top_right'><div><span>{i?.Title}</span></div></Tooltip>
             return <span>{i[col.key]}</span>
           }}
           onSearchBoxClick={() => {console.log("Before Search")}}

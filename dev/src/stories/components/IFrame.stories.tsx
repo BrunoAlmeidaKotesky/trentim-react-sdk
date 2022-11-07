@@ -1,4 +1,4 @@
-import * as React from 'react';
+
 import {IFrame, IFrameProps} from 'trentim-react-sdk';
 import type { ComponentStory, Meta } from '@storybook/react';
 

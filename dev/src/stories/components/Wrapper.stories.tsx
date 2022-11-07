@@ -1,4 +1,4 @@
-import * as React from 'react';
+
 import {ConditionalWrapper} from 'trentim-react-sdk';
 
 export default {

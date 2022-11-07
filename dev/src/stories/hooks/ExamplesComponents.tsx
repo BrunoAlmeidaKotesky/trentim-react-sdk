@@ -1,4 +1,4 @@
-import * as React from 'react';
+
 import { ChangeEvent, useState } from "react";
 import { useDebounce, useOuterClick, usePrevious, useWindowSize, useFileUpload } from 'trentim-react-sdk';
 
