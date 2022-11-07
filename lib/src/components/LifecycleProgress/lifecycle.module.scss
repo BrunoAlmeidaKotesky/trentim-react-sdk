@@ -27,6 +27,7 @@
     background-color: var(--lifecycle-left-col-color);
     padding-left: 14px;
     font-size: 14px;
+	text-align: left;
 	.columnTitle {
 		font-weight: 600;
 	}
@@ -140,7 +141,6 @@
 		}
 		.stageIndicator {
 			border-color: var(--lifecycle-color);
-			cursor: pointer;
 		}
 		.stageIndicator:after {
 			content: '';
@@ -164,7 +164,6 @@
 		color: #fff;
 		justify-content: center;
 		align-items: center;
-		cursor: pointer;
 	}
 
 	&.middle.active:before,
@@ -184,6 +183,14 @@
 	color: black;
 	width: 100%;
 	white-space: nowrap;
+}
+
+@media screen and (max-width: 430px) {
+	.tileTitle {
+		width: 100px;
+		text-overflow: ellipsis;
+		overflow: hidden;
+	}
 }
 
 .stageIndicator {

@@ -74,7 +74,7 @@ export const ListOptions = () => {
                         styles={mergeButtonStyles(b?.props?.styles, b?.position)} {...b?.props}>{b?.text}</DefaultButton>);
                 case 'CustomButton': 
                     return b?.onRenderCustomButton(b?.props) ?? null;
-                default: throw new Error("[TRS] - GridView - Invalid renderAs value for custom button");
+                default: console.error("[TRS] - GridView - Invalid renderAs value for custom button");
             }
         })}
         {(enableSearch && searchKeys) && 

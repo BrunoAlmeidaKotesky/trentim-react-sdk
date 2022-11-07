@@ -1,7 +1,7 @@
 import LifecycleTile from './LifecycleTile';
 import { IButtonStyles, IconButton } from '@fluentui/react/lib/Button';
 import styles from './lifecycle.module.scss';
-import type { ILifecycleProgressProps, ILifecycleProgressRef, LifecycleCallout, IInternalLifecycleStages } from '@models/interfaces/ILifecycleProgressProps';
+import type { ILifecycleProgressProps, ILifecycleProgressRef, LifecycleCallout, ILifecycleStages } from '@models/interfaces/ILifecycleProgressProps';
 import { useEffect, useMemo, useRef, useState, useImperativeHandle, forwardRef, ForwardedRef, useLayoutEffect, useCallback } from 'react';
 import { Callout, DirectionalHint } from '@fluentui/react/lib/Callout';
 import { CalloutCtx } from './Context';
@@ -15,9 +15,10 @@ declare module "react" {
 function LifecycleProgressInner<StageData = any>(props: ILifecycleProgressProps<StageData>, ref: ForwardedRef<ILifecycleProgressRef>) {
     const [{isVisible, calloutIdx}, setCallout] = useState<LifecycleCallout>({isVisible: false, calloutIdx: null});
     const lifecycleTrack = useRef<HTMLDivElement>(null);
-    const lifecyleContainer = useRef<HTMLDivElement>(null); 
+    const lifecycleContainer = useRef<HTMLDivElement>(null);
+    const overflowStageText = useRef(false);
     const [gridRowNumber, setGridRowNumber] = useState<number>(1);
-    const [visibleStagesQueue, setVisibleStages] = useState<IInternalLifecycleStages[]>(props?.stages.map(i => ({...i, hidden: true})));
+    const [visibleStages, setVisibleStages] = useState<ILifecycleStages[]>(props?.stages.map(i => ({...i, hidden: true})));
     const iconStyles = useMemo<{right: IButtonStyles, left: IButtonStyles}>(() => {
         const baseStyles: IButtonStyles = ({
             root: {color: 'white', width: 24}, 
@@ -41,7 +42,7 @@ function LifecycleProgressInner<StageData = any>(props: ILifecycleProgressProps<
     }
 
     const verifyGridRowNumber = () => {
-        const width = lifecyleContainer?.current?.clientWidth;
+        const width = lifecycleContainer?.current?.clientWidth;
         if(width >= 1200) {
             if(props?.stages.length >= 4) return setGridRowNumber(4);
             else return setGridRowNumber(props?.stages.length);
@@ -54,58 +55,108 @@ function LifecycleProgressInner<StageData = any>(props: ILifecycleProgressProps<
             if(props?.stages.length >= 2) return setGridRowNumber(2);
             else return setGridRowNumber(props?.stages.length);
         }
-        if(width <= 520) setGridRowNumber(1);
+        if(width <= 411) {
+            setGridRowNumber(1);
+            
+        }
         else setGridRowNumber(3);
     }
 
+    const changeVisibility = (direction: 'left' | 'right') => {
+        if (!lifecycleTrack.current) return; 
+        if(direction === 'right') {
+            const notHiddenIdxs: number[] = [];
+            for(let i = 0; i < visibleStages.length; i++)
+                if(!visibleStages[i].hidden) notHiddenIdxs.push(i);
+            const lastVisibleIdx = notHiddenIdxs[notHiddenIdxs.length - 1];
+            const firstVisibleIdx = notHiddenIdxs[0];
+            if(lastVisibleIdx === visibleStages.length - 1) return;
+            //The item in the firstVisibleIdx should be now be hidden and everything before it, and the next item after lastVisibleIdx should be visible.
+            setVisibleStages(p => p.map((i, idx) => {
+                if(idx < firstVisibleIdx) return {...i, hidden: true};
+                if(idx === firstVisibleIdx) return {...i, hidden: true};
+                if(idx === lastVisibleIdx + 1) return {...i, hidden: false};
+                return i;
+            }));
+        }
+        if (direction === 'left') {
+            const notHiddenIdxs: number[] = [];
+            for(let i = 0; i < visibleStages.length; i++)
+                if(!visibleStages[i].hidden) notHiddenIdxs.push(i);
+            const lastVisibleIdx = notHiddenIdxs[notHiddenIdxs.length - 1];
+            const firstVisibleIdx = notHiddenIdxs[0];
+            if(firstVisibleIdx === 0) return;
+            //The item in the lastVisibleIdx should be now be hidden and everything after it, and the next item before firstVisibleIdx should be visible.
+            setVisibleStages(p => p.map((i, idx) => {
+                if(idx > lastVisibleIdx) return {...i, hidden: true};
+                if(idx === lastVisibleIdx) return {...i, hidden: true};
+                if(idx === firstVisibleIdx - 1) return {...i, hidden: false};
+                return i;
+            }));
+        }
+    }
+
+    const checkTilePosition = useCallback((index: number) => {
+        if (index === 0) return 'start';
+        if (index === visibleStages.length - 1) return 'end';
+        return 'middle';
+    }, [visibleStages]);
+
+    type LFS = ILifecycleStages<any>;
+    const mountNewStages = (minusOneIdx: number, zeroIdx: number, lastIdx: number, middleIdx?: number) => (previousArr: LFS[]): LFS[] => {
+        const activeIdx = previousArr.findIndex(i => i.active);
+        if(activeIdx === -1) return previousArr.map((i, idx) => ({...i, hidden: idx < previousArr.length - minusOneIdx}));
+        if(activeIdx === 0) return previousArr.map((i, idx) => ({...i, hidden: idx > zeroIdx}));
+        if(activeIdx === visibleStages.length - 1) return previousArr.map((i, idx) => ({...i, hidden: idx < visibleStages.length - lastIdx}));
+        return previousArr.map((i, idx) => {
+            const hidden = (middleIdx >= 0) ? 
+            idx < activeIdx - 1 || idx > activeIdx + middleIdx : 
+            idx < activeIdx - 1 || idx > activeIdx;
+            return {...i, hidden};
+        });
+    }
+
     useLayoutEffect(() => { setCSSVariables(); verifyGridRowNumber(); }, []);
-    useEffect(() => verifyGridRowNumber(), [lifecyleContainer?.current?.clientWidth, props?.stages.length]);
+    useEffect(() => { setVisibleStages(p => props?.stages.map((i, idx) => ({...i, hidden: p[idx]?.hidden}))) }, [props.stages]);
+    useEffect(() => verifyGridRowNumber(), [lifecycleContainer?.current?.clientWidth, visibleStages.length]);
     useEffect(() => {
+        if(gridRowNumber === 1) overflowStageText.current = true;
+        else overflowStageText.current = false;
         switch(gridRowNumber) {
             case 1: setVisibleStages(p => p.map((i, idx) => ({...i, hidden: idx !== 0}))); break;
-            case 4:
-                setVisibleStages(p => p.map((i, idx) => ({...i, hidden: idx > 3}))); break;
-            case 3:
-                setVisibleStages(p => p.map((i, idx) => ({...i, hidden: idx > 2}))); break;
-            case 2:
-                setVisibleStages(p => p.map((i, idx) => ({...i, hidden: idx > 1}))); break;
+            case 4: {
+                setVisibleStages(mountNewStages(4, 3, 4, 2)); 
+                break;
+            }
+            case 3: {
+                setVisibleStages(mountNewStages(3, 2 , 3, 1)); 
+                break;
+            }
+            case 2: {
+                setVisibleStages(mountNewStages(2, 1, 2)); 
+                break;
+            }
         }
     }, [gridRowNumber]);
     useEffect(() => setCSSVariables(), [gridRowNumber, props?.indicatorColor, props?.leftColumnColor]);
 
     useImperativeHandle(ref, () => ({ setCallout }), []);
 
-    const checkTilePosition = useCallback((order: number) => {
-        if (order === props?.stages?.[0]?.order) return 'start';
-        if (order === props?.stages[props?.stages.length - 1].order) return 'end';
-        return 'middle';
-    }, [props?.stages]);
-
-    const scrollItem = useCallback((direction: 'left' | 'right') => {
-        if (!lifecycleTrack.current) return; 
-        if(direction === 'left') lifecycleTrack.current.scrollLeft -= 140;
-        if (direction === 'right') lifecycleTrack.current.scrollLeft += 140;
-    }, [lifecycleTrack?.current]);
-
-
     useEffect(() => {
         window.addEventListener('resize', verifyGridRowNumber);
-        return () => {
-            window.removeEventListener('resize', verifyGridRowNumber);
-        };
+        return () => { window.removeEventListener('resize', verifyGridRowNumber); };
     }, []);
 
     return (<>
-        <div ref={lifecyleContainer} className={styles.lifecycle}>
+        <div ref={lifecycleContainer} className={styles.lifecycle}>
             <div className={styles.projectLifecycle}>
                 <span className={styles.columnTitle}>{props.leftColumnTitle}</span>
                 <span className={styles.columnSubTitle}>{props.leftColumnSubtitle}</span>
             </div>
             <div className={styles.lifecycleContainer}>
-                <div className={`${styles.btnLifecycleScroll} ${styles.scrollLeft}`} onClick={() => scrollItem('left')}>
+                <div className={`${styles.btnLifecycleScroll} ${styles.scrollLeft}`} onClick={() => changeVisibility('left')}>
                     <IconButton styles={iconStyles.left} iconProps={{iconName: 'ChevronLeftMed'}} />
                 </div>
-
                 <div className={styles.lifecycleTrackContainer}>
                     <div ref={lifecycleTrack} className={styles.lifecycleTrack}>
                         <CalloutCtx.Provider value={{
@@ -113,27 +164,26 @@ function LifecycleProgressInner<StageData = any>(props: ILifecycleProgressProps<
                             alwaysShowCallout: props?.alwaysShowCallout, 
                             showCalloutOnlyOnActive: props?.showCalloutOnlyOnActive
                         }}>
-                        {visibleStagesQueue?.map((item, idx) => (
+                        {visibleStages?.map((item, idx) => (
                             <LifecycleTile
                                 hidden={item?.hidden}
                                 styles={styles}
-                                key={item?.order}
+                                key={item?.label + idx}
                                 label={item.label}
+                                overflowStageText={overflowStageText.current}
                                 currentIdx={idx}
                                 data={item?.data}
-                                order={item.order}
                                 showCallout={item?.showCallout}
                                 active={item.active}
                                 completed={item?.completed}
-                                position={checkTilePosition(item.order)}
+                                position={checkTilePosition(idx)}
                                 onStageClick={props.onStageClick}
                             />
                         ))}
                         </CalloutCtx.Provider>
                     </div>
                 </div>
-
-                <div className={`${styles.btnLifecycleScroll} ${styles.scrollRight}`} onClick={() => scrollItem('right')}>
+                <div className={`${styles.btnLifecycleScroll} ${styles.scrollRight}`} onClick={() => changeVisibility('right')}>
                     <IconButton styles={iconStyles.right} iconProps={{iconName: 'ChevronRightMed'}} />
                 </div>
             </div>

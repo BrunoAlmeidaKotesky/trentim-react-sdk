@@ -8,6 +8,7 @@ type LifecycleTileProps<T> = ILifecycleStages<T> & Pick<ILifecycleProgressProps,
     currentIdx: number;
 	hidden: boolean;
 	styles: CSSModuleClasses;
+	overflowStageText: boolean;
 };
 
 const LifecycleTile = ({styles, ...props}: LifecycleTileProps<any>) => {
@@ -15,7 +16,7 @@ const LifecycleTile = ({styles, ...props}: LifecycleTileProps<any>) => {
 	const indicatorClass = `${styles.tile} ${styles[`${props.position}`]} ${props.completed ? styles.completed : ''} ${props.active ? styles['active'] : ''} indicator-${props?.currentIdx}`;
 
 	return (
-		<div className={indicatorClass} style={{ order: props.order, display: props?.hidden ? 'none' : 'flex' }}>
+		<div className={indicatorClass} style={{ order: props.currentIdx, display: props?.hidden ? 'none' : 'flex' }}>
 			{props.completed ? (
 				<span className={styles.stageIndicator}>
 					<Icon styles={{root: {width: '100%' }}} iconName='CheckMark' />
@@ -35,7 +36,11 @@ const LifecycleTile = ({styles, ...props}: LifecycleTileProps<any>) => {
 					onStageClick(rest, currentIdx, setCallout, ev);
 				}
             }}>
-				<span className={styles.tileTitle}>{props.label}</span>
+				<span 
+					className={styles.tileTitle} 
+					style={props.overflowStageText ? {textOverflow: 'ellipsis', width: 100, overflow: 'hidden'} : {}}>
+					{props.label}
+				</span>
 			</div>
 		</div>
 	);
