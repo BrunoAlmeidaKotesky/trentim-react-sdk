@@ -1,6 +1,7 @@
 
+import React from "react";
 import { ChangeEvent, useState } from "react";
-import { useDebounce, useOuterClick, usePrevious, useWindowSize, useFileUpload } from 'trentim-react-sdk';
+import { useDebounce, useOuterClick, usePrevious, useWindowSize, useFileUpload } from 'trentim-react-sdk/hooks';
 
 export function DebounceExample() {
     const [value, setValue] = useState<string>('');
@@ -21,6 +22,7 @@ export function OuterClickExample() {
     const buttonRef = useOuterClick<HTMLButtonElement>(
         (_pointerEv) => setClickLabel('outside'),
         (pointerEv) => {
+            //@ts-ignore
             if (pointerEv.target?.['id'] === 'outer-hook-cancel-button') {
                 setClickLabel('cancelled');
                 return true;
@@ -63,7 +65,7 @@ export function SizeExample() {
 
 export function UseFileEx() {
     const { onUpload, elementRef, onDropFile, isDroppingFile } = useFileUpload();
-    const [currentFile, setFile] = useState<File>(null);
+    const [currentFile, setFile] = useState<File | null>(null);
     const [count, setCount] = React.useState(1);
 
     React.useEffect(() => {

@@ -2873,6 +2873,11 @@ vite-plugin-dts@1.6.6:
     kolorist "^1.6.0"
     ts-morph "^16.0.0"
 
+vite-plugin-libcss@^1.0.5:
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/vite-plugin-libcss/-/vite-plugin-libcss-1.0.5.tgz#a44e139e6aae19589cc0e888a7bdd2e1e0be37a7"
+  integrity sha512-NUQwWhn9j8fpRBwHeDr35a3TuRP0xvdIHtJni+3DcnPcq4Vrg+G5A3ZtCJ8y2EC83G97tBJ36svPdiIVuBEfsQ==
+
 vite@3.2.0-beta.1:
   version "3.2.0-beta.1"
   resolved "https://registry.yarnpkg.com/vite/-/vite-3.2.0-beta.1.tgz#41bede092ba2ea45e92bf1b4ab2602ff4f8cc1bc"

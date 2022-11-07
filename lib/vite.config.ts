@@ -4,6 +4,7 @@ import { defineConfig } from 'vite';
 import dts from 'vite-plugin-dts';
 import { visualizer } from "rollup-plugin-visualizer";
 import fs from 'fs';
+import libCss from 'vite-plugin-libcss';
 
 const generateComponentsEntries = () => {
     const components = fs.readdirSync(resolve(__dirname, 'src/components'));
@@ -20,12 +21,12 @@ export default defineConfig({
         react({
             jsxRuntime: 'classic'
         }),
+        libCss(),
         dts({
             outputDir: 'dist',
             beforeWriteFile: (path, content) => {
                 //console.log(path);
                 //Replace by the name of the folder
-                let filePath = path;
                 const splittedPath = path.split('/').map(p => p);
                 const lastItem = splittedPath[splittedPath.length - 1];
                 const beforeLastItem = splittedPath[splittedPath.length - 2];
@@ -33,6 +34,8 @@ export default defineConfig({
                 if (lastItem === 'index.d.ts') {
                     //Write an copy file, but at one upper level with the name of the beforeLastItem
                     const createContent = (path: string) => `export * from './dist/${path}/index'`;
+                    console.log(splittedPath.join('/'));
+                    if(beforeLastItem === 'dist' || beforeLastItem === 'styles') return;
                     let newContent = component.toLowerCase() === 'components' ? createContent(`components/${beforeLastItem}`) : createContent(beforeLastItem);
                     fs.writeFileSync(`${__dirname}/${beforeLastItem}.d.ts`, newContent);
                 }
@@ -61,7 +64,7 @@ export default defineConfig({
                 let indexContent = '';
                 for (const file of dtsFiles) {
                     if (file !== 'index.d.ts')
-                        indexContent += `/// <reference path="${file}" />\n`;
+                        indexContent += `/// <reference path="${file}" />\n`; // 
                 }
                 fs.writeFileSync(resolve(__dirname, 'index.d.ts'), indexContent);
 
