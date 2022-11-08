@@ -1,7 +1,7 @@
 {
   "name": "trentim-react-sdk",
   "private": false,
-  "version": "4.0.0-beta16",
+  "version": "4.0.0-beta17",
   "description": "Trentim internal SDK for ReactJS projects, with UI components, helpers, hooks and more.",
   "license": "MIT",
   "repository": {
@@ -45,10 +45,10 @@
     }
   },
   "module": "dist/index.js",
-  "types": "./types/index.d.ts",
+  "types": "./index.d.ts",
   "files": [
-    "dist",
-    "types"
+    "dist/*",
+    "types/*"
   ],
   "devDependencies": {
     "@babel/core": "^7.18.6",
