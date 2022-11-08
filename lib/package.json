@@ -1,7 +1,7 @@
 {
   "name": "trentim-react-sdk",
   "private": false,
-  "version": "4.0.0-beta18",
+  "version": "4.0.0-beta19",
   "description": "Trentim internal SDK for ReactJS projects, with UI components, helpers, hooks and more.",
   "license": "MIT",
   "repository": {
@@ -19,36 +19,66 @@
     "coverage": "vitest run --coverage"
   },
   "exports": {
-    ".": {
-      "import": "./dist/index.js",
-      "require": "./dist/index.cjs"
+    "./ConditionalWrapper": {
+      "import": "./dist/ConditionalWrapper.es.js",
+      "require": "./dist/ConditionalWrapper.cjs.js"
     },
-    "./models": {
-      "import": "./dist/models/index.js",
-      "require": "./dist/models/index.cjs"
+    "./GridView": {
+      "import": "./dist/GridView.es.js",
+      "require": "./dist/GridView.cjs.js"
     },
-    "./components": {
-      "import": "./dist/components/index.js",
-      "require": "./dist/components/index.cjs"
+    "./IFrame": {
+      "import": "./dist/IFrame.es.js",
+      "require": "./dist/IFrame.cjs.js"
     },
-    "./hooks": {
-      "import": "./dist/hooks/index.js",
-      "require": "./dist/hooks/index.cjs"
+    "./LifecycleProgress": {
+      "import": "./dist/LifecycleProgress.es.js",
+      "require": "./dist/LifecycleProgress.cjs.js"
     },
-    "./helpers": {
-      "import": "./dist/helpers/index.js",
-      "require": "./dist/helpers/index.cjs"
+    "./StickerCard": {
+      "import": "./dist/StickerCard.es.js",
+      "require": "./dist/StickerCard.cjs.js"
+    },
+    "./Tooltip": {
+      "import": "./dist/Tooltip.es.js",
+      "require": "./dist/Tooltip.cjs.js"
     },
     "./decorators": {
-      "import": "./dist/decorators/index.js",
-      "require": "./dist/decorators/index.cjs"
+      "import": "./dist/decorators.es.js",
+      "require": "./dist/decorators.cjs.js"
+    },
+    "./helpers": {
+      "import": "./dist/helpers.es.js",
+      "require": "./dist/helpers.cjs.js"
+    },
+    "./hooks": {
+      "import": "./dist/hooks.es.js",
+      "require": "./dist/hooks.cjs.js"
+    },
+    "./index": {
+      "import": "./dist/index.es.js",
+      "require": "./dist/index.cjs.js"
+    },
+    "./models": {
+      "import": "./dist/models.es.js",
+      "require": "./dist/models.cjs.js"
     }
   },
   "module": "dist/index.js",
   "types": "./index.d.ts",
   "files": [
     "dist/*",
-    "index.d.ts"
+    "ConditionalWrapper.d.ts",
+    "GridView.d.ts",
+    "IFrame.d.ts",
+    "LifecycleProgress.d.ts",
+    "StickerCard.d.ts",
+    "Tooltip.d.ts",
+    "decorators.d.ts",
+    "helpers.d.ts",
+    "hooks.d.ts",
+    "index.d.ts",
+    "models.d.ts"
   ],
   "devDependencies": {
     "@babel/core": "^7.18.6",
