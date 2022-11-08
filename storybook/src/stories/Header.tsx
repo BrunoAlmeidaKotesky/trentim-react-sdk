@@ -9,6 +9,7 @@ type User = {
 
 interface HeaderProps {
   user?: User;
+  /**Happens on login */
   onLogin: () => void;
   onLogout: () => void;
   onCreateAccount: () => void;

@@ -3,11 +3,11 @@ import { resolve } from 'path';
 import { defineConfig } from 'vite';
 import dts from 'vite-plugin-dts';
 import { visualizer } from "rollup-plugin-visualizer";
-import fs from 'fs';
+import { existsSync, readdirSync, lstatSync, rmdirSync, unlinkSync, writeFileSync, copyFileSync } from 'fs'
 import libCss from 'vite-plugin-libcss';
 
 const generateComponentsEntries = () => {
-    const components = fs.readdirSync(resolve(__dirname, 'src/components'));
+    const components = readdirSync(resolve(__dirname, 'src/components'));
     const entries = {};
     for (const component of components) {
         const name = component.split('.')[0];
@@ -16,6 +16,25 @@ const generateComponentsEntries = () => {
     return entries;
 }
 
+function emptyDir(dir: string): void {
+    if (!existsSync(dir)) {
+        return
+    }
+    for (const file of readdirSync(dir)) {
+        const abs = resolve(dir, file)
+        // baseline is Node 12 so can't use rmSync
+        if (lstatSync(abs).isDirectory()) {
+            emptyDir(abs)
+            rmdirSync(abs)
+        } else {
+            unlinkSync(abs)
+        }
+    }
+}
+
+emptyDir(resolve(__dirname, 'dist'))
+emptyDir(resolve(__dirname, 'types'))
+
 export default defineConfig({
     plugins: [
         react({
@@ -23,7 +42,11 @@ export default defineConfig({
         }),
         libCss(),
         dts({
-            outputDir: 'dist',
+            outputDir: ['dist'],
+            //rollupTypes: true,
+            //insertTypesEntry: true,
+            skipDiagnostics: true,
+            logDiagnostics: true,
             beforeWriteFile: (path, content) => {
                 //console.log(path);
                 //Replace by the name of the folder
@@ -37,20 +60,20 @@ export default defineConfig({
                     console.log(splittedPath.join('/'));
                     if(beforeLastItem === 'dist' || beforeLastItem === 'styles') return;
                     let newContent = component.toLowerCase() === 'components' ? createContent(`components/${beforeLastItem}`) : createContent(beforeLastItem);
-                    fs.writeFileSync(`${__dirname}/${beforeLastItem}.d.ts`, newContent);
+                    writeFileSync(`${__dirname}/${beforeLastItem}.d.ts`, newContent);
                 }
                 return { path, content };
             },
             afterBuild: () => {
                 //Copy every `[file].d.ts` from dist to the root of __dirname and then create a index.d.ts that ///references this files
-                const files = fs.readdirSync(resolve(__dirname));
+                const files = readdirSync(resolve(__dirname));
                 const dtsFiles = files.filter(f => f.endsWith('.d.ts'));
                 const packageJson = require(resolve(__dirname, 'package.json'));
                 packageJson.files = ['dist'];
                 packageJson.exports = {};
                 for (const file of dtsFiles) {
                     const destPath = resolve(__dirname, `${file}`);
-                    fs.copyFileSync(resolve(__dirname, file), destPath);
+                    copyFileSync(resolve(__dirname, file), destPath);
                     //Then update package.json `files` to include all this files
                     packageJson.files = [...packageJson.files, file];
                     //update all package.json `exports` to include the keys with the file name with import and require
@@ -59,20 +82,20 @@ export default defineConfig({
                         import: `./dist/${file.replace('.d.ts', '.es.js')}`,
                         require: `./dist/${file.replace('.d.ts', '.cjs.js')}`
                     }
-                    fs.writeFileSync(resolve(__dirname, 'package.json'), JSON.stringify(packageJson, null, 2));
+                    writeFileSync(resolve(__dirname, 'package.json'), JSON.stringify(packageJson, null, 2));
                 }
                 let indexContent = '';
                 for (const file of dtsFiles) {
                     if (file !== 'index.d.ts')
-                        indexContent += `/// <reference path="${file}" />\n`; // 
+                        indexContent += `/// <reference path="${file}" />\n export * from './${file.replace('.d.ts', '')}'\n`; // 
                 }
-                fs.writeFileSync(resolve(__dirname, 'index.d.ts'), indexContent);
+                writeFileSync(resolve(__dirname, 'index.d.ts'), indexContent);
 
             }
         }),
         visualizer({
             gzipSize: true,
-            open: false
+            open: true
         })
     ],
     resolve: {
@@ -93,7 +116,7 @@ export default defineConfig({
                 decorators: resolve(__dirname, 'src/decorators/index.ts'),
                 hooks: resolve(__dirname, 'src/hooks/index.ts'),
                 models: resolve(__dirname, 'src/models/index.ts'),
-                index: resolve(__dirname,'src/index.ts'),
+                index: resolve(__dirname, 'src/index.ts'),
             },
             name: 'trentim-react-sdk',
             formats: ['es', 'cjs'],

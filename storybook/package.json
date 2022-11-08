@@ -13,7 +13,7 @@
   "dependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "trentim-react-sdk": "4.0.0-beta9"
+    "trentim-react-sdk": "4.0.0-rc3"
   },
   "devDependencies": {
     "@storybook/addon-essentials": "^7.0.0-alpha.48",
@@ -26,6 +26,8 @@
     "@types/react-dom": "^18.0.8",
     "@vitejs/plugin-react": "^2.2.0",
     "storybook": "^7.0.0-alpha.48",
+    "storybook-addon-jsx": "^7.3.14",
+    "storybook-addon-react-docgen": "^1.2.42",
     "typescript": "^4.6.4",
     "vite": "^3.2.3"
   }

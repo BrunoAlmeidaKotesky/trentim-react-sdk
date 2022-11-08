@@ -12,6 +12,8 @@ module.exports = {
       name: "@storybook/addon-docs",
       options: { transcludeMarkdown: true },
     },
+    'storybook-addon-react-docgen',
+    'storybook-addon-jsx'
   ],
   "framework": {
     "name": "@storybook/react-vite",

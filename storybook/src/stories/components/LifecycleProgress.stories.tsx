@@ -1,15 +1,13 @@
 
 import { LifecycleProgress } from 'trentim-react-sdk/LifecycleProgress';
 import type { Meta, StoryObj } from '@storybook/react';
-import 'trentim-react-sdk/dist/style.css';
 
 const meta: Meta<typeof LifecycleProgress> = {
     title: 'components/LifecycleProgress',
     component: LifecycleProgress,
     // This component will have an automatically generated docsPage entry: https://storybook.js.org/docs/react/writing-docs/docs-page
-    tags: ['component', 'docsPage'],
+    tags: ['docsPage'],
     // More on argTypes: https://storybook.js.org/docs/react/api/argtypes,
-    argTypes: {}
 };
 
 export default meta;
@@ -88,6 +86,13 @@ export const Demo: Story = {
         buttonColor: 'lightblue',
         calloutContent: <div>Aaaa</div>,
         leftColumnTitle: 'Menu do cilo de vida',
-        leftColumnSubtitle: 'Data de criação'
+        leftColumnSubtitle: 'Data de criação',
+        calloutProps: {},
+        indicatorColor: 'rgb(0, 114, 198)',
+        leftColumnColor: undefined,
+        onStageClick: (stage) => console.log(stage),
+        showCalloutOnlyOnActive: false,
+        leftScrollButtonStyles: undefined,
+        rightScrollButtonStyles: undefined
     }
 }
