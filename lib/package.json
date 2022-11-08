@@ -1,7 +1,7 @@
 {
   "name": "trentim-react-sdk",
   "private": false,
-  "version": "4.0.0-rc1",
+  "version": "4.0.0-rc2",
   "description": "Trentim internal SDK for ReactJS projects, with UI components, helpers, hooks and more.",
   "license": "MIT",
   "repository": {
@@ -56,7 +56,7 @@
       "import": "./dist/hooks.es.js",
       "require": "./dist/hooks.cjs.js"
     },
-    "./index": {
+    ".": {
       "import": "./dist/index.es.js",
       "require": "./dist/index.cjs.js"
     },
