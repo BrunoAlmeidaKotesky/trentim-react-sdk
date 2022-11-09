@@ -3,6 +3,30 @@
 #### [New Major Release v4!](#v4.0.0)
 
 <br/>
+<details id="v4.1.0">
+<summary><b style="font-size: 20px;">4.1.0 (Current)</b></summary>
+
+*Please note that a proper general documentation on Storybook of the changes in v4 is still in progress.*
+
+This version fixes the previous mentioned problems which the `style.css` was being imported on every file, now it's only imported on the component which is being used(`<LifecycleProgress>`, `<Tooltip>` and `<StickerCard>`).
+
+Please note that if import one of these components only using `import {} from 'trentim-react-sdk'`, you'll need to import the `style.css` file as well, as the following example:
+
+```ts
+//Styles will not be applied
+import { Tooltip } from 'trentim-react-sdk';
+//Styles will be applied
+import { Tooltip } from 'trentim-react-sdk';
+import 'trentim-react-sdk/dist/style.css';
+//Styles will be applied
+import { Tooltip } from 'trentim-react-sdk/Tooltip';
+```
+
+- Fixed a huge problem which `react-dom` was being imported on every component that uses any of `@fluentui/react` components.
+- The `fieldName` prop from `TColumn<T>` (which is the type of the `columns` prop from `<GridView>`) will have the same value from the `key` prop and doesn't need to be passed anymore.
+</details>
+<br/>
+
 <details id="v4.0.1">
 <summary><b style="font-size: 20px;">v4.0.1</b></summary>
 
@@ -10,7 +34,7 @@
 </details>
 <br/>
 <details id="v4.0.0">
-<summary><b style="font-size: 20px;">v4.0.0 (New major release!)</b></summary>
+<summary><b style="font-size: 20px;">v4.0.0</b></summary>
 
 Many new changes in this release, with new styles and behaviors for previous components, removal of previous deprecated functions and components, structure change, how to use the library, and more.
 
@@ -21,7 +45,7 @@ You can also import everything from `trentim-react-sdk`, but this is not recomme
 
 Every component can be individually imported, similar to how it was on v1. this means that you should import functionalities like this:
 
-* Note: There is a known problem where all the components are importing the `styles.css` as well, this will be fixed *ASAP*.
+~~Note: There is a known problem where all the components are importing the `styles.css` as well, this will be fixed~~ (Fixed on 4.1.0)
 
 ```ts dark
 import {IFrame} from 'trentim-react-sdk/IFrame';

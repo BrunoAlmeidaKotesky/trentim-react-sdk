@@ -2,7 +2,7 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { resolve } from 'path';
 
-const libPath = __dirname.replace('/dev', '/lib');
+const libPath = __dirname.replace('/storybook', '/lib');
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],

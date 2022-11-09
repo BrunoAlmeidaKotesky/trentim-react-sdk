@@ -1,5 +1,5 @@
 import { Route, BrowserRouter, Link, Routes } from 'react-router-dom';
-import Grids from './components/Grids';
+import Grids from './components/GridViewListExample';
 import Basics from './components/BasicComponents';
 import './App.css'
 import { LifecycleTests } from './components/LifecycleTests';

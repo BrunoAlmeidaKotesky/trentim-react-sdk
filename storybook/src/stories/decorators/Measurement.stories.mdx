@@ -1,4 +1,5 @@
 import { Meta } from '@storybook/addon-docs'
+import {TypesTable} from '../TypesTable';
 
 <Meta title="Decorators/Measurement" />
 
@@ -8,11 +9,22 @@ Decorate a method with this decorator to measure the execution time of the metho
 
 * Parameters:
 
-| *Name* | *Required* | *Description* | *Type* | *Default* |
-| ----------- | ----------- | ----------- | ----------- |
-| disable | false | If true, the measure is disabled. | <code>boolean</code> | <code>false</code> |
-| logCss | false | Custom `console.log` css if desired. | <code>string</code> | <code>color: white; background-color: #3e88ef</code> |
-
+<TypesTable rows={[
+    {
+        Id: 1,
+        name: 'disable',
+        type: 'boolean',
+        description: 'If true, the measure is disabled.',
+        default: 'false'
+    },
+    {
+        Id: 2,
+        name: 'logCss',
+        type: 'string',
+        description: 'Custom `console.log` css if desired.',
+        default: '`color: white; background-color: #3e88ef`',
+    }
+]}/>
 
 __Example:__
 

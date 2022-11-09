@@ -1,4 +1,5 @@
-import { Meta } from '@storybook/addon-docs'
+import { Meta } from '@storybook/addon-docs';
+import { TypesTable } from '../TypesTable';
 
 <Meta title="Decorators/CatchDecorator" />
 
@@ -15,7 +16,7 @@ type Handler<E = any, Args extends any[] = any[], C = any, R = any> = (err: E, c
 function DefaultCatch<Error = any, Args extends any[] = any[], Ctx = any, Returned = any>(handler: Handler<Error, Args, Ctx, Returned>)
 
 //Example:
-    import { Catch, DefaultCatch, Handler } from 'trentim-react-sdk/dist/decorators';
+    import { Catch, DefaultCatch, Handler } from 'trentim-react-sdk/decorators';
     class DummyError extends Error {}
 
     //Complete type example
