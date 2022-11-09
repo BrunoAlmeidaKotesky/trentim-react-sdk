@@ -37,4 +37,10 @@ export default meta;
 
 type Story = StoryObj<typeof Tooltip>;
 export const Demo: Story =  {
+    args: {
+        enableParentOverflow: false,
+        children: <div>Hover!!!</div>,
+        content: <div style={{padding: 8}}>🤨</div>,
+        direction: 'right'
+    }
 };

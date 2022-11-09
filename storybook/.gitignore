@@ -22,3 +22,16 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+.git/
+.idea/
+coverage/
+node_modules/
+temp/
+npm-debug.log
+bash.exe.stackdump
+/yarn-error.log
+dev/MOCK_DATA2.ts
+storybook-static
+dist
+dist/*.*

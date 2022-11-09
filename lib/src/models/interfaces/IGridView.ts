@@ -140,7 +140,7 @@ export interface IGridHandler<T> extends IGridClickActions {
      * 
      * This is different from `onRenderCustomRow`, since this method is applied to the default `onRenderItemColumn` from `DetailsList` and not on the entire component.
      */
-    onRenderItemColumn: (item?: IRow<T>, index?: number, column?: TColumn<T>) => React.ReactNode;
+    onRenderItemColumn?: (item?: IRow<T>, index?: number, column?: TColumn<T>) => React.ReactNode;
     /**If you want to totally overwrite the component that is being rendered, independent of the `renderAs` value, use this rendering function. 
      *
      * This element will be applied to each item `IRow`, not the entire component. */
