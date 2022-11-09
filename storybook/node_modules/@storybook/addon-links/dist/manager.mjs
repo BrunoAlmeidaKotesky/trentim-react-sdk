@@ -1,0 +1,1 @@
+import{a as t,c as n}from"./chunk-DUAG4ME5.mjs";import{addons as e}from"@storybook/addons";e.register(t,o=>{e.getChannel().on(n.REQUEST,({kind:r,name:E})=>{let m=o.storyId(r,E);o.emit(n.RECEIVE,m)})});
