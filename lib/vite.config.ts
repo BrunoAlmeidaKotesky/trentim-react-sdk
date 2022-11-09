@@ -78,7 +78,8 @@ export default defineConfig({
                     packageJson.files = [...packageJson.files, file];
                     //update all package.json `exports` to include the keys with the file name with import and require
                     const exports = packageJson.exports;
-                    exports[`./${file.replace('.d.ts', '')}`] = {
+                    const exportKeyName = file.startsWith('index') ? '.' : "./" + file.replace('.d.ts', '');
+                    exports[exportKeyName] = {
                         import: `./dist/${file.replace('.d.ts', '.es.js')}`,
                         require: `./dist/${file.replace('.d.ts', '.cjs.js')}`
                     }

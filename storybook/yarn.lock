@@ -8057,10 +8057,10 @@ tr46@~0.0.3:
   resolved "https://registry.yarnpkg.com/tr46/-/tr46-0.0.3.tgz#8184fd347dac9cdc185992f3a6622e14b9d9ab6a"
   integrity sha512-N3WMsuqV66lT30CrXNbEjx4GEwlow3v6rr4mCcv6prnfwhS01rkgyFdjPNBYd9br7LpXV1+Emh01fHnq2Gdgrw==
 
-trentim-react-sdk@4.0.0-rc3:
-  version "4.0.0-rc3"
-  resolved "https://registry.yarnpkg.com/trentim-react-sdk/-/trentim-react-sdk-4.0.0-rc3.tgz#3434a7d85fefe277a73ed60592fcea354332233f"
-  integrity sha512-vRFd9DnjS0rCd2ifuoIrX7KInTJVsZ3Ow8Su4lp7GeRTmdT1Ho68gots8BX4aLwzlzmpcdMtzHAsAze84s6ZAg==
+trentim-react-sdk@4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/trentim-react-sdk/-/trentim-react-sdk-4.0.0.tgz#38c3fe6b5168d9a1082e9e3d0ea74b867aa82ec4"
+  integrity sha512-P5PVEveHKM65B1gmF6aESmGi5tOb3/9VhJq4W4XPkKCR6xkT/LsJSeNMYMvOJGmmjOPyabAYfFuw81VaDFZm8Q==
   dependencies:
     "@fluentui/react" "8.52.3"
     bakutils-types "^1.1.0"
