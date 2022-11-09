@@ -4,7 +4,7 @@
 
 <br/>
 <details id="v4.1.0">
-<summary><b style="font-size: 20px;">4.1.0 (Current)</b></summary>
+<summary><b style="font-size: 20px;">v4.1.0 - 4.1.1 (Current)</b></summary>
 
 *Please note that a proper general documentation on Storybook of the changes in v4 is still in progress.*
 

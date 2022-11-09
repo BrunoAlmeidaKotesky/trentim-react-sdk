@@ -22,7 +22,7 @@ declare module "react" {
 
 /** TO-DO: Use `useReducer` with context for better code splitting. */
 export function useGridController<T extends BaseType>(props: IGridListProps<T>, ref: React.ForwardedRef<IGridViewRefHandler<T>>) {
-    const [cols, setCols] = useState(props?.columns?.map(c => ({ ... c, fieldName: c?.key })));
+    const [cols, setCols] = useState<TColumn<T>[]>(props?.columns?.map(c => ({ ... c, fieldName: c?.key })));
     const [isGroping, setIsGrouping] = useState<{ active: boolean, key: string, name: string }>({ active: false, key: null, name: null });
     const [groups, setGroups] = useState<IGroup[]>(undefined);
     const [enableGrouping, setEnableGrouping] = useState(props?.headerOptions?.enableGrouping ?? false);
