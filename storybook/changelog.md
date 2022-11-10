@@ -2,9 +2,16 @@
 
 #### [New Major Release v4!](#v4.0.0)
 
+<details id="4.1.2">
+<summary><b style="font-size: 20px;">v4.1.2 (Current)</b></summary>
+
+- Fixed a bug on `<LifecycleProgress>` which, when the stages we're empty or null, the component would fail to render.
+    - Please note that when your `stages` array is empty, is up to you to handle the UI of the component, since it's not possible to know what you want to show in that case, and a default UI would be misleading.
+</details>
 <br/>
+
 <details id="v4.1.0">
-<summary><b style="font-size: 20px;">v4.1.0 - 4.1.1 (Current)</b></summary>
+<summary><b style="font-size: 20px;">v4.1.0 - 4.1.1</b></summary>
 
 *Please note that a proper general documentation on Storybook of the changes in v4 is still in progress.*
 
@@ -45,7 +52,7 @@ You can also import everything from `trentim-react-sdk`, but this is not recomme
 
 Every component can be individually imported, similar to how it was on v1. this means that you should import functionalities like this:
 
-~~Note: There is a known problem where all the components are importing the `styles.css` as well, this will be fixed~~ (Fixed on 4.1.0)
+~~Note: There is a known problem where all the components are importing the `styles.css` as well, this will be fixed~~ (Fixed on 4.1.1)
 
 ```ts dark
 import {IFrame} from 'trentim-react-sdk/IFrame';

@@ -1,13 +1,19 @@
 import { LifecycleProgress } from "@components/LifecycleProgress";
 import { initializeIcons } from '@fluentui/font-icons-mdl2';
 import { Slider } from "@fluentui/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { mockStages } from './constants';
 
 initializeIcons();
 export function LifecycleTests({ height }: { height?: string } = { height: '100%' }) {
     const [width, setWidth] = useState(1280);
-    const [stages, setStages] = useState(mockStages);
+    const [stages, setStages] = useState([]);
+
+    useEffect(() => {
+        setTimeout(() => {
+            setStages(mockStages);
+        }, 3000);
+    }, []);
 
     return (
         <div style={{ width: '100%', height, margin: '0 auto' }}>

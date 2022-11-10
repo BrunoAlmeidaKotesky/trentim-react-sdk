@@ -19,7 +19,8 @@ function LifecycleProgressInner<StageData = any>(props: ILifecycleProgressProps<
     const lifecycleContainer = useRef<HTMLDivElement>(null);
     const overflowStageText = useRef(false);
     const [gridRowNumber, setGridRowNumber] = useState<number>(1);
-    const [visibleStages, setVisibleStages] = useState<ILifecycleStages[]>(props?.stages.map(i => ({...i, hidden: true})));
+    const [visibleStages, setVisibleStages] = useState<ILifecycleStages[]>(
+        props?.stages.map(i => ({...i, hidden: true})) ?? []);
     const iconStyles = useMemo<{right: IButtonStyles, left: IButtonStyles}>(() => {
         const baseStyles: IButtonStyles = ({
             root: {color: 'white', width: 24}, 
@@ -46,15 +47,15 @@ function LifecycleProgressInner<StageData = any>(props: ILifecycleProgressProps<
         const width = lifecycleContainer?.current?.clientWidth;
         if(width >= 1200) {
             if(props?.stages.length >= 4) return setGridRowNumber(4);
-            else return setGridRowNumber(props?.stages.length);
+            return setGridRowNumber(props?.stages.length);
         }
         if(width <= 992 && width > 768) {
             if(props?.stages.length >= 3) return setGridRowNumber(3);
-            else return setGridRowNumber(props?.stages.length);
+            return setGridRowNumber(props?.stages.length);
         }
         if(width <= 768 && width > 520) {
             if(props?.stages.length >= 2) return setGridRowNumber(2);
-            else return setGridRowNumber(props?.stages.length);
+            return setGridRowNumber(props?.stages.length);
         }
         if(width <= 411)
             setGridRowNumber(1);
@@ -120,8 +121,10 @@ function LifecycleProgressInner<StageData = any>(props: ILifecycleProgressProps<
     useLayoutEffect(() => { setCSSVariables(); verifyGridRowNumber(); }, []);
     useEffect(() => {
         //Keep every prop from props.stage, but keep the hidden from visibleStages
-        const newStages = props.stages.map((i, idx) => ({...i, hidden: visibleStages[idx].hidden}));
-        setVisibleStages(newStages);
+        if(props.stages.length > 0) {
+            const newStages = props.stages.map((i, idx) => ({...i, hidden: visibleStages?.[idx]?.hidden ?? true}));
+            setVisibleStages(newStages);
+        }
     }, [props.stages]);
     useEffect(() => verifyGridRowNumber(), [lifecycleContainer?.current?.clientWidth, visibleStages.length]);
     useEffect(() => {

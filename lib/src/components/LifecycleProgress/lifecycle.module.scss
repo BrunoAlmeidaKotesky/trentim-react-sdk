@@ -1,32 +1,30 @@
-
-
 .lifecycle *,
 .lifecycle {
-    box-sizing: border-box;
+	box-sizing: border-box;
 }
 
 .lifecycle {
-    display: grid;
-    grid-template-columns: 200px minmax(160px, 1fr);
-    grid-gap: 0;
-    gap: 0;
-    align-content: end;
-    align-items: end;
-    width: 100%;
-    position: relative;
-    font-family: "Segoe UI", sans-serif;
+	display: grid;
+	grid-template-columns: 200px minmax(160px, 1fr);
+	grid-gap: 0;
+	gap: 0;
+	align-content: end;
+	align-items: end;
+	width: 100%;
+	position: relative;
+	font-family: "Segoe UI", sans-serif;
 }
 
 .projectLifecycle {
-    display: flex;
-    flex-direction: column;
-    width: 200px;
-    height: 42px;
-    margin-top: auto;
-    color: #fff;
-    background-color: var(--lifecycle-left-col-color);
-    padding-left: 14px;
-    font-size: 14px;
+	display: flex;
+	flex-direction: column;
+	width: 200px;
+	height: 42px;
+	margin-top: auto;
+	color: #fff;
+	background-color: var(--lifecycle-left-col-color);
+	padding-left: 14px;
+	font-size: 14px;
 	text-align: left;
 	.columnTitle {
 		font-weight: 600;
@@ -37,48 +35,48 @@
 }
 
 .lifecycleContainer {
-    display: flex;
-    width: 100%;
-    height: 56px;
-    align-items: flex-end;
-    position: relative;
+	display: flex;
+	width: 100%;
+	height: 56px;
+	align-items: flex-end;
+	position: relative;
 }
 
 .btnLifecycleScroll {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: var(--lifecycle-button-color); //hsl(hue(var(--lifecycle-color)), 45%, 36%);
-    height: 42px;
-    position: absolute;
-    z-index: 1001;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-color: var(--lifecycle-button-color); //hsl(hue(var(--lifecycle-color)), 45%, 36%);
+	height: 42px;
+	position: absolute;
+	z-index: 1001;
 
-    &:hover {
-        cursor: pointer;
-    }
+	&:hover {
+		cursor: pointer;
+	}
 }
 
 .scrollLeft {
-    left: 0;
+	left: 0;
 }
 
 .scrollRight {
-    right: 0;
+	right: 0;
 }
 
 .lifecycleTrackContainer {
-    overflow: hidden;
-    width: calc(100% - 48px);
+	overflow: hidden;
+	width: calc(100% - 48px);
 	margin: 0 auto;
 }
 
 .lifecycleTrack {
 	display: grid;
-    width: 100%;
-    overflow: overlay;
-    padding: 10px 0 20px;
-    margin-bottom: -20px;
-    grid-template-columns: repeat(var(--lifecycle-grid-row-number), 1fr);
+	width: 100%;
+	overflow: overlay;
+	padding: 10px 0 20px;
+	margin-bottom: -20px;
+	grid-template-columns: repeat(var(--lifecycle-grid-row-number), 1fr);
 }
 
 /* Lifecycle tile */
@@ -93,7 +91,7 @@
 	border-top: 4px solid #e2e2e2;
 	position: relative;
 	background-color: #efefef;
-    padding: 0 1rem;
+	padding: 0 1rem;
 
 	&.start:after {
 		content: '';
@@ -210,14 +208,14 @@
 }
 
 .titleArea {
-    display: flex;
-    align-items: flex-end;
-    justify-content: center;
-    height: 100%;
-    width: 100%;
+	display: flex;
+	align-items: flex-end;
+	justify-content: center;
+	height: 100%;
+	width: 100%;
 
-    &:hover {
-        background-color: #dfdfdf;
-        cursor: pointer;
-    }
+	&:hover {
+		background-color: #dfdfdf;
+		cursor: pointer;
+	}
 }
