@@ -1,11 +1,11 @@
 
 import LifecycleTile from './LifecycleTile';
-import { IButtonStyles, IconButton } from '@fluentui/react/lib/Button';
 import styles from './lifecycle.module.scss';
 import type { ILifecycleProgressProps, ILifecycleProgressRef, LifecycleCallout, ILifecycleStages } from '@models/interfaces/ILifecycleProgressProps';
-import { useEffect, useMemo, useRef, useState, useImperativeHandle, forwardRef, ForwardedRef, useLayoutEffect, useCallback } from 'react';
+import { useEffect, useRef, useState, useImperativeHandle, forwardRef, ForwardedRef, useLayoutEffect, useCallback } from 'react';
 import { Callout, DirectionalHint } from '@fluentui/react/lib/Callout';
 import { CalloutCtx } from './Context';
+import { ChevronLeft24Regular, ChevronRight24Regular } from '@fluentui/react-icons';
 
 declare module "react" {
     function forwardRef<T, P = {}>(
@@ -21,17 +21,6 @@ function LifecycleProgressInner<StageData = any>(props: ILifecycleProgressProps<
     const [gridRowNumber, setGridRowNumber] = useState<number>(1);
     const [visibleStages, setVisibleStages] = useState<ILifecycleStages[]>(
         props?.stages.map(i => ({...i, hidden: true})) ?? []);
-    const iconStyles = useMemo<{right: IButtonStyles, left: IButtonStyles}>(() => {
-        const baseStyles: IButtonStyles = ({
-            root: {color: 'white', width: 24}, 
-            rootHovered: {backgroundColor: props?.buttonColor, color: 'white'}, 
-            rootFocused: {outline: 'none', color: 'white'}, 
-            rootPressed: {background: props.buttonColor, color: 'white'}});
-        return {
-            left: {...baseStyles, ...props?.leftScrollButtonStyles},
-            right: {...baseStyles,...props?.rightScrollButtonStyles},
-        }
-    }, [props?.leftScrollButtonStyles, props?.rightScrollButtonStyles]);
 
     const setCSSVariables = () => {
         const root = document.documentElement;
@@ -162,8 +151,8 @@ function LifecycleProgressInner<StageData = any>(props: ILifecycleProgressProps<
                 <span className={styles.columnSubTitle}>{props.leftColumnSubtitle}</span>
             </div>
             <div className={styles.lifecycleContainer}>
-                <div className={`${styles.btnLifecycleScroll} ${styles.scrollLeft}`} onClick={() => changeVisibility('left')}>
-                    <IconButton styles={iconStyles.left} iconProps={{iconName: 'ChevronLeftMed'}} />
+                <div style={props?.leftScrollButtonStyles} className={`${styles.btnLifecycleScroll} ${styles.scrollLeft}`} onClick={() => changeVisibility('left')}>
+                    <ChevronLeft24Regular />
                 </div>
                 <div className={styles.lifecycleTrackContainer}>
                     <div ref={lifecycleTrack} className={styles.lifecycleTrack}>
@@ -190,8 +179,8 @@ function LifecycleProgressInner<StageData = any>(props: ILifecycleProgressProps<
                         </CalloutCtx.Provider>
                     </div>
                 </div>
-                <div className={`${styles.btnLifecycleScroll} ${styles.scrollRight}`} onClick={() => changeVisibility('right')}>
-                    <IconButton styles={iconStyles.right} iconProps={{iconName: 'ChevronRightMed'}} />
+                <div style={props?.rightScrollButtonStyles} className={`${styles.btnLifecycleScroll} ${styles.scrollRight}`} onClick={() => changeVisibility('right')}>
+                    <ChevronRight24Regular />
                 </div>
             </div>
         </div>

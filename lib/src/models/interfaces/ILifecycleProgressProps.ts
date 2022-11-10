@@ -1,6 +1,5 @@
-import { IButtonStyles } from '@fluentui/react/lib/Button';
 import type { ICalloutProps } from '@fluentui/react/lib/Callout';
-import type { Dispatch, ReactNode, SetStateAction } from 'react';
+import type { CSSProperties, Dispatch, ReactNode, SetStateAction } from 'react';
 
 export type LifecycleCallout = {isVisible: boolean, calloutIdx: number};
 export type ILifecycleProgressRef = {
@@ -53,9 +52,9 @@ export interface ILifecycleProgressProps<StageData = any> {
     /**A custom color of the left column, if not set, will be the same as `indicatorColor` */
     leftColumnColor?: string;
     /**Custom styles for the left arrow button*/
-    leftScrollButtonStyles?: IButtonStyles;
+    leftScrollButtonStyles?: CSSProperties;
     /**Custom styles for the right arrow button*/
-    rightScrollButtonStyles?: IButtonStyles;
+    rightScrollButtonStyles?: CSSProperties;
     /**
      * If true, the callout will always be shown, even if on the currentStage the showCallout is falsy 
      *@default false*/

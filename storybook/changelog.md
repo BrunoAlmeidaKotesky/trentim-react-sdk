@@ -2,8 +2,20 @@
 
 #### [New Major Release v4!](#v4.0.0)
 
+<details id="4.2.0">
+<summary><b style="font-size: 20px;">v4.2.0 (Current)</b></summary>
+
+Does not export `IconButton.js` from `@fluentui/react` anymore, since `<LifecycleProgress>` does not uses it anymore.
+Added `@fluentui/react-icons` as a decency to reduce the final bundle size, primary caused the Icon button problem, so the component only import the needed icons.
+
+- This is potentially a breaking change, but since the component no longer uses icon button, `leftScrollButtonStyles` and `rightScrollButtonStyles` types have change to `CSSProperties` instead of `IButtonStyles`.
+    - This is better, since it's easier to configure and more flexible. (And lighter)
+- Some general fixes to `<LifecycleProgress>` styles, which does not affect the component usage.
+</details>
+<br/>
+
 <details id="4.1.2">
-<summary><b style="font-size: 20px;">v4.1.2 (Current)</b></summary>
+<summary><b style="font-size: 20px;">v4.1.2</b></summary>
 
 - Fixed a bug on `<LifecycleProgress>` which, when the stages we're empty or null, the component would fail to render.
     - Please note that when your `stages` array is empty, is up to you to handle the UI of the component, since it's not possible to know what you want to show in that case, and a default UI would be misleading.

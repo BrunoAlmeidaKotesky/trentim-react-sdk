@@ -28,6 +28,7 @@
 	text-align: left;
 	.columnTitle {
 		font-weight: 600;
+		line-height: 24px;
 	}
 	.columnSubTitle {
 		line-height: 1;
@@ -50,7 +51,7 @@
 	height: 42px;
 	position: absolute;
 	z-index: 1001;
-
+	width: 24px;
 	&:hover {
 		cursor: pointer;
 	}
@@ -213,7 +214,7 @@
 	justify-content: center;
 	height: 100%;
 	width: 100%;
-
+	text-align: center;
 	&:hover {
 		background-color: #dfdfdf;
 		cursor: pointer;
