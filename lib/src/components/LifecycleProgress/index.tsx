@@ -32,8 +32,10 @@ function LifecycleProgressInner<StageData = any>(props: ILifecycleProgressProps<
         else root?.style.setProperty("--lifecycle-grid-row-number", "3");
     }
 
-    const verifyGridRowNumber = () => {
-        const width = lifecycleContainer?.current?.clientWidth;
+    const verifyGridRowNumber = useCallback(() => {
+        let width = lifecycleContainer?.current?.clientWidth;
+        if(!width) 
+            width =  document.querySelector('.mainLifecycleContainer')?.clientWidth;
         if(width >= 1200) {
             if(props?.stages.length >= 4) return setGridRowNumber(4);
             return setGridRowNumber(props?.stages.length);
@@ -49,7 +51,7 @@ function LifecycleProgressInner<StageData = any>(props: ILifecycleProgressProps<
         if(width <= 411)
             setGridRowNumber(1);
         else setGridRowNumber(3);
-    }
+    }, [lifecycleContainer?.current?.clientWidth, props?.stages, visibleStages?.length]);
 
     const changeVisibility = (direction: 'left' | 'right') => {
         if (!lifecycleTrack.current) return; 
@@ -107,7 +109,10 @@ function LifecycleProgressInner<StageData = any>(props: ILifecycleProgressProps<
         });
     }
 
-    useLayoutEffect(() => { setCSSVariables(); verifyGridRowNumber(); }, []);
+    useLayoutEffect(() => { 
+        setCSSVariables(); 
+        verifyGridRowNumber(); 
+    }, []);
     useEffect(() => {
         //Keep every prop from props.stage, but keep the hidden from visibleStages
         if(props.stages.length > 0) {
@@ -145,7 +150,7 @@ function LifecycleProgressInner<StageData = any>(props: ILifecycleProgressProps<
     }, []);
 
     return (<>
-        <div ref={lifecycleContainer} className={styles.lifecycle}>
+        <div ref={lifecycleContainer} className={`${styles.lifecycle} mainLifecycleContainer`}>
             <div className={styles.projectLifecycle}>
                 <span className={styles.columnTitle}>{props.leftColumnTitle}</span>
                 <span className={styles.columnSubTitle}>{props.leftColumnSubtitle}</span>

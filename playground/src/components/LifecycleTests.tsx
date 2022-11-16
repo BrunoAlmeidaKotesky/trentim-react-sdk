@@ -2,22 +2,22 @@ import { LifecycleProgress } from "@components/LifecycleProgress";
 import { initializeIcons } from '@fluentui/font-icons-mdl2';
 import { Slider } from "@fluentui/react";
 import { useEffect, useState } from "react";
-import { mockStages } from './constants';
+import { mockStages, mockStages2 } from './constants';
 
 initializeIcons();
 export function LifecycleTests({ height }: { height?: string } = { height: '100%' }) {
-    const [width, setWidth] = useState(1280);
+    const [width, setWidth] = useState(871);
     const [stages, setStages] = useState([]);
 
     useEffect(() => {
         setTimeout(() => {
-            setStages(mockStages);
-        }, 3000);
+            setStages(mockStages2);
+        }, 2000);
     }, []);
 
     return (
         <div style={{ width: '100%', height, margin: '0 auto' }}>
-            <Slider min={0} max={3280} value={width} onChange={v => setWidth(v)}/>
+            <Slider min={0} max={3280} value={width} styles={{valueLabel: {color: 'white'}}} onChange={v => setWidth(v)}/>
             <div style={{width, margin: 'auto', marginTop: 50}}>
             <LifecycleProgress
                 leftColumnSubtitle="Atualizado em 23/10/2022"

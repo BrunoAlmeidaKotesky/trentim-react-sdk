@@ -2,8 +2,15 @@
 
 #### [New Major Release v4!](#v4.0.0)
 
+<details id="4.2.1">
+<summary><b style="font-size: 20px;">v4.2.1 (Current)</b></summary>
+
+- Fix a bug on `<LifecycleProgress>`, which on very specific cases, where the `--lifecycle-grid-row-number` css variable was not being changed when needed.
+</details>
+<br/>
+
 <details id="4.2.0">
-<summary><b style="font-size: 20px;">v4.2.0 (Current)</b></summary>
+<summary><b style="font-size: 20px;">v4.2.0</b></summary>
 
 Does not export `IconButton.js` from `@fluentui/react` anymore, since `<LifecycleProgress>` does not uses it anymore.
 Added `@fluentui/react-icons` as a decency to reduce the final bundle size, primary caused the Icon button problem, so the component only import the needed icons.

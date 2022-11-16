@@ -235,6 +235,7 @@ export interface SubStage {
     completed: boolean;
     active: boolean;
 }
+
 export const mockStages: ILifecycleStages<SubStage[]>[] = [
     {
         active: false, 
@@ -302,3 +303,198 @@ export const mockStages: ILifecycleStages<SubStage[]>[] = [
         ],
     }
 ];
+
+export const mockStages2 = [
+    {
+        "label": "1. Concepção",
+        "data": {
+            "stages": [
+                {
+                    "StageName": "1A - Solicitação",
+                    "StageDescription": "",
+                    "StageStatus": 1,
+                    "active": true,
+                    "completed": false,
+                    "StageCompletionDate": null,
+                    "StageInformation": "Um nova solicitação foi criada. Por favor complete todas as informações obrigatórias e clique em \"Enviar\".",
+                    "StageOrder": 0,
+                    "StageStateDescription": "In Progress (Waiting for Input)",
+                    "StageId": "dd31e3d8-9212-ed11-8945-00155d88724f"
+                },
+                {
+                    "StageName": "1B - Aprovação da Área",
+                    "StageDescription": "",
+                    "StageStatus": 0,
+                    "active": false,
+                    "completed": false,
+                    "StageCompletionDate": null,
+                    "StageInformation": null,
+                    "StageOrder": 1,
+                    "StageStateDescription": "Not Started",
+                    "StageId": "1a83e32a-9312-ed11-b597-00155d88724d"
+                }
+            ],
+            "LastModifiedDate": "/Date(1668610574030)/",
+            "PhaseDescription": "Solicitação de um projeto/ideia para ser analisada"
+        },
+        "active": true,
+        "completed": false,
+        "showCallout": true
+    },
+    {
+        "label": "2. Priorização",
+        "data": {
+            "stages": [
+                {
+                    "StageName": "2A - Business Case",
+                    "StageDescription": "",
+                    "StageStatus": 0,
+                    "active": false,
+                    "completed": false,
+                    "StageCompletionDate": null,
+                    "StageInformation": null,
+                    "StageOrder": 2,
+                    "StageStateDescription": "Not Started",
+                    "StageId": "6e42bb0c-2d13-ed11-867c-00155d88c343"
+                },
+                {
+                    "StageName": "2B - Revisão Comitê",
+                    "StageDescription": "",
+                    "StageStatus": 0,
+                    "active": false,
+                    "completed": false,
+                    "StageCompletionDate": null,
+                    "StageInformation": null,
+                    "StageOrder": 3,
+                    "StageStateDescription": "Not Started",
+                    "StageId": "36983a57-2e13-ed11-b7b1-00155d884040"
+                },
+                {
+                    "StageName": "2C - Ordem de Investimento",
+                    "StageDescription": "",
+                    "StageStatus": 0,
+                    "active": false,
+                    "completed": false,
+                    "StageCompletionDate": null,
+                    "StageInformation": null,
+                    "StageOrder": 4,
+                    "StageStateDescription": "Not Started",
+                    "StageId": "8f8a15e4-fc20-ed11-8362-00155d88ba3a"
+                }
+            ],
+            "LastModifiedDate": "/Date(1668610563673)/",
+            "PhaseDescription": "Priorização dos projetos que estão aderentes aos objetivos estratégicos da empresa"
+        },
+        "active": false,
+        "completed": false,
+        "showCallout": false
+    },
+    {
+        "label": "3. Planejamento",
+        "data": {
+            "stages": [
+                {
+                    "StageName": "3A - Termo de Abertura",
+                    "StageDescription": "",
+                    "StageStatus": 0,
+                    "active": false,
+                    "completed": false,
+                    "StageCompletionDate": null,
+                    "StageInformation": null,
+                    "StageOrder": 5,
+                    "StageStateDescription": "Not Started",
+                    "StageId": "6f8667a8-2e13-ed11-b7b1-00155d884040"
+                },
+                {
+                    "StageName": "3B - Revisão Escopo",
+                    "StageDescription": "",
+                    "StageStatus": 0,
+                    "active": false,
+                    "completed": false,
+                    "StageCompletionDate": null,
+                    "StageInformation": null,
+                    "StageOrder": 8,
+                    "StageStateDescription": "Not Started",
+                    "StageId": "556c623c-3013-ed11-91eb-00155d883845"
+                }
+            ],
+            "LastModifiedDate": "/Date(1668610563673)/",
+            "PhaseDescription": "Planejamento do escopo de um projeto"
+        },
+        "active": false,
+        "completed": false,
+        "showCallout": false
+    },
+    {
+        "label": "4. Execução",
+        "data": {
+            "LastModifiedDate": "/Date(1668610563673)/",
+            "PhaseDescription": "Execução e monitoria do projeto",
+            "stages": [
+                {
+                    "StageName": "4A - Execução e Monitoria",
+                    "StageDescription": "",
+                    "StageStatus": 0,
+                    "active": false,
+                    "completed": false,
+                    "StageCompletionDate": null,
+                    "StageInformation": null,
+                    "StageOrder": 9,
+                    "StageStateDescription": "Not Started",
+                    "StageId": "2748c61c-3b13-ed11-b15b-00155d885949"
+                }
+            ]
+        },
+        "active": false,
+        "completed": false,
+        "showCallout": false
+    },
+    {
+        "label": "5. Pos Audit",
+        "data": {
+            "LastModifiedDate": "/Date(1668610563673)/",
+            "PhaseDescription": "Etapa de revisão e validação do encerramento do projeto",
+            "stages": [
+                {
+                    "StageName": "5A - Termo de Encerramento",
+                    "StageDescription": "",
+                    "StageStatus": 0,
+                    "active": false,
+                    "completed": false,
+                    "StageCompletionDate": null,
+                    "StageInformation": null,
+                    "StageOrder": 10,
+                    "StageStateDescription": "Not Started",
+                    "StageId": "b30afbde-3c13-ed11-9877-00155d888e4a"
+                }
+            ]
+        },
+        "active": false,
+        "completed": false,
+        "showCallout": false
+    },
+    {
+        "label": "6. Encerrado",
+        "data": {
+            "LastModifiedDate": "/Date(1668610563673)/",
+            "PhaseDescription": "Etapa final do ciclo de vida do projeto",
+            "stages": [
+                {
+                    "StageName": "6A - Encerrado",
+                    "StageDescription": "",
+                    "StageStatus": 0,
+                    "active": false,
+                    "completed": false,
+                    "StageCompletionDate": null,
+                    "StageInformation": null,
+                    "StageOrder": 11,
+                    "StageStateDescription": "Not Started",
+                    "StageId": "fae46ab1-3d13-ed11-9877-00155d888e4a"
+                }
+            ]
+        },
+        "active": false,
+        "completed": false,
+        "showCallout": false
+    }
+]
