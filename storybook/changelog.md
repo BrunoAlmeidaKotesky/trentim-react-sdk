@@ -3,14 +3,14 @@
 #### [New Major Release v4!](#v4.0.0)
 
 <details id="4.2.1">
-<summary><b style="font-size: 20px;">v4.2.1 (Current)</b></summary>
+<summary><b>v4.2.1 (Current)</b></summary>
 
 - Fix a bug on `<LifecycleProgress>`, which on very specific cases, where the `--lifecycle-grid-row-number` css variable was not being changed when needed.
 </details>
 <br/>
 
 <details id="4.2.0">
-<summary><b style="font-size: 20px;">v4.2.0</b></summary>
+<summary><b >v4.2.0</b></summary>
 
 Does not export `IconButton.js` from `@fluentui/react` anymore, since `<LifecycleProgress>` does not uses it anymore.
 Added `@fluentui/react-icons` as a decency to reduce the final bundle size, primary caused the Icon button problem, so the component only import the needed icons.
@@ -22,7 +22,7 @@ Added `@fluentui/react-icons` as a decency to reduce the final bundle size, prim
 <br/>
 
 <details id="4.1.2">
-<summary><b style="font-size: 20px;">v4.1.2</b></summary>
+<summary><b >v4.1.2</b></summary>
 
 - Fixed a bug on `<LifecycleProgress>` which, when the stages we're empty or null, the component would fail to render.
     - Please note that when your `stages` array is empty, is up to you to handle the UI of the component, since it's not possible to know what you want to show in that case, and a default UI would be misleading.
@@ -30,7 +30,7 @@ Added `@fluentui/react-icons` as a decency to reduce the final bundle size, prim
 <br/>
 
 <details id="v4.1.0">
-<summary><b style="font-size: 20px;">v4.1.0 - 4.1.1</b></summary>
+<summary><b >v4.1.0 - 4.1.1</b></summary>
 
 *Please note that a proper general documentation on Storybook of the changes in v4 is still in progress.*
 
@@ -54,13 +54,13 @@ import { Tooltip } from 'trentim-react-sdk/Tooltip';
 <br/>
 
 <details id="v4.0.1">
-<summary><b style="font-size: 20px;">v4.0.1</b></summary>
+<summary><b >v4.0.1</b></summary>
 
 - Marked `onRenderItemColumn` from `IGridView` as optional again.
 </details>
 <br/>
 <details id="v4.0.0">
-<summary><b style="font-size: 20px;">v4.0.0</b></summary>
+<summary><b >v4.0.0</b></summary>
 
 Many new changes in this release, with new styles and behaviors for previous components, removal of previous deprecated functions and components, structure change, how to use the library, and more.
 
@@ -117,14 +117,14 @@ import type {/*A type or interface*/} from 'trentim-react-sdk/models';
 <br/>
 
 <details id="v3.4.3">
-<summary><b style="font-size: 20px;">v3.4.3</b></summary>
+<summary><b >v3.4.3</b></summary>
 
 - Fixed `<LifecycleProgress/>` `indicatorColor` background-color to not be applied on fluentui `<Icon/>` background.
 </details>
 <br/>
 
 <details id="v3.4.2">
-<summary><b style="font-size: 20px;">v3.4.2</b></summary>
+<summary><b >v3.4.2</b></summary>
 
 - When the `<StickerCard/>` is rendered with `isEditModeEnabled={true}`, only the new added stickers are going to have the TextField opened by default, pre-loaded `stickers` from state doesn't have the TextField opened by default.
 - Added a new **`readonly`** property to `IStickerItem<T>` named `renderedOnce` which is going to be set to `true` when the sticker is added for the first time, this property should not be changed, and `onBeforeAddSticker` will just ignore modifications on it.
@@ -133,14 +133,14 @@ import type {/*A type or interface*/} from 'trentim-react-sdk/models';
 <br/>
 
 <details id="v3.4.1">
-<summary><b style="font-size: 20px;">v3.4.1</b></summary>
+<summary><b >v3.4.1</b></summary>
 
 - Fixed the style of `<LifecycleProgress>` stage when it's completed, increasing it's size and correcting it's color.
 </details>
 <br/>
 
 <details id="v3.4.0">
-<summary><b style="font-size: 20px;">v3.4.0</b></summary>
+<summary><b >v3.4.0</b></summary>
 
 This release adds a new component `<StickerCard>`, which is going to be the only card component on the future, and making `<Card />` deprecated. And talking about depreciation, some features were also marked as deprecated, and will be removed in the next major release.
     
@@ -155,7 +155,7 @@ For the moment there are not documentation for the new card component, but it wi
 <br/>
 
 <details id="v3.3.0">
-<summary><b style="font-size: 20px;">v3.3.0</b></summary>
+<summary><b >v3.3.0</b></summary>
 
 This is a minor release that focus on fixing the `<Tooltip>` component bugs related to it's direction, so now it basically works as expected.
 - Added a optional property to `<Tooltip>` called `enableParentOverflow`, which is **not** recommended to be set to `true`, only if you **truly** need that to occurs.
@@ -167,7 +167,7 @@ This is a minor release that focus on fixing the `<Tooltip>` component bugs rela
 <br/>
 
 <details id="v3.2.0">
-<summary><b style="font-size: 20px;">v3.2.0</b></summary>
+<summary><b >v3.2.0</b></summary>
 
 - Reduced the bundle size of the package, removing the unnecessary flunetui components from the final bundle, and not being lazy loaded anymore.
 - Added a new hook called `useFileUpload`, please read the documentation on the storybook page for more details.
@@ -184,7 +184,7 @@ This is a minor release that focus on fixing the `<Tooltip>` component bugs rela
 <br/>
 
 <details id="v3.1.0">
-<summary><b style="font-size: 20px;">v3.1.0</b></summary>
+<summary><b >v3.1.0</b></summary>
 
 This versions is an extension of the previous version minor fixes that are were all focused on `<LifeCycleProgress>` tiny fixes related to dynamic height due to the scroll behavior.
 The difference is that the property `textColor` from `ILifecycleProgressProps` has been removed in order to provide a full customization to the span element with `stageTextStyle`.
@@ -192,7 +192,7 @@ The difference is that the property `textColor` from `ILifecycleProgressProps` h
 <br/>
 
 <details id="v3.0.0">
-<summary><b style="font-size: 20px;">v3.0.0</b></summary>
+<summary><b >v3.0.0</b></summary>
 
 This new major version focus on some aspects from the last previous released component `<LifecycleProgress>`, breaking name changes from some API methods, a new React hook, new types and some fixes.
 Please view the storybook for more details of the new added features.
@@ -213,63 +213,63 @@ Please view the storybook for more details of the new added features.
 <br/>
 
 <details id="v2.3.1">
-<summary><b style="font-size: 20px;">v2.3.1</b></summary>
+<summary><b >v2.3.1</b></summary>
 
 - Fixed the dumbest mistake of `2.3.0`, where the method `getSearchParamsAsObject` didn't return.
 </details>
 <br/>
 
 <details id="v2.3.0">
-<summary><b style="font-size: 20px;">v2.3.0</b></summary>
+<summary><b >v2.3.0</b></summary>
 
 - Added a new utility method `getSearchParamsAsObject` to the `Utils` class.
 </details>
 <br/>
 
 <details id="v2.2.4">
-<summary><b style="font-size: 20px;">v2.2.4</b></summary>
+<summary><b >v2.2.4</b></summary>
 
 - Added a new property to the `<GridView>` component: `leftHeaderSpace` inside `headerOptions`, which is a `React.ReactNode` element that can be placed on the left side of the header, using the previous free space from the header.
 </details>
 <br/>
 
 <details id="v2.2.3">
-<summary><b style="font-size: 20px;">v2.2.3</b></summary>
+<summary><b >v2.2.3</b></summary>
 
 - The same fix from the previous version, with the value also being changed to inactive indicators.
 </details>
 <br/>
 
 <details id="v2.2.2">
-<summary><b style="font-size: 20px;">v2.2.2</b></summary>
+<summary><b >v2.2.2</b></summary>
 
 - Changed the size of the indicator from `LifecycleProgress` from 24px to 20px, removing the unnecessary border when the stage is not active.
 </details>
 <br/>
 
 <details id="v2.2.1">
-<summary><b style="font-size: 20px;">v2.2.1</b></summary>
+<summary><b >v2.2.1</b></summary>
 
 - Fixed a bug, where the progress bar color from `LifecycleProgress` was using the `stageBgColor` property instead of the `indicatorColor` property.
 </details>
 <br/>
 
 <details id="v2.2.0">
-<summary><b style="font-size: 20px;">v2.2.0</b></summary>
+<summary><b >v2.2.0</b></summary>
 
 - Fixed the `react` and `react-dom` dependencies to correctly use `^16.9.0` by default, which the core library uses, changing to the classic `jsxRuntime` on vite.
 </details>
 <br/>
 
 <details id="v2.1.1">
-<summary><b style="font-size: 20px;">v2.1.1</b></summary>
+<summary><b >v2.1.1</b></summary>
 
 - Fixed how `LifecycleProgress` renders the keys from it's children.
 </details>
 <br/>
 
 <details id="v2.1.0">
-<summary><b style="font-size: 20px;">v2.1.0</b></summary>
+<summary><b >v2.1.0</b></summary>
 
 - Created a new component called `LifecycleProgress`, in which it was used and implemented in a non-generic way internally in our company, and now is public and generic.
 Please view the documentation for more information.
@@ -277,7 +277,7 @@ Please view the documentation for more information.
 <br/>
 
 <details id="v2.0.0">
-<summary><b style="font-size: 20px;">v2.0.0</b></summary>
+<summary><b >v2.0.0</b></summary>
 
 Although this is a major release, not many aspects from functionalities have changed.
 The main goal of this release is to change the internal way of how the library is bundled and structured, 

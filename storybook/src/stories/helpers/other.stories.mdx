@@ -1,0 +1,95 @@
+import { Meta } from '@storybook/addon-docs'
+import {TypesTable} from '../TypesTable';
+
+<Meta title="Helpers/Other utilities" />
+
+This function are utilities functions that simply does not fit in any other category.
+
+### convertIsoToLocaleString:
+Tries to convert an ISO `string` to the locale format if possible.
+It's not very different from the native `Intl.DateTimeFormat` function (which is used internally), 
+but the difference is that it actually does an verification to make sure the string is an ISO string, and if not, it returns the original string.
+
+* Return Value: The converted string or the original one if it couldn't be converted. `string`
+
+* Parameters:
+
+<TypesTable rows={[
+    {
+        Id: 1,
+        name: 'date',
+        type: 'string',
+        description: 'A string on the ISO format `.toISOstring()`',
+        required: true
+    },
+    {
+        Id: 2,
+        name: 'locales',
+        type: 'string[]',
+        description: 'The locales to use, the default is pt-BR ',
+        required: false,
+        default: 'pt-BR'
+    },
+    {
+        Id: 3,
+        name: 'options',
+        type: 'Intl.DateTimeFormat',
+        description: 'The options to pass to the `Intl.DateTimeFormat` function',
+        required: false,
+        default: 'undefined'
+    }
+]}/>
+
+* Example:
+
+```ts dark
+import { convertIsoToLocaleString } from 'trentim-react-sdk/helpers';
+const ISO_STRING = new Date().toISOString();
+const convertedString = convertIsoToLocaleString(ISO_STRING);
+```
+
+### registerLiveReload:
+It enables the webpart to be live reloaded even when the webpart/extension is already on a production environment 
+(When using `?debug=true&noredir=true&debugManifestsFile=https://localhost:4321/temp/manifests.js` for example).
+It only applies when running the webpart on a development environment (`gulp serve`).
+
+* Parameters:
+
+<TypesTable rows={[
+    {
+        Id: 1,
+        name: 'manifest',
+        type: 'any',
+        description: 'SPFx manifest from the webpart context - `microsoft/sp-component-base#BaseComponent.context`',
+        required: true
+    },
+    {
+        Id: 2,
+        name: 'serveUrl',
+        type: 'string',
+        description: 'An optional URL to use as the gulp serve address.',
+        required: false,
+        default: 'https://localhost:4321' 
+    },
+    {
+        Id: 3,
+        name: 'liveReloadUrl',
+        type: 'string',
+        description: 'An optional URL to use as the live reload address.',
+        required: false,
+        default: 'localhost:35729/livereload.js?snipver=1' 
+    }
+]}/>
+
+
+* Example:
+
+```ts dark
+import { registerLiveReload } from 'trentim-react-sdk/helpers';
+
+export default class MyWebPart extends BaseClientSideWebPart<IMyWebPartProps> {
+    public async onInit() {
+      registerLiveReload(this.context?.manifest);
+    }
+}
+```

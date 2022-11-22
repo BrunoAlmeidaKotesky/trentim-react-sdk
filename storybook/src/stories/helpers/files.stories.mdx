@@ -1,0 +1,161 @@
+import { Meta } from '@storybook/addon-docs'
+import {TypesTable} from '../TypesTable';
+
+<Meta 
+  parameters={{
+    viewMode: 'docs',
+    previewTabs: { canvas: { hidden: true } },
+  }}
+  title="Helpers/File utilities" />
+
+Utilities functions for working with files on the client side.
+
+### urlToFile:
+Take an stored object url and convert it back to a `File` object.
+
+* Return Value: The new `File` object. `Promise<File>`
+
+* Parameters:
+
+<TypesTable rows={[
+    {
+        Id: 1,
+        name: 'url',
+        type: 'string',
+        description: 'The url of the file, like an blob: for example.',
+        required: true
+    },
+    {
+        Id: 2,
+        name: 'fileInfo',
+        type: 'IFileInfo',
+        description: "The information of the new file object, like it's mime type, name and more.",
+        required: true
+    },
+    {
+        Id: 3,
+        name: 'fetchOptions',
+        type: 'RequestInit',
+        description: 'The options to pass to the fetch request.',
+        required: false
+    }
+]}/>
+
+* Signature:
+```ts dark
+  function urlToFile(url: string, fileInfo: IFileInfo, fetchOptions: RequestInit = null): Promise<File>
+```	
+
+* Example:
+
+```ts live=true
+const newFile = await urlToFile("blob:https://tenant.com/bd3df1f7-38c5-44db-9a97-aa956072ef02", {
+  fileName: "bird.png",
+  fileMime: "image/png",
+  lastModified: new Date().getTime()
+});
+```
+
+### blobToBase64:
+Takes any `Blob` object or inherited objects from this interface and convert it to a base64 string.
+ 
+* Return Value: The base64 string. `Promise<string>`
+
+* Parameters:
+
+<TypesTable rows={[
+  {
+      Id: 1,
+      name: 'blob',
+      type: 'Blob',
+      description: 'The blob object to convert to base64.',
+      required: true
+  },
+  {
+      Id: 2,
+      name: 'config',
+      type: 'IBlobStringWriter',
+      description: 'An optional configuration object.',
+      required: false
+  }
+]} />
+
+* Signature:
+
+```ts dark
+  function blobToBase64(blob: Blob, config?: IBlobStringWriter): Promise<string>
+```
+
+* Example:
+
+```ts live=true
+const fileObject = await urlToFile("blob:https://tenant.com/bd3df1f7-38c5-44db-9a97-aa956072ef02", {
+  fileName: "bird.png",
+  fileMime: "image/png",
+  lastModified: new Date().getTime()
+});
+const base64 = await blobToBase64(fileObject);
+```
+
+### convertBase64To:
+
+Convert's a base 64 string to some of the possible return values from `ConversionOptions` class.
+
+* Return Value: A instance of `ConversionOptions` class.
+
+* Signature:
+```ts dark
+    function convertBase64To(base64: string, fileName?: string, type?: string): ConversionOptions
+```
+
+* Parameters:
+
+<TypesTable rows={[
+  {
+      Id: 1,
+      name: 'base64',
+      type: 'string',
+      description: 'The base64 string to convert.',
+      required: true
+  },
+  {
+      Id: 2,
+      name: 'fileName',
+      type: 'string',
+      description: 'The name of the file to convert.',
+      required: false
+  },
+  {
+      Id: 3,
+      name: 'type',
+      type: 'string',
+      description: 'The mime type of the file to convert.',
+      required: false
+    }
+]}/>
+
+### ConversionOptions:
+
+The ClassConversionOptions has this simple implementation:
+    
+```ts dark
+export class ConversionOptions {
+  constructor(private blob: Blob, private byteArrays: Uint8Array[], private mimeType: string, private fileName?: string) { }
+  /**
+   * @returns Return the converted value as an blob Object
+   */
+  public getBlob(): Blob {
+    return this.blob;
+  }
+
+  public getFile(): File {
+    return new File([this.getBlob()], this?.fileName, { type: this?.mimeType });
+  }
+  /**
+   * @returns Return an array representation of the type `Uint8Array` from the given base64 value.
+   */
+  public getByteArray(): Uint8Array[] {
+    return this.byteArrays;
+  }
+}
+```

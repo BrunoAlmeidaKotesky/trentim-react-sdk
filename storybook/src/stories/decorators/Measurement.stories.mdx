@@ -5,7 +5,7 @@ import {TypesTable} from '../TypesTable';
 
 # Measurement
 
-Decorate a method with this decorator to measure the execution time of the method.
+Decorate a method with this decorator to measure the execution time of the method, the result will be printed on browser console.
 
 * Parameters:
 
@@ -14,8 +14,9 @@ Decorate a method with this decorator to measure the execution time of the metho
         Id: 1,
         name: 'disable',
         type: 'boolean',
-        description: 'If true, the measure is disabled.',
-        default: 'false'
+        description: 'If true, the measurement is disabled.',
+        default: 'false',
+        required: false
     },
     {
         Id: 2,
@@ -23,10 +24,11 @@ Decorate a method with this decorator to measure the execution time of the metho
         type: 'string',
         description: 'Custom `console.log` css if desired.',
         default: '`color: white; background-color: #3e88ef`',
+        required: false
     }
-]}/>
+]} />
 
-__Example:__
+* Example:
 
 ```ts dark
 class Example {
