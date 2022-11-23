@@ -29,6 +29,7 @@ Take an stored object url and convert it back to a `File` object.
         Id: 2,
         name: 'fileInfo',
         type: 'IFileInfo',
+        typeLink: "?path=/docs/helpers-file-utilities--docs#types-ifileinfo",
         description: "The information of the new file object, like it's mime type, name and more.",
         required: true
     },
@@ -36,6 +37,7 @@ Take an stored object url and convert it back to a `File` object.
         Id: 3,
         name: 'fetchOptions',
         type: 'RequestInit',
+        typeLink: "https://developer.mozilla.org/en-US/docs/Web/API/Request/Request",
         description: 'The options to pass to the fetch request.',
         required: false
     }
@@ -68,6 +70,7 @@ Takes any `Blob` object or inherited objects from this interface and convert it 
       Id: 1,
       name: 'blob',
       type: 'Blob',
+      typeLink: 'https://developer.mozilla.org/en-US/docs/Web/API/Blob',
       description: 'The blob object to convert to base64.',
       required: true
   },
@@ -75,6 +78,7 @@ Takes any `Blob` object or inherited objects from this interface and convert it 
       Id: 2,
       name: 'config',
       type: 'IBlobStringWriter',
+      typeLink: '?path=/docs/helpers-file-utilities--docs#types-iblobstringwritter',
       description: 'An optional configuration object.',
       required: false
   }
@@ -137,7 +141,7 @@ Convert's a base 64 string to some of the possible return values from `Conversio
 ### ConversionOptions:
 
 The ClassConversionOptions has this simple implementation:
-    
+
 ```ts dark
 export class ConversionOptions {
   constructor(private blob: Blob, private byteArrays: Uint8Array[], private mimeType: string, private fileName?: string) { }
@@ -157,5 +161,28 @@ export class ConversionOptions {
   public getByteArray(): Uint8Array[] {
     return this.byteArrays;
   }
+}
+```
+
+<div id="types-iblobstringwritter"/>
+* Interface: IBlobStringWriter
+```ts dark
+export interface IBlobStringWritter {
+    readAs: 'ArrayBuffer' | 'BinaryString' | 'DataURL' | 'Text'
+    customCb: (res: string | ArrayBuffer) => Promise<string>;
+    encoding?: string
+}
+```
+
+<div id="types-ifileinfo"/>
+* Interface: IFileInfo
+```ts dark
+export interface IFileInfo {
+    /**Name of the file to be converted to `File` */
+    fileName: string;
+    /**The Mime-Type of the file, example: `text/plain` */
+    fileMime?: string;
+    /**The last modfified date of the file before being converted */
+    lastModified?: number;
 }
 ```

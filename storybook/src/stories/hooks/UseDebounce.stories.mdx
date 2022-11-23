@@ -1,5 +1,6 @@
 import { Meta } from '@storybook/addon-docs'
 import {DebounceExample} from './ExamplesComponents'
+import {TypesTable} from '../TypesTable';
 
 <Meta title="Hooks/useDebounce" />
 
@@ -16,10 +17,22 @@ import {DebounceExample} from './ExamplesComponents'
 
 * Parameters:
 
-| *Name* | *Required* | *Description* | *Type* |
-|--------|-------------|----------------|--------|
-| value | true | The value to be debounced of any type. | <code>T</code> |
-| delay | true | time to delay the event. | <code language="typescript">number</code> |
+<TypesTable rows={[
+    {
+        Id: 1,
+        name: 'value',
+        type: 'T',
+        description: 'The value to be debounced of any type.',
+        required: true
+    },
+    {
+        Id: 2,
+        name: 'delay',
+        type: 'number',
+        description: 'Time to delay the event.',
+        required: true
+    }
+]}/>
 
 * Function Signature:
 ```ts dark

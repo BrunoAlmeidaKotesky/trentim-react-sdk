@@ -26,14 +26,16 @@ The path string is automatically inferred from the given object, due to the type
         name: 'nestedObject',
         type: 'Record<any, any>',
         description: 'The object to search the value in.',
-        required: true
+        required: true,
+        typeLink: "https://www.typescriptlang.org/docs/handbook/utility-types.html#recordkeys-type"
     },
     {
         Id: 2,
         name: 'path',
         type: 'Path',
         description: 'The path to the value, as an array of keys, separated by dots.',
-        required: false
+        required: false,
+        typeLink: "https://github.com/BrunoAlmeidaKotesky/bakutils-types#paths"
     }
 ]}/>
 
@@ -93,7 +95,8 @@ This is similar to `Object.keys`, but it traverses through the whole object hier
         name: 'obj',
         type: 'Record<any, any>',
         description: 'The object to get the keys from.',
-        required: true
+        required: true,
+        typeLink: "https://www.typescriptlang.org/docs/handbook/utility-types.html#recordkeys-type"
     }
 ]}/>
 
@@ -128,21 +131,24 @@ Change the value of a property in a deep nested object, **mutating** the origina
         name: 'obj',
         type: 'Record<any, any>',
         description: 'The object to search in.',
-        required: true
+        required: true,
+        typeLink: "https://www.typescriptlang.org/docs/handbook/utility-types.html#recordkeys-type"
     },
     {
         Id: 2,
         name: 'path',
         type: 'Path',
         description: 'The path to the value, as an array of keys, separated by dots.',
-        required: true
+        required: true,
+        typeLink: "https://github.com/BrunoAlmeidaKotesky/bakutils-types#paths"
     },
     {
         Id: 3,
         name: 'value',
         type: 'TypeFrom<Obj, Path>',
         description: 'The new value to set.',
-        required: true
+        required: true,
+        typeLink: "https://github.com/BrunoAlmeidaKotesky/bakutils-types#typefrom"
     }
 ]}/>
 

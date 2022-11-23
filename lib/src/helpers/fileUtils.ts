@@ -1,5 +1,5 @@
 import { ConversionOptions } from "@helpers/ConverterOptions";
-import type { IBlobStringWritter as IBlobStringWriter, IFileInfo } from "@models/interfaces/IFileInfo";
+import type { IBlobStringWriter, IFileInfo } from "@models/interfaces/IFileInfo";
 
 /**
 * Take an stored object url and convert it back to a File object.

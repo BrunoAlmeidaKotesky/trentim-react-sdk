@@ -8,7 +8,7 @@ export interface IFileInfo {
     lastModified?: number;
 }
 
-export interface IBlobStringWritter {
+export interface IBlobStringWriter {
     readAs: 'ArrayBuffer' | 'BinaryString' | 'DataURL' | 'Text'
     customCb: (res: string | ArrayBuffer) => Promise<string>;
     encoding?: string

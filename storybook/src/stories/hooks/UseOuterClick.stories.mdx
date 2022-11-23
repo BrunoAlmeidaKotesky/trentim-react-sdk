@@ -1,5 +1,6 @@
 import { Meta } from '@storybook/addon-docs'
 import {OuterClickExample} from './ExamplesComponents'
+import {TypesTable} from '../TypesTable';
 
 <Meta title="Hooks/useOuterClick" />
 
@@ -11,10 +12,20 @@ Use this hook if you need to detect clicks outside of a component when you were 
 
 * Parameters:
 
-| *Name* | *Required* | *Description* | *Type* |
-|--------|-------------|----------------|--------|
-| callback | true | A callback with a pointer event as it's parameter. | <code>(ev?: PointerEvent) => any</code> |
-| cancelableCb | false | A callback with a pointer event as it's parameter, which can be used to stop the execution of the first callback.. | <code language="typescript">cancelableCb?: (ev: PointerEvent) => boolean</code> |
+<TypesTable rows={[
+   {
+        name: 'callback',
+        required: true,
+        description: 'A callback with a pointer event as it\'s parameter.',
+        type: '(ev?: PointerEvent) => any',
+     },
+     {
+        name: 'cancelableCb',
+        required: false,
+        description: 'A callback with a pointer event as it\'s parameter, which can be used to stop the execution of the first callback.',
+        type: '(ev: PointerEvent) => boolean',
+     }
+]}/>
 
 * Function Signature:
 ```ts dark
