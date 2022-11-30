@@ -31,5 +31,9 @@ export function convertIsoToLocaleString(
   if (!isIsoDate) return date;
   return new Intl.DateTimeFormat(locales, formatOptions).format(new Date(date));
 }
-
-//A pipeline function
+/**
+ * The classical sleep function, it will wait for the specified amount of time before continuing the execution.
+ * 
+ * Similar to Python `time.sleep()`
+ */
+export const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));

@@ -2,7 +2,7 @@
 import LifecycleTile from './LifecycleTile';
 import styles from './lifecycle.module.scss';
 import type { ILifecycleProgressProps, ILifecycleProgressRef, LifecycleCallout, ILifecycleStages } from '@models/interfaces/ILifecycleProgressProps';
-import { useEffect, useRef, useState, useImperativeHandle, forwardRef, ForwardedRef, useLayoutEffect, useCallback } from 'react';
+import { useEffect, useRef, useState, useImperativeHandle, forwardRef, ForwardedRef, useLayoutEffect, useCallback, DOMAttributes } from 'react';
 import { Callout, DirectionalHint } from '@fluentui/react/lib/Callout';
 import { CalloutCtx } from './Context';
 import { ChevronLeft24Regular, ChevronRight24Regular } from '@fluentui/react-icons';
@@ -12,6 +12,7 @@ declare module "react" {
       render: (props: P, ref: React.Ref<T>) => React.ReactElement<any, string | React.JSXElementConstructor<any>>
     ): (props: P & React.RefAttributes<T>) => React.ReactElement<any, string | React.JSXElementConstructor<any>>;
 }
+type MouseDown = DOMAttributes<HTMLDivElement>['onMouseDown'];
 
 function LifecycleProgressInner<StageData = any>(props: ILifecycleProgressProps<StageData>, ref: ForwardedRef<ILifecycleProgressRef>) {
     const [{isVisible, calloutIdx}, setCallout] = useState<LifecycleCallout>({isVisible: false, calloutIdx: null});
@@ -101,12 +102,25 @@ function LifecycleProgressInner<StageData = any>(props: ILifecycleProgressProps<
         if(activeIdx === -1) return previousArr.map((i, idx) => ({...i, hidden: idx < previousArr.length - minusOneIdx}));
         if(activeIdx === 0) return previousArr.map((i, idx) => ({...i, hidden: idx > zeroIdx}));
         if(activeIdx === visibleStages.length - 1) return previousArr.map((i, idx) => ({...i, hidden: idx < visibleStages.length - lastIdx}));
-        return previousArr.map((i, idx) => {
+        const newStageArr = previousArr.map((i, idx) => {
             const hidden = (middleIdx >= 0) ? 
             idx < activeIdx - 1 || idx > activeIdx + middleIdx : 
             idx < activeIdx - 1 || idx > activeIdx;
             return {...i, hidden};
         });
+
+        if(minusOneIdx === 4) {
+            //If the active stage is the one before the last one,
+            const activeIdx =  newStageArr.findIndex(i => i.active);
+            if(activeIdx === newStageArr.length - 2) {
+                //Make the item before the last hidden, also make the last item visible.
+                const firstNotHiddenIdx = newStageArr.findIndex(i => !i.hidden);
+                if(firstNotHiddenIdx !== -1 && newStageArr?.[firstNotHiddenIdx - 1])
+                    newStageArr[firstNotHiddenIdx - 1].hidden = false;
+            }
+        }
+
+        return newStageArr;
     }
 
     useLayoutEffect(() => { 
@@ -149,6 +163,8 @@ function LifecycleProgressInner<StageData = any>(props: ILifecycleProgressProps<
         return () => { window.removeEventListener('resize', verifyGridRowNumber); };
     }, []);
 
+    const preventTextSelection: MouseDown = useCallback(e => { if(e.detail > 1) e.preventDefault(); }, []);
+
     return (<>
         <div ref={lifecycleContainer} className={`${styles.lifecycle} mainLifecycleContainer`}>
             <div className={styles.projectLifecycle}>
@@ -156,7 +172,10 @@ function LifecycleProgressInner<StageData = any>(props: ILifecycleProgressProps<
                 <span className={styles.columnSubTitle}>{props.leftColumnSubtitle}</span>
             </div>
             <div className={styles.lifecycleContainer}>
-                <div style={props?.leftScrollButtonStyles} className={`${styles.btnLifecycleScroll} ${styles.scrollLeft}`} onClick={() => changeVisibility('left')}>
+                <div 
+                    onMouseDown={preventTextSelection} 
+                    style={props?.leftScrollButtonStyles} className={`${styles.btnLifecycleScroll} ${styles.scrollLeft}`} 
+                    onClick={() => changeVisibility('left')}>
                     <ChevronLeft24Regular />
                 </div>
                 <div className={styles.lifecycleTrackContainer}>
@@ -184,7 +203,10 @@ function LifecycleProgressInner<StageData = any>(props: ILifecycleProgressProps<
                         </CalloutCtx.Provider>
                     </div>
                 </div>
-                <div style={props?.rightScrollButtonStyles} className={`${styles.btnLifecycleScroll} ${styles.scrollRight}`} onClick={() => changeVisibility('right')}>
+                <div 
+                    onMouseDown={preventTextSelection} 
+                    style={props?.rightScrollButtonStyles} className={`${styles.btnLifecycleScroll} ${styles.scrollRight}`} 
+                    onClick={() => changeVisibility('right')}>
                     <ChevronRight24Regular />
                 </div>
             </div>

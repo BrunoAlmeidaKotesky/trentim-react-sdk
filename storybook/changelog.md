@@ -2,8 +2,18 @@
 
 #### [New Major Release v4!](#v4.0.0)
 
+<details id="4.3.0">
+<summary><b>v4.3.0 (Current)</b></summary>
+
+- Fix a bug on `<LifecycleProgress>`, which in some cases depending on the `stages` length, if the number of visible items were 4, the last item would be cut off.
+- Upgrade `bakutils-types` library to `1.2.0`, which introduces the following types: `RemoveFunctionsFrom`, `DeepPartialArray`, `DeepPartialObj` and removes `SetValuesByPath`.
+- Added a new helper function which is always used: `sleep`.
+- Introduced three new __*Experimental*__ helpers functions: `pipe`, `memoize` and `memoizeAsync`, which are not yet documented on storybook. (And since it's experimental, it could or could not be removed in the future).
+</details>
+<br/>
+
 <details id="4.2.1">
-<summary><b>v4.2.1 (Current)</b></summary>
+<summary><b>v4.2.1</b></summary>
 
 - Fix a bug on `<LifecycleProgress>`, which on very specific cases, where the `--lifecycle-grid-row-number` css variable was not being changed when needed.
 </details>

@@ -313,8 +313,8 @@ export const mockStages2 = [
                     "StageName": "1A - Solicitação",
                     "StageDescription": "",
                     "StageStatus": 1,
-                    "active": true,
-                    "completed": false,
+                    "active": false,
+                    "completed": true,
                     "StageCompletionDate": null,
                     "StageInformation": "Um nova solicitação foi criada. Por favor complete todas as informações obrigatórias e clique em \"Enviar\".",
                     "StageOrder": 0,
@@ -326,7 +326,7 @@ export const mockStages2 = [
                     "StageDescription": "",
                     "StageStatus": 0,
                     "active": false,
-                    "completed": false,
+                    "completed": true,
                     "StageCompletionDate": null,
                     "StageInformation": null,
                     "StageOrder": 1,
@@ -337,8 +337,8 @@ export const mockStages2 = [
             "LastModifiedDate": "/Date(1668610574030)/",
             "PhaseDescription": "Solicitação de um projeto/ideia para ser analisada"
         },
-        "active": true,
-        "completed": false,
+        "active": false,
+        "completed": true,
         "showCallout": true
     },
     {
@@ -350,7 +350,7 @@ export const mockStages2 = [
                     "StageDescription": "",
                     "StageStatus": 0,
                     "active": false,
-                    "completed": false,
+                    "completed": true,
                     "StageCompletionDate": null,
                     "StageInformation": null,
                     "StageOrder": 2,
@@ -362,7 +362,7 @@ export const mockStages2 = [
                     "StageDescription": "",
                     "StageStatus": 0,
                     "active": false,
-                    "completed": false,
+                    "completed": true,
                     "StageCompletionDate": null,
                     "StageInformation": null,
                     "StageOrder": 3,
@@ -374,7 +374,7 @@ export const mockStages2 = [
                     "StageDescription": "",
                     "StageStatus": 0,
                     "active": false,
-                    "completed": false,
+                    "completed": true,
                     "StageCompletionDate": null,
                     "StageInformation": null,
                     "StageOrder": 4,
@@ -386,7 +386,7 @@ export const mockStages2 = [
             "PhaseDescription": "Priorização dos projetos que estão aderentes aos objetivos estratégicos da empresa"
         },
         "active": false,
-        "completed": false,
+        "completed": true,
         "showCallout": false
     },
     {
@@ -398,7 +398,7 @@ export const mockStages2 = [
                     "StageDescription": "",
                     "StageStatus": 0,
                     "active": false,
-                    "completed": false,
+                    "completed": true,
                     "StageCompletionDate": null,
                     "StageInformation": null,
                     "StageOrder": 5,
@@ -410,7 +410,7 @@ export const mockStages2 = [
                     "StageDescription": "",
                     "StageStatus": 0,
                     "active": false,
-                    "completed": false,
+                    "completed": true,
                     "StageCompletionDate": null,
                     "StageInformation": null,
                     "StageOrder": 8,
@@ -422,7 +422,7 @@ export const mockStages2 = [
             "PhaseDescription": "Planejamento do escopo de um projeto"
         },
         "active": false,
-        "completed": false,
+        "completed": true,
         "showCallout": false
     },
     {
@@ -435,8 +435,8 @@ export const mockStages2 = [
                     "StageName": "4A - Execução e Monitoria",
                     "StageDescription": "",
                     "StageStatus": 0,
-                    "active": false,
-                    "completed": false,
+                    "active": true,
+                    "completed": true,
                     "StageCompletionDate": null,
                     "StageInformation": null,
                     "StageOrder": 9,
@@ -445,7 +445,7 @@ export const mockStages2 = [
                 }
             ]
         },
-        "active": false,
+        "active": true,
         "completed": false,
         "showCallout": false
     },
@@ -491,6 +491,25 @@ export const mockStages2 = [
                     "StageStateDescription": "Not Started",
                     "StageId": "fae46ab1-3d13-ed11-9877-00155d888e4a"
                 }
+            ]
+        },
+        "active": false,
+        "completed": false,
+        "showCallout": false
+    },
+    {
+        "label": "7. Finalizar",
+        "data": {
+            "LastModifiedDate": "/Date(1668610563673)/",
+            "PhaseDescription": "Etapa final do ciclo de vida do projeto",
+            "stages": [
+                {
+                    "StageName": "7A - Finalizar",
+                    "StageDescription": "",
+                    "StageStatus": 0,
+                    "active": false,
+                    "completed": false,
+                },
             ]
         },
         "active": false,

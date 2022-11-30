@@ -117,7 +117,7 @@
   "dependencies": {
     "@fluentui/react": "^8.52.3",
     "@fluentui/react-icons": "^2.0.186",
-    "bakutils-types": "^1.1.0",
+    "bakutils-types": "1.2.0",
     "fast-sort": "^3.1.3"
   }
 }

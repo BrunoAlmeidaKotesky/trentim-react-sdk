@@ -1,5 +1,6 @@
 import {getDeepKeys, getDeepValue, setDeepValue, tryJSONParse} from '@helpers/objectUtils';
 import {convertIsoToLocaleString} from '@helpers/general';
+import {memoize, memoizeAsync, pipe } from '@helpers/functional';
 import {describe, it, expect} from 'vitest';
 
 //Test every method of Utils
@@ -52,5 +53,35 @@ describe('Test all methods from Utils', () => {
         };
         const objectToCompare = {...obj, b: {...obj.b, d: {...obj.b.d, e: 5}}};
         expect(setDeepValue(obj, 'b.d.e', 5)).toEqual(objectToCompare);
+    });
+    it('memoize', () => {
+        const func = (a: number, b: number) => a + b;
+        const memoized = memoize(func);
+        expect(memoized(1, 2)).toBe(3);
+    });
+    it('memoizeAsync', async () => {
+        const func = async (a: number, b: number) => Promise.resolve(a + b);
+        const memoized = memoizeAsync(func);
+        expect(await memoized(1, 2)).toBe(3);
+    });
+    it('pipe', () => {
+        const func = (a: number) => a + 1;
+        const func2 = (a: number) => a * 2;
+        const value = pipe(42, func, func2);
+        expect(value).toBe(86);
+    });
+    it('pipeAsync', async () => {
+        const numToString = (a: number) => a.toString();
+        const stringToNum = (a: string) => parseInt(a);
+        const numToStringAsync = async (a: number) => { return Promise.resolve(a.toString());}
+        const stringToNumberAsync = async (b: string) => Promise.resolve(parseInt(b, 10));
+        //Make 6 test cases, which one increasing the number of functions in the pipe
+        expect(await pipe(42, numToStringAsync)).not.instanceOf(Promise);
+        expect(await pipe(42, numToStringAsync, stringToNumberAsync)).not.instanceOf(Promise);
+        expect(await pipe(42, numToStringAsync, stringToNumberAsync, numToStringAsync)).not.instanceOf(Promise);
+        expect(await pipe(42, numToStringAsync, stringToNumberAsync, numToString, stringToNumberAsync)).not.instanceOf(Promise);
+        expect(await pipe(42, numToStringAsync, stringToNumberAsync, numToStringAsync, stringToNumberAsync, numToStringAsync)).not.instanceOf(Promise);
+        expect(await pipe(42, numToStringAsync, stringToNumberAsync, numToStringAsync, stringToNumberAsync, numToStringAsync, stringToNum)).not.instanceOf(Promise);
+        expect(await pipe(42, numToStringAsync, stringToNum, numToStringAsync, stringToNum, numToStringAsync, stringToNumberAsync)).not.instanceOf(Promise);
     });
 });
