@@ -1631,10 +1631,10 @@ babel-plugin-polyfill-regenerator@^0.4.1:
   dependencies:
     "@babel/helper-define-polyfill-provider" "^0.3.3"
 
-bakutils-types@1.2.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/bakutils-types/-/bakutils-types-1.2.0.tgz#3270ca0fb5429b20f4ac1b829b7a021859fe4ffb"
-  integrity sha512-frbfhbcqBwwTy1M6h9alCyFIyZD+u7ilfTCoWy7dVKm2ocssucXsoJs2/StH6Io2MEs3sT+9spJh0mURIGgesA==
+bakutils-types@^1.3.0:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/bakutils-types/-/bakutils-types-1.3.0.tgz#10fa2de255d9e25946be37c6e1bbdbf81f127a35"
+  integrity sha512-trPew176WAZ3neth7Jdl2EoxicqGBGYs8g/9GQRq8hlE3XbbN6HUD677sSE06J0+M4/IvdQvlS1fmxFR6nKRUQ==
 
 balanced-match@^1.0.0:
   version "1.0.2"

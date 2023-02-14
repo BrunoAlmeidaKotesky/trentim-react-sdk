@@ -2,12 +2,13 @@
 import {forwardRef} from 'react';
 import { useGridController } from '@components/GridView/hooks/useGridController';
 import { FilterPanelContext, GroupPanelContext, ListOptionsContext } from '@components/GridView/Contexts';
-import { CheckboxVisibility, CollapseAllVisibility, DetailsList, DetailsListLayoutMode } from '@fluentui/react/lib/DetailsList';
-import { Sticky, StickyPositionType } from '@fluentui/react/lib/Sticky';
+import { CheckboxVisibility, CollapseAllVisibility, DetailsList, DetailsListLayoutMode, IDetailsColumnRenderTooltipProps, IDetailsHeaderProps, IDetailsListStyles } from '@fluentui/react/lib/DetailsList';
 import type { IGridListProps, BaseType, IGridViewRefHandler } from '@models/interfaces/IGridView';
 import PanelFilter from '@components/GridView/PanelFilter';
 import GroupPanel from '@components/GridView/GroupPanel';
 import { ListOptions } from '@components/GridView/ListOptions';
+import { TooltipHost } from '@fluentui/react/lib/Tooltip';
+import type { IRenderFunction } from '@fluentui/react/lib/Utilities';
 
 declare module "react" {
     function forwardRef<T, P = {}>(
@@ -19,6 +20,40 @@ function GridViewInner<T extends BaseType>(props: IGridListProps<T>, ref: React.
     const {state, handlers} = useGridController(props, ref);
     const {actualRows, visibleCols, isFilterPanelOpen, filterPanelConfig, groupPanelConfig, listConfig, isGroupPanelOpen, groups} = state;
     const {onItemClick} = handlers;
+
+    const onRenderDetailsHeader: IRenderFunction<IDetailsHeaderProps> = (props, defaultRender) => {
+        if (!props) {
+          return null;
+        }
+        const onRenderColumnHeaderTooltip: IRenderFunction<IDetailsColumnRenderTooltipProps> = tooltipHostProps => (
+          <TooltipHost {...tooltipHostProps} />
+        );
+        return defaultRender!({
+          ...props,
+          onRenderColumnHeaderTooltip,
+        });
+    };
+
+    const gridStyles: Partial<IDetailsListStyles> = {
+        root: {
+          overflowX: 'scroll',
+          selectors: {
+            '& [role=grid]': {
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'start',
+            },
+          },
+        },
+        headerWrapper: {
+          flex: '0 0 auto',
+        },
+        contentWrapper: {
+          flex: '1 1 auto',
+          overflowY: 'auto',
+          overflowX: 'hidden',
+        },
+      };
 
     return (
         <GroupPanelContext.Provider value={groupPanelConfig}>
@@ -48,12 +83,10 @@ function GridViewInner<T extends BaseType>(props: IGridListProps<T>, ref: React.
                             },
                             showEmptyGroups: false
                         }}
-                        layoutMode={DetailsListLayoutMode.fixedColumns} isHeaderVisible={true}
-                        onRenderDetailsHeader={(headerProps, defaultRender) => (
-                            <Sticky key={headerProps?.key} stickyPosition={StickyPositionType.Header} stickyBackgroundColor="transparent">
-                                <div key={headerProps?.key}>{defaultRender!(headerProps)}</div>
-                            </Sticky>)
-                        }
+                        styles={gridStyles}
+                        onShouldVirtualize={() => true}
+                        layoutMode={props?.detailsListProps?.layoutMode ?? DetailsListLayoutMode.justified} isHeaderVisible={true}
+                        onRenderDetailsHeader={props?.detailsListProps?.onRenderDetailsHeader ?? onRenderDetailsHeader}
                         checkboxVisibility={props?.detailsListProps?.checkboxVisibility ?? CheckboxVisibility.hidden}
                     />}
                 </div>

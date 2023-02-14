@@ -37,13 +37,13 @@ export type TColumn<T> = IColumn & {
     hideColumn?: boolean;
 }
 
-export type IFluentDetailsListProps = Omit<IDetailsListProps, 'columns' | 'items' | 'onRenderItemColumn' | 'onRenderRow'| 'layoutMode' | 'onRenderDetailsHeader'>; 
+export type IFluentDetailsListProps = Omit<IDetailsListProps, 'columns' | 'items' | 'onRenderItemColumn' | 'onRenderRow' >; 
 
 export interface IGridListProps<T extends any> extends IGridHandler<T> {
     /**Use this to overwrite the default props `IDetailListProps` from Microsoft's `@fluent-ui` */
     detailsListProps?: IFluentDetailsListProps;
     /**Configure the header behavior, such as to enable filter and other functionalities. */
-    headerOptions: IConfigurableHeader<T>;
+    headerOptions?: IConfigurableHeader<T>;
     /**The column model to be applied to the list.
      * It extends the Microsoft `@fluent-ui` `IColumn` interface.
      *

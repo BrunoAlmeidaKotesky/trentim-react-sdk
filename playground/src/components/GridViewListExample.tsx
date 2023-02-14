@@ -25,6 +25,9 @@ export default function GridViewListExample() {
         <GridView<JsonType>
           //ref={ref}
           rows={items}
+          styles={{
+            contentContainer: {maxHeight: 400}
+          }}
           //getCurrentRows={r => setCurrentGridRows(r)}
           columns={[
             {
