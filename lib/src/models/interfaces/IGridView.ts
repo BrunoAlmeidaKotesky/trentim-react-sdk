@@ -2,7 +2,7 @@ import type { IPanelChildrenPosition } from '@models/interfaces/ICommonPanel';
 import type { IConfigurableHeader } from '@models/interfaces/IListOptions';
 import type { ApplyCustomFilter, FilterComponent, CancelActivation, ColumnKey, IDateConversionOptions } from '@models/types/Common';
 import type { Dispatch, SetStateAction } from "react";
-import type { IColumn, IDetailsListProps, IGroup } from "@fluentui/react";
+import type { IColumn, IDetailsListProps, IGroup, IListProps } from "@fluentui/react";
 
 /**It should represent any object with primitive data types. 
  * Please use the `Id` property to uniquely identify the object, it helps to avoid duplicates and correctly apply the filter.
@@ -37,9 +37,25 @@ export type TColumn<T> = IColumn & {
     hideColumn?: boolean;
 }
 
-export type IFluentDetailsListProps = Omit<IDetailsListProps, 'columns' | 'items' | 'onRenderItemColumn' | 'onRenderRow' >; 
+export type IFluentDetailsListProps = Omit<
+    IDetailsListProps, 
+    'columns' | 'items' | 'onRenderItemColumn' | 'onRenderRow' | 'onShouldVirtualize'
+>
 
 export interface IGridListProps<T extends any> extends IGridHandler<T> {
+    /**
+     * If a `maxHeight` is not set, the list will not be virtualized by default, even if you return `true` on this property.
+     * We do that to ensure that, to ensure with no max height is se to the list, the @fluentui virtualization bug does not occur.
+     */
+    onShouldVirtualize?: IListProps['onShouldVirtualize'];
+    /**Use this property to set a maximum height for the DetailsList.
+     * 
+     * Note that this is just a easier way to set the `detailsListProps={{styles: {root: {maxHeight: '...'}}}}` property.
+     * 
+     * When setting this property, the `onShouldVirtualize` will be by default set to `(() => true)`, 
+     * you can overwrite it by setting the `onShouldVirtualize` property, but we do not recommend.
+     **/
+    maxHeight?: string | number;
     /**Use this to overwrite the default props `IDetailListProps` from Microsoft's `@fluent-ui` */
     detailsListProps?: IFluentDetailsListProps;
     /**Configure the header behavior, such as to enable filter and other functionalities. */

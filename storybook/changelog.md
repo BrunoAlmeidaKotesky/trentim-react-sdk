@@ -2,8 +2,26 @@
 
 #### [New Major Release v4!](#v4.0.0)
 
+<details id="4.5.0">
+<summary><b>v4.5.0 - Recommended</b></summary>
+
+- The `onShouldVirtualize` from `detailsListProps` has been moved to an internal prop, and now the component will always virtualize the list if `maxHeight` is set, unless the property itself is set to not virtualize (not recommended).
+    - If the `maxHeight` property is not set (meaning tha the list will grow as much as needed), the component will not virtualize the list, even if the `onShouldVirtualize` is set to true.
+- Fixed bugs related to the virtualization and header on `GridView` problems introduced on v4.4.0.
+</details>
+<br/>
+
+<details id="4.4.0">
+<summary><b>v4.4.0 - Unstable `GridView`</b></summary>
+
+- `GridView` `headerOptions` is now optional, and if not passed, the default options will be used.
+- Upgraded the library `bakutils-types` to the version 1.3.0, which includes four new helper types.
+    - Please read the [documentation](https://github.com/BrunoAlmeidaKotesky/bakutils-types/blob/master/README.md) for more information.
+</details>
+<br/>
+
 <details id="4.3.0">
-<summary><b>v4.3.0 (Current)</b></summary>
+<summary><b>v4.3.0</b></summary>
 
 - Fix a bug on `<LifecycleProgress>`, which in some cases depending on the `stages` length, if the number of visible items were 4, the last item would be cut off.
 - Upgrade `bakutils-types` library to `1.2.0`, which introduces the following types: `RemoveFunctionsFrom`, `DeepPartialArray`, `DeepPartialObj` and removes `SetValuesByPath`.

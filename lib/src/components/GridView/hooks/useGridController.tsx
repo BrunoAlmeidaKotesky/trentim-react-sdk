@@ -13,6 +13,7 @@ import type { IGroupPanel } from '@models/interfaces/IGroupPanel';
 import type { IGroup } from '@fluentui/react/lib/DetailsList';
 import type { KeyAndName } from '@models/types/Common';
 import { convertIsoToLocaleString } from '@helpers/general';
+import type { IListProps } from '@fluentui/react/lib/List';
 
 declare module "react" {
     function forwardRef<T, P = {}>(
@@ -181,6 +182,13 @@ export function useGridController<T extends BaseType>(props: IGridListProps<T>, 
 
     const filterOptionsMatrix = useMemo(() => memoizedAvailableFilter.map(f => GridViewMapper.mapFilterOptions(f?.options)), [memoizedAvailableFilter]);
 
+    
+    const verifyVirtualization = useCallback((): IListProps['onShouldVirtualize']  => {
+        if(props?.maxHeight || props?.detailsListProps?.styles?.['root']?.['maxHeight'])
+          return props?.onShouldVirtualize ?? (() => true);
+        return () => false;
+    }, [props?.maxHeight, props?.detailsListProps]);
+
     const filterPanelConfig: IPanelFilterProps = {
         isOpen: isFilterPanelOpen,
         onApply: GridViewFilter.onApplyFilter({
@@ -284,6 +292,6 @@ export function useGridController<T extends BaseType>(props: IGridListProps<T>, 
             listConfig,
             groups
         },
-        handlers: { onItemClick }
+        handlers: { onItemClick, verifyVirtualization }
     }
 }
