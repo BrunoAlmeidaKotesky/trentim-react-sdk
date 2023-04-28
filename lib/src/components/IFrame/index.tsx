@@ -8,7 +8,9 @@ export type IBaseFrame = React.ComponentProps<'iframe'> & {
 
 export type IFrameProps = IBaseFrame & { fallback?: JSX.Element; };
 
-/**Same functionality from a normal iframe, but it can be lazy loaded and needs a fallback component.
+/**
+ * @deprecated This component will be removed in the next major version.
+ * Same functionality from a normal iframe, but it can be lazy loaded and needs a fallback component.
  * 
  * You can also pass a callback with the ref of the iframe, and it's dependency list.
  * 

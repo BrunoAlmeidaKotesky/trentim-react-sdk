@@ -14,7 +14,7 @@ declare module "react" {
     function forwardRef<T, P = {}>(
       render: (props: P, ref: React.Ref<T>) => React.ReactElement | null
     ): (props: P & React.RefAttributes<T>) => React.ReactElement | null;
-  }
+}
 
 function GridViewInner<T extends BaseType>(props: IGridListProps<T>, ref: React.ForwardedRef<IGridViewRefHandler<T>>) {
     const {state, handlers} = useGridController(props, ref);
@@ -77,7 +77,10 @@ function GridViewInner<T extends BaseType>(props: IGridListProps<T>, ref: React.
         </GroupPanelContext.Provider>);
 }
 
-/** An enhanced version of the `DetailsList` component, with automatic filtering, sorting, grouping, properties searching with many other features to customize.
+/** 
+ * @info This component will be renamed and heavily changed on the next major release.
+ * 
+ * An enhanced version of the `DetailsList` component, with automatic filtering, sorting, grouping, properties searching with many other features to customize.
  * 
  * The component can also be rendered as a collection of `Card` components, with the same functionalities.
  */

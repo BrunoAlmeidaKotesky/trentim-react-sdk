@@ -1,11 +1,12 @@
 
 import LifecycleTile from './LifecycleTile';
-import styles from './lifecycle.module.scss';
+import './lifecycle.scss';
 import type { ILifecycleProgressProps, ILifecycleProgressRef, LifecycleCallout, ILifecycleStages } from '@models/interfaces/ILifecycleProgressProps';
-import { useEffect, useRef, useState, useImperativeHandle, forwardRef, ForwardedRef, useLayoutEffect, useCallback, DOMAttributes } from 'react';
+import { useEffect, useRef, useState, useImperativeHandle, forwardRef, ForwardedRef, useLayoutEffect, useCallback, DOMAttributes, useMemo } from 'react';
 import { Callout, DirectionalHint } from '@fluentui/react/lib/Callout';
 import { CalloutCtx } from './Context';
 import { ChevronLeft24Regular, ChevronRight24Regular } from '@fluentui/react-icons';
+import { loadCSS } from './spPolyfill';
 
 declare module "react" {
     function forwardRef<T, P = {}>(
@@ -123,7 +124,8 @@ function LifecycleProgressInner<StageData = any>(props: ILifecycleProgressProps<
         return newStageArr;
     }
 
-    useLayoutEffect(() => { 
+    useLayoutEffect(() => {
+        loadCSS();
         setCSSVariables(); 
         verifyGridRowNumber(); 
     }, []);
@@ -164,32 +166,32 @@ function LifecycleProgressInner<StageData = any>(props: ILifecycleProgressProps<
     }, []);
 
     const preventTextSelection: MouseDown = useCallback(e => { if(e.detail > 1) e.preventDefault(); }, []);
+    const calloutCtxValues = useMemo(() => ({
+        calloutIdx, setCallout, 
+        alwaysShowCallout: props?.alwaysShowCallout, 
+        showCalloutOnlyOnActive: props?.showCalloutOnlyOnActive
+    }), [calloutIdx, props?.alwaysShowCallout, props?.showCalloutOnlyOnActive, setCallout]);
 
     return (<>
-        <div ref={lifecycleContainer} className={`${styles.lifecycle} mainLifecycleContainer`}>
-            <div className={styles.projectLifecycle}>
-                <span className={styles.columnTitle}>{props.leftColumnTitle}</span>
-                <span className={styles.columnSubTitle}>{props.leftColumnSubtitle}</span>
+        <div ref={lifecycleContainer} className={'lifecycle mainLifecycleContainer'}>
+            <div className={'projectLifecycle'}>
+                <span className={'columnTitle'}>{props.leftColumnTitle}</span>
+                <span className={'columnSubTitle'}>{props.leftColumnSubtitle}</span>
             </div>
-            <div className={styles.lifecycleContainer}>
+            <div className={'lifecycleContainer'}>
                 <div 
                     onMouseDown={preventTextSelection} 
-                    style={props?.leftScrollButtonStyles} className={`${styles.btnLifecycleScroll} ${styles.scrollLeft}`} 
+                    style={props?.leftScrollButtonStyles} className={'btnLifecycleScroll scrollLeft'} 
                     onClick={() => changeVisibility('left')}>
                     <ChevronLeft24Regular />
                 </div>
-                <div className={styles.lifecycleTrackContainer}>
-                    <div ref={lifecycleTrack} className={styles.lifecycleTrack}>
-                        <CalloutCtx.Provider value={{
-                            calloutIdx, setCallout, 
-                            alwaysShowCallout: props?.alwaysShowCallout, 
-                            showCalloutOnlyOnActive: props?.showCalloutOnlyOnActive
-                        }}>
+                <div className={'lifecycleTrackContainer'}>
+                    <div ref={lifecycleTrack} className={'lifecycleTrack'}>
+                        <CalloutCtx.Provider value={calloutCtxValues}>
                         {visibleStages?.map((item, idx) => (
                             <LifecycleTile
                                 hidden={item?.hidden}
-                                styles={styles}
-                                key={item?.label + idx}
+                                key={item?.label + new Date().getTime()}
                                 label={item.label}
                                 overflowStageText={overflowStageText.current}
                                 currentIdx={idx}
@@ -205,7 +207,7 @@ function LifecycleProgressInner<StageData = any>(props: ILifecycleProgressProps<
                 </div>
                 <div 
                     onMouseDown={preventTextSelection} 
-                    style={props?.rightScrollButtonStyles} className={`${styles.btnLifecycleScroll} ${styles.scrollRight}`} 
+                    style={props?.rightScrollButtonStyles} className={'btnLifecycleScroll scrollRight'} 
                     onClick={() => changeVisibility('right')}>
                     <ChevronRight24Regular />
                 </div>

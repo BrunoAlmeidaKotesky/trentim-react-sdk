@@ -2,8 +2,21 @@
 
 #### [New Major Release v4!](#v4.0.0)
 
+<details id="4.6.0">
+<summary><b>v4.6.0 - Current Version</b></summary>
+
+This is probably the last version of the v4, since the v5 development is now in progress.
+
+- The following functions has been marked with an `@info` doc label, since they are going to be changed or moved on v5.
+  - `registerLiveReload` is marked due to the fact that it's going to be moved to the `@trentim-react-sdk/sp-plugin` library. (Temporary name).
+  - `<GridView/>` has also been marked, this component will heavily change on v5, and will also be renamed.
+- `<LifecycleProgress />` only use normal classNames and not scss modules anymore, this is due to a test regarding it's behavior on SharePoint environments. And also adding manually the css styles as string on head tag on SharePoint environments.
+- `getSearchParamsAsObject` now verifies if the `search` property from the URL are not empty, and if it's empty, it'll return null and warn on console.
+</details>
+<br/>
+
 <details id="4.5.0">
-<summary><b>v4.5.0 - Recommended</b></summary>
+<summary><b>v4.5.0</b></summary>
 
 - The `onShouldVirtualize` from `detailsListProps` has been moved to an internal prop, and now the component will always virtualize the list if `maxHeight` is set, unless the property itself is set to not virtualize (not recommended).
     - If the `maxHeight` property is not set (meaning tha the list will grow as much as needed), the component will not virtualize the list, even if the `onShouldVirtualize` is set to true.

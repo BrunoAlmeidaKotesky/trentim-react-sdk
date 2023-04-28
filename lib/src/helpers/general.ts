@@ -1,4 +1,5 @@
 /**
+ *@info This function will be moved on next major release to a separated plugin module.
 * It enables the SPFx to be live reloaded even when it is already on a production environment, it only applies when using `gulp serve`.
 * @param manifest - SPFx manifest from a webpart or extension context - `{@microsoft/sp-component-base#BaseComponent.context}`
 * @param serveUrl - An optional URL to use as the gulp serve address, by default it will be https://localhost:4321

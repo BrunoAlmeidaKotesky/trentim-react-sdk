@@ -3,29 +3,29 @@ import type { ILifecycleStages, ILifecycleProgressProps } from '@models/interfac
 import { Checkmark20Regular } from '@fluentui/react-icons';
 import { useContext } from 'react';
 import { CalloutCtx } from './Context';
+import './lifecycle.scss';
 
 type LifecycleTileProps<T> = ILifecycleStages<T> & Pick<ILifecycleProgressProps, 'onStageClick'> & {
 	position: 'start' | 'middle' | 'end';
     currentIdx: number;
 	hidden: boolean;
-	styles: CSSModuleClasses;
 	overflowStageText: boolean;
 };
 
-const LifecycleTile = ({styles, ...props}: LifecycleTileProps<any>) => {
+const LifecycleTile = (props: LifecycleTileProps<any>) => {
 	const {calloutIdx, setCallout, alwaysShowCallout, showCalloutOnlyOnActive} = useContext(CalloutCtx);
-	const indicatorClass = `${styles.tile} ${styles[`${props.position}`]} ${props.completed ? styles.completed : ''} ${props.active ? styles['active'] : ''} indicator-${props?.currentIdx}`;
+	const indicatorClass = `tile ${props.position} ${props.completed ? 'completed' : ''} ${props.active ? 'active' : ''} indicator-${props?.currentIdx}`;
 
 	return (
 		<div className={indicatorClass} style={{ order: props.currentIdx, display: props?.hidden ? 'none' : 'flex' }}>
 			{props.completed ? (
-				<span className={styles.stageIndicator}>
+				<span className={'stageIndicator'}>
 					<Checkmark20Regular />
 				</span>
 			) : (
-				<span className={styles.stageIndicator}></span>
+				<span className={'stageIndicator'}></span>
 			)}
-			<div className={styles.titleArea} onClick={(ev) => {
+			<div className={'titleArea'} onClick={(ev) => {
                 const {onStageClick, position, currentIdx, ...rest} = props;
 				if(alwaysShowCallout) 
 					setCallout({isVisible: true, calloutIdx: currentIdx});
@@ -38,7 +38,7 @@ const LifecycleTile = ({styles, ...props}: LifecycleTileProps<any>) => {
 				}
             }}>
 				<span 
-					className={styles.tileTitle} 
+					className={'tileTitle'} 
 					style={props.overflowStageText ? {textOverflow: 'ellipsis', width: 100, overflow: 'hidden'} : {}}>
 					{props.label}
 				</span>

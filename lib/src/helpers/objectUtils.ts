@@ -101,8 +101,13 @@ Obj extends Record<any, any> = Record<any, any>>
 export function getSearchParamsAsObject<
     Keys extends string,
     AsLowerCase extends boolean = false | true
->(asLowerCase: AsLowerCase): Record<AsLowerCase extends true ? Lowercase<Keys> : Keys, string> {
+>(asLowerCase: AsLowerCase): Record<AsLowerCase extends true ? Lowercase<Keys> : Keys, string> | null {
     try {
+        const hasQuery = new URL(location.href).search !== '';
+        if(!hasQuery) {
+            console.warn("[TRS] - No search params found in the URL.");
+            return null;
+        }
         const search = location.search.substring(1);
         const pathAsString = '{"' + decodeURI(search)
         .replace(/"/g, '\\"')
