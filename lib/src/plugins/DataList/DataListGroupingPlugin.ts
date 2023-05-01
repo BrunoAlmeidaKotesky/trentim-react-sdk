@@ -2,7 +2,7 @@ import { getDeepValue } from '@helpers/objectUtils';
 import { GroupOrder } from '@helpers/enums';
 import type { IGroup } from "@fluentui/react/lib/DetailsList";
 import type { ApplyGrouping, BuildGroups } from "@models/interfaces/IGrouping";
-import type { IRow } from '@models/interfaces/IGridView';
+import type { IRow } from '@models/interfaces/IDataList';
 import { convertIsoToLocaleString } from '@helpers/general';
 
 export class GridViewGrouping {

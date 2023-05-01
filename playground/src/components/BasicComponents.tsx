@@ -1,8 +1,6 @@
-import {Tooltip} from '@components/Tooltip';
 import type { TooltipDirectionValues } from '@models/index';
 import { useEffect, useState } from 'react';
 import { StickerCard } from '@components/StickerCard';
-import { IFrame } from '@components/IFrame';
 
 export default function BaseComponents() {
     const [direct, setDirection] = useState<TooltipDirectionValues>('bottom_center');
@@ -21,9 +19,6 @@ export default function BaseComponents() {
                     {options.map(opt => <option key={opt}>{opt}</option>)}
                 </select>
             </div>
-            <Tooltip content={<div style={{width: 60, height: 40, color: 'cyan'}}>Hello</div>} direction={direct}>
-                <IFrame fallback={<div style={{width: 300, height: 153, backgroundColor: '#f1643'}}></div>} src="https://www.google.com" />
-            </Tooltip>
             <StickerCard
                 classNames={{ root: 'rootCard'}}
                 headerProps={{

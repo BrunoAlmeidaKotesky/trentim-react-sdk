@@ -104,8 +104,7 @@ const generateDeclarationTypes = () => {
         const exports = packageJson.exports;
         const exportKeyName = file.startsWith('index') ? '.' : "./" + file.replace('.d.ts', '');
         exports[exportKeyName] = {
-            import: `./dist/${file.replace('.d.ts', '.es.js')}`,
-            require: `./dist/${file.replace('.d.ts', '.cjs.js')}`
+            import: `./dist/${file.replace('.d.ts', '.js')}`,
         }
         writeFileSync(resolve(__dirname, 'package.json'), JSON.stringify(packageJson, null, 2));
     }
@@ -126,7 +125,7 @@ const afterBuild = () => {
 export default defineConfig({
     plugins: [
         react({
-            jsxRuntime: 'classic'
+            jsxRuntime: 'automatic'
         }),
         libCss(),
         dts({
@@ -150,7 +149,8 @@ export default defineConfig({
             '@models': resolve(__dirname, 'src/models'),
             '@helpers': resolve(__dirname, 'src/helpers'),
             '@decorators': resolve(__dirname, 'src/decorators'),
-            '@hooks': resolve(__dirname, 'src/hooks')
+            '@hooks': resolve(__dirname, 'src/hooks'),
+            '@plugins': resolve(__dirname, 'src/plugins'),
         }
     },
     build: {
@@ -161,11 +161,12 @@ export default defineConfig({
                 decorators: resolve(__dirname, 'src/decorators/index.ts'),
                 hooks: resolve(__dirname, 'src/hooks/index.ts'),
                 models: resolve(__dirname, 'src/models/index.ts'),
+                plugins: resolve(__dirname, 'src/plugins/index.ts'),
                 index: resolve(__dirname, 'src/index.ts'),
             },
             name: 'trentim-react-sdk',
             formats: ['es', 'cjs'],
-            fileName: (format) => { return `[name].${format}.js` },
+            fileName: () => { return `[name].js` },
         },
         rollupOptions: {
             external: ['react', 'react-dom'],

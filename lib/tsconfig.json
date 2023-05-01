@@ -59,6 +59,9 @@
       ],
       "@decorators/*": [
         "src/decorators/*"
+      ],
+      "@plugins/*": [
+        "src/plugins/*"
       ]
     },
   },

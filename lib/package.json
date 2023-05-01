@@ -22,57 +22,43 @@
   "sideEffects": false,
   "exports": {
     "./ConditionalWrapper": {
-      "import": "./dist/ConditionalWrapper.es.js",
-      "require": "./dist/ConditionalWrapper.cjs.js"
+      "import": "./dist/ConditionalWrapper.js"
     },
-    "./GridView": {
-      "import": "./dist/GridView.es.js",
-      "require": "./dist/GridView.cjs.js"
-    },
-    "./IFrame": {
-      "import": "./dist/IFrame.es.js",
-      "require": "./dist/IFrame.cjs.js"
+    "./DataList": {
+      "import": "./dist/DataList.js",
+      "require": "./dist/DataList.cjs.js"
     },
     "./LifecycleProgress": {
-      "import": "./dist/LifecycleProgress.es.js",
-      "require": "./dist/LifecycleProgress.cjs.js"
+      "import": "./dist/LifecycleProgress.js"
     },
     "./StickerCard": {
-      "import": "./dist/StickerCard.es.js",
-      "require": "./dist/StickerCard.cjs.js"
+      "import": "./dist/StickerCard.js"
     },
     "./Tooltip": {
-      "import": "./dist/Tooltip.es.js",
-      "require": "./dist/Tooltip.cjs.js"
+      "import": "./dist/Tooltip.js"
     },
     "./decorators": {
-      "import": "./dist/decorators.es.js",
-      "require": "./dist/decorators.cjs.js"
+      "import": "./dist/decorators.js"
     },
     "./helpers": {
-      "import": "./dist/helpers.es.js",
-      "require": "./dist/helpers.cjs.js"
+      "import": "./dist/helpers.js"
     },
     "./hooks": {
-      "import": "./dist/hooks.es.js",
-      "require": "./dist/hooks.cjs.js"
+      "import": "./dist/hooks.js"
     },
     ".": {
-      "import": "./dist/index.es.js",
-      "require": "./dist/index.cjs.js"
+      "import": "./dist/index.js"
     },
     "./models": {
-      "import": "./dist/models.es.js",
-      "require": "./dist/models.cjs.js"
+      "import": "./dist/models.js"
     }
   },
-  "module": "./dist/index.es.js",
+  "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "files": [
     "dist",
     "ConditionalWrapper.d.ts",
-    "GridView.d.ts",
-    "IFrame.d.ts",
+    "DataList.d.ts",
     "LifecycleProgress.d.ts",
     "StickerCard.d.ts",
     "Tooltip.d.ts",
@@ -97,11 +83,11 @@
     "acorn-jsx": "^5.3.2",
     "babel-loader": "^8.2.5",
     "json": "^11.0.0",
-    "react": "^16.9.0",
-    "react-dom": "16.9.0",
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
     "rollup-plugin-visualizer": "^5.8.0",
     "sass": "^1.56.0",
-    "typescript": "^4.6.4",
+    "typescript": "4.9.5",
     "vite": "3.2.3",
     "vite-plugin-build": "^0.6.0",
     "vite-plugin-chunk-split": "^0.2.7",
@@ -111,13 +97,15 @@
     "vitest": "^0.23.4"
   },
   "peerDependencies": {
-    "react": "^16.9.0",
-    "react-dom": "^16.9.0"
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
   },
   "dependencies": {
     "@fluentui/react": "^8.52.3",
     "@fluentui/react-icons": "^2.0.186",
     "bakutils-types": "^1.3.0",
-    "fast-sort": "^3.1.3"
+    "fast-sort": "3.1.3",
+    "immer": "^10.0.1",
+    "zustand": "^4.3.7"
   }
 }

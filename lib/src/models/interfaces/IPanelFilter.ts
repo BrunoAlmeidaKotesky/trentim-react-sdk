@@ -17,7 +17,6 @@ export interface IAvailableFilters {
     name: string;
     options: FilterOption[];
     enableMultiple: boolean;
-    renderAs: FilterComponent;
 }
 
 interface IDateSliderCtx {

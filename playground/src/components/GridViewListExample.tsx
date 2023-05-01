@@ -1,16 +1,37 @@
-import { useState, useRef } from "react";
-import { GridView } from "@components/GridView";
-import { Tooltip } from "@components/Tooltip";
-import type { IGridViewRefHandler } from "@models/index";
+import { useState } from "react";
+import { DataList } from "@components/DataList";
 import json from "./MOCK_DATA.json";
+import { DataListPlugin } from "@plugins/index";
+import { BaseType } from "@models/interfaces/IDataList";
+import { DataListStore } from "@components/DataList/store";
 
 type JsonType = NonNullable<typeof json[0]>;
+
+export class MyCustomPlugin<T extends BaseType> extends DataListPlugin<T> {
+  constructor() {
+    super("MyCustomPlugin", "My Custom Plugin", "1.0.0");
+  }
+
+  initialize(store: DataListStore<T>): void {
+    console.log("MyCustomPlugin initialized", store);
+  }
+
+  render = (store: DataListStore<T>) => {
+    // Agora você pode acessar a store aqui
+    return (
+      <div style={{ backgroundColor: "lightblue", padding: "10px", marginBottom: "10px" }}>
+        <h3>My Custom Plugin</h3>
+        <p>Plugins atuais {store.plugins[0].name}</p>
+        <button onClick={() => {
+          store.setRows(store.rows.map(i => ({ ...i, Status: "Mudado" })));
+        }}>Mudar estado</button>
+      </div>
+    );
+  };
+}
+
 export default function GridViewListExample() {
   const [items] = useState<JsonType[]>(json);
-  const ref = useRef<IGridViewRefHandler<JsonType>>(null);
-  //const [currentGridRows, setCurrentGridRows] = useState<JsonType[]>([]);
-  const [isGroupingDisabled, setGroupingDisabled] = useState(false);
-  const [isFilterDisabled, setFilterDisabled] = useState(false);
 
   return (
     <div
@@ -22,11 +43,10 @@ export default function GridViewListExample() {
       }}
     >
       <div style={{ width: "80%" }}>
-        <GridView<JsonType>
-          //ref={ref}
+        <DataList<JsonType>
           rows={items}
+          plugins={[new MyCustomPlugin()]}
           maxHeight="400px"
-          //getCurrentRows={r => setCurrentGridRows(r)}
           columns={[
             {
               key: "Title",
@@ -35,7 +55,6 @@ export default function GridViewListExample() {
               minWidth: 100,
               maxWidth: 200,
               isResizable: true,
-              renderFilterAs: "SearchBox",
             },
             {
               key: "NumeroPI",
@@ -60,7 +79,6 @@ export default function GridViewListExample() {
               minWidth: 100,
               maxWidth: 200,
               isResizable: true,
-              renderFilterAs: "PeoplePicker",
             },
             {
               key: "DonoProjeto.Title",
@@ -69,7 +87,6 @@ export default function GridViewListExample() {
               minWidth: 100,
               maxWidth: 200,
               isResizable: true,
-              renderFilterAs: "PeoplePicker",
             },
             {
               key: "DataInicio",
@@ -79,7 +96,6 @@ export default function GridViewListExample() {
               maxWidth: 200,
               isResizable: true,
               dateConversionOptions: { shouldConvertToLocaleString: true },
-              renderFilterAs: "DateSlider",
             },
             {
               key: "Modified",
@@ -89,81 +105,8 @@ export default function GridViewListExample() {
               maxWidth: 200,
               hideColumn: false,
               dateConversionOptions: { shouldConvertToLocaleString: true },
-              renderFilterAs: "DateSlider",
             },
           ]}
-          //hiddenFilterKeys={["NumeroPI"]}
-          //initialGroupedBy={{key: 'Status', name: 'Status'}}
-          headerOptions={{
-            enableFilter: false, enableGrouping: false, enableSearch: false
-            // leftHeaderSpace: (
-            //   <span
-            //     style={{
-            //       fontWeight: "700",
-            //       flexWrap: "wrap",
-            //       flex: "auto",
-            //       textAlign: "initial",
-            //       paddingLeft: "8px",
-            //     }}
-            //   >
-            //     Central de Projetos
-            //   </span>
-            // ),
-            // enableSearch: true,
-            // enableFilter: true,
-            // enableGrouping: true,
-            // searchKeys: ["Title", "Status", "NumeroPI"],
-            // searchBoxPlaceholder: "Pesquisar",
-            // searchBoxProps: {
-            //   styles: { root: { width: 200 } },
-            // },
-            // customButtons: [
-            //   {
-            //     text: "Upload",
-            //     props: {
-            //       onClick: () => console.log("Clicked"),
-            //     },
-            //   },
-            // ],
-            // groupButtonProps: {
-            //   disabled: isGroupingDisabled,
-            // },
-            // filterButtonProps: {
-            //   disabled: isFilterDisabled,
-            // },
-          }}/*
-          panelChildren={{
-            group: {
-              top: <div>AAA</div>,
-              footer: <div>BBB</div>,
-            },
-          }}
-          onGroupPanelCancel={(by) => console.log(by)}
-          onFilterPanelCancel={(by) => console.log(by)}
-          styles={{ contentContainer: { maxHeight: 500, overflowY: "auto" } }}
-          onFilterIconClick={() => {
-            console.log("Before Filter");
-          }}
-          onGroupIconClick={() => {
-            console.log("Before Group");
-          }}
-          onRenderItemColumn={(i, _idx, col) => {
-            if (col.key === "Title")
-              return (
-                <Tooltip content={<div>AAAA</div>} direction="top_right">
-                  <div>
-                    <span>{i?.Title}</span>
-                  </div>
-                </Tooltip>
-              );
-            return <span>{i[col.key]}</span>;
-          }}
-          onSearchBoxClick={() => {
-            console.log("Before Search");
-          }}
-          //onItemsFiltered={() => setGroupingDisabled(true)}
-          //onItemsGrouped={() => setFilterDisabled(true)}
-          onItemClick={(i) => console.log(i.Id)}*/
         />
       </div>
     </div>
