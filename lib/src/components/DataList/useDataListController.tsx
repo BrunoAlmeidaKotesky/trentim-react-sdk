@@ -5,40 +5,49 @@ import { createNewSortInstance } from 'fast-sort';
 import type { IDataListProps, IRow, TColumn, BaseType } from '@models/interfaces/IDataList';
 import { convertIsoToLocaleString } from '@helpers/general';
 import type { IListProps } from '@fluentui/react/lib/List';
-import { useDataListStore } from './store';
-
+import { useDataListContext } from './store';
 
 /** TO-DO: Use `useReducer` with context for better code splitting. */
 export function useDataListController<T extends BaseType>(props: IDataListProps<T>) {
-    const store = useDataListStore();
+    const store = useDataListContext((s) => s);
     const { plugins, initializePlugin, setPlugins } = store;
     const naturalSort = useCallback(createNewSortInstance({
         comparer: new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' }).compare,
     }), []);
 
     useEffect(() => {
-        if (props.rows && props.rows.length > 0) 
-            store.setRows(props.rows);
-        if (props.columns && props.columns.length > 0) {
-            const columns = props?.columns;
-            const convertedColumns = columns.map(c => {
-                if (c?.key?.includes('.')) {
-                    c.onRender = (item, _2) => {
-                        const fieldValue: string = getDeepValue(item, c?.key);
-                        return <span>{fieldValue}</span>;
-                    }
-                    return c;
-                } else if (c?.dateConversionOptions?.shouldConvertToLocaleString) {
-                    c.onRender = (item, _2) => {
-                        const fieldValue = convertIsoToLocaleString(item[c?.key], c?.dateConversionOptions?.locales, c?.dateConversionOptions?.formatOptions);
-                        return <span>{fieldValue}</span>;
-                    }
-                }
-                return c;
-            });
-            store.setColumns(convertedColumns as TColumn<BaseType>[]);
+        if (props.rows && props.rows.length > 0) {
+          store.setRows(props.rows);
         }
-    }, [props.rows, props.columns]);
+        if (props.columns && props.columns.length > 0) {
+          const columns = props?.columns;
+          const convertedColumns = columns.map((c) => {
+            let onRender;
+            if (c?.key?.includes('.')) {
+              onRender = (item) => {
+                const fieldValue: string = getDeepValue(item, c?.key);
+                return <span>{fieldValue}</span>;
+              };
+            } else if (c?.dateConversionOptions?.shouldConvertToLocaleString) {
+              onRender = (item) => {
+                const fieldValue = convertIsoToLocaleString(
+                  item[c?.key],
+                  c?.dateConversionOptions?.locales,
+                  c?.dateConversionOptions?.formatOptions
+                );
+                return <span>{fieldValue}</span>;
+              };
+            }
+      
+            if (onRender) {
+              return { ...c, onRender };
+            }
+      
+            return c;
+          });
+          store.setColumns(convertedColumns as TColumn<BaseType>[]);
+        }
+      }, [props.rows, props.columns]);
 
     useEffect(() => {
         setPlugins(props.plugins);

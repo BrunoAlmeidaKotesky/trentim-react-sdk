@@ -1,33 +1,66 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { DataList } from "@components/DataList";
 import json from "./MOCK_DATA.json";
 import { DataListPlugin } from "@plugins/index";
 import { BaseType } from "@models/interfaces/IDataList";
-import { DataListStore } from "@components/DataList/store";
+import { DataListStore } from "@models/interfaces/DataListStore";
+import { ITextFieldProps, TextField } from "@fluentui/react/lib/TextField";
 
 type JsonType = NonNullable<typeof json[0]>;
 
-export class MyCustomPlugin<T extends BaseType> extends DataListPlugin<T> {
-  constructor() {
-    super("MyCustomPlugin", "My Custom Plugin", "1.0.0");
+export type SearchBoxConfig = {
+  /**@default Search */
+  placeholder?: string;
+  containerStyles?: React.CSSProperties;
+  textFieldStyles?: ITextFieldProps['styles']
+}
+
+function SearchBox<T extends BaseType>(props: SearchBoxConfig & { store: DataListStore<T> }) {
+  const containerStyles: React.CSSProperties = props?.containerStyles ?? {
+    marginBottom: '10px',
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'end',
+    marginRight: '12px'
+  }
+
+  const onSearch = <T extends BaseType>(store: DataListStore<T>, type: 'click' | 'keydown') => (e: any) => {
+    if (type === 'keydown' && e.key !== 'Enter') return;
+    const inputValue = (e?.currentTarget?.parentElement?.childNodes[0] as HTMLInputElement)?.value;
+    if (inputValue) {
+      store.setTempRows('allRows', store.rows);
+      store.setRows(store.rows.filter((i) => i.Title.includes(inputValue)));
+    }
+    else {
+      store.setRows(store.getTempRows('allRows') || store.rows);
+    }
+  }
+
+  return (
+    <div style={containerStyles}>
+      <TextField
+        styles={props?.textFieldStyles} placeholder={props?.placeholder ?? 'Search'}
+        iconProps={{
+          iconName: 'Search',
+          style: { pointerEvents: "auto", cursor: "pointer", position: 'static', padding: 8, backgroundColor: '#e2d7cab5' },
+          onKeyDown: onSearch(props?.store, 'keydown'),
+          onClick: onSearch(props?.store, 'click')
+        }} />
+    </div>
+  )
+}
+
+export class SearchBoxPlugin<T extends BaseType> extends DataListPlugin<T> {
+  constructor(private props?: SearchBoxConfig | null) {
+    super("SearchBoxPlugin", "SearchBoxPlugin", "1.0.0");
   }
 
   initialize(store: DataListStore<T>): void {
-    console.log("MyCustomPlugin initialized", store);
+    store.setTempRows('searchPlugin', []);
+    console.log("SearchBoxPlugin initialized");
   }
 
-  render = (store: DataListStore<T>) => {
-    // Agora você pode acessar a store aqui
-    return (
-      <div style={{ backgroundColor: "lightblue", padding: "10px", marginBottom: "10px" }}>
-        <h3>My Custom Plugin</h3>
-        <p>Plugins atuais {store.plugins[0].name}</p>
-        <button onClick={() => {
-          store.setRows(store.rows.map(i => ({ ...i, Status: "Mudado" })));
-        }}>Mudar estado</button>
-      </div>
-    );
-  };
+  render = (store: DataListStore<T>) => <SearchBox store={store} {...this.props} />
 }
 
 export default function GridViewListExample() {
@@ -45,7 +78,7 @@ export default function GridViewListExample() {
       <div style={{ width: "80%" }}>
         <DataList<JsonType>
           rows={items}
-          plugins={[new MyCustomPlugin()]}
+          plugins={[new SearchBoxPlugin()]}
           maxHeight="400px"
           columns={[
             {
@@ -62,7 +95,7 @@ export default function GridViewListExample() {
               fieldName: "NumeroPI",
               minWidth: 100,
               maxWidth: 200,
-              isResizable: true, 
+              isResizable: true,
             },
             {
               key: "Status",

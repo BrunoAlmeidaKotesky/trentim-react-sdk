@@ -1,8 +1,12 @@
 import { useDataListController } from './useDataListController';
 import { CheckboxVisibility, CollapseAllVisibility, DetailsList, DetailsListLayoutMode } from '@fluentui/react/lib/DetailsList';
 import type { IDataListProps, BaseType, IRow } from '@models/interfaces/IDataList';
+import { DataListCtx } from './Context';
+import { useRef } from 'react'
+import { createUseDataListStore } from './store';
+import type { DataListState, DataListStore } from '@models/interfaces/DataListStore';
 
-export function DataList<T extends BaseType>(props: IDataListProps<T>) {
+function DataListInner<T extends BaseType>(props: IDataListProps<T>) {
     const { state, handlers } = useDataListController(props);
     const { rows, columns, groups } = state;
     const { onItemClick, verifyVirtualization, renderPlugins } = handlers;
@@ -42,4 +46,29 @@ export function DataList<T extends BaseType>(props: IDataListProps<T>) {
                 }
             </div>
         </div>);
+}
+
+export function DataList<T extends BaseType = BaseType>(props: IDataListProps<T>){
+    return (
+        <DataListProvider 
+            rows={props?.rows} plugins={props?.plugins} tempRows={new Map()}
+            //@ts-ignore
+            columns={props?.columns} >
+            <DataListInner {...props}/>
+        </DataListProvider>
+    )
+}
+
+type DataListProviderProps<T extends BaseType> = React.PropsWithChildren<DataListState<T>>;
+function DataListProvider<T extends BaseType>({ children, ...props }: DataListProviderProps<T>) {
+  const storeRef = useRef<DataListStore>();
+  if (!storeRef.current) {
+    //@ts-ignore
+    storeRef.current = createUseDataListStore(props);
+  }
+  return (
+    <DataListCtx.Provider value={storeRef.current}>
+      {children}
+    </DataListCtx.Provider>
+  )
 }
