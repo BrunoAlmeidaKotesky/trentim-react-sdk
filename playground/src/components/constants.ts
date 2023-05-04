@@ -1,4 +1,6 @@
-import { ILifecycleStages } from "@models/interfaces/ILifecycleProgressProps";
+import type { TColumn } from "@models/interfaces/IDataList";
+import type { ILifecycleStages } from "@models/interfaces/ILifecycleProgressProps";
+import type json from "./MOCK_DATA.json";
 
 export const simpleRow = [
 {
@@ -517,3 +519,65 @@ export const mockStages2 = [
         "showCallout": false
     }
 ]
+
+export type JsonType = NonNullable<typeof json[0]>;
+export const COLUMNS_EX: TColumn<JsonType>[] = [
+    {
+      key: "Title",
+      name: "Nome Do Projeto",
+      fieldName: "Title",
+      minWidth: 100,
+      maxWidth: 200,
+      isResizable: true,
+    },
+    {
+      key: "NumeroPI",
+      name: "PI",
+      fieldName: "NumeroPI",
+      minWidth: 100,
+      maxWidth: 200,
+      isResizable: true,
+    },
+    {
+      key: "Status",
+      name: "Status",
+      fieldName: "Status",
+      minWidth: 100,
+      maxWidth: 200,
+      isResizable: true,
+    },
+    {
+      key: "GerenteProjeto.Title",
+      name: "Gerente do Projeto",
+      //fieldName: "GerenteProjeto.Title",
+      minWidth: 100,
+      maxWidth: 200,
+      isResizable: true,
+    },
+    {
+      key: "DonoProjeto.Title",
+      name: "Dono do Projeto",
+      //fieldName: "DonoProjeto.Title",
+      minWidth: 100,
+      maxWidth: 200,
+      isResizable: true,
+    },
+    {
+      key: "DataInicio",
+      name: "Data Início",
+      //fieldName: "DataInicio",
+      minWidth: 100,
+      maxWidth: 200,
+      isResizable: true,
+      dateConversionOptions: { shouldConvertToLocaleString: true },
+    },
+    {
+      key: "Modified",
+      name: "Modificado",
+      fieldName: "Modified",
+      minWidth: 100,
+      maxWidth: 200,
+      hideColumn: false,
+      dateConversionOptions: { shouldConvertToLocaleString: true },
+    },
+  ]
