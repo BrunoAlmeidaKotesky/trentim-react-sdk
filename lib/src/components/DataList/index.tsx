@@ -1,12 +1,12 @@
 import { useDataListController } from './useDataListController';
 import { CheckboxVisibility, CollapseAllVisibility, DetailsList, DetailsListLayoutMode } from '@fluentui/react/lib/DetailsList';
-import type { IDataListProps, BaseType, IRow } from '@models/interfaces/IDataList';
+import type { IDataListProps } from '@models/interfaces/IDataList';
 import { DataListCtx } from './Context';
 import { useRef } from 'react'
 import { createUseDataListStore } from './store';
 import type { DataListState, DataListStore } from '@models/interfaces/DataListStore';
 
-function DataListInner<T extends BaseType>(props: IDataListProps<T>) {
+function DataListInner<T>(props: IDataListProps<T>) {
     const { state, handlers } = useDataListController(props);
     const { rows, columns, groups } = state;
     const { onItemClick, verifyVirtualization, renderPlugins } = handlers;
@@ -17,7 +17,7 @@ function DataListInner<T extends BaseType>(props: IDataListProps<T>) {
             {renderPlugins()}
             </div>
             <div data-is-scrollable="true" style={{ position: 'relative', zIndex: 0, overflowY: 'scroll', height: props?.maxHeight, ...props?.styles?.contentContainer }} id="DataList-root">
-                {!!props?.onRenderCustomRow ? rows?.map(i => props?.onRenderCustomRow(i as IRow<T>)) :
+                {!!props?.onRenderCustomRow ? rows?.map(i => props?.onRenderCustomRow(i)) :
                     <DetailsList
                         {...props?.detailsListProps}
                         onRenderItemColumn={props?.onRenderItemColumn}
@@ -48,7 +48,7 @@ function DataListInner<T extends BaseType>(props: IDataListProps<T>) {
         </div>);
 }
 
-export function DataList<T extends BaseType = BaseType>(props: IDataListProps<T>){
+export function DataList<T>(props: IDataListProps<T>){
     return (
         <DataListProvider 
             rows={props?.rows} plugins={props?.plugins} tempRows={new Map()}
@@ -59,9 +59,9 @@ export function DataList<T extends BaseType = BaseType>(props: IDataListProps<T>
     )
 }
 
-type DataListProviderProps<T extends BaseType> = React.PropsWithChildren<DataListState<T>>;
-function DataListProvider<T extends BaseType>({ children, ...props }: DataListProviderProps<T>) {
-  const storeRef = useRef<DataListStore>();
+type DataListProviderProps<T> = React.PropsWithChildren<DataListState<T>>;
+function DataListProvider<T>({ children, ...props }: DataListProviderProps<T>) {
+  const storeRef = useRef<DataListStore<T>>();
   if (!storeRef.current) {
     //@ts-ignore
     storeRef.current = createUseDataListStore(props);

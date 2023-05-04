@@ -37,9 +37,6 @@
     "./Tooltip": {
       "import": "./dist/Tooltip.js"
     },
-    "./decorators": {
-      "import": "./dist/decorators.js"
-    },
     "./helpers": {
       "import": "./dist/helpers.js"
     },
@@ -62,7 +59,6 @@
     "LifecycleProgress.d.ts",
     "StickerCard.d.ts",
     "Tooltip.d.ts",
-    "decorators.d.ts",
     "helpers.d.ts",
     "hooks.d.ts",
     "index.d.ts",

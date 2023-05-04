@@ -148,7 +148,6 @@ export default defineConfig({
             '@components': resolve(__dirname, 'src/components'),
             '@models': resolve(__dirname, 'src/models'),
             '@helpers': resolve(__dirname, 'src/helpers'),
-            '@decorators': resolve(__dirname, 'src/decorators'),
             '@hooks': resolve(__dirname, 'src/hooks'),
             '@plugins': resolve(__dirname, 'src/plugins'),
         }
@@ -158,7 +157,6 @@ export default defineConfig({
             entry: {
                 ...generateComponentsEntries(),
                 helpers: resolve(__dirname, 'src/helpers/index.ts'),
-                decorators: resolve(__dirname, 'src/decorators/index.ts'),
                 hooks: resolve(__dirname, 'src/hooks/index.ts'),
                 models: resolve(__dirname, 'src/models/index.ts'),
                 plugins: resolve(__dirname, 'src/plugins/index.ts'),

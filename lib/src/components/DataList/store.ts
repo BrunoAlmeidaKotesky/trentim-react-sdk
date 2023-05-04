@@ -1,45 +1,41 @@
 import type { DataListState, DataListStore } from '@models/interfaces/DataListStore';
 import { createStore, useStore} from 'zustand';
 import { immer } from 'zustand/middleware/immer';
-import { DataListPlugin } from '@plugins/DataList/DataListPlugin';
-import type { BaseType } from '@models/interfaces/IDataList';
 import { useContext } from 'react';
 import { DataListCtx } from './Context';
 import { enableMapSet } from 'immer';
+import { TColumn } from '@models/interfaces/IDataList';
 
 enableMapSet();
-export const createUseDataListStore = <T>(initialProps?: Partial<DataListStore>) => {
-    const DEFAULT_STATE: DataListState<BaseType> = {
+export const createUseDataListStore = <T>(initialProps?: Partial<DataListStore<T>>) => {
+    const DEFAULT_STATE: DataListState<T> = {
         rows: [],
         columns: [],
-        tempRows: new Map(),
+        tempRows: new Map([
+            ['allRows', []],
+            ['filtered', []],
+            ['grouped', []]
+        ]),
         plugins: [],
         groups: []
     }
 
-    return createStore<DataListStore>()(immer((set, get) => ({
+    return createStore<DataListStore<T>>()(immer((set, get) => ({
         ...DEFAULT_STATE,
-        ...initialProps,
+        ...initialProps as Partial<DataListStore<T>>,
         setRows: rows => set(state => {
             if (typeof rows === 'function')
-                state.rows = rows(state.rows);
+                (state.rows as T[]) = rows(state.rows as T[]);
             else
-                state.rows = rows;
+                (state.rows as T[]) = rows;
         }),
         setTempRows: (key, rows) => set(state => {
+            //@ts-ignore
             state.tempRows.set(key, rows);
         }),
         getTempRows: key => get().tempRows.get(key) ?? [],
-        addPlugin: (plugin) => {
-            if (plugin instanceof DataListPlugin) {
-                set((state) => ({ plugins: [...state.plugins, plugin] }));
-                get().initializePlugin(plugin);
-            } else {
-                console.error('[TRS] - The given plugin is not an instance of DataListPlugin.');
-            }
-        },
         initializePlugin: (plugin) => {
-            if (typeof plugin.initialize === 'function') {
+            if (typeof plugin?.initialize === 'function') {
                 plugin.initialize(get());
             } else {
                 console.error(`
@@ -49,9 +45,9 @@ export const createUseDataListStore = <T>(initialProps?: Partial<DataListStore>)
         },
         setColumns: columns => set(state => {
             if (typeof columns === 'function')
-                state.columns = columns(state.columns);
+                (state.columns as TColumn<T>[]) = columns(state.columns as TColumn<T>[]);
             else
-                state.columns = columns;
+                (state.columns as TColumn<T>[]) = columns;
         }),
         setPlugins: plugins => set(state => {
             if (typeof plugins === 'function')
@@ -64,10 +60,10 @@ export const createUseDataListStore = <T>(initialProps?: Partial<DataListStore>)
 
 
 
-export function useDataListContext<T>(
-  selector: (state: DataListStore<BaseType>) => T,
+export function useDataListContext<T, S>(
+  selector: (state: DataListStore<T>) => S,
   equalityFn?: (left: T, right: T) => boolean
-): T {
+): S {
   const store = useContext(DataListCtx);
   if (!store) throw new Error('Missing DataListCtx.Provider in the tree')
   //@ts-ignore

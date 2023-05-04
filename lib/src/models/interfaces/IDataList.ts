@@ -2,18 +2,6 @@ import type { ColumnKey, IDateConversionOptions } from '@models/types/Common';
 import type { IColumn, IDetailsListProps, IListProps } from "@fluentui/react";
 import type { IDataListPlugin } from '@plugins/index';
 
-/**It should represent any object with primitive data types. 
- * Please use the `Id` property to uniquely identify the object, it helps to avoid duplicates and correctly apply the filter.
-*/
-export type BaseType = {
-    /**It's recommended that the row object contains an unique identifier*/
-    Id: string | number
-};
-/**Make T extends an optional type, if not set, it will be the default Id: string | number; */
-export type IRow<T extends {} = BaseType> = T & BaseType & {
-    [key: string]: any;
-}
-
 export type TColumn<T> = IColumn & {
     /**If the desired value is from an nested object, provide the value with dots. 
      * @example "file.name" will get the value from the file object.
@@ -45,26 +33,26 @@ export type SearchBoxProps<T> = {
     searchKeys?: Array<ColumnKey<T>>;
     /**A placeholder text to the search box. */
     searchBoxPlaceholder?: string;
-    onSearchItemChange?: (searchText: string, keys: Array<keyof IRow>) => void;
+    onSearchItemChange?: (searchText: string, keys: Array<keyof T>) => void;
     onSearchBoxClick?: (e?: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement, Element>) => void;
-    onClickSearchIcon?: (searchText?: string, keys?: (keyof IRow)[]) => void;
+    onClickSearchIcon?: (searchText?: string, keys?: (keyof T)[]) => void;
 }
 
 /**Represents all the functions that can be used. */
 export interface IDataListHandler<T> {
     /**A custom event to be fired when a row is clicked. */
-    onItemClick?: (row: IRow<T>) => void;
+    onItemClick?: (row: T) => void;
     /**The same event from `IDetailsListProps` from `@fluent-ui` with generic types.
      * 
      * This is different from `onRenderCustomRow`, since this method is applied to the default `onRenderItemColumn` from `DetailsList` and not on the entire component.
      */
-    onRenderItemColumn?: (item?: IRow<T>, index?: number, column?: TColumn<T>) => React.ReactNode;
+    onRenderItemColumn?: (item?: T, index?: number, column?: TColumn<T>) => React.ReactNode;
     /**If you want to totally overwrite the component that is being rendered, independent of the `renderAs` value, use this rendering function. 
      *
      * This element will be applied to each item `IRow`, not the entire component. */
-    onRenderCustomRow?: (item: IRow<T>) => React.ReactNode;
+    onRenderCustomRow?: (item: T) => React.ReactNode;
     /**A callback that will be called after the items were filtered from the search box. */
-    onSearchBoxItemsFiltered?: (filtered?: IRow<T>[]) => void;
+    onSearchBoxItemsFiltered?: (filtered?: T[]) => void;
 }
 
 export interface IDataListStyles {
@@ -122,12 +110,20 @@ export interface IDataListProps<T extends any>
      * ```
     */
     columns: TColumn<T>[];
-    /**The list of items to be displayed.
+    /**The list of items to be displayed.*/
+    rows: T[];
+    /**
+     * Before v5 everything related to the row information was an `IRow<T>`,
+     * which basically meant that the `IRow<T>` was the `T` itself, but with an required `{Id: string | number}` property.
      * 
-     * The items should be of type `IRow<T>[]`, which means any parsable interface that contains an `Id` property.
-    */
-    rows: IRow<T>[];
+     * Since v5, the `IRow<T>` is no longer required, and the `T` itself is used as the `IRow<T>`.
+     * For that to work, you need to provide the `keyUniqueIdentifier` property, which will be used to identify each row.
+     * 
+     * This makes easier to use, since you don't need to create a new object with the `Id` property 
+     * and use your own, and make it easier for plugin developers to create their own plugins.
+     */
+    keyUniqueIdentifier: keyof T;
     /**Custom styles to the component container and root. */
     styles?: IDataListStyles;
-    plugins?: IDataListPlugin[];
+    plugins?: IDataListPlugin<T>[];
 }

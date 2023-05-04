@@ -1,12 +1,11 @@
 import { ITextFieldProps, TextField } from "@fluentui/react/lib/TextField";
 import { DataListPlugin } from "@plugins/index";
-import type { BaseType } from "@models/interfaces/IDataList";
 import type { ColumnKey } from "@models/types/Common";
 import type { DataListStore } from "@models/interfaces/DataListStore";
 import { getDeepValue } from "@helpers/objectUtils";
 import { useMemo, CSSProperties } from "react";
 
-export type SearchBoxConfig<T extends BaseType> = {
+export type SearchBoxConfig<T> = {
     keysToSearch: Array<ColumnKey<T>>
     /**@default 'Search' */
     placeholder?: string;
@@ -16,12 +15,12 @@ export type SearchBoxConfig<T extends BaseType> = {
     /**@default {pointerEvents: "auto", cursor: "pointer", position: "static", padding: 8, backgroundColor: "rgb(0, 120, 222)"} */
     iconStyles?: CSSProperties;
 }
-type SearchBoxProps<T extends BaseType> = SearchBoxConfig<T> & { store: DataListStore<T> }
+type SearchBoxProps<T> = SearchBoxConfig<T> & { store: DataListStore<T> }
 
 /**Componente caso o plugin tenha alguma lógica que vá renderizar algo a mais dentro da área do DataList
  * Ex: Uma caixa de busca (filtro) em cima da listagem.
 */
-function SearchBox<T extends BaseType>(props: SearchBoxProps<T>): JSX.Element {
+function SearchBox<T>(props: SearchBoxProps<T>): JSX.Element {
     const containerStyles = useMemo<CSSProperties>(() => props?.containerStyles ?? {
         marginBottom: '10px',
         display: 'flex',
@@ -34,7 +33,7 @@ function SearchBox<T extends BaseType>(props: SearchBoxProps<T>): JSX.Element {
         pointerEvents: "auto", cursor: "pointer", position: 'static', padding: 8, backgroundColor: 'rgb(0, 120, 222)'
     }, [props?.iconStyles]);
 
-    const onSearch = <T extends BaseType>(store: DataListStore<T>, type: 'click' | 'keydown') => (e: any) => {
+    const onSearch = (store: DataListStore<T>, type: 'click' | 'keydown') => (e: any) => {
         if (type === 'keydown' && e.key !== 'Enter') return;
         const inputValue = (e?.currentTarget?.parentElement?.childNodes[0] as HTMLInputElement)?.value;
         if(!inputValue) 
@@ -66,7 +65,7 @@ function SearchBox<T extends BaseType>(props: SearchBoxProps<T>): JSX.Element {
 }
 
 /**Implementação do plugin de fato pra ser instanciado e passado para o array de plugins do DataList */
-export class SearchBoxPlugin<T extends BaseType> extends DataListPlugin<T> {
+export class SearchBoxPlugin<T> extends DataListPlugin<T> {
     constructor(private props?: SearchBoxConfig<T> | null) {
         super("SearchBoxPlugin", "SearchBoxPlugin", "1.0.0");
     }

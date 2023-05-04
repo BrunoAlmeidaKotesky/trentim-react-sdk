@@ -2,14 +2,15 @@
 import { getDeepValue } from '@helpers/objectUtils';
 import { useEffect, useCallback } from 'react';
 import { createNewSortInstance } from 'fast-sort';
-import type { IDataListProps, IRow, TColumn, BaseType } from '@models/interfaces/IDataList';
+import type { IDataListProps, TColumn } from '@models/interfaces/IDataList';
 import { convertIsoToLocaleString } from '@helpers/general';
 import type { IListProps } from '@fluentui/react/lib/List';
 import { useDataListContext } from './store';
+import { DataListStore } from '@models/interfaces/DataListStore';
 
 /** TO-DO: Use `useReducer` with context for better code splitting. */
-export function useDataListController<T extends BaseType>(props: IDataListProps<T>) {
-    const store = useDataListContext((s) => s);
+export function useDataListController<T>(props: IDataListProps<T>) {
+    const store = useDataListContext<T, DataListStore<T>>(s => s);
     const { plugins, initializePlugin, setPlugins } = store;
     const naturalSort = useCallback(createNewSortInstance({
         comparer: new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' }).compare,
@@ -46,7 +47,7 @@ export function useDataListController<T extends BaseType>(props: IDataListProps<
       
             return c;
           });
-          store.setColumns(convertedColumns as TColumn<BaseType>[]);
+          store.setColumns(convertedColumns as TColumn<T>[]);
         }
       }, [props.rows, props.columns]);
 
@@ -61,8 +62,8 @@ export function useDataListController<T extends BaseType>(props: IDataListProps<
         });
     }, [plugins, initializePlugin]);
 
-    const onItemClick = (item: IRow<T>) => !!props?.onItemClick && props?.onItemClick(item);
-    const onColumnClick = (currentRows: IRow<T>[]) => (_: any, column: TColumn<T>): void => {
+    const onItemClick = (item: T) => !!props?.onItemClick && props?.onItemClick(item);
+    const onColumnClick = (currentRows: T[]) => (_: any, column: TColumn<T>): void => {
         if (!column) return;
         let isSortedDescending = column?.isSortedDescending;
         if (column?.isSorted)
@@ -88,7 +89,7 @@ export function useDataListController<T extends BaseType>(props: IDataListProps<
     }
 
     useEffect(() => {
-        store.setColumns(columns => [...columns.map(c => ({ ...c, onColumnClick: onColumnClick(store.rows as IRow<T>[]) }))]);
+        store.setColumns(columns => [...columns.map(c => ({ ...c, onColumnClick: onColumnClick(store.rows) }))]);
     }, [store.rows]);
 
     const renderPlugins = () => {

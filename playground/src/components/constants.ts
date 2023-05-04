@@ -520,8 +520,22 @@ export const mockStages2 = [
     }
 ]
 
-export type JsonType = NonNullable<typeof json[0]>;
-export const COLUMNS_EX: TColumn<JsonType>[] = [
+export interface Project {
+    Id: number;
+    GerenteProjeto: { Title: string };
+    DonoProjeto: { Title: string };
+    UnidadeDeNegocio: { Id: number, Title: string };
+    TipoDeProjeto: { Title: string, Id: number };
+    Title: string;
+    Modified: string;
+    Created: string;
+    DataInicio: string;
+    NumeroPI: number;
+    DescricaoPI: string;
+    Setor: string;
+    Status: string;
+}
+export const COLUMNS_EX: TColumn<Project>[] = [
     {
       key: "Title",
       name: "Nome Do Projeto",
