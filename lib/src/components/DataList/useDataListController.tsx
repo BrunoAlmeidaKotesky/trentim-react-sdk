@@ -18,6 +18,7 @@ export function useDataListController<T extends BaseType>(props: IDataListProps<
     useEffect(() => {
         if (props.rows && props.rows.length > 0) {
           store.setRows(props.rows);
+          store.setTempRows('allRows', props.rows);
         }
         if (props.columns && props.columns.length > 0) {
           const columns = props?.columns;
