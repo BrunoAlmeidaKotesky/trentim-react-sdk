@@ -19,13 +19,13 @@ export interface DataListPlugin<T> {
      * `initialProps` is the props passed to the DataList component when the plugin was first initialized,
      * it does not change when the DataList props change.
     */
-    initialize(store: DataListStore<T>, initialProps?: IDataListProps<T>): void;
+    initialize(getStore: () => DataListStore<T>, initialProps?: IDataListProps<T>): void;
     /** Method that renders something within the DataList plugins area div 
      * 
      * `initialProps` is the props passed to the DataList component when the plugin was first initialized,
      * **it does not guarantee** that the props will be the same when the DataList props change.
     */
-    render?: (store: DataListStore<T>, initialProps?: IDataListProps<T>) => ReactNode;
+    render?: (getStore: () => DataListStore<T>, initialProps?: IDataListProps<T>) => ReactNode;
 }
 
 export type ContextMenuState = {
@@ -50,12 +50,14 @@ export interface DataListActions<T> {
     /**Set the rows that will be displayed in the DataList */
     setRows: (data: ValueOrFunc<T[]>) => void;
     setColumns: (data: ValueOrFunc<TColumn<T>[]>) => void;
+    setHeaderMenuItems: (data: CallbackSet<IContextualMenuItem[]>) => void;
     setTempRows: <S extends BaseDataListTempRowMapKeys>(key: S, rows: T[]) => void;
     getTempRows: <S extends BaseDataListTempRowMapKeys>(key: S) => T[];
     initializePlugin: (plugin: DataListPlugin<T>, props?: IDataListProps<T>) => void;
     setPlugins: (plugins: ValueOrFunc<DataListPlugin<T>[]>) => void;
     setContextMenu: (data: ValueOrFunc<ContextMenuState>) => void;
     onColumnClick: (ev: React.MouseEvent<HTMLElement>, column: TColumn<T>) => void;
+    getStore: () => DataListStore<T>;
 }
 
 export type DataListStore<T> = DataListState<T> & DataListActions<T>;

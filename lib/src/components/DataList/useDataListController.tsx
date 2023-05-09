@@ -45,7 +45,7 @@ export function useDataListController<T>(props: IDataListProps<T>) {
     const renderPlugins = () => {
         return store.plugins.map((plugin) => {
             if (plugin.render)
-                return <div key={plugin.name}>{plugin.render(store, props)}</div>
+                return <div key={plugin.name}>{plugin.render(() => store.getStore(), props)}</div>
             return null;
         });
     };

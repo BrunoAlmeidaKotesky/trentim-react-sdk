@@ -73,10 +73,11 @@ export class SearchBoxPlugin<T> implements DataListPlugin<T> {
     public version = '1.0.0';
     constructor(private props?: SearchBoxConfig<T> | null) {}
 
-    initialize(store: DataListStore<T>): void {
+    initialize(getStore: () => DataListStore<T>): void {
+        const store = getStore();
         store.setTempRows('search', []);
         console.log("SearchBoxPlugin initialized");
     }
 
-    render = (store: DataListStore<T>) => <SearchBox store={store} {...this.props} />
+    render = (getStore: () => DataListStore<T>) => <SearchBox store={getStore()} {...this.props} />
 }

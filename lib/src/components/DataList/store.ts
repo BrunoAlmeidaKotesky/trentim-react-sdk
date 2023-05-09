@@ -8,6 +8,7 @@ import { enableMapSet } from 'immer';
 import type { TColumn } from '@models/interfaces/IDataList';
 import { sortItems } from './utilities';
 import type { ColumnKey } from '@models/types/Common';
+import { IContextualMenuItem } from '@fluentui/react/lib/ContextualMenu';
 
 enableMapSet();
 export const createUseDataListStore = <T>(initialStore: Partial<DataListStore<T>>, props?: IDataListProps<T>) => {
@@ -72,7 +73,7 @@ export const createUseDataListStore = <T>(initialStore: Partial<DataListStore<T>
         getTempRows: key => get().tempRows.get(key) ?? [],
         initializePlugin: (plugin) => {
             if (typeof plugin?.initialize === 'function') {
-                plugin.initialize(get(), props);
+                plugin.initialize(() => get(), props);
             } else {
                 console.error(`
                 [TRS] - Plugin ${plugin.name} does not implement the initialize method.\r\n 
@@ -108,7 +109,11 @@ export const createUseDataListStore = <T>(initialStore: Partial<DataListStore<T>
                 };
                 (state.clickedColumnKey as ColumnKey<T>) = column.key;
             });
-        }
+        },
+        setHeaderMenuItems: items => set(state => {
+            (state.headerMenuItems as IContextualMenuItem[]) = items(state.headerMenuItems as IContextualMenuItem[]);
+        }),
+        getStore: () => get()
     })));
 }
 
