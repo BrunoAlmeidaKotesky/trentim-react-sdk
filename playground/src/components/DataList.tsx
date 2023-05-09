@@ -3,13 +3,13 @@ import json from "./MOCK_DATA.json";
 import { SearchBoxPlugin } from "@plugins/DataList/DataListSearchBoxPlugin";
 import { COLUMNS_EX, Project } from './constants';
 
+const rows: Project[] = json;
 const searchBoxPlugin = new SearchBoxPlugin<Project>({
   placeholder: 'Buscar', 
   keysToSearch: ['Title', 'DonoProjeto.Title']
 });
 
-export default function GridViewListExample() {
-  const rows: Project[] = json;
+export default function DataListEx() {
   return (
     <div style={{ display: "grid", placeItems: "center", margin: "0 auto", height: "100%"}}>
       <div style={{ width: "80%" }}>

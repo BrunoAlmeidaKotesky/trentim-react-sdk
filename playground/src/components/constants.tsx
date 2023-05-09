@@ -539,7 +539,6 @@ export const COLUMNS_EX: TColumn<Project>[] = [
     {
       key: "Title",
       name: "Nome Do Projeto",
-      fieldName: "Title",
       minWidth: 100,
       maxWidth: 200,
       isResizable: true,
@@ -547,15 +546,21 @@ export const COLUMNS_EX: TColumn<Project>[] = [
     {
       key: "NumeroPI",
       name: "PI",
-      fieldName: "NumeroPI",
       minWidth: 100,
       maxWidth: 200,
       isResizable: true,
+      transformations: {
+        renderAs: 'number',
+        locales: ['pt-BR'],
+        formatOptions: {
+            style: 'currency',
+            currency: 'BRL'
+        }
+      }
     },
     {
       key: "Status",
       name: "Status",
-      fieldName: "Status",
       minWidth: 100,
       maxWidth: 200,
       isResizable: true,
@@ -563,15 +568,17 @@ export const COLUMNS_EX: TColumn<Project>[] = [
     {
       key: "GerenteProjeto.Title",
       name: "Gerente do Projeto",
-      //fieldName: "GerenteProjeto.Title",
       minWidth: 100,
       maxWidth: 200,
       isResizable: true,
+      transformations: {
+        renderAs: 'custom',
+        mapFn: (value) => <span>{(value as string).toUpperCase()}</span>
+      }
     },
     {
       key: "DonoProjeto.Title",
       name: "Dono do Projeto",
-      //fieldName: "DonoProjeto.Title",
       minWidth: 100,
       maxWidth: 200,
       isResizable: true,
@@ -579,19 +586,23 @@ export const COLUMNS_EX: TColumn<Project>[] = [
     {
       key: "DataInicio",
       name: "Data Início",
-      //fieldName: "DataInicio",
       minWidth: 100,
       maxWidth: 200,
       isResizable: true,
-      dateConversionOptions: { shouldConvertToLocaleString: true },
+      transformations: {
+        renderAs: 'date',
+        locales: ['pt-BR']
+      },
     },
     {
       key: "Modified",
       name: "Modificado",
-      fieldName: "Modified",
       minWidth: 100,
       maxWidth: 200,
       hideColumn: false,
-      dateConversionOptions: { shouldConvertToLocaleString: true },
-    },
+      transformations: {
+        renderAs: 'date',
+        locales: ['pt-BR']
+      },
+    }
   ]

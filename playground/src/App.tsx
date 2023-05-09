@@ -1,5 +1,5 @@
 import { Route, BrowserRouter, Link, Routes } from 'react-router-dom';
-import Grids from './components/GridViewListExample';
+import DataList from './components/DataList';
 import Basics from './components/BasicComponents';
 import './App.css'
 import { LifecycleTests } from './components/LifecycleTests';
@@ -13,7 +13,7 @@ function App() {
         <Routes>
           {/**@ts-ignore */}
           <Route path="/" index element={<Home />} />
-          <Route path="/grids" element={<Grids />} />
+          <Route path="/grids" element={<DataList />} />
           <Route path="/basics" element={<Basics />} />
           <Route path="/lifecycle" element={<LifecycleTests height='100%'/>}/>
         </Routes>
@@ -25,7 +25,7 @@ function App() {
 function Home() {  
   return (
     <ul>
-      <li><Link to="/grids">Grids</Link></li>
+      <li><Link to="/grids">DataList</Link></li>
       <li><Link to="/basics">Basics</Link></li>
       <li><Link to="/lifecycle">Lifecycle</Link></li>
     </ul>
