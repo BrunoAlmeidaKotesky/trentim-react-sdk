@@ -1,21 +1,20 @@
 
-import { getDeepValue } from '@helpers/objectUtils';
 import { useEffect, useCallback } from 'react';
-import { createNewSortInstance } from 'fast-sort';
 import type { IDataListProps, TColumn } from '@models/interfaces/IDataList';
-import { convertIsoToLocaleString } from '@helpers/general';
 import type { IListProps } from '@fluentui/react/lib/List';
 import { useDataListContext } from './store';
 import { DataListStore } from '@models/interfaces/DataListStore';
+import { mapColumns } from './utilities';
 
-/** TO-DO: Use `useReducer` with context for better code splitting. */
 export function useDataListController<T>(props: IDataListProps<T>) {
     const store = useDataListContext<T, DataListStore<T>>(s => s);
-    const { plugins, initializePlugin, setPlugins } = store;
-    const naturalSort = useCallback(createNewSortInstance({
-        comparer: new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' }).compare,
-    }), []);
+    const { 
+        plugins, initializePlugin, setPlugins, setContextMenu,
+        headerMenuItems, onColumnClick, contextMenu 
+    } = store;
 
+    const columnMapper = useCallback(mapColumns, []);
+    /**Change the state of the rows and columns once they are on the properties.*/
     useEffect(() => {
         if (props.rows && props.rows.length > 0) {
           store.setRows(props.rows);
@@ -23,83 +22,34 @@ export function useDataListController<T>(props: IDataListProps<T>) {
         }
         if (props.columns && props.columns.length > 0) {
           const columns = props?.columns;
-          const convertedColumns = columns.map((c) => {
-            let onRender;
-            if (c?.key?.includes('.')) {
-              onRender = (item) => {
-                const fieldValue: string = getDeepValue(item, c?.key);
-                return <span>{fieldValue}</span>;
-              };
-            } else if (c?.dateConversionOptions?.shouldConvertToLocaleString) {
-              onRender = (item) => {
-                const fieldValue = convertIsoToLocaleString(
-                  item[c?.key],
-                  c?.dateConversionOptions?.locales,
-                  c?.dateConversionOptions?.formatOptions
-                );
-                return <span>{fieldValue}</span>;
-              };
-            }
-      
-            if (onRender) {
-              return { ...c, onRender };
-            }
-      
-            return c;
-          });
+          const convertedColumns = columns.map(columnMapper);
           store.setColumns(convertedColumns as TColumn<T>[]);
         }
       }, [props.rows, props.columns]);
 
-    useEffect(() => {
-        setPlugins(props.plugins);
-    }, [props.plugins, setPlugins]);
+    /**Set the state of plugins when the props.plugins changes. */
+    useEffect(() => { setPlugins(props.plugins) }, [props.plugins, setPlugins]);
 
-    // Inicialize os plugins apenas uma vez durante a montagem do componente
+    //Initializes the plugins once they are set.
     useEffect(() => {
         plugins.forEach((plugin) => {
-            initializePlugin(plugin);
+            initializePlugin(plugin, props);
         });
     }, [plugins, initializePlugin]);
 
+    /**If consumer provided the props.onItemClick use it, otherwise do nothing. */
     const onItemClick = (item: T) => !!props?.onItemClick && props?.onItemClick(item);
-    const onColumnClick = (currentRows: T[]) => (_: any, column: TColumn<T>): void => {
-        if (!column) return;
-        let isSortedDescending = column?.isSortedDescending;
-        if (column?.isSorted)
-            isSortedDescending = !isSortedDescending;
-        let sortedItems = currentRows;
-        const sortType: 'asc' | 'desc' = isSortedDescending ? 'desc' : 'asc';
-        const columnKeys = column?.key;
-        if (sortType === 'asc')
-            sortedItems = naturalSort(sortedItems).by({
-                asc: u => getDeepValue(u, columnKeys as any)?.toString(),
-            });
-        else if (sortType === 'desc')
-            sortedItems = naturalSort(sortedItems).by({
-                desc: u => getDeepValue(u, columnKeys as any)?.toString(),
-            });
-        store.setRows(sortedItems);
-        store.setColumns(c => c.map(col => {
-            col.isSorted = col.key === column?.key;
-            if (col?.isSorted)
-                col.isSortedDescending = isSortedDescending;
-            return col;
-        }));
-    }
-
-    useEffect(() => {
-        store.setColumns(columns => [...columns.map(c => ({ ...c, onColumnClick: onColumnClick(store.rows) }))]);
-    }, [store.rows]);
-
+    /**The sorting logic of the columns. */
+    
+    /**If the plugins had implemented the render method, it will render them. */
     const renderPlugins = () => {
         return store.plugins.map((plugin) => {
             if (plugin.render)
-                return <div key={plugin.name}>{plugin.render(store)}</div>
+                return <div key={plugin.name}>{plugin.render(store, props)}</div>
             return null;
         });
     };
-
+    /** If the user provided a maxHeight, it will use the onShouldVirtualize property of the DetailsList */
     const verifyVirtualization = useCallback((): IListProps['onShouldVirtualize'] => {
         if (props?.maxHeight || props?.detailsListProps?.styles?.['root']?.['maxHeight'])
             return props?.onShouldVirtualize ?? (() => true);
@@ -110,8 +60,9 @@ export function useDataListController<T>(props: IDataListProps<T>) {
         state: {
             columns: store.columns,
             rows: store.rows,
-            groups: store?.groups
+            groups: store?.groups,
+            contextMenu, headerMenuItems
         },
-        handlers: { onItemClick, verifyVirtualization, renderPlugins }
+        handlers: { onItemClick, verifyVirtualization, renderPlugins, onColumnClick, setContextMenu }
     }
 }

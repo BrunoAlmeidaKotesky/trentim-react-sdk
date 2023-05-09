@@ -1,6 +1,7 @@
-import type { ColumnKey, IDateConversionOptions } from '@models/types/Common';
+import type { ColumnKey } from '@models/types/Common';
 import type { IColumn, IDetailsListProps, IListProps } from "@fluentui/react";
-import type { IDataListPlugin } from '@plugins/index';
+import type { DataListPlugin } from '@models/interfaces/DataListStore';
+import type { ColumnItemTransformation } from './ColumnItemTransformation';
 
 export type TColumn<T> = IColumn & {
     /**If the desired value is from an nested object, provide the value with dots. 
@@ -9,12 +10,15 @@ export type TColumn<T> = IColumn & {
    //Type of key should be either keyof T or DeepPath
     key: ColumnKey<T>;
     /**
-     * @deprecated - This property no longer needs to be provided, since it has no actual effect.
-     * If the desired value is from an nested object, provide the value with dots. 
-     * @example "file.name" will get the value from the file object.
-    */
-    fieldName?: ColumnKey<T>;
-    dateConversionOptions?: IDateConversionOptions;
+     * Apply a transformations to all the items (cells) of this column.
+     * 
+     * You can use the `renderAs` property to render the value as a `date`, `number`, `boolean` or a `custom` render function.
+     * 
+     * If you do want to render the items as a custom function, you will need to use the `mapFn` property, which will receive the value of the cell and should return a `React.ReactNode`.
+     * 
+     * You can also use the `wrapper` property to wrap the value with a custom component, otherwise it will be wrapped with a `<span />` tag.
+     */
+    transformations?: ColumnItemTransformation;
     /**Use this if you don't want to display the column all it's rows, with this you can still use this column on for actions like filtering or grouping. 
      * @default false */
     hideColumn?: boolean;
@@ -25,34 +29,15 @@ export type IFluentDetailsListProps = Omit<
     'columns' | 'items' | 'onRenderItemColumn' | 'onRenderRow' | 'onShouldVirtualize'
 >
 
-export type SearchBoxProps<T> = {
-    /**
-     * If set to `true`, will display the searchbox, where the `searchKeys` property should be used to define which key to filter by. 
-     * @default true */
-    enableSearch?: boolean;
-    searchKeys?: Array<ColumnKey<T>>;
-    /**A placeholder text to the search box. */
-    searchBoxPlaceholder?: string;
-    onSearchItemChange?: (searchText: string, keys: Array<keyof T>) => void;
-    onSearchBoxClick?: (e?: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement, Element>) => void;
-    onClickSearchIcon?: (searchText?: string, keys?: (keyof T)[]) => void;
-}
-
 /**Represents all the functions that can be used. */
 export interface IDataListHandler<T> {
     /**A custom event to be fired when a row is clicked. */
     onItemClick?: (row: T) => void;
-    /**The same event from `IDetailsListProps` from `@fluent-ui` with generic types.
+    /**
+     * You should see the `transformations` property from `TColumn<T>` first, since it will probably solve your problem.
      * 
-     * This is different from `onRenderCustomRow`, since this method is applied to the default `onRenderItemColumn` from `DetailsList` and not on the entire component.
-     */
+     * The same event from `IDetailsListProps` from `@fluent-ui` with generic types.*/
     onRenderItemColumn?: (item?: T, index?: number, column?: TColumn<T>) => React.ReactNode;
-    /**If you want to totally overwrite the component that is being rendered, independent of the `renderAs` value, use this rendering function. 
-     *
-     * This element will be applied to each item `IRow`, not the entire component. */
-    onRenderCustomRow?: (item: T) => React.ReactNode;
-    /**A callback that will be called after the items were filtered from the search box. */
-    onSearchBoxItemsFiltered?: (filtered?: T[]) => void;
 }
 
 export interface IDataListStyles {
@@ -63,8 +48,7 @@ export interface IDataListStyles {
 }
 
 
-export interface IDataListProps<T extends any> 
-    extends IDataListHandler<T>, SearchBoxProps<T> {
+export interface IDataListProps<T extends any> extends IDataListHandler<T> {
     /**
      * If a `maxHeight` is not set, the list will not be virtualized by default, even if you return `true` on this property.
      * We do that to ensure that, to ensure with no max height is se to the list, the @fluentui virtualization bug does not occur.
@@ -125,5 +109,9 @@ export interface IDataListProps<T extends any>
     keyUniqueIdentifier: keyof T;
     /**Custom styles to the component container and root. */
     styles?: IDataListStyles;
-    plugins?: IDataListPlugin<T>[];
+    plugins?: DataListPlugin<T>[];
+    columnMenuConfig?: {
+        sortAscText?: string;
+        sortDescText?: string;
+    }
 }

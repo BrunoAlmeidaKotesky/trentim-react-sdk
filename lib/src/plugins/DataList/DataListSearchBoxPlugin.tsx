@@ -1,5 +1,5 @@
 import { ITextFieldProps, TextField } from "@fluentui/react/lib/TextField";
-import { DataListPlugin } from "@plugins/index";
+import type { DataListPlugin } from "@models/interfaces/DataListStore";
 import type { ColumnKey } from "@models/types/Common";
 import type { DataListStore } from "@models/interfaces/DataListStore";
 import { getDeepValue } from "@helpers/objectUtils";
@@ -33,6 +33,14 @@ function SearchBox<T>(props: SearchBoxProps<T>): JSX.Element {
         pointerEvents: "auto", cursor: "pointer", position: 'static', padding: 8, backgroundColor: 'rgb(0, 120, 222)'
     }, [props?.iconStyles]);
 
+    /**Works either when user clicks on the icon or press enter on the input 
+     * 
+     * If the current target value is empty, it will set the rows to the original rows, by using
+     * the native tempRows `allRows` that were saved before any plugin was applied.
+     * 
+     * If the current target value is not empty, it will filter the rows by the `keysToSearch` property from
+     * the `DataList` component.
+    */
     const onSearch = (store: DataListStore<T>, type: 'click' | 'keydown') => (e: any) => {
         if (type === 'keydown' && e.key !== 'Enter') return;
         const inputValue = (e?.currentTarget?.parentElement?.childNodes[0] as HTMLInputElement)?.value;
@@ -55,27 +63,20 @@ function SearchBox<T>(props: SearchBoxProps<T>): JSX.Element {
             <TextField
                 styles={props?.textFieldStyles} placeholder={props?.placeholder ?? 'Search'}
                 onKeyDown={onSearch(props?.store, 'keydown')}
-                iconProps={{
-                    iconName: 'Search',
-                    style: iconStyles,
-                    onClick: onSearch(props?.store, 'click')
-                }} />
+                iconProps={{ iconName: 'Search', style: iconStyles, onClick: onSearch(props?.store, 'click') }} />
         </div>
     )
 }
 
-/**Implementação do plugin de fato pra ser instanciado e passado para o array de plugins do DataList */
-export class SearchBoxPlugin<T> extends DataListPlugin<T> {
-    constructor(private props?: SearchBoxConfig<T> | null) {
-        super("SearchBoxPlugin", "SearchBoxPlugin", "1.0.0");
-    }
+export class SearchBoxPlugin<T> implements DataListPlugin<T> {
+    public name = 'SearchBoxPlugin';
+    public version = '1.0.0';
+    constructor(private props?: SearchBoxConfig<T> | null) {}
 
-    /**Método obrigatório para implementar, que faz alguma coisa (o que quiser) quando o plugin inicializa */
     initialize(store: DataListStore<T>): void {
-        store.setTempRows('searchPlugin', []);
+        store.setTempRows('search', []);
         console.log("SearchBoxPlugin initialized");
     }
 
-    /**Método que faz algo ser renderizado dentro do DataList, nesse caso esse plugin renderiza o componente SearchBox */
     render = (store: DataListStore<T>) => <SearchBox store={store} {...this.props} />
 }
