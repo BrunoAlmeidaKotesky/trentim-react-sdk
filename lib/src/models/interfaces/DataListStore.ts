@@ -58,6 +58,14 @@ export interface DataListActions<T> {
     setContextMenu: (data: ValueOrFunc<ContextMenuState>) => void;
     onColumnClick: (ev: React.MouseEvent<HTMLElement>, column: TColumn<T>) => void;
     getStore: () => DataListStore<T>;
+    subscribe: ZustandSubscribe<DataListStore<T>>;
 }
 
 export type DataListStore<T> = DataListState<T> & DataListActions<T>;
+
+export type ZustandSubscribe<T> = {
+    <U>(selector: (state: DataListStore<T>) => U, listener: (selectedState: U, previousSelectedState: U) => void, options?: {
+        equalityFn?: (a: U, b: U) => boolean;
+        fireImmediately?: boolean;
+    }): () => void;
+};

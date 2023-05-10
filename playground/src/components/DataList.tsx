@@ -9,7 +9,10 @@ const searchBoxPlugin = new SearchBoxPlugin<Project>({
   placeholder: 'Buscar', 
   keysToSearch: ['Title', 'DonoProjeto.Title']
 });
-const filterPlugin = new FilterPlugin<Project>();
+const filterPlugin = new FilterPlugin<Project>({
+  filterText: 'Filtrar por',
+  excludeColumns: ['Title', 'DonoProjeto.Title']
+});
 
 export default function DataListEx() {
   return (
