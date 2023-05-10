@@ -38,7 +38,12 @@ function DataListInner<T>(props: IDataListProps<T>) {
                         showEmptyGroups: false
                     }}
                     onRenderDetailsHeader={(props, defaultRender) => {
-                        return defaultRender({...props, onColumnClick});
+                        return (
+                            <div id="dataListHeaderContainer">
+                                {defaultRender({...props, onColumnClick})}
+                                <div id={`headerPortalZone`}/>
+                            </div>
+                        )
                     }}
                     groups={groups.length === 0 ? undefined : groups}
                     onShouldVirtualize={verifyVirtualization()}

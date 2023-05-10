@@ -3,6 +3,7 @@ import { createNewSortInstance } from 'fast-sort';
 import type { TColumn } from "@models/interfaces/IDataList";
 import type { ReactNode, ComponentType } from "react";
 import type { ColumnKey } from "@models/types/Common";
+import type { DataListStore } from "@models/interfaces/DataListStore";
 
 /**
  * This function takes the transformations of a column and returns the rendered value of the item, 
@@ -109,3 +110,11 @@ export function sortItems<T>(items: T[], columnKey: ColumnKey<T>, isSortedDescen
         desc: u => getDeepValue(u, columnKey as any)?.toString(),
     });
 };
+
+export function onClickSortItem<T>(desc: boolean, get: () => DataListStore<T>, set: Function) {
+    const column = get().clickedColumnKey;
+    const sortedItems = sortItems(get().rows, column, desc);
+    set(state => {
+        (state.rows as T[]) = sortedItems;
+    });
+}

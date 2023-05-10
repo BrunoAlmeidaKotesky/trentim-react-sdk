@@ -1,15 +1,15 @@
-import type { DataListState, DataListStore, BaseDataListTempRowMapKeys, ZustandSubscribe } from '@models/interfaces/DataListStore';
-import type { IDataListProps } from '@models/interfaces/IDataList';
 import { createStore, useStore } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
-import { subscribeWithSelector } from 'zustand/middleware/subscribeWithSelector';
+import { subscribeWithSelector } from 'zustand/middleware';
 import { useContext } from 'react';
 import { DataListCtx } from './Context';
 import { enableMapSet } from 'immer';
-import type { TColumn } from '@models/interfaces/IDataList';
-import { sortItems } from './utilities';
+import { onClickSortItem } from './utilities';
 import type { ColumnKey } from '@models/types/Common';
-import { IContextualMenuItem } from '@fluentui/react/lib/ContextualMenu';
+import type { IContextualMenuItem } from '@fluentui/react/lib/ContextualMenu';
+import type { TColumn } from '@models/interfaces/IDataList';
+import type { DataListState, DataListStore, BaseDataListTempRowMapKeys, ZustandSubscribe } from '@models/interfaces/DataListStore';
+import type { IDataListProps } from '@models/interfaces/IDataList';
 
 enableMapSet();
 export const createUseDataListStore = <T>(initialStore: Partial<DataListStore<T>>, props?: IDataListProps<T>) => {
@@ -39,26 +39,12 @@ export const createUseDataListStore = <T>(initialStore: Partial<DataListStore<T>
                 {
                     key: 'sortAsc',
                     text: props?.columnMenuConfig?.sortAscText || 'Sort Ascending',
-                    onClick: (e, v) => {
-                        console.log(e, v);
-                        const column = get().clickedColumnKey;
-                        const sortedItems = sortItems(get().rows, column, false);
-                        set(state => {
-                            (state.rows as T[]) = sortedItems;
-                        });
-                    }
+                    onClick: () => onClickSortItem(false, get, set)
                 },
                 {
                     key: 'sortDesc',
                     text: props?.columnMenuConfig?.sortDescText || 'Sort Descending',
-                    onClick: (e, v) => {
-                        console.log(e, v);
-                        const column = get().clickedColumnKey;
-                        const sortedItems = sortItems(get().rows, column, true);
-                        set(state => {
-                            (state.rows as T[]) = sortedItems;
-                        });
-                    }
+                    onClick: () => onClickSortItem(true, get, set)
                 }
             ],
             ...initialStore as Partial<DataListStore<T>>,

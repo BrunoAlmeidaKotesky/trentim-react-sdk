@@ -64,7 +64,7 @@ export interface DataListActions<T> {
 export type DataListStore<T> = DataListState<T> & DataListActions<T>;
 
 export type ZustandSubscribe<T> = {
-    <U>(selector: (state: DataListStore<T>) => U, listener: (selectedState: U, previousSelectedState: U) => void, options?: {
+    <U>(selector: (state: T) => U, listener: (selectedState: U, previousSelectedState: U) => void, options?: {
         equalityFn?: (a: U, b: U) => boolean;
         fireImmediately?: boolean;
     }): () => void;

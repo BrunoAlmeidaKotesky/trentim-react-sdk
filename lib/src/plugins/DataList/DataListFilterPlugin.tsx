@@ -4,28 +4,54 @@ import type { DataListPlugin } from "@models/interfaces/DataListStore";
 import type { DataListStore } from "@models/interfaces/DataListStore";
 import { getDeepValue } from '@helpers/index';
 import { ComboBox, IComboBoxOption } from '@fluentui/react/lib/ComboBox';
+import {createPortal} from 'react-dom';
+import type { TColumn } from '@models/interfaces/IDataList';
 
 type FilterPluginConfig<T> = {
     /**Text to display when clicking on the column header menu */
     filterText?: string;
     /**Fields that won't be filtered */
     excludeColumns?: ColumnKey<T>[];
+    /**@default `white` */
 };
-type FilterMap<T> = Map<ColumnKey<T>, {values: unknown[], order: number, name: string}>;
-type FilterAreaProps<T> = {store: DataListStore<T>, filterMap: FilterMap<T>};
+type FilterMap<T> = Map<ColumnKey<T>, {values: unknown[], order: number, column: TColumn<T>;}>;
+type FilterAreaProps<T> = {
+    store: DataListStore<T>, 
+    filterMap: FilterMap<T>, 
+    /**@default `white` */
+}
+type AddOrRemoveConfig<T> = Pick<DataListStore<T>, 'clickedColumnKey' | 'headerMenuItems' | 'getStore' | 'setHeaderMenuItems'>;
 
 function FilterArea<T>(props: FilterAreaProps<T>): JSX.Element {
     const currentFilteringKey = props.store.clickedColumnKey;
     if(!props.filterMap.has(currentFilteringKey)) return null;
-    const options = props.filterMap.get(currentFilteringKey)?.values?.map<IComboBoxOption>(v => ({
+    const currentMap = props.filterMap.get(currentFilteringKey);
+    const options = currentMap?.values?.map<IComboBoxOption>(v => ({
         key: `${currentFilteringKey} - ${v?.toString()}`,
         text: v?.toString(),
     })) || [];
+    
+    const targetSelector = `div[data-item-key="${currentFilteringKey}"]`;
+    const targetDom = document.querySelector(targetSelector);
+    if(!targetDom) {
+        console.error(`FilterPlugin: Could not find target element with selector ${targetSelector}`);
+        return null;
+    }
+    const width = targetDom?.clientWidth || currentMap.column?.minWidth;
+    const sibling = targetDom?.appendChild(document.createElement('div'));
 
-    return (
-        <div>
-            <ComboBox options={options} autoComplete="on" />
+    return createPortal(<div style={{width: '100%', top: 40, zIndex: 999, position: 'absolute' }}>
+        <div style={{ width, placeContent: 'center', display: 'grid' }} id={currentFilteringKey as string}>
+            <ComboBox 
+                multiSelect
+                styles={{
+                    root: {maxWidth: width},
+                    callout: {minWidth: 100, maxHeight: '320px!important', scroll: 'auto'}
+                }}
+                options={options} autoComplete="on" />
         </div>
+        </div>,
+        sibling
     );
 }
 
@@ -33,8 +59,6 @@ export class FilterPlugin<T> implements DataListPlugin<T> {
     public name: string = 'DataListFilterPlugin';
     public version: string = '1.0.0';
     private currentFilter: FilterMap<T> = new Map([]);
-    private unsubscribe: () => void = null;
-
     constructor(private config?: FilterPluginConfig<T>) {}
 
     public initialize(getStore: () => DataListStore<T>) {
@@ -50,10 +74,16 @@ export class FilterPlugin<T> implements DataListPlugin<T> {
                 }
             ];
         });
-        this.unsubscribe = getStore().subscribe(
+        getStore().subscribe(
             (state) => state.clickedColumnKey,
-            (clickedColumnKey, prevClickedColumnKey) => {
-                console.log('O clickedColumnKey mudou de', prevClickedColumnKey, 'para', clickedColumnKey);
+            (clickedColumnKey, _prev) => {
+                const store = getStore();
+                this.#addOrRemoveFilterItem({
+                    clickedColumnKey,
+                    getStore,
+                    headerMenuItems: store.headerMenuItems,
+                    setHeaderMenuItems: store.setHeaderMenuItems,
+                });
             },
             { fireImmediately: true }
         );
@@ -64,16 +94,54 @@ export class FilterPlugin<T> implements DataListPlugin<T> {
         const column = store.columns.find(c => c.key === columnKey);
         if(!column) return;
         const order = this.currentFilter.has(columnKey) ? this.currentFilter.get(columnKey)!.order : 0;
-        const valuesToShow = store.rows
+        const valuesToShow = [...new Set(
+            store.rows
             .filter(r => {
                 const value = getDeepValue(r, columnKey as any);
                 if(value === undefined || value === null) return false;
                 return true;
             })
-            .map(r => getDeepValue(r, columnKey  as any));
-        this.currentFilter.set(columnKey, {values: valuesToShow, order, name: column.name});
+            .map(r => getDeepValue(r, columnKey  as any))
+        )];
+        this.currentFilter.set(columnKey, {values: valuesToShow, order, column});
         console.log(this.currentFilter);
     }
 
-    public render = (getStore: () => DataListStore<T>) => <FilterArea<T> store={getStore()} filterMap={this.currentFilter}/>
+    #addOrRemoveFilterItem({
+        clickedColumnKey, getStore, 
+        headerMenuItems, setHeaderMenuItems
+    }: AddOrRemoveConfig<T>) {
+        if (!clickedColumnKey) return;
+
+        // Encontra o item "filter" em headerMenuItems
+        const filterItemIndex = headerMenuItems.findIndex(item => item.key === 'filter');
+
+        // Cria uma nova cópia de headerMenuItems para evitar a mutação direta do estado
+        let newHeaderMenuItems = [...headerMenuItems];
+
+        // Se clickedColumnKey é um dos excludeColumns, remova o item "filter" se ele existir
+        if (this?.config?.excludeColumns?.includes(clickedColumnKey)) {
+            if (filterItemIndex !== -1) {
+                // Remova o item "filter"
+                newHeaderMenuItems = newHeaderMenuItems.filter((_, index) => index !== filterItemIndex);
+            }
+        } else {
+            // Se clickedColumnKey não é um dos excludeColumns, adicione o item "filter" se ele não existir
+            if (filterItemIndex === -1) {
+                // Adicione o item "filter"
+                newHeaderMenuItems.push({
+                    key: 'filter',
+                    text: this?.config?.filterText || 'Filter By',
+                    onClick: () => this.#onClickFilterOpt(getStore())
+                });
+            }
+        }
+
+        // No final, podemos querer atualizar o estado da loja com o novo headerMenuItems
+        setHeaderMenuItems(() => newHeaderMenuItems);
+    }
+
+    public render = (getStore: () => DataListStore<T>) => (
+        <FilterArea<T> store={getStore()} filterMap={this.currentFilter}/>
+    )
 }
