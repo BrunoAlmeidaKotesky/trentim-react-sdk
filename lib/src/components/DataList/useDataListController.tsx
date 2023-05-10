@@ -4,7 +4,7 @@ import type { IDataListProps, TColumn } from '@models/interfaces/IDataList';
 import type { IListProps } from '@fluentui/react/lib/List';
 import { useDataListContext } from './store';
 import { DataListStore } from '@models/interfaces/DataListStore';
-import { mapColumns } from './utilities';
+import { mapColumns } from '@helpers/internalUtils';
 
 export function useDataListController<T>(props: IDataListProps<T>) {
     const store = useDataListContext<T, DataListStore<T>>(s => s);
@@ -18,7 +18,7 @@ export function useDataListController<T>(props: IDataListProps<T>) {
     useEffect(() => {
         if (props.rows && props.rows.length > 0) {
           store.setRows(props.rows);
-          store.setTempRows('allRows', props.rows);
+          store.setTempRows(props.rows);
         }
         if (props.columns && props.columns.length > 0) {
           const columns = props?.columns;

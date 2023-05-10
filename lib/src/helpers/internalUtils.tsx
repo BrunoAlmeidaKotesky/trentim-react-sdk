@@ -1,3 +1,5 @@
+/**All the functions in this file are for internal use only. */
+
 import { convertIsoToLocaleString, getDeepValue} from "@helpers/index";
 import { createNewSortInstance } from 'fast-sort';
 import type { TColumn } from "@models/interfaces/IDataList";

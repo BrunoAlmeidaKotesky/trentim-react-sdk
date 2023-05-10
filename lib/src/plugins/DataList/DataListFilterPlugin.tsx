@@ -29,12 +29,14 @@ function FilterArea<T>(props: FilterAreaProps<T>): JSX.Element {
     const options = currentMap?.values?.map<IComboBoxOption>(v => ({
         key: `${currentFilteringKey} - ${v?.toString()}`,
         text: v?.toString(),
+        useAriaLabelAsText: true,
+        ariaLabel: v?.toString(),
     })) || [];
     
-    const targetSelector = `div[data-item-key="${currentFilteringKey}"]`;
-    const targetDom = document.querySelector(targetSelector);
+    const TARGET_SELECTOR = `div[data-item-key="${currentFilteringKey}"]` as const;
+    const targetDom = document.querySelector(TARGET_SELECTOR);
     if(!targetDom) {
-        console.error(`FilterPlugin: Could not find target element with selector ${targetSelector}`);
+        console.error(`FilterPlugin: Could not find target element with selector ${TARGET_SELECTOR}`);
         return null;
     }
     const width = targetDom?.clientWidth || currentMap.column?.minWidth;
@@ -48,6 +50,7 @@ function FilterArea<T>(props: FilterAreaProps<T>): JSX.Element {
                     root: {maxWidth: width},
                     callout: {minWidth: 100, maxHeight: '320px!important', scroll: 'auto'}
                 }}
+                //onRenderItem={/**Implement it later */}
                 options={options} autoComplete="on" />
         </div>
         </div>,
@@ -55,15 +58,15 @@ function FilterArea<T>(props: FilterAreaProps<T>): JSX.Element {
     );
 }
 
-export class FilterPlugin<T> implements DataListPlugin<T> {
+
+export class FilterPlugin<T> implements DataListPlugin<T, 'FilterPlugin'> {
     public name: string = 'DataListFilterPlugin';
     public version: string = '1.0.0';
     private currentFilter: FilterMap<T> = new Map([]);
     constructor(private config?: FilterPluginConfig<T>) {}
 
-    public initialize(getStore: () => DataListStore<T>) {
+    public initialize(getStore: () => DataListStore<T, 'FilterPlugin'>) {
         const store = getStore();
-        store.setTempRows('filtered', []);
         console.log("FilterPlugin initialized");
         store.setHeaderMenuItems(items => {
             return [...items, 
@@ -87,6 +90,8 @@ export class FilterPlugin<T> implements DataListPlugin<T> {
             },
             { fireImmediately: true }
         );
+        //type Test = {a: string};
+        //let b = store.getPluginDataMapValue<Test>('FilterPlugin')('a')
     }
 
     #onClickFilterOpt(store: DataListStore<T>): void {

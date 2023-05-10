@@ -45,7 +45,7 @@ function SearchBox<T>(props: SearchBoxProps<T>): JSX.Element {
         if (type === 'keydown' && e.key !== 'Enter') return;
         const inputValue = (e?.currentTarget?.parentElement?.childNodes[0] as HTMLInputElement)?.value;
         if(!inputValue) 
-            return store.setRows(store.getTempRows('allRows') || store.rows);
+            return store.setRows(store.tempRows || store.rows);
         const keysToSearch = props?.keysToSearch ?? [];
         store.setRows(
             store.rows.filter(row =>
@@ -75,7 +75,6 @@ export class SearchBoxPlugin<T> implements DataListPlugin<T> {
 
     initialize(getStore: () => DataListStore<T>): void {
         const store = getStore();
-        store.setTempRows('search', []);
         console.log("SearchBoxPlugin initialized");
     }
 

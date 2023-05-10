@@ -4,24 +4,21 @@ import { subscribeWithSelector } from 'zustand/middleware';
 import { useContext } from 'react';
 import { DataListCtx } from './Context';
 import { enableMapSet } from 'immer';
-import { onClickSortItem } from './utilities';
+import { onClickSortItem } from '@helpers/internalUtils';
+import {setDeepValue} from '@helpers/objectUtils';
 import type { ColumnKey } from '@models/types/Common';
 import type { IContextualMenuItem } from '@fluentui/react/lib/ContextualMenu';
 import type { TColumn } from '@models/interfaces/IDataList';
-import type { DataListState, DataListStore, BaseDataListTempRowMapKeys, ZustandSubscribe } from '@models/interfaces/DataListStore';
+import type { DataListState, DataListStore, ZustandSubscribe } from '@models/interfaces/DataListStore';
 import type { IDataListProps } from '@models/interfaces/IDataList';
+import type { Paths, TypeFrom } from '@models/types/UtilityTypes';
 
 enableMapSet();
 export const createUseDataListStore = <T>(initialStore: Partial<DataListStore<T>>, props?: IDataListProps<T>) => {
     const DEFAULT_STATE: Omit<DataListState<T>, 'headerMenuItems'> = {
         rows: [],
         columns: [],
-        tempRows: new Map<BaseDataListTempRowMapKeys, T[]>([
-            ['allRows', []],
-            ['filtered', []],
-            ['grouped', []],
-            ['search', []]
-        ]),
+        tempRows: [],
         plugins: [],
         groups: [],
         clickedColumnKey: null,
@@ -29,10 +26,12 @@ export const createUseDataListStore = <T>(initialStore: Partial<DataListStore<T>
             visible: false,
             x: 0,
             y: 0
-        }
+        },
+        pluginsDataMap: new Map()
     }
 
-    return createStore<DataListStore<T>>()(subscribeWithSelector(immer((set, get, api) => {
+    return createStore<DataListStore<T>>()(subscribeWithSelector(immer(
+        (set, get, api) => {
         return ({
             ...DEFAULT_STATE,
             headerMenuItems: [
@@ -54,11 +53,12 @@ export const createUseDataListStore = <T>(initialStore: Partial<DataListStore<T>
                 else
                     (state.rows as T[]) = rows;
             }),
-            setTempRows: (key, rows) => set(state => {
-                //@ts-ignore
-                state.tempRows.set(key, rows);
+            setTempRows: tempRows => set(state => {
+                if (typeof tempRows === 'function')
+                    (state.tempRows as T[]) = tempRows(state.tempRows as T[]);
+                else
+                    (state.tempRows as T[]) = tempRows; 
             }),
-            getTempRows: key => get().tempRows.get(key) ?? [],
             initializePlugin: (plugin) => {
                 if (typeof plugin?.initialize === 'function') {
                     plugin.initialize(() => get(), props);
@@ -101,6 +101,22 @@ export const createUseDataListStore = <T>(initialStore: Partial<DataListStore<T>
             setHeaderMenuItems: items => set(state => {
                 (state.headerMenuItems as IContextualMenuItem[]) = items(state.headerMenuItems as IContextualMenuItem[]);
             }),
+            setPluginDataMapValue: (pluginKey) => (k, v) => {
+                set(state => {
+                    const pluginRecord = state.pluginsDataMap.get(pluginKey);
+                    if (pluginRecord) {
+                        const newRecord = setDeepValue(pluginRecord, k, v as any);
+                        state.pluginsDataMap.set(pluginKey, newRecord);
+                    }
+                })
+            },
+            getPluginDataMapValue: <T extends Record<string, unknown>, R extends string>(pluginKey: R) => (k: Paths<T, 4>): TypeFrom<T> => {
+                const pluginRecord = get().pluginsDataMap.get(pluginKey);
+                if (pluginRecord) {
+                    return pluginRecord[k as string] as TypeFrom<T>;
+                }
+                return undefined as TypeFrom<T>;
+            },            
             getStore: () => get(),
             subscribe: api.subscribe as unknown as ZustandSubscribe<DataListStore<T>>
         })
