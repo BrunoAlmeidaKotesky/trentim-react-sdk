@@ -1,73 +1,18 @@
-import type { ColumnKey } from '@models/types/Common';
 import type { DataListPlugin } from "@models/interfaces/DataListStore";
-//import type { ColumnKey } from "@models/types/Common";
 import type { DataListStore } from "@models/interfaces/DataListStore";
+import type { FilterMap, FilterPluginConfig, AddOrRemoveConfig } from './types';
 import { getDeepValue } from '@helpers/index';
-import { ComboBox, IComboBoxOption } from '@fluentui/react/lib/ComboBox';
-import {createPortal} from 'react-dom';
-import type { TColumn } from '@models/interfaces/IDataList';
+import { FilterBox } from './FilterBox';
 
-type FilterPluginConfig<T> = {
-    /**Text to display when clicking on the column header menu */
-    filterText?: string;
-    /**Fields that won't be filtered */
-    excludeColumns?: ColumnKey<T>[];
-    /**@default `white` */
-};
-type FilterMap<T> = Map<ColumnKey<T>, {values: unknown[], order: number, column: TColumn<T>;}>;
-type FilterAreaProps<T> = {
-    store: DataListStore<T>, 
-    filterMap: FilterMap<T>, 
-    /**@default `white` */
-}
-type AddOrRemoveConfig<T> = Pick<DataListStore<T>, 'clickedColumnKey' | 'headerMenuItems' | 'getStore' | 'setHeaderMenuItems'>;
-
-function FilterArea<T>(props: FilterAreaProps<T>): JSX.Element {
-    const currentFilteringKey = props.store.clickedColumnKey;
-    if(!props.filterMap.has(currentFilteringKey)) return null;
-    const currentMap = props.filterMap.get(currentFilteringKey);
-    const options = currentMap?.values?.map<IComboBoxOption>(v => ({
-        key: `${currentFilteringKey} - ${v?.toString()}`,
-        text: v?.toString(),
-        useAriaLabelAsText: true,
-        ariaLabel: v?.toString(),
-    })) || [];
-    
-    const TARGET_SELECTOR = `div[data-item-key="${currentFilteringKey}"]` as const;
-    const targetDom = document.querySelector(TARGET_SELECTOR);
-    if(!targetDom) {
-        console.error(`FilterPlugin: Could not find target element with selector ${TARGET_SELECTOR}`);
-        return null;
-    }
-    const width = targetDom?.clientWidth || currentMap.column?.minWidth;
-    const sibling = targetDom?.appendChild(document.createElement('div'));
-
-    return createPortal(<div style={{width: '100%', top: 40, zIndex: 999, position: 'absolute' }}>
-        <div style={{ width, placeContent: 'center', display: 'grid' }} id={currentFilteringKey as string}>
-            <ComboBox 
-                multiSelect
-                styles={{
-                    root: {maxWidth: width},
-                    callout: {minWidth: 100, maxHeight: '320px!important', scroll: 'auto'}
-                }}
-                //onRenderItem={/**Implement it later */}
-                options={options} autoComplete="on" />
-        </div>
-        </div>,
-        sibling
-    );
-}
-
-
-export class FilterPlugin<T> implements DataListPlugin<T, 'FilterPlugin'> {
+export class FilterPlugin<T> implements DataListPlugin<T> {
     public name: string = 'DataListFilterPlugin';
     public version: string = '1.0.0';
     private currentFilter: FilterMap<T> = new Map([]);
     constructor(private config?: FilterPluginConfig<T>) {}
-
-    public initialize(getStore: () => DataListStore<T, 'FilterPlugin'>) {
+ 
+    public initialize(getStore: () => DataListStore<T>) {
         const store = getStore();
-        console.log("FilterPlugin initialized");
+        console.log("DataListFilterPlugin initialized");
         store.setHeaderMenuItems(items => {
             return [...items, 
                 {
@@ -90,8 +35,6 @@ export class FilterPlugin<T> implements DataListPlugin<T, 'FilterPlugin'> {
             },
             { fireImmediately: true }
         );
-        //type Test = {a: string};
-        //let b = store.getPluginDataMapValue<Test>('FilterPlugin')('a')
     }
 
     #onClickFilterOpt(store: DataListStore<T>): void {
@@ -109,7 +52,7 @@ export class FilterPlugin<T> implements DataListPlugin<T, 'FilterPlugin'> {
             .map(r => getDeepValue(r, columnKey  as any))
         )];
         this.currentFilter.set(columnKey, {values: valuesToShow, order, column});
-        console.log(this.currentFilter);
+        store.setUnmountedPlugins('DataListFilterPlugin', false);
     }
 
     #addOrRemoveFilterItem({
@@ -147,6 +90,10 @@ export class FilterPlugin<T> implements DataListPlugin<T, 'FilterPlugin'> {
     }
 
     public render = (getStore: () => DataListStore<T>) => (
-        <FilterArea<T> store={getStore()} filterMap={this.currentFilter}/>
+        <FilterBox<T> getStore={getStore} filterMap={this.currentFilter} />
     )
+
+    public onUnmount = (getStore: () => DataListStore<T>) => {
+        getStore().unmountedPlugins.set('DataListFilterPlugin', true);
+    }
 }

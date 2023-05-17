@@ -1,2 +1,2 @@
-export * from './DataList/DataListFilterPlugin';
+export * from './DataList/FilterPlugin/Plugin';
 export * from './DataList/DataListSearchBoxPlugin';

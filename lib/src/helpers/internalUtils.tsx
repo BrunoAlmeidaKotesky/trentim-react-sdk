@@ -6,6 +6,7 @@ import type { TColumn } from "@models/interfaces/IDataList";
 import type { ReactNode, ComponentType } from "react";
 import type { ColumnKey } from "@models/types/Common";
 import type { DataListStore } from "@models/interfaces/DataListStore";
+import type { ColumnItemTransformation } from "@models/interfaces/ColumnItemTransformation";
 
 /**
  * This function takes the transformations of a column and returns the rendered value of the item, 
@@ -29,6 +30,37 @@ function renderValue<T>(
     return Wrapper ? <Wrapper>{valueNode}</Wrapper> : valueNode;
 }
 
+export const convertItemValue = (transformations: ColumnItemTransformation, fieldValue: unknown): string => {
+    if(!transformations?.renderAs) return fieldValue?.toString();
+    switch (transformations.renderAs) {
+        case 'date': {
+            return convertIsoToLocaleString(
+                fieldValue as string,
+                transformations?.locales,
+                transformations?.formatOptions
+            );
+        }
+        case 'boolean': {
+            let valueToRender: string = '';
+            if (typeof fieldValue === 'boolean') {
+                valueToRender = fieldValue ? transformations?.trueText : transformations?.falseText;
+            } else {
+                valueToRender = transformations?.nullText;
+            }
+            return valueToRender;
+        }
+        case 'number': {
+            return Number(fieldValue).toLocaleString(
+                transformations?.locales,
+                transformations?.formatOptions
+            );
+        }
+        case 'custom': {
+            return transformations?.mapFn(fieldValue);
+        }
+    }
+}
+
 /**
  * Maps columns to be used in the DataList component, depending on the transformations provided (if any).
  * 
@@ -42,58 +74,7 @@ export function mapColumns<T>(c: TColumn<T>): TColumn<T> {
         onRender = (item) => renderValue(item, c, (fieldValue) => <span>{fieldValue}</span>);
         return {...c, onRender, fieldName: c?.key };
     }
-    switch (transformations?.renderAs) {
-        case 'date': {
-            onRender = (item) => {
-                const valueToRender = renderValue(item, c, (fieldValue: string) => {
-                    return convertIsoToLocaleString(
-                        fieldValue,
-                        transformations?.locales,
-                        transformations?.formatOptions
-                    );
-                }, transformations?.wrapper);
-                return valueToRender;
-            };
-            break;
-        }
-        case 'boolean': {
-            onRender = (item) => {
-                const valueToRender = renderValue(item, c, (fieldValue: boolean | null) => {
-                    let valueToRender: string = '';
-                    if (typeof fieldValue === 'boolean') {
-                        valueToRender = fieldValue ? transformations?.trueText : transformations?.falseText;
-                    } else {
-                        valueToRender = transformations?.nullText;
-                    }
-                    return valueToRender;
-                }, transformations?.wrapper);
-                return valueToRender;
-            };
-            break;
-        }
-        case 'number': {
-            onRender = (item) => {
-                const valueToRender = renderValue(item, c, (fieldValue: string) => {
-                    return Number(fieldValue).toLocaleString(
-                        transformations?.locales,
-                        transformations?.formatOptions
-                    );
-                }, transformations?.wrapper);
-                return valueToRender;
-            };
-            break;
-        }
-        case 'custom': {
-            onRender = (item) => renderValue(item, c, (fieldValue) => {
-                const valueToRender = transformations?.mapFn(fieldValue);
-                return valueToRender;
-            });
-            break;
-        }
-        default: {
-            throw new Error('[TRS] - Unknown renderAs transformation for the column with key: "' + c?.key + '"');
-        }
-    }
+    onRender = (item) => renderValue(item, c, (fieldValue) => convertItemValue(transformations, fieldValue), transformations?.wrapper);
     return {...c, onRender, fieldName: c?.key}
 }
 

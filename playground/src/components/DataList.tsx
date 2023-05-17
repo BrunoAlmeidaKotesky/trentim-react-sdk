@@ -1,7 +1,6 @@
 import { DataList } from "@components/DataList";
 import json from "./MOCK_DATA.json";
-import { SearchBoxPlugin } from "@plugins/DataList/DataListSearchBoxPlugin";
-import { FilterPlugin } from "../../../lib/src/plugins/DataList/DataListFilterPlugin";
+import { FilterPlugin, SearchBoxPlugin } from "@plugins/DataList";
 import { COLUMNS_EX, Project } from './constants';
 
 const rows: Project[] = json;

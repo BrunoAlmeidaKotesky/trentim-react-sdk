@@ -10,10 +10,7 @@ export type CallbackSet<T> = (data: T) => T;
 export type ValueOrFunc<T> = T | CallbackSet<T>;
 
 /** Use this interface to implement the actual plugin to be instantiated and passed to the DataList's plugin array */
-export interface DataListPlugin<
-    T,
-    PluginUniqueKey extends string = string
-> {
+export interface DataListPlugin<T> {
     /**The name  identifier of the plugin */
     name: string;
     /**You can use this property to specify the version of the plugin */
@@ -23,13 +20,14 @@ export interface DataListPlugin<
      * `initialProps` is the props passed to the DataList component when the plugin was first initialized,
      * it does not change when the DataList props change.
     */
-    initialize(getStore: () => DataListStore<T, PluginUniqueKey>, initialProps?: IDataListProps<T>): void;
+    initialize(getStore: () => DataListStore<T>, initialProps?: IDataListProps<T>): void;
     /** Method that renders something within the DataList plugins area div 
      * 
      * `initialProps` is the props passed to the DataList component when the plugin was first initialized,
      * **it does not guarantee** that the props will be the same when the DataList props change.
     */
-    render?: (getStore: () => DataListStore<T, PluginUniqueKey>, initialProps?: IDataListProps<T>) => ReactNode;
+    render?: (getStore: () => DataListStore<T>, initialProps?: IDataListProps<T>) => ReactNode;
+    onUnmount?: (getStore: () => DataListStore<T>) => void;
 }
 
 export type ContextMenuState = {
@@ -37,7 +35,7 @@ export type ContextMenuState = {
     y: number;
     visible: boolean;
 }
-export interface DataListState<T, PluginUniqueKey extends string = string,> {
+export interface DataListState<T> {
     /**The initial rows that were passed to the DataList component */
     rows: T[];
     /**Use this state to store the rows information depending on your needs */
@@ -52,10 +50,11 @@ export interface DataListState<T, PluginUniqueKey extends string = string,> {
      * 
      * Which could not be done with this property.
      */
-    pluginsDataMap: Map<PluginUniqueKey, Record<string, unknown>>;
+    pluginsDataMap: Map<string, Record<string, unknown>>;
+    unmountedPlugins: Map<string, boolean>;
 }
 
-export interface DataListActions<T, PluginUniqueKey extends string = string> {
+export interface DataListActions<T> {
     /**Set the rows that will be displayed in the DataList */
     setRows: (data: ValueOrFunc<T[]>) => void;
     setColumns: (data: ValueOrFunc<TColumn<T>[]>) => void;
@@ -77,14 +76,28 @@ export interface DataListActions<T, PluginUniqueKey extends string = string> {
      * @example
      * store.setPluginDataMap<MyRecord>('MyPlugin')('myKey', myValue);
      */
-    setPluginDataMapValue: <R extends Record<string, unknown> = Record<string, unknown>>(pluginKey: PluginUniqueKey) => SetValueByPath<void, R>;
-    getPluginDataMapValue: <T extends Record<string, unknown>, R extends string = PluginUniqueKey>(pluginKey: R) => (k: Paths<T, 4>) => TypeFrom<T>;
+    setPluginDataMapValue: <R extends Record<string, unknown> = Record<string, unknown>>(pluginKey: string) => SetValueByPath<void, R>;
+    /**
+     * An action that retrieves a value from the plugin data map.
+     * @typeParam T - A record type, defaulting to `Record<string, unknown>`. This is the shape of the data that will be retrieved from the map.
+     * @param pluginKey - The unique key identifying the plugin. This is used as the key in the outer map.
+     * @returns A function that takes a key. The key is a string that identifies the specific piece of data within the plugin's map.
+     * 
+     * This action will first retrieve the map associated with the plugin using `pluginKey`. If such a map exists, it will return the value at the given key.
+     * 
+     * Note: This is a curried function, meaning that it returns a function when first called with `pluginKey`. This returned function is then called with the key to retrieve the value.
+     * 
+     * @example
+     * const myValue = store.getPluginDataMapValue<MyRecord>('MyPlugin')('myKey');
+     */
+    getPluginDataMapValue: <T extends Record<string, unknown>>(pluginKey: string) => (k: Paths<T, 4>) => TypeFrom<T>;
     onColumnClick: (ev: React.MouseEvent<HTMLElement>, column: TColumn<T>) => void;
+    setUnmountedPlugins: (pluginKey: string, value: boolean) => void;
     getStore: () => DataListStore<T>;
     subscribe: ZustandSubscribe<DataListStore<T>>;
 }
 
-export type DataListStore<T, PluginUniqueKey extends string = string> = DataListState<T, PluginUniqueKey> & DataListActions<T, PluginUniqueKey>;
+export type DataListStore<T> = DataListState<T> & DataListActions<T>;
 
 export type ZustandSubscribe<T> = {
     <U>(selector: (state: T) => U, listener: (selectedState: U, previousSelectedState: U) => void, options?: {

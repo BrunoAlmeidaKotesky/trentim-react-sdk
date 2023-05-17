@@ -37,15 +37,35 @@ export function useDataListController<T>(props: IDataListProps<T>) {
         });
     }, [plugins, initializePlugin]);
 
+    useEffect(() => {
+        const unsubscribe = store.subscribe(
+            (state) => state.unmountedPlugins,
+            (unmountedPlugins) => {
+                for (let [pluginKey, shouldUnmount] of unmountedPlugins) {
+                    if (shouldUnmount) {
+                        const plugin = store.plugins.find(p => p.name === pluginKey);
+                        plugin?.onUnmount?.(store.getStore);
+                        // Reset the unmount flag for this plugin
+                        store.setUnmountedPlugins(pluginKey, false);
+                    }
+                }
+            }
+        );
+
+        return () => unsubscribe();
+    }, []);
+
     /**If consumer provided the props.onItemClick use it, otherwise do nothing. */
     const onItemClick = (item: T) => !!props?.onItemClick && props?.onItemClick(item);
     /**The sorting logic of the columns. */
     
     /**If the plugins had implemented the render method, it will render them. */
     const renderPlugins = () => {
-        return store.plugins.map((plugin) => {
+        return store.plugins
+            .filter((plugin) => !store?.unmountedPlugins?.get(plugin.name))
+            .map((plugin) => {
             if (plugin.render)
-                return <div key={plugin.name}>{plugin.render(() => store.getStore(), props)}</div>
+                return <div key={plugin.name}>{plugin.render(store.getStore, props)}</div>
             return null;
         });
     };

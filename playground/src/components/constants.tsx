@@ -573,7 +573,8 @@ export const COLUMNS_EX: TColumn<Project>[] = [
       isResizable: true,
       transformations: {
         renderAs: 'custom',
-        mapFn: (value) => <span>{(value as string).toUpperCase()}</span>
+        wrapper: ({children}) => <span>{children}</span>,
+        mapFn: value=> (value as string)?.toUpperCase()
       }
     },
     {

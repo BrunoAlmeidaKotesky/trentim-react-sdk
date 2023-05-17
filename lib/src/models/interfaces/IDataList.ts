@@ -14,10 +14,11 @@ export type TColumn<T> = IColumn & {
      * 
      * You can use the `renderAs` property to render the value as a `date`, `number`, `boolean` or a `custom` render function.
      * 
-     * If you do want to render the items as a custom function, you will need to use the `mapFn` property, which will receive the value of the cell and should return a `React.ReactNode`.
+     * If you do want to modify the value string format, you can use the `mapFn` when using the `custom` on `renderAs` property.
      * 
      * You can also use the `wrapper` property to wrap the value with a custom component, otherwise it will be wrapped with a `<span />` tag.
-     */
+     * 
+     * See {@link ColumnItemTransformation} for examples.*/
     transformations?: ColumnItemTransformation;
     /**Use this if you don't want to display the column all it's rows, with this you can still use this column on for actions like filtering or grouping. 
      * @default false */
@@ -110,6 +111,7 @@ export interface IDataListProps<T extends any> extends IDataListHandler<T> {
     /**Custom styles to the component container and root. */
     styles?: IDataListStyles;
     plugins?: DataListPlugin<T>[];
+    /**Configure the text of the column menu. */
     columnMenuConfig?: {
         sortAscText?: string;
         sortDescText?: string;
