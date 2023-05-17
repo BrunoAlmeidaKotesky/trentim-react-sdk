@@ -2,8 +2,8 @@ import { useEffect, useRef } from "react";
 
 /**
  * 
- * @param callback - A callback with a pointer event as it's parameter.
- * @param cancelableCb - A callback with a pointer event as it's parameter, which can be used to stop the execution of the first callback.
+ * @param onOuterClick - A callback with a pointer event as it's parameter.
+ * @param cancellationFn - A callback with a pointer event as it's parameter, which can be used to stop the execution of the first callback.
  * @returns innerRef - A ref to be used on some element.
  * 
  * @example
@@ -25,22 +25,27 @@ import { useEffect, useRef } from "react";
     );
  * ```
  */
-export function useOuterClick<R extends HTMLElement = HTMLElement>(callback: (ev?: PointerEvent) => any, cancelableCb?: (ev: PointerEvent) => boolean) {
+
+type Config = {
+    onOuterClick: (ev?: PointerEvent) => void, 
+    cancellationFn?: (ev: PointerEvent) => boolean;
+}
+export function useOuterClick<R extends HTMLElement = HTMLElement>({onOuterClick, cancellationFn}: Config) {
     const callbackRef = useRef<Function>(); // initialize mutable ref, which stores callback
     const innerRef = useRef<R>(); // initialize returned to client, who marks "border" element
 
     // update cb on each render, so second useEffect has access to current value 
-    useEffect(() => { callbackRef.current = callback; });
+    useEffect(() => { callbackRef.current = onOuterClick; });
 
     useEffect(() => {
         function handleClick(e: PointerEvent) {
             if (innerRef?.current && callbackRef?.current &&
                 !innerRef?.current?.contains(e?.target as Node)
             ) {
-                if (!cancelableCb)
+                if (!cancellationFn)
                     callbackRef.current(e);
                 else {
-                    const isCancelable = cancelableCb(e);
+                    const isCancelable = cancellationFn(e);
                     if (!isCancelable)
                         callbackRef.current(e);
                 }

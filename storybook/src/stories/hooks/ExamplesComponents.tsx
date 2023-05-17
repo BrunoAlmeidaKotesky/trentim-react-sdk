@@ -19,9 +19,9 @@ export function OuterClickExample() {
     const style = {
         width: 200, height: 35, display: 'grid', placeItems: 'center'
     }
-    const buttonRef = useOuterClick<HTMLButtonElement>(
-        (_pointerEv) => setClickLabel('outside'),
-        (pointerEv) => {
+    const buttonRef = useOuterClick<HTMLButtonElement>({
+        onOuterClick: (_pointerEv) => setClickLabel('outside'),
+        cancellationFn: (pointerEv) => {
             //@ts-ignore
             if (pointerEv.target?.['id'] === 'outer-hook-cancel-button') {
                 setClickLabel('cancelled');
@@ -29,7 +29,7 @@ export function OuterClickExample() {
             }
             return false;
         }
-    );
+    });
 
     return (
         <div style={{ justifyContent: 'space-around', display: 'flex' }}>

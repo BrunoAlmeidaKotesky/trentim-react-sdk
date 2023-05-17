@@ -1,20 +1,20 @@
 import { ComboBox, IComboBoxOption } from '@fluentui/react/lib/ComboBox';
-import {createPortal} from 'react-dom';
+import { createPortal } from 'react-dom';
 import { convertItemValue } from '@helpers/internalUtils';
 import { useOuterClick } from '@hooks/useOuterClick';
-import type {FilterAreaProps} from './types';
+import type { FilterAreaProps } from './types';
 
 export function FilterBox<T>(props: FilterAreaProps<T>): JSX.Element {
     const currentFilteringKey = props.getStore().clickedColumnKey;
     const TARGET_SELECTOR = `div[data-item-key="${currentFilteringKey}"]` as const;
 
-    const useOuterClickRef = useOuterClick<HTMLDivElement>(() => {
-        props.getStore().setUnmountedPlugins('DataListFilterPlugin', true);
-    }, (e) => {
-        if (e.target instanceof HTMLElement && e.target.closest(`span[id^="header"]`)) {
-            return true;
+    const useOuterClickRef = useOuterClick<HTMLDivElement>({
+        onOuterClick: () => props.getStore().setUnmountedPlugins('DataListFilterPlugin', true),
+        cancellationFn: (e) => {
+            if (e.target instanceof HTMLElement && e.target.closest(`span[id^="header"]`))
+                return true;
+            return false;
         }
-        return false;
     });
 
     const currentMap = props.filterMap.get(currentFilteringKey);
@@ -37,7 +37,7 @@ export function FilterBox<T>(props: FilterAreaProps<T>): JSX.Element {
 
     const width = targetDom?.clientWidth || currentMap.column?.minWidth;
     const newDiv = document.createElement('div');
-    newDiv.id = 'filterPluginContainer';
+    newDiv.className = 'filterPluginContainer';
     const sibling = targetDom?.appendChild(newDiv);
 
     return createPortal(<div style={{ width: '100%', top: 40, zIndex: 999, position: 'absolute' }}>

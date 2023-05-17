@@ -40,18 +40,17 @@ export function useDataListController<T>(props: IDataListProps<T>) {
     useEffect(() => {
         const unsubscribe = store.subscribe(
             (state) => state.unmountedPlugins,
-            (unmountedPlugins) => {
+            (unmountedPlugins, previousUnmountedPlugins) => {
                 for (let [pluginKey, shouldUnmount] of unmountedPlugins) {
-                    if (shouldUnmount) {
+                    const wasUnmounted = previousUnmountedPlugins.get(pluginKey);
+                    if (shouldUnmount && !wasUnmounted) {
                         const plugin = store.plugins.find(p => p.name === pluginKey);
-                        plugin?.onUnmount?.(store.getStore);
-                        // Reset the unmount flag for this plugin
-                        store.setUnmountedPlugins(pluginKey, false);
+                        plugin?.unmount?.(store.getStore);
                     }
                 }
             }
         );
-
+    
         return () => unsubscribe();
     }, []);
 

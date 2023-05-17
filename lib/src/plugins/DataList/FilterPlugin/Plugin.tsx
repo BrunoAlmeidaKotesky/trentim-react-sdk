@@ -93,7 +93,8 @@ export class FilterPlugin<T> implements DataListPlugin<T> {
         <FilterBox<T> getStore={getStore} filterMap={this.currentFilter} />
     )
 
-    public onUnmount = (getStore: () => DataListStore<T>) => {
-        getStore().unmountedPlugins.set('DataListFilterPlugin', true);
+    public unmount = (getStore: () => DataListStore<T>) => {
+        getStore().setUnmountedPlugins('DataListFilterPlugin', true);
+        document.querySelectorAll('.filterPluginContainer')?.forEach(e => e?.remove());
     }
 }
