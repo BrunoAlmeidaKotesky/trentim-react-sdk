@@ -90,7 +90,7 @@ export interface DataListActions<T> {
      * @example
      * const myValue = store.getPluginDataMapValue<MyRecord>('MyPlugin')('myKey');
      */
-    getPluginDataMapValue: <T extends Record<string, unknown>>(pluginKey: string) => (k: Paths<T, 4>) => TypeFrom<T>;
+    getPluginDataMapValue: <T extends Record<string, unknown>>(pluginKey: string) => (k: keyof T) => TypeFrom<T>;
     onColumnClick: (ev: React.MouseEvent<HTMLElement>, column: TColumn<T>) => void;
     setUnmountedPlugins: (pluginKey: string, value: boolean) => void;
     getStore: () => DataListStore<T>;

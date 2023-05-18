@@ -11,7 +11,7 @@ import type { IContextualMenuItem } from '@fluentui/react/lib/ContextualMenu';
 import type { TColumn } from '@models/interfaces/IDataList';
 import type { DataListState, DataListStore, ZustandSubscribe } from '@models/interfaces/DataListStore';
 import type { IDataListProps } from '@models/interfaces/IDataList';
-import type { Paths, TypeFrom } from '@models/types/UtilityTypes';
+import type { TypeFrom } from '@models/types/UtilityTypes';
 
 enableMapSet();
 export const createUseDataListStore = <T>(initialStore: Partial<DataListStore<T>>, props?: IDataListProps<T>) => {
@@ -106,7 +106,7 @@ export const createUseDataListStore = <T>(initialStore: Partial<DataListStore<T>
                     set(state => {
                         const newPluginsDataMap = new Map(state.pluginsDataMap);
                         if (!newPluginsDataMap.has(pluginKey)) {
-                            newPluginsDataMap.set(pluginKey, {});
+                            newPluginsDataMap.set(pluginKey, {[k]: v});
                         } else {
                             const pluginRecord = newPluginsDataMap.get(pluginKey);
                             if (pluginRecord) {
@@ -117,7 +117,7 @@ export const createUseDataListStore = <T>(initialStore: Partial<DataListStore<T>
                         state.pluginsDataMap = newPluginsDataMap;
                     })
                 },
-                getPluginDataMapValue: <T extends Record<string, unknown>>(pluginKey: string) => (k: Paths<T, 4>): TypeFrom<T> => {
+                getPluginDataMapValue: <T extends Record<string, unknown>>(pluginKey: string) => (k: keyof T): TypeFrom<T> => {
                     const pluginRecord = get().pluginsDataMap.get(pluginKey);
                     if (pluginRecord) {
                         return pluginRecord[k as string] as TypeFrom<T>;
