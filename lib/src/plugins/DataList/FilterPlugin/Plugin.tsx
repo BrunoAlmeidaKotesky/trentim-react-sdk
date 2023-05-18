@@ -3,7 +3,7 @@ import type { DataListStore } from "@models/interfaces/DataListStore";
 import type { CurrentFiltering, FilterPluginConfig, AddOrRemoveConfig, FilterQueue } from './types';
 import { getDeepValue } from '@helpers/index';
 import { FilterBox } from './FilterBox';
-import { listeners } from '../../utilities';
+import { subscribe } from '../../utilities';
 
 export class FilterPlugin<T> implements DataListPlugin<T> {
     public name: string = 'DataListFilterPlugin';
@@ -23,10 +23,10 @@ export class FilterPlugin<T> implements DataListPlugin<T> {
                 }
             ];
         });
-        listeners(getStore, [
+        subscribe(getStore, [
             {
-                stateKey: 'clickedColumnKey',
-                cb: ([clickedColumnKey, _prev]) => {
+                stateKeys: ['clickedColumnKey'],
+                cb: ([{clickedColumnKey}]) => {
                     const store = getStore();
                     this.#addOrRemoveFilterItem({
                         clickedColumnKey,
