@@ -10,7 +10,8 @@ export type StoreSelectorCb<
 
 type StoreListener<T, K extends StateKey<T>> = {
     stateKeys: K,
-    cb: StoreSelectorCb<T, K>
+    cb: StoreSelectorCb<T, K>,
+    equalityFn?: (cur: any, prev: any) => boolean
 };
 
 /**
@@ -54,18 +55,15 @@ type StoreListener<T, K extends StateKey<T>> = {
 */
 export function subscribe<T, K extends StateKey<T>>(getStore: GetStore<T>, listeners: StoreListener<T, K>[]) {
     for (const listener of listeners) {
+        const selectedStateKeys = listener.stateKeys.reduce((state, key) => {
+            state[key] = getStore()[key];
+            return state;
+        }, {});
         getStore().subscribe(
-            (state) => pick(state, listener.stateKeys),
+            (_state) => selectedStateKeys,
+            //@ts-ignore
             (curr, prev) => listener.cb([curr, prev]),
-            { fireImmediately: true }
+            { fireImmediately: true, equalityFn: listener.equalityFn || Object.is }
         );
     }
-}
-
-function pick<T, K extends keyof T>(obj: T, keys: K[]): Pick<T, K> {
-    const result = {} as Pick<T, K>;
-    for (const key of keys) {
-        result[key] = obj[key];
-    }
-    return result;
 }

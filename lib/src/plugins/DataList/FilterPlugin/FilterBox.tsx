@@ -3,13 +3,12 @@ import { createPortal } from 'react-dom';
 import { convertItemValue } from '@helpers/internalUtils';
 import { useOuterClick } from '@hooks/useOuterClick';
 import type { FilterAreaProps, FilterQueueValue, FilterQueue } from './types';
-import { useCallback, useMemo, useState } from 'react';
-import {Draft, produce} from 'immer';
+import { useCallback, useMemo } from 'react';
+import { Draft, produce } from 'immer';
 import type { ColumnKey } from '@models/index';
 
-type QueueUpdate<T> = (queue: FilterQueueValue<T>[], filterIndex: number, value: string) => FilterQueueValue<T>[];
+type QueueUpdate<T> = (queue: FilterQueueValue<T>[], filterIndex: number, value: string, clickedKey?: ColumnKey<T>) => FilterQueueValue<T>[];
 export function FilterBox<T>({ currentFiltering, getStore }: FilterAreaProps<T>): JSX.Element {
-    const [selectedKeys, setSelectedKeys] = useState([]);
     const clickedKey = getStore().clickedColumnKey;
     const TARGET_SELECTOR = `div[data-item-key="${clickedKey}"]` as const;
 
@@ -36,44 +35,45 @@ export function FilterBox<T>({ currentFiltering, getStore }: FilterAreaProps<T>)
         return getStore().pluginsDataMap.get('DataListFilterPlugin')?.queue as FilterQueueValue<T>[];
     }, [getStore]);
 
-    const updateQueueWithSelectedOption: QueueUpdate<T> = (queue, filterIndex, value) => 
-    produce(queue, draft => {
-        if(filterIndex !== -1) {
-            draft[filterIndex].values.push(value);
-        } else {
-            draft.push({ key: clickedKey as Draft<ColumnKey<T>>, values: [value] });
-        }
-    });
-
-const removeFromQueue: QueueUpdate<T> = (queue, filterIndex, optionKey) =>
-    produce(queue, draft => {
-        if(filterIndex !== -1) {
-            const values = draft[filterIndex].values;
-            const keyIndex = values.findIndex(i => i === optionKey);
-            if(keyIndex !== -1) values.splice(keyIndex, 1);
-            if(values.length === 0) draft.splice(filterIndex, 1);
-        }
-    });
-
-const onComboBoxChange: IComboBoxProps['onChange'] = useCallback((_e, opt) => {
-    const clickedKey = getStore().clickedColumnKey
-    if(!clickedKey) return;
-    
-    const currentQueue = getQueue();
-    const currentFilterIndex = currentQueue.findIndex(i => i.key === clickedKey);
-
-    let newQueue: FilterQueueValue<T>[];
-    if(opt.selected) {
-        newQueue = updateQueueWithSelectedOption(currentQueue, currentFilterIndex, opt.text);
-        setSelectedKeys(prev => [...prev, opt.key]);
-    } else {
-        newQueue = removeFromQueue(currentQueue, currentFilterIndex, opt.text);
-        setSelectedKeys(prev => prev.filter(i => i !== opt.key));
+    const getSelectedKeys = (): string[] => {
+        return getQueue().map(i => i?.values?.map(v => `${i.key} - ${v}`))?.flat();
     }
 
-    getStore().setPluginDataMapValue<FilterQueue<T>>('DataListFilterPlugin')('queue', newQueue);
-    console.log(getQueue());
-}, []);
+    const updateQueueWithSelectedOption: QueueUpdate<T> = (queue, filterIndex, value, clickedKey) =>
+        produce(queue, draft => {
+            if (filterIndex !== -1) {
+                draft[filterIndex].values.push(value);
+            } else {
+                draft.push({ key: clickedKey as Draft<ColumnKey<T>>, values: [value] });
+            }
+        });
+
+    const removeFromQueue: QueueUpdate<T> = (queue, filterIndex, optionKey) =>
+        produce(queue, draft => {
+            if (filterIndex !== -1) {
+                const values = draft[filterIndex].values;
+                const keyIndex = values.findIndex(i => i === optionKey);
+                if (keyIndex !== -1) values.splice(keyIndex, 1);
+                if (values.length === 0) draft.splice(filterIndex, 1);
+            }
+        });
+
+    const onComboBoxChange: IComboBoxProps['onChange'] = (_e, opt) => {
+        const clickedKey = getStore().clickedColumnKey
+        if (!clickedKey) return;
+
+        const currentQueue = getQueue();
+        const currentFilterIndex = currentQueue.findIndex(i => i.key === clickedKey);
+
+        let newQueue: FilterQueueValue<T>[];
+        if (opt.selected)
+            newQueue = updateQueueWithSelectedOption(currentQueue, currentFilterIndex, opt.text, clickedKey);
+        else
+            newQueue = removeFromQueue(currentQueue, currentFilterIndex, opt.text);
+
+        getStore().setPluginDataMapValue<FilterQueue<T>>('DataListFilterPlugin')('queue', newQueue);
+        console.log(getQueue());
+    }
 
     const targetDom = document.querySelector(TARGET_SELECTOR);
     if (!targetDom) {
@@ -92,7 +92,7 @@ const onComboBoxChange: IComboBoxProps['onChange'] = useCallback((_e, opt) => {
             <div ref={useOuterClickRef} style={{ width, placeContent: 'center', display: 'grid' }} id={getStore().clickedColumnKey as string}>
                 <ComboBox
                     multiSelect
-                    selectedKey={selectedKeys}
+                    selectedKey={getSelectedKeys()}
                     onChange={onComboBoxChange}
                     styles={{
                         root: { maxWidth: width },
