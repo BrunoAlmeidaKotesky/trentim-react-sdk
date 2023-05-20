@@ -10,7 +10,15 @@ const searchBoxPlugin = new SearchBoxPlugin<Project>({
 });
 const filterPlugin = new FilterPlugin<Project>({
   filterText: 'Filtrar por',
-  excludeColumns: ['Title', 'DonoProjeto.Title']
+  excludeColumns: ['Title', 'DonoProjeto.Title'],
+  dateRangeSliderConfig: [
+    {
+      key: 'DataInicio', 
+      props: {
+        sliderLabels: ['Última Semana', 'Último Mês', 'Último ano', 'Escolha um range de data']
+      }
+    },
+  ]
 });
 
 export default function DataListEx() {

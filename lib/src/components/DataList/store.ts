@@ -1,17 +1,15 @@
-import { createStore, useStore } from 'zustand';
+import { createStore, StoreApi, useStore } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
 import { subscribeWithSelector } from 'zustand/middleware';
 import { useContext } from 'react';
 import { DataListCtx } from './Context';
 import { enableMapSet } from 'immer';
 import { onClickSortItem } from '@helpers/internalUtils';
-import { setDeepValue } from '@helpers/objectUtils';
 import type { ColumnKey } from '@models/types/Common';
 import type { IContextualMenuItem } from '@fluentui/react/lib/ContextualMenu';
 import type { TColumn } from '@models/interfaces/IDataList';
 import type { DataListState, DataListStore, ZustandSubscribe } from '@models/interfaces/DataListStore';
 import type { IDataListProps } from '@models/interfaces/IDataList';
-import type { TypeFrom } from '@models/types/UtilityTypes';
 
 enableMapSet();
 export const createUseDataListStore = <T>(initialStore: Partial<DataListStore<T>>, props?: IDataListProps<T>) => {
@@ -27,8 +25,8 @@ export const createUseDataListStore = <T>(initialStore: Partial<DataListStore<T>
             x: 0,
             y: 0
         },
-        pluginsDataMap: new Map(),
-        unmountedPlugins: new Map()
+        unmountedPlugins: new Map(),
+        pluginStores: {}
     }
 
     return createStore<DataListStore<T>>()(subscribeWithSelector(immer(
@@ -60,13 +58,21 @@ export const createUseDataListStore = <T>(initialStore: Partial<DataListStore<T>
                     else
                         (state.tempRows as T[]) = tempRows;
                 }),
-                initializePlugin: (plugin) => {
+                initializePlugin: async (plugin) => {
                     if (typeof plugin?.initialize === 'function') {
-                        plugin.initialize(() => get(), props);
+                        await plugin.initialize(() => get(), props);
+                        if (typeof plugin?.registerStore === 'function') {
+                            set(state => {
+                                if (!state.pluginStores) {
+                                    state.pluginStores = {};
+                                }
+                                state.pluginStores[plugin.name] = plugin.registerStore();
+                            });
+                        }
                     } else {
                         console.error(`
-                    [TRS] - Plugin ${plugin.name} does not implement the initialize method.\r\n 
-                    This method is required to initialize the plugin`);
+                        [TRS] - Plugin ${plugin.name} does not implement the initialize method.\r\n 
+                        This method is required to initialize the plugin`);
                     }
                 },
                 setColumns: columns => set(state => {
@@ -102,41 +108,24 @@ export const createUseDataListStore = <T>(initialStore: Partial<DataListStore<T>
                 setHeaderMenuItems: items => set(state => {
                     (state.headerMenuItems as IContextualMenuItem[]) = items(state.headerMenuItems as IContextualMenuItem[]);
                 }),
-                setPluginDataMapValue: (pluginKey) => (k, v) => {
-                    set(state => {
-                        const newPluginsDataMap = new Map(state.pluginsDataMap);
-                        if (!newPluginsDataMap.has(pluginKey)) {
-                            newPluginsDataMap.set(pluginKey, {[k]: v});
-                        } else {
-                            const pluginRecord = newPluginsDataMap.get(pluginKey);
-                            if (pluginRecord) {
-                                const newRecord = setDeepValue(pluginRecord, k, v as any);
-                                newPluginsDataMap.set(pluginKey, newRecord);
-                            }
-                        }
-                        state.pluginsDataMap = newPluginsDataMap;
-                    })
-                },
-                getPluginDataMapValue: <T extends Record<string, unknown>>(pluginKey: string) => (k: keyof T): TypeFrom<T> => {
-                    const pluginRecord = get().pluginsDataMap.get(pluginKey);
-                    if (pluginRecord) {
-                        return pluginRecord[k as string] as TypeFrom<T>;
-                    }
-                    return undefined as TypeFrom<T>;
-                },
                 setUnmountedPlugins: (pluginKey, value) => set(state => {
                     const newUnmountedPlugins = new Map(state.unmountedPlugins);
                     newUnmountedPlugins.set(pluginKey, value);
                     state.unmountedPlugins = newUnmountedPlugins;
                 }),
                 getStore: () => get(),
+                getCustomStore: <S>(pluginKey: string): StoreApi<S> | undefined => {
+                    const store = get().pluginStores?.[pluginKey] as StoreApi<S> | undefined;
+                    if (!store) {
+                        console.error('[TRS] - Plugin ${pluginKey} does not have a store registered or it has not been initialized yet.');
+                    }
+                    return store;
+                },
                 subscribe: api.subscribe as unknown as ZustandSubscribe<DataListStore<T>>
             })
         }
     )));
 }
-
-
 
 export function useDataListContext<T, S>(
     selector: (state: DataListStore<T>) => S,

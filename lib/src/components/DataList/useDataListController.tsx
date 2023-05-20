@@ -32,9 +32,14 @@ export function useDataListController<T>(props: IDataListProps<T>) {
 
     //Initializes the plugins once they are set.
     useEffect(() => {
-        plugins.forEach((plugin) => {
-            initializePlugin(plugin, props);
-        });
+        const initializePlugins = async () => {
+            await Promise.all(plugins.map(plugin => initializePlugin(plugin, props)));
+            plugins.forEach(plugin => {
+                if(plugin?.onInitialized)
+                    plugin.onInitialized(store.getStore, props);
+            });
+        };
+        initializePlugins();
     }, [plugins, initializePlugin]);
 
     useEffect(() => {

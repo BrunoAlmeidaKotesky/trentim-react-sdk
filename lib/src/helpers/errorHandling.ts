@@ -52,6 +52,14 @@ export function Some<T>(value: T): Option<T> {
  */
 export const None: Option<never> = { type: 'none' };
 
+export function isSome<T>(option: Option<T>): option is { type: 'some', value: T } {
+    return option.type === 'some';
+}
+
+export function isNone<T>(option: Option<T>): option is { type: 'none' } {
+    return option.type === 'none';
+}
+
 //Decorators
 export function isPromise<T = any>(object: any): object is Promise<T> {
     return object && Promise.resolve(object) === object;

@@ -1,93 +1,95 @@
-import type { DataListPlugin } from "@models/interfaces/DataListStore";
+import type { DataListPlugin, ZustandSubscribe } from "@models/interfaces/DataListStore";
 import type { DataListStore } from "@models/interfaces/DataListStore";
-import type { CurrentFiltering, FilterPluginConfig, AddOrRemoveConfig, FilterQueue } from './types';
+import type { AddOrRemoveConfig, CurrentFiltering, FilterPluginConfig, FilterPluginStore } from './types';
 import { getDeepValue } from '@helpers/index';
 import { FilterBox } from './FilterBox';
-import { subscribe } from '../../utilities';
+import { createStore } from "zustand";
+import { subscribeWithSelector } from 'zustand/middleware';
+import { immer } from 'zustand/middleware/immer';
 
 export class FilterPlugin<T> implements DataListPlugin<T> {
     public name: string = 'DataListFilterPlugin';
     public version: string = '1.0.0';
     private currentFilter: CurrentFiltering<T> = null;
-    constructor(private config?: FilterPluginConfig<T>) {}
- 
-    public initialize(getStore: () => DataListStore<T>) {
+    constructor(private config?: FilterPluginConfig<T>) { }
+
+    public registerStore = () => createStore<FilterPluginStore<T>>()(
+        subscribeWithSelector(
+            immer((set, get, {subscribe}) => ({
+                queue: [],
+                subscribe: subscribe as ZustandSubscribe<FilterPluginStore<T>>,
+            }))
+        )
+    );
+
+    public async initialize(getStore: () => DataListStore<T>) {
         const store = getStore();
         console.log("DataListFilterPlugin initialized");
         store.setHeaderMenuItems(items => {
-            return [...items, 
-                {
-                    key: 'filter',
-                    text: this?.config?.filterText || 'Filter By',
-                    onClick: () => this.#onClickFilterOpt(getStore())
-                }
+            return [...items,
+            {
+                key: 'filter',
+                text: this?.config?.filterText || 'Filter By',
+                onClick: () => this.#onClickFilterOpt(getStore())
+            }
             ];
         });
-        subscribe(getStore, [
-            {
-                stateKeys: ['clickedColumnKey'],
-                cb: ([{clickedColumnKey}]) => {
-                    const store = getStore();
-                    this.#addOrRemoveFilterItem({
-                        clickedColumnKey,
-                        getStore,
-                        headerMenuItems: store.headerMenuItems,
-                        setHeaderMenuItems: store.setHeaderMenuItems,
-                    });
-                }
-            }
-        ]);
-        getStore().setPluginDataMapValue<FilterQueue<T>>('DataListFilterPlugin')('queue', []);
+        return Promise.resolve();
+    }
+
+    onInitialized(getStore: () => DataListStore<T>): void {
+        getStore().getCustomStore<FilterPluginStore<T>>('DataListFilterPlugin').getState().subscribe(state => state.queue, queue => {
+            console.log(queue);
+        });
+        getStore().subscribe(state => state.clickedColumnKey, clickedColumnKey => {
+            if (!clickedColumnKey) return;
+            const store = getStore();
+            this.#addOrRemoveFilterItem({
+                clickedColumnKey,
+                getStore,
+                headerMenuItems: store.headerMenuItems,
+                setHeaderMenuItems: store.setHeaderMenuItems,
+            });
+        });
     }
 
     #onClickFilterOpt(store: DataListStore<T>): void {
         const columnKey = store.clickedColumnKey;
         const column = store.columns.find(c => c.key === columnKey);
-        if(!column) return;
+        if (!column) return;
         const values = [...new Set(
             store.rows
-            .filter(r => {
-                const value = getDeepValue(r, columnKey as any);
-                if(value === undefined || value === null) return false;
-                return true;
-            })
-            .map(r => getDeepValue(r, columnKey  as any))
+                .filter(r => {
+                    const value = getDeepValue(r, columnKey as any);
+                    if (value === undefined || value === null) return false;
+                    return true;
+                })
+                .map(r => getDeepValue(r, columnKey as any))
         )];
-        this.currentFilter = {values, column};
+        const dateRangeSliderConfig = this?.config?.dateRangeSliderConfig?.find(i => i.key === columnKey);
+        this.currentFilter = { values, column, show: true, dateRangeSliderConfig };
         store.setUnmountedPlugins('DataListFilterPlugin', false);
     }
 
     #addOrRemoveFilterItem({
-        clickedColumnKey, getStore, 
+        clickedColumnKey, getStore,
         headerMenuItems, setHeaderMenuItems
     }: AddOrRemoveConfig<T>) {
         if (!clickedColumnKey) return;
 
-        // Encontra o item "filter" em headerMenuItems
         const filterItemIndex = headerMenuItems.findIndex(item => item.key === 'filter');
-
-        // Cria uma nova cópia de headerMenuItems para evitar a mutação direta do estado
         let newHeaderMenuItems = [...headerMenuItems];
 
-        // Se clickedColumnKey é um dos excludeColumns, remova o item "filter" se ele existir
-        if (this?.config?.excludeColumns?.includes(clickedColumnKey)) {
-            if (filterItemIndex !== -1) {
-                // Remova o item "filter"
-                newHeaderMenuItems = newHeaderMenuItems.filter((_, index) => index !== filterItemIndex);
-            }
-        } else {
-            // Se clickedColumnKey não é um dos excludeColumns, adicione o item "filter" se ele não existir
-            if (filterItemIndex === -1) {
-                // Adicione o item "filter"
-                newHeaderMenuItems.push({
-                    key: 'filter',
-                    text: this?.config?.filterText || 'Filter By',
-                    onClick: () => this.#onClickFilterOpt(getStore())
-                });
-            }
+        if (this?.config?.excludeColumns?.includes(clickedColumnKey) && filterItemIndex !== -1) {
+            newHeaderMenuItems = newHeaderMenuItems.filter((_, index) => index !== filterItemIndex);
+        } else if (filterItemIndex === -1) {
+            newHeaderMenuItems.push({
+                key: 'filter',
+                text: this?.config?.filterText || 'Filter By',
+                onClick: () => this.#onClickFilterOpt(getStore())
+            });
         }
 
-        // No final, podemos querer atualizar o estado da loja com o novo headerMenuItems
         setHeaderMenuItems(() => newHeaderMenuItems);
     }
 
