@@ -19,7 +19,7 @@ export function DateRangeSlider(props: DateRangeSliderProps) {
     const sliderLabels = props?.sliderLabels || ['Last Week', 'Last Month', 'Last Year', 'Range'];
 
     useEffect(() => {
-        if (props?.sliderLabels.length > 0 && props?.sliderLabels?.length !== 4) {
+        if (props?.sliderLabels?.length > 0 && props?.sliderLabels?.length !== 4) {
             throw new Error('DateRangeSelector: sliderLabels must have 4 elements');
         }
     }, [props.sliderLabels]);
@@ -81,11 +81,11 @@ export function DateRangeSlider(props: DateRangeSliderProps) {
                     <DatePicker
                         {...props?.startPicker}
                         maxDate={dateRange?.end}
-                        onSelectDate={handleStartDateChange} value={dateRange.start} />
+                        onSelectDate={handleStartDateChange} value={dateRange?.start} />
                     <DatePicker
                         {...props?.endPicker}
                         minDate={dateRange?.start}
-                        onSelectDate={handleEndDateChange} value={dateRange.end} />
+                        onSelectDate={handleEndDateChange} value={dateRange?.end} />
                 </div>
             )}
         </div>

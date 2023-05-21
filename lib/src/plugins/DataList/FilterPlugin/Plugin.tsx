@@ -1,22 +1,29 @@
 import type { DataListPlugin, ZustandSubscribe } from "@models/interfaces/DataListStore";
 import type { DataListStore } from "@models/interfaces/DataListStore";
-import type { AddOrRemoveConfig, CurrentFiltering, FilterPluginConfig, FilterPluginStore } from './types';
+import type { AddOrRemoveConfig, FilterPluginConfig, FilterPluginStore } from './types';
 import { getDeepValue } from '@helpers/index';
 import { FilterBox } from './FilterBox';
 import { createStore } from "zustand";
 import { subscribeWithSelector } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
+import { FilterStateManager } from "./FilterStateManager";
+import { IComboBoxOption } from "@fluentui/react/lib/ComboBox";
+import { convertItemValue } from '@helpers/internalUtils';
 
 export class FilterPlugin<T> implements DataListPlugin<T> {
     public name: string = 'DataListFilterPlugin';
     public version: string = '1.0.0';
-    private currentFilter: CurrentFiltering<T> = null;
     constructor(private config?: FilterPluginConfig<T>) { }
 
     public registerStore = () => createStore<FilterPluginStore<T>>()(
         subscribeWithSelector(
-            immer((set, get, {subscribe}) => ({
+            immer((_set, _get, {subscribe}) => ({
+                currentFiltering: null,
                 queue: [],
+                dateRange: null,
+                options: null,
+                selectedKeys: null,
+                sliderValue: null,
                 subscribe: subscribe as ZustandSubscribe<FilterPluginStore<T>>,
             }))
         )
@@ -30,18 +37,42 @@ export class FilterPlugin<T> implements DataListPlugin<T> {
             {
                 key: 'filter',
                 text: this?.config?.filterText || 'Filter By',
-                onClick: () => this.#onClickFilterOpt(getStore())
+                onClick: () => this.#onClickFilterOpt(getStore)
             }
             ];
         });
         return Promise.resolve();
     }
 
-    onInitialized(getStore: () => DataListStore<T>): void {
-        getStore().getCustomStore<FilterPluginStore<T>>('DataListFilterPlugin').getState().subscribe(state => state.queue, queue => {
-            console.log(queue);
-        });
-        getStore().subscribe(state => state.clickedColumnKey, clickedColumnKey => {
+    public onInitialized(getStore: () => DataListStore<T>): void {
+        getStore()
+            .getCustomStore<FilterPluginStore<T>>('DataListFilterPlugin')
+            .getState()
+            .subscribe(state => state.queue, queue => {
+                console.log(queue);
+            });
+        getStore()
+            .getCustomStore<FilterPluginStore<T>>('DataListFilterPlugin')
+            .getState()
+            .subscribe(state => state.currentFiltering, currentFiltering => {
+                const options = currentFiltering?.values?.map<IComboBoxOption>(v => {
+                    if (currentFiltering?.column?.transformations?.renderAs !== 'date') {
+                        const text = convertItemValue(currentFiltering?.column?.transformations, v);
+                        return {
+                            key: `${getStore().clickedColumnKey} - ${text}`,
+                            text,
+                            useAriaLabelAsText: true,
+                            ariaLabel: text,
+                            data: getStore().clickedColumnKey
+                        };
+                    }
+                }) || [];
+                if(options.length > 0)
+                new FilterStateManager(getStore)
+                    .setWrappedFilterStoreValue('options', options);
+            });
+        getStore()
+            .subscribe(state => state.clickedColumnKey, clickedColumnKey => {
             if (!clickedColumnKey) return;
             const store = getStore();
             this.#addOrRemoveFilterItem({
@@ -51,9 +82,11 @@ export class FilterPlugin<T> implements DataListPlugin<T> {
                 setHeaderMenuItems: store.setHeaderMenuItems,
             });
         });
+
     }
 
-    #onClickFilterOpt(store: DataListStore<T>): void {
+    #onClickFilterOpt(getStore: () => DataListStore<T>): void {
+        const store = getStore();
         const columnKey = store.clickedColumnKey;
         const column = store.columns.find(c => c.key === columnKey);
         if (!column) return;
@@ -67,7 +100,13 @@ export class FilterPlugin<T> implements DataListPlugin<T> {
                 .map(r => getDeepValue(r, columnKey as any))
         )];
         const dateRangeSliderConfig = this?.config?.dateRangeSliderConfig?.find(i => i.key === columnKey);
-        this.currentFilter = { values, column, show: true, dateRangeSliderConfig };
+        new FilterStateManager(getStore)
+            .setPluginStateValue('currentFiltering', { 
+                values, 
+                column, 
+                show: true, 
+                dateRangeSliderConfig 
+            });
         store.setUnmountedPlugins('DataListFilterPlugin', false);
     }
 
@@ -86,7 +125,7 @@ export class FilterPlugin<T> implements DataListPlugin<T> {
             newHeaderMenuItems.push({
                 key: 'filter',
                 text: this?.config?.filterText || 'Filter By',
-                onClick: () => this.#onClickFilterOpt(getStore())
+                onClick: () => this.#onClickFilterOpt(getStore)
             });
         }
 
@@ -94,7 +133,7 @@ export class FilterPlugin<T> implements DataListPlugin<T> {
     }
 
     public render = (getStore: () => DataListStore<T>) => (
-        <FilterBox<T> getStore={getStore} currentFiltering={this.currentFilter} />
+        <FilterBox<T> getStore={getStore} stateManager={new FilterStateManager<T>(getStore)} />
     )
 
     public unmount = (getStore: () => DataListStore<T>) => {
