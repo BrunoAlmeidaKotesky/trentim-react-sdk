@@ -5,9 +5,8 @@ import type { IDataListProps, TColumn } from '@models/interfaces/IDataList';
 import type { ReactNode } from 'react';
 import type { StoreApi } from 'zustand';
 
-export type BaseDataListTempRowMapKeys = 'filtered' | 'grouped' | 'allRows' | 'search';
 export type CallbackSet<T> = (data: T) => T;
-export type ValueOrFunc<T> = T | CallbackSet<T>;
+export type Updater<T> = T | CallbackSet<T>;
 
 /** Use this interface to implement the actual plugin to be instantiated and passed to the DataList's plugin array */
 export interface DataListPlugin<T> {
@@ -24,7 +23,6 @@ export interface DataListPlugin<T> {
     */
     render?: (getStore: () => DataListStore<T>, initialProps?: IDataListProps<T>) => ReactNode;
     unmount?: (getStore: () => DataListStore<T>) => void;
-    registerStore(): StoreApi<any>;
 }
 
 export type ContextMenuState = {
@@ -35,8 +33,8 @@ export type ContextMenuState = {
 export interface DataListState<T> {
     /**The initial rows that were passed to the DataList component */
     rows: T[];
-    /**Use this state to store the rows information depending on your needs */
-    tempRows: T[];
+    /**Do not modify this value, it's used to store the initial rows when the props was passed, it can be used to compare the current rows to the initials.*/
+    allRows: T[];
     headerMenuItems: IContextualMenuItem[];
     plugins: DataListPlugin<T>[];
     columns: TColumn<T>[];
@@ -45,22 +43,24 @@ export interface DataListState<T> {
     contextMenu: ContextMenuState;
     unmountedPlugins: Map<string, boolean>;
     pluginStores: Record<string, StoreApi<unknown>>;
+    originalRowValues: {values: {oldValue: unknown, transformedValue: string}[], key: string}[];
 }
 
 export interface DataListActions<T> {
     /**Set the rows that will be displayed in the DataList */
-    setRows: (data: ValueOrFunc<T[]>) => void;
-    setColumns: (data: ValueOrFunc<TColumn<T>[]>) => void;
+    setRows: (data: Updater<T[]>) => void;
+    setColumns: (data: Updater<TColumn<T>[]>) => void;
     setHeaderMenuItems: (data: CallbackSet<IContextualMenuItem[]>) => void;
-    setTempRows: (data: ValueOrFunc<T[]>) => void;
+    setOriginalRowValue: (key: string, oldValue: unknown, transformedValue: string) => void;
+    setAllRows: (data: Updater<T[]>) => void;
     initializePlugin: (plugin: DataListPlugin<T>, props?: IDataListProps<T>) => Promise<void>;
-    setPlugins: (plugins: ValueOrFunc<DataListPlugin<T>[]>) => void;
-    setContextMenu: (data: ValueOrFunc<ContextMenuState>) => void;
+    setPlugins: (plugins: Updater<DataListPlugin<T>[]>) => void;
+    setContextMenu: (data: Updater<ContextMenuState>) => void;
     onColumnClick: (ev: React.MouseEvent<HTMLElement>, column: TColumn<T>) => void;
     setUnmountedPlugins: (pluginKey: string, value: boolean) => void;
     getStore: () => DataListStore<T>;
     subscribe: ZustandSubscribe<DataListStore<T>>;
-    getCustomStore: <S>(pluginKey: string) => StoreApi<S>;
+    registerPluginStore: (pluginName: string, pluginStore: StoreApi<unknown>) => void;
 }
 
 export type DataListStore<T> = DataListState<T> & DataListActions<T>;

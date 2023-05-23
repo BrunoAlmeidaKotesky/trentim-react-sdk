@@ -67,15 +67,24 @@ export const convertItemValue = (transformations: ColumnItemTransformation, fiel
  * @param c Column to map
  * @returns Mapped column
  */
-export function mapColumns<T>(c: TColumn<T>): TColumn<T> {
+export function mapColumns<T>(column: TColumn<T>, store: DataListStore<T>): TColumn<T> {
     let onRender: (item?: T, index?: number, column?: TColumn<T>) => ReactNode;
-    const transformations = c?.transformations;
+    const transformations = column?.transformations;
     if (!transformations) {
-        onRender = (item) => renderValue(item, c, (fieldValue) => <span>{fieldValue}</span>);
-        return {...c, onRender, fieldName: c?.key };
+        onRender = (item) => renderValue(item, column, (fieldValue) => <span>{fieldValue}</span>);
+        return {...column, onRender, fieldName: column?.key };
     }
-    onRender = (item) => renderValue(item, c, (fieldValue) => convertItemValue(transformations, fieldValue), transformations?.wrapper);
-    return {...c, onRender, fieldName: c?.key}
+    onRender = (item) => renderValue(
+        item, 
+        column, 
+        (fieldValue) => {
+            const newValue = convertItemValue(transformations, fieldValue);
+            store.setOriginalRowValue(column.key, fieldValue, newValue);
+            return newValue;
+        }, 
+        transformations?.wrapper
+    );
+    return {...column, onRender, fieldName: column?.key}
 }
 
 const naturalSort = createNewSortInstance({

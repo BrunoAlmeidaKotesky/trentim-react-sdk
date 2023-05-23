@@ -12,25 +12,28 @@ const BoxShadow = ({ children }: { children: ReactNode }) => (
     }}>{children}</div>
 )
 
-export function FilterBox<T>({ stateManager, getStore }: FilterAreaProps<T>): JSX.Element {
-    const {state, handlers} = useFilterBox({stateManager, getStore});
-    const {width, sibling, targetDom, useOuterClickRef} = state;
+export function FilterBox<T>({ getStore }: FilterAreaProps<T>): JSX.Element {
+    const {state, handlers} = useFilterBox({getStore});
+    const {
+        width, sibling, targetDom, useOuterClickRef,
+        sliderValue, dateRange, selectedKeys, options,
+        currentFiltering
+    } = state;
     const {onComboBoxChange, onDateValueChange, onSliderChange} = handlers;
 
-    if (!stateManager.getPluginStateValue('currentFiltering')?.show || !targetDom) {
+    if (!currentFiltering?.show || !targetDom)
         return null;
-    }
-
+    
     return createPortal(
         <div style={{ width: '100%', top: 40, zIndex: 999, position: 'absolute' }}>
             <div ref={useOuterClickRef} style={{ width, placeContent: 'center', display: 'grid' }} id={getStore().clickedColumnKey as string}>
-                {(stateManager.getPluginStateValue('currentFiltering')?.column?.transformations?.renderAs === 'date') ?
+                {(currentFiltering?.column?.transformations?.renderAs === 'date') ?
                     <BoxShadow>
                         <div style={{ width, backgroundColor: 'white', padding: 8 }}>
                             <DateRangeSlider
-                                {...stateManager.getPluginStateValue('currentFiltering')?.dateRangeSliderConfig?.props}
-                                sliderValue={stateManager.getWrappedFilterStoreValue('sliderValue')} 
-                                dateRange={stateManager.getWrappedFilterStoreValue('dateRange')}
+                                {...currentFiltering?.dateRangeSliderConfig?.props}
+                                sliderValue={sliderValue} 
+                                dateRange={dateRange}
                                 onDateValueChange={onDateValueChange}
                                 onSliderChange={onSliderChange} />
                         </div>
@@ -38,14 +41,14 @@ export function FilterBox<T>({ stateManager, getStore }: FilterAreaProps<T>): JS
                     <BoxShadow>
                         <VirtualizedComboBox
                             multiSelect
-                            selectedKey={stateManager.getWrappedFilterStoreValue('selectedKeys')}
+                            selectedKey={selectedKeys}
                             onChange={onComboBoxChange}
                             dropdownMaxWidth={300}
                             styles={{
                                 root: { maxWidth: width },
                                 callout: { minWidth: 100, maxHeight: '320px!important', scroll: 'auto' }
                             }}
-                            options={stateManager.getWrappedFilterStoreValue('options') || []} 
+                            options={options || []} 
                             autoComplete="on" />
                     </BoxShadow>
                 }

@@ -1,13 +1,12 @@
 import type { TColumn } from '@models/interfaces/IDataList';
-import type { DataListStore, ZustandSubscribe } from "@models/interfaces/DataListStore";
+import type { DataListStore, Updater, ZustandSubscribe } from "@models/interfaces/DataListStore";
 import type { ColumnKey } from '@models/types/Common';
 import type { DateRangeSliderProps, DateSliderValues } from '@components/DateRangeSlider';
 import type { IComboBoxOption } from '@fluentui/react/lib/ComboBox';
-import type { FilterStateManager } from './FilterStateManager';
 
 type FilterPluginDateSliderProps = Omit<
     DateRangeSliderProps, 
-    'onSliderChange' | 'onDateValueChange'
+    'onSliderChange' | 'onDateValueChange'| 'dateRange' | 'sliderValue'
 >
 
 type FilterAreaSliderProp<T> = {
@@ -32,7 +31,6 @@ export interface CurrentFiltering<T> {
 
 export interface FilterAreaProps<T> {
     getStore: () => DataListStore<T>;
-    stateManager: FilterStateManager<T>;
 }
 
 export type AddOrRemoveConfig<T> = Pick<
@@ -40,8 +38,8 @@ export type AddOrRemoveConfig<T> = Pick<
     'clickedColumnKey' | 'headerMenuItems' | 'getStore' | 'setHeaderMenuItems'
 >
 
-export type FilterQueueValue<T, M = any> = {
-    key: ColumnKey<T>;
+export type FilterQueueValue<M = any> = {
+    key: ColumnKey<unknown>;
     values: unknown[];
     metadata?: M;
 }
@@ -62,8 +60,29 @@ export interface FilterPluginState<T> extends WrappedFilterState {
     currentFiltering: CurrentFiltering<T>;
 }
 
-export type FilterPluginActions<T> = {
-    subscribe: ZustandSubscribe<FilterPluginStore<T>>;
+export type FilterPluginActions = {
+    subscribe: ZustandSubscribe<FilterPluginStore<any>>;
+    setWrappedFilterStoreValue: <
+        K extends keyof WrappedFilterState, 
+        V extends WrappedFilterState[K][0]["value"]
+    >(
+        clickedColumnKey: ColumnKey<any>,
+        key: K, 
+        value: Updater<V>
+    ) => void
+    getWrappedFilterStoreValue: <
+        K extends keyof WrappedFilterState
+    >(  
+        clickedColumnKey: ColumnKey<any>,
+        key: K, 
+    ) => WrappedFilterState[K][0]["value"]
+    setQueue: <M = any>(queue: Updater<FilterQueueValue<M>[]>) => void;
 }
 
-export type FilterPluginStore<T> = FilterPluginState<T> & FilterPluginActions<T>;
+export type FilterPluginStore<T> = FilterPluginState<T> & FilterPluginActions;
+
+export type FilterRowConfig<T> = {
+    filter: FilterQueueValue<{ type: 'slider' | 'range'; sliderValue?: DateSliderValues; }>, 
+    row: T, 
+    column: TColumn<any>
+}

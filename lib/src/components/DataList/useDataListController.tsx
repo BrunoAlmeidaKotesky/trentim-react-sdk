@@ -13,16 +13,15 @@ export function useDataListController<T>(props: IDataListProps<T>) {
         headerMenuItems, onColumnClick, contextMenu 
     } = store;
 
-    const columnMapper = useCallback(mapColumns, []);
     /**Change the state of the rows and columns once they are on the properties.*/
     useEffect(() => {
         if (props.rows && props.rows.length > 0) {
           store.setRows(props.rows);
-          store.setTempRows(props.rows);
+          store.setAllRows(props.rows);
         }
         if (props.columns && props.columns.length > 0) {
           const columns = props?.columns;
-          const convertedColumns = columns.map(columnMapper);
+          const convertedColumns = columns.map(c => mapColumns(c, store));
           store.setColumns(convertedColumns as TColumn<T>[]);
         }
       }, [props.rows, props.columns]);

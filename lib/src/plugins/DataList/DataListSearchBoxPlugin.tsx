@@ -36,7 +36,7 @@ function SearchBox<T>(props: SearchBoxProps<T>): JSX.Element {
     /**Works either when user clicks on the icon or press enter on the input 
      * 
      * If the current target value is empty, it will set the rows to the original rows, by using
-     * the native tempRows `allRows` that were saved before any plugin was applied.
+     * the native allRows `allRows` that were saved before any plugin was applied.
      * 
      * If the current target value is not empty, it will filter the rows by the `keysToSearch` property from
      * the `DataList` component.
@@ -45,7 +45,7 @@ function SearchBox<T>(props: SearchBoxProps<T>): JSX.Element {
         if (type === 'keydown' && e.key !== 'Enter') return;
         const inputValue = (e?.currentTarget?.parentElement?.childNodes[0] as HTMLInputElement)?.value;
         if(!inputValue) 
-            return store.setRows(store.tempRows || store.rows);
+            return store.setRows(store.allRows || store.rows);
         const keysToSearch = props?.keysToSearch ?? [];
         store.setRows(
             store.rows.filter(row =>
@@ -73,8 +73,9 @@ export class SearchBoxPlugin<T> implements DataListPlugin<T> {
     public version = '1.0.0';
     constructor(private props?: SearchBoxConfig<T> | null) {}
 
-    initialize(_getStore: () => DataListStore<T>): void {
+    async initialize(_getStore: () => DataListStore<T>): Promise<void> {
         console.log("SearchBoxPlugin initialized");
+        Promise.resolve();
     }
 
     render = (getStore: () => DataListStore<T>) => <SearchBox store={getStore()} {...this.props} />

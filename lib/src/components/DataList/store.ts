@@ -16,7 +16,7 @@ export const createUseDataListStore = <T>(initialStore: Partial<DataListStore<T>
     const DEFAULT_STATE: Omit<DataListState<T>, 'headerMenuItems'> = {
         rows: [],
         columns: [],
-        tempRows: [],
+        allRows: [],
         plugins: [],
         groups: [],
         clickedColumnKey: null,
@@ -26,7 +26,8 @@ export const createUseDataListStore = <T>(initialStore: Partial<DataListStore<T>
             y: 0
         },
         unmountedPlugins: new Map(),
-        pluginStores: {}
+        pluginStores: {},
+        originalRowValues: []
     }
 
     return createStore<DataListStore<T>>()(subscribeWithSelector(immer(
@@ -52,29 +53,33 @@ export const createUseDataListStore = <T>(initialStore: Partial<DataListStore<T>
                     else
                         (state.rows as T[]) = rows;
                 }),
-                setTempRows: tempRows => set(state => {
-                    if (typeof tempRows === 'function')
-                        (state.tempRows as T[]) = tempRows(state.tempRows as T[]);
+                setAllRows: allRows => set(state => {
+                    if (typeof allRows === 'function')
+                        (state.allRows as T[]) = allRows(state.allRows as T[]);
                     else
-                        (state.tempRows as T[]) = tempRows;
+                        (state.allRows as T[]) = allRows;
+                }),
+                setOriginalRowValue: (key, oldValue, transformedValue) => set(state => {
+                    if(state.originalRowValues?.map(i => i?.key).includes(key)) {
+                        const index = state.originalRowValues.findIndex(i => i?.key === key);
+                        state.originalRowValues[index].values.push({oldValue, transformedValue});
+                    }
+                    else {
+                        state.originalRowValues.push({key, values: [{oldValue, transformedValue}]});
+                    }
                 }),
                 initializePlugin: async (plugin) => {
                     if (typeof plugin?.initialize === 'function') {
                         await plugin.initialize(() => get(), props);
-                        if (typeof plugin?.registerStore === 'function') {
-                            set(state => {
-                                if (!state.pluginStores) {
-                                    state.pluginStores = {};
-                                }
-                                state.pluginStores[plugin.name] = plugin.registerStore();
-                            });
-                        }
                     } else {
                         console.error(`
                         [TRS] - Plugin ${plugin.name} does not implement the initialize method.\r\n 
                         This method is required to initialize the plugin`);
                     }
                 },
+                registerPluginStore: (pluginName, pluginStore) => set(state => {
+                    state.pluginStores[pluginName] = pluginStore;
+                }),
                 setColumns: columns => set(state => {
                     if (typeof columns === 'function')
                         (state.columns as TColumn<T>[]) = columns(state.columns as TColumn<T>[]);
@@ -114,13 +119,6 @@ export const createUseDataListStore = <T>(initialStore: Partial<DataListStore<T>
                     state.unmountedPlugins = newUnmountedPlugins;
                 }),
                 getStore: () => get(),
-                getCustomStore: <S>(pluginKey: string): StoreApi<S> | undefined => {
-                    const store = get().pluginStores?.[pluginKey] as StoreApi<S> | undefined;
-                    if (!store) {
-                        console.error('[TRS] - Plugin ${pluginKey} does not have a store registered or it has not been initialized yet.');
-                    }
-                    return store;
-                },
                 subscribe: api.subscribe as unknown as ZustandSubscribe<DataListStore<T>>
             })
         }

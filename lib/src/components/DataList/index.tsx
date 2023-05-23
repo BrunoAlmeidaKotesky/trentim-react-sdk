@@ -65,7 +65,7 @@ export function DataList<T>(props: IDataListProps<T>) {
     return (
         <DataListProvider
             //@ts-ignore
-            rows={props?.rows} plugins={props?.plugins} tempRows={new Map()} columns={props?.columns} >
+            rows={props?.rows} plugins={props?.plugins} allRows={new Map()} columns={props?.columns} >
             <DataListInner {...props} />
         </DataListProvider>
     )
