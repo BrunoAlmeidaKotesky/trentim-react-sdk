@@ -1,11 +1,11 @@
 import type { TColumn } from '@models/interfaces/IDataList';
 import type { DataListStore, Updater, ZustandSubscribe } from "@models/interfaces/DataListStore";
 import type { ColumnKey } from '@models/types/Common';
-import type { DateRangeSliderProps, DateSliderValues } from '@components/DateRangeSlider';
+import type { DateDropdownValues, DateRangeDropdownProps } from '@components/DateRangeDropdown';
 import type { IComboBoxOption } from '@fluentui/react/lib/ComboBox';
 
 type FilterPluginDateSliderProps = Omit<
-    DateRangeSliderProps, 
+    DateRangeDropdownProps, 
     'onSliderChange' | 'onDateValueChange'| 'dateRange' | 'sliderValue'
 >
 
@@ -51,13 +51,16 @@ export type KeyWrapper<T> = {
 
 export type WrappedFilterState = {
     selectedKeys: KeyWrapper<string[]>;
-    sliderValue: KeyWrapper<DateSliderValues>;
+    dropdownValue: KeyWrapper<DateDropdownValues>;
     dateRange: KeyWrapper<{ start: Date | null, end: Date | null }>;
     options: KeyWrapper<IComboBoxOption[]>;
 }
+
 export interface FilterPluginState<T> extends WrappedFilterState {
     queue: FilterQueueValue<T>[];
     currentFiltering: CurrentFiltering<T>;
+    applyFilter: boolean;
+    showBreadcrumb: boolean;
 }
 
 export type FilterPluginActions = {
@@ -77,12 +80,15 @@ export type FilterPluginActions = {
         key: K, 
     ) => WrappedFilterState[K][0]["value"]
     setQueue: <M = any>(queue: Updater<FilterQueueValue<M>[]>) => void;
+    setApplyFilter: (value: boolean) => void;
+    setShowBreadcrumb: (value: boolean) => void;
+    setCurrentFiltering: (value: Updater<CurrentFiltering<any>>) => void;
 }
 
 export type FilterPluginStore<T> = FilterPluginState<T> & FilterPluginActions;
 
 export type FilterRowConfig<T> = {
-    filter: FilterQueueValue<{ type: 'slider' | 'range'; sliderValue?: DateSliderValues; }>, 
+    filter: FilterQueueValue<{ type: 'date' }>, 
     row: T, 
     column: TColumn<any>
 }

@@ -24,8 +24,15 @@ export const filterPluginStore = createStore<FilterPluginStore<any>>()(
             queue: [],
             dateRange: null,
             options: null,
+            applyFilter: false,
             selectedKeys: null,
-            sliderValue: null,
+            showBreadcrumb: false,
+            dropdownValue: null,
+            setCurrentFiltering: value => set(state => {
+                //@ts-ignore
+                state.currentFiltering = typeof value === 'function'? value(state.currentFiltering) : value;
+            }),
+            setShowBreadcrumb: value => set(state => { state.showBreadcrumb = value }),
             setQueue: queue => set(state => {
                 if (typeof queue === 'function')
                     state.queue = queue(state.queue);
@@ -40,6 +47,7 @@ export const filterPluginStore = createStore<FilterPluginStore<any>>()(
                 const valuesArray = get()[key] as unknown as KeyWrapper<WrappedFilterState[K][0]['value']>;
                 return getWrappedFilterStoreValueHelper(valuesArray, clickedColumnKey);
             },
+            setApplyFilter: value => set(state => { state.applyFilter = value }),
             setWrappedFilterStoreValue: <K extends keyof WrappedFilterState, V extends WrappedFilterState[K][0]['value']>(
                 clickedColumnKey: string,
                 key: K,
@@ -101,5 +109,9 @@ export const stateSelector = (state: FilterPluginStore<any>) => ({
     currentFiltering: state.currentFiltering,
     setQueue: state.setQueue,
     queue: state.queue,
-    setWrappedValue: state.setWrappedFilterStoreValue
+    setWrappedValue: state.setWrappedFilterStoreValue,
+    applyFilter: state.applyFilter,
+    setApplyFilter: state.setApplyFilter,
+    setShowBreadcrumb: state.setShowBreadcrumb,
+    setCurrentFiltering: state.setCurrentFiltering
 })

@@ -49,7 +49,7 @@ export function useDataListController<T>(props: IDataListProps<T>) {
                     const wasUnmounted = previousUnmountedPlugins.get(pluginKey);
                     if (shouldUnmount && !wasUnmounted) {
                         const plugin = store.plugins.find(p => p.name === pluginKey);
-                        plugin?.unmount?.(store.getStore);
+                        plugin?.onUnmount?.(store.getStore);
                     }
                 }
             }

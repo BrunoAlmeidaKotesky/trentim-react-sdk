@@ -1,6 +1,6 @@
 import { DataList } from "@components/DataList";
 import json from "./MOCK_DATA.json";
-import { FilterPlugin, SearchBoxPlugin } from "@plugins/DataList";
+import { FilterPlugin, SearchBoxPlugin } from "@plugins/index";
 import { COLUMNS_EX, Project } from './constants';
 
 const rows: Project[] = json;
@@ -10,15 +10,7 @@ const searchBoxPlugin = new SearchBoxPlugin<Project>({
 });
 const filterPlugin = new FilterPlugin<Project>({
   filterText: 'Filtrar por',
-  excludeColumns: ['Title', 'DonoProjeto.Title'],
-  dateRangeSliderConfig: [
-    {
-      key: 'DataInicio', 
-      props: {
-        sliderLabels: ['Última Semana', 'Último Mês', 'Último ano', 'Escolha um range de data']
-      }
-    },
-  ]
+  excludeColumns: ['Title', 'DonoProjeto.Title']
 });
 
 export default function DataListEx() {

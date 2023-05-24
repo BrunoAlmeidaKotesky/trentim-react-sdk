@@ -22,7 +22,11 @@ export interface DataListPlugin<T> {
      * **it does not guarantee** that the props will be the same when the DataList props change.
     */
     render?: (getStore: () => DataListStore<T>, initialProps?: IDataListProps<T>) => ReactNode;
-    unmount?: (getStore: () => DataListStore<T>) => void;
+    /**A method that happens after you set your store to not render anymore. 
+     * @example
+     * getStore().setUnmountedPlugins('MyPluginIdentifier', true);
+    */
+    onUnmount?: (getStore: () => DataListStore<T>) => void;
 }
 
 export type ContextMenuState = {

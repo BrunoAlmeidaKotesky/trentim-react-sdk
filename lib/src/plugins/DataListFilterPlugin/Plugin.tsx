@@ -1,13 +1,12 @@
 import type { DataListPlugin } from "@models/interfaces/DataListStore";
 import type { DataListStore } from "@models/interfaces/DataListStore";
-import type { AddOrRemoveConfig, FilterPluginConfig, FilterQueueValue, FilterRowConfig } from './types';
-import { getDeepValue } from '@helpers/index';
-import { FilterBox } from './FilterBox';
-import { IComboBoxOption } from "@fluentui/react/lib/ComboBox";
+import type { AddOrRemoveConfig, FilterPluginConfig } from './types';
+import type { IComboBoxOption } from "@fluentui/react/lib/ComboBox";
 import { convertItemValue } from '@helpers/internalUtils';
+import { FilteringLogic } from './FilteringLogic';
 import { filterPluginStore } from './store';
-import type { TColumn } from "@models/index";
-import type { DateSliderValues } from "@components/DateRangeSlider";
+import { getDeepValue } from '@helpers/index';
+import { FilterWrapper } from './FilterComponents';
 
 export class FilterPlugin<T> implements DataListPlugin<T> {
     public name: string = 'DataListFilterPlugin';
@@ -23,16 +22,19 @@ export class FilterPlugin<T> implements DataListPlugin<T> {
                 key: 'filter',
                 text: this?.config?.filterText || 'Filter By',
                 onClick: () => this.#onClickFilterOpt(getStore)
-            }
-            ];
+            }];
         });
         getStore().registerPluginStore('DataListFilterPlugin', filterPluginStore);
         return Promise.resolve();
     }
 
     public onInitialized(getStore: () => DataListStore<T>): void {
-        filterPluginStore.subscribe(state => state.queue, queue => {
-            this.applyFilter(queue, getStore);
+        filterPluginStore.subscribe(state => ({
+            queue: state.queue, 
+            applyFilter: state.applyFilter
+        }), ({queue, applyFilter}) => {
+            if(applyFilter)
+                FilteringLogic.applyFilter(queue, getStore);
         });
         filterPluginStore.subscribe(state => state.currentFiltering, currentFiltering => {
             const options = currentFiltering?.values?.map<IComboBoxOption>(v => {
@@ -86,6 +88,7 @@ export class FilterPlugin<T> implements DataListPlugin<T> {
                 dateRangeSliderConfig
             }
         });
+        filterPluginStore.getState().setApplyFilter(false);
         store.setUnmountedPlugins('DataListFilterPlugin', false);
     }
 
@@ -111,70 +114,5 @@ export class FilterPlugin<T> implements DataListPlugin<T> {
         setHeaderMenuItems(() => newHeaderMenuItems);
     }
 
-    public render = (getStore: () => DataListStore<T>) => (<FilterBox<T> getStore={getStore} />)
-
-    public unmount = (getStore: () => DataListStore<T>) => {
-        getStore().setUnmountedPlugins('DataListFilterPlugin', true);
-        document.querySelectorAll('.filterPluginContainer')?.forEach(e => e?.remove());
-    }
-
-    public applyFilter(queue: FilterQueueValue<{ type: 'slider' | 'range', sliderValue?: DateSliderValues }>[], getStore: () => DataListStore<T>) {
-        let rows = [...getStore().rows];
-
-        if (queue.length === 0) {
-            rows = [...getStore().allRows];
-            getStore().setRows(rows);
-            return;
-        }
-
-        const columns = getStore().columns;
-
-        for (const filter of queue) {
-            const column: TColumn<any> = columns.find(column => column.key === filter.key);
-
-            if (!column) continue;
-
-            if (filter?.metadata?.type === 'slider') {
-                const preDate = filter?.values?.[0] as string;
-                const sliderValue = new Date(preDate);
-                rows = rows.filter(row => {
-                    //@ts-ignore
-                    const currentValue = new Date(getDeepValue(row, column.key));
-                    // Filtro para valores depois do valor do slider
-                    return currentValue >= sliderValue;
-                });
-            } else if (filter?.metadata?.type === 'range') {
-                const rangeStart = new Date(filter.values[0] as string);
-                const rangeEnd = new Date(filter.values[1] as string);
-                rows = rows.filter(row => {
-                    //@ts-ignore
-                    const currentValue = new Date(getDeepValue(row, column.key));
-                    // Filtro para valores dentro do range
-                    return currentValue >= rangeStart && currentValue <= rangeEnd;
-                });
-            } else {
-                rows = rows.filter(row => this.filerRow({ filter, row, column }, getStore));
-            }
-        }
-        getStore().setRows(rows);
-    }
-
-    private filerRow({ column, filter, row }: FilterRowConfig<any>, getStore: () => DataListStore<T>): unknown {
-        let filterValues = filter.values;
-        const transformations = column?.transformations;
-        if (transformations?.renderAs)
-            filterValues = this.findOriginalValue(getStore, filter);
-        //@ts-ignore
-        return filterValues.includes(getDeepValue(row, column.key));
-    }
-
-    private findOriginalValue(getStore: () => DataListStore<T>, filter: FilterQueueValue<any>): unknown[] {
-        const originalRowValues = getStore().originalRowValues;
-        const foundItem = originalRowValues?.find(originalRow => originalRow?.key === filter.key);
-        const originalValues = foundItem?.values
-            ?.filter(value => filter?.values
-                ?.includes(value?.transformedValue))
-            ?.map(v => v?.oldValue);
-        return originalValues;
-    }
+    public render = (getStore: () => DataListStore<T>) => (<FilterWrapper<T> getStore={getStore} />)
 }

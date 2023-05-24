@@ -1,4 +1,4 @@
-import { createStore, StoreApi, useStore } from 'zustand';
+import { createStore, useStore } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
 import { subscribeWithSelector } from 'zustand/middleware';
 import { useContext } from 'react';

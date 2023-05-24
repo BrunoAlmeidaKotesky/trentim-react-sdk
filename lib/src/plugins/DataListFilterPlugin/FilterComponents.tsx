@@ -1,9 +1,11 @@
 import { VirtualizedComboBox } from '@fluentui/react/lib/ComboBox';
 import { createPortal } from 'react-dom';
-import { DateRangeSlider } from '@components/DateRangeSlider';
+import { DateRangeDropdown } from '@components/DateRangeDropdown';
+import { Breadcrumb, IBreadcrumbItem } from '@fluentui/react/lib/Breadcrumb';
 import { useFilterBox } from './useFilterBox';
 import type { FilterAreaProps } from './types';
-import type { ReactNode } from 'react';
+import { ReactNode, useMemo } from 'react';
+import { useFilterPluginStore } from './store';
 
 const BoxShadow = ({ children }: { children: ReactNode }) => (
     <div style={{
@@ -16,10 +18,10 @@ export function FilterBox<T>({ getStore }: FilterAreaProps<T>): JSX.Element {
     const {state, handlers} = useFilterBox({getStore});
     const {
         width, sibling, targetDom, useOuterClickRef,
-        sliderValue, dateRange, selectedKeys, options,
+        dropdownValue, dateRange, selectedKeys, options,
         currentFiltering
     } = state;
-    const {onComboBoxChange, onDateValueChange, onSliderChange} = handlers;
+    const {onComboBoxChange, onDateSelected} = handlers;
 
     if (!currentFiltering?.show || !targetDom)
         return null;
@@ -30,12 +32,11 @@ export function FilterBox<T>({ getStore }: FilterAreaProps<T>): JSX.Element {
                 {(currentFiltering?.column?.transformations?.renderAs === 'date') ?
                     <BoxShadow>
                         <div style={{ width, backgroundColor: 'white', padding: 8 }}>
-                            <DateRangeSlider
+                            <DateRangeDropdown
                                 {...currentFiltering?.dateRangeSliderConfig?.props}
-                                sliderValue={sliderValue} 
+                                dropdownValue={dropdownValue} 
                                 dateRange={dateRange}
-                                onDateValueChange={onDateValueChange}
-                                onSliderChange={onSliderChange} />
+                                onDateValueChange={onDateSelected}/>
                         </div>
                     </BoxShadow> :
                     <BoxShadow>
@@ -56,4 +57,33 @@ export function FilterBox<T>({ getStore }: FilterAreaProps<T>): JSX.Element {
         </div>,
         sibling
     );
+}
+
+function FilterBreadCrumb(){
+    const {showBreadcrumb, queue, applyFilter} = useFilterPluginStore(state => ({
+        showBreadcrumb: state.showBreadcrumb,
+        queue: state.queue,
+        applyFilter: state.applyFilter
+    }));
+    const breadCrumbItems = useMemo<IBreadcrumbItem[]>(() => {
+        return queue?.map((item) => {
+            let text: string;
+            if ((item?.metadata as any)?.type === 'date')
+                text = (item?.metadata as any)?.label;
+            else text = item?.values?.map(v => v)?.join(', ');
+            return ({
+                key: item.key,
+                text
+            })
+        }) || [];
+    }, [queue]);
+    if(!showBreadcrumb || !applyFilter) return null;
+    return <Breadcrumb items={breadCrumbItems} />
+}
+
+export function FilterWrapper<T>({ getStore }: FilterAreaProps<T>): JSX.Element {
+    return (<>
+        <FilterBreadCrumb />
+        <FilterBox getStore={getStore} />
+    </>);
 }

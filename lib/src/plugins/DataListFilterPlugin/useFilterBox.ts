@@ -1,38 +1,33 @@
 import type { IComboBoxProps } from '@fluentui/react/lib/ComboBox';
 import { useOuterClick } from '@hooks/useOuterClick';
-import { DateSliderValues, SLIDER_VALUES } from '@components/DateRangeSlider';
+import type { DateRangeDdpChange } from '@components/DateRangeDropdown';
 import type { FilterQueueValue, FilterAreaProps } from './types';
-import { useEffect, useState } from 'react';
 import { Draft, produce } from 'immer';
 import type { ColumnKey } from '@models/index';
 import { useFilterPluginStoreValues, useFilterPluginStore, stateSelector } from './store';
 
 type QueueUpdate = (queue: FilterQueueValue[], filterIndex: number, value: string, clickedKey?: ColumnKey<unknown>) => FilterQueueValue<unknown>[];
 export function useFilterBox<T>({getStore}: FilterAreaProps<T>) {
-    const [state, forceUpdate] = useState(false);
-    const {currentFiltering, setQueue, queue, setWrappedValue} = useFilterPluginStore(stateSelector);
-    const { sliderValue, dateRange, selectedKeys, options } = useFilterPluginStoreValues(
+    const {currentFiltering, setQueue, queue, setWrappedValue, setApplyFilter, setShowBreadcrumb, setCurrentFiltering} = useFilterPluginStore(stateSelector);
+    const { dropdownValue, dateRange, selectedKeys, options } = useFilterPluginStoreValues(
         getStore().clickedColumnKey, 
-        ['sliderValue', 'dateRange', 'selectedKeys', 'options']
+        ['dropdownValue', 'dateRange', 'selectedKeys', 'options']
     );
 
     const clickedKey = getStore().clickedColumnKey;
     const TARGET_SELECTOR = `div[data-item-key="${clickedKey}"]` as const;
-    //Revisar essa parte
     const useOuterClickRef = useOuterClick<HTMLDivElement>({
-        onOuterClick: () => getStore().setUnmountedPlugins('DataListFilterPlugin', true),
+        onOuterClick: () => {
+            setCurrentFiltering({ ...currentFiltering, show: false });
+            if(queue.length > 0) {
+                setApplyFilter(true);
+                setShowBreadcrumb(true);
+            } else {
+                setShowBreadcrumb(false);
+            }
+        },
         cancellationFn: (e) => !!(e.target instanceof HTMLElement && e.target.closest(`span[id^="header"]`))
     });
-
-    useEffect(() => {
-        const sideLabels = currentFiltering?.dateRangeSliderConfig?.props?.sliderLabels;
-        const renderAs = currentFiltering?.column?.transformations?.renderAs;
-        if (
-            renderAs === 'date' &&
-            (!sideLabels || sideLabels?.length !== 4)
-        )
-            console.error('[TRS] - DataListFilterPlugin: Tried to render custom slider, but with none or fewer than 4 labels');
-    }, []);
 
     const updateQueueWithSelectedOption: QueueUpdate = (queue, filterIndex, value, clickedKey) =>
         produce(queue, draft => {
@@ -75,44 +70,32 @@ export function useFilterBox<T>({getStore}: FilterAreaProps<T>) {
                 return previousSelectedKeys.filter((key) => key !== opt.key);
             }
         });
-        forceUpdate(!state);
     }
 
-    const onSliderChange = (value: DateSliderValues) => {
-        const date = new Date();
-        switch (value) {
-            case SLIDER_VALUES.WEEK:
-                date.setDate(date.getDate() - 7);
-                break;
-            case SLIDER_VALUES.MONTH:
-                date.setMonth(date.getMonth() - 1);
-                break;
-            case SLIDER_VALUES.YEAR:
-                date.setFullYear(date.getFullYear() - 1);
-                break;
-        }
-
+    const onDateDropdownChange: DateRangeDdpChange = (date, value, label) => {
+        // Adicionando start e end na fila
         const stateIdx = queue.findIndex(i => i.key === clickedKey);
         if (stateIdx !== -1) {
             const newQueue = produce(queue, draft => {
-                draft[stateIdx].values = [date.toISOString()];
-                draft[stateIdx].metadata = {type: 'slider', sliderValue: value}
+                draft[stateIdx].values = [date?.start?.toISOString(), date?.end?.toISOString()];
+                draft[stateIdx].metadata = {type: 'date', dropdownValue: value, label}
             });
             setQueue(newQueue);
         } else {
             const newQueue = produce(queue, draft => {
                 draft.push({
                     key: clickedKey as Draft<ColumnKey<unknown>>,
-                    values: [date.toISOString()],
-                    metadata: {type: 'slider', sliderValue: value}
+                    values: [date?.start?.toISOString(), date?.end?.toISOString()],
+                    metadata: {type: 'date', dropdownValue: value, label}
                 });
             });
             setQueue(newQueue);
         }
-        setWrappedValue(clickedKey, 'sliderValue', value);
+        setWrappedValue(clickedKey, 'dropdownValue', value);
+        setWrappedValue(clickedKey, 'dateRange', date);
     }
 
-    const onDateValueChange = (value: { start: Date | null, end: Date | null }) => {
+    const onDateValueChange: DateRangeDdpChange = (value, ddp, label) => {
         if (value.start && value.end) {
             const start = value.start.toISOString();
             const end = value.end.toISOString();
@@ -120,7 +103,7 @@ export function useFilterBox<T>({getStore}: FilterAreaProps<T>) {
             if (stateIdx !== -1) {
                 const newQueue = produce(queue, draft => {
                     draft[stateIdx].values = [start, end];
-                    draft[stateIdx].metadata = {type: 'range'}
+                    draft[stateIdx].metadata = {type: 'date', dropdownValue: ddp, label}
                 });
                 setQueue(newQueue);
             } else {
@@ -128,13 +111,19 @@ export function useFilterBox<T>({getStore}: FilterAreaProps<T>) {
                     draft.push({
                         key: clickedKey as Draft<ColumnKey<unknown>>,
                         values: [start, end],
-                        metadata: {type: 'range'}
+                        metadata: {type: 'date', dropdownValue: ddp, label}
                     });
                 });
                 setQueue(newQueue);
             }
         }
         setWrappedValue(clickedKey, 'dateRange', value);
+        setWrappedValue(clickedKey, 'dropdownValue', ddp);
+    }
+
+    const onDateSelected: DateRangeDdpChange = (date, opt, label) => {
+        if(opt === 'range') return onDateValueChange(date, opt, label);
+        return onDateDropdownChange(date, opt, label);
     }
 
     const targetDom = document.querySelector(TARGET_SELECTOR);
@@ -146,13 +135,12 @@ export function useFilterBox<T>({getStore}: FilterAreaProps<T>) {
     return {
         state: {
             width, sibling, targetDom, useOuterClickRef,
-            sliderValue, dateRange, selectedKeys, options,
+            dropdownValue, dateRange, selectedKeys, options,
             currentFiltering
         },
         handlers: {
             onComboBoxChange,
-            onSliderChange,
-            onDateValueChange
+            onDateSelected
         }
     }
 }
