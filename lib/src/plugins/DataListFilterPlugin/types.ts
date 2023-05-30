@@ -83,6 +83,7 @@ export type FilterPluginActions = {
     setApplyFilter: (value: boolean) => void;
     setShowBreadcrumb: (value: boolean) => void;
     setCurrentFiltering: (value: Updater<CurrentFiltering<any>>) => void;
+    resetState: () => void;
 }
 
 export type FilterPluginStore<T> = FilterPluginState<T> & FilterPluginActions;

@@ -4,7 +4,7 @@ import type { AddOrRemoveConfig, FilterPluginConfig } from './types';
 import type { IComboBoxOption } from "@fluentui/react/lib/ComboBox";
 import { convertItemValue } from '@helpers/internalUtils';
 import { FilteringLogic } from './FilteringLogic';
-import { filterPluginStore } from './store';
+import { filterPluginStore } from './filterStore';
 import { getDeepValue } from '@helpers/index';
 import { FilterWrapper } from './FilterComponents';
 

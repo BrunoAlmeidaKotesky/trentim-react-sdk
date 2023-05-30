@@ -5,7 +5,7 @@ import { Breadcrumb, IBreadcrumbItem } from '@fluentui/react/lib/Breadcrumb';
 import { useFilterBox } from './useFilterBox';
 import type { FilterAreaProps } from './types';
 import { ReactNode, useMemo } from 'react';
-import { useFilterPluginStore } from './store';
+import { useFilterPluginStore } from './filterStore';
 
 const BoxShadow = ({ children }: { children: ReactNode }) => (
     <div style={{

@@ -4,7 +4,7 @@ import type { DateRangeDdpChange } from '@components/DateRangeDropdown';
 import type { FilterQueueValue, FilterAreaProps } from './types';
 import { Draft, produce } from 'immer';
 import type { ColumnKey } from '@models/index';
-import { useFilterPluginStoreValues, useFilterPluginStore, stateSelector } from './store';
+import { useFilterPluginStoreValues, useFilterPluginStore, stateSelector } from './filterStore';
 
 type QueueUpdate = (queue: FilterQueueValue[], filterIndex: number, value: string, clickedKey?: ColumnKey<unknown>) => FilterQueueValue<unknown>[];
 export function useFilterBox<T>({getStore}: FilterAreaProps<T>) {

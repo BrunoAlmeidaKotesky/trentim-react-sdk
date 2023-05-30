@@ -44,8 +44,15 @@ function SearchBox<T>(props: SearchBoxProps<T>): JSX.Element {
     const onSearch = (store: DataListStore<T>, type: 'click' | 'keydown') => (e: any) => {
         if (type === 'keydown' && e.key !== 'Enter') return;
         const inputValue = (e?.currentTarget?.parentElement?.childNodes[0] as HTMLInputElement)?.value;
-        if(!inputValue) 
+        if(!inputValue) {
+            if(
+                'DataListFilterPlugin' in store?.pluginStores && 
+                (store?.pluginStores?.DataListFilterPlugin as any)?.getState()?.queue?.length > 0
+            ) {
+                return (store?.pluginStores?.DataListFilterPlugin as any)?.getState()?.resetState();
+            }
             return store.setRows(store.allRows || store.rows);
+        }
         const keysToSearch = props?.keysToSearch ?? [];
         store.setRows(
             store.rows.filter(row =>

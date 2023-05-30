@@ -3,6 +3,7 @@
     "composite": true,
     "module": "ESNext",
     "moduleResolution": "Node",
+    "skipLibCheck": true,
     "allowSyntheticDefaultImports": true
   },
   "include": [ "beforeWrite.ts", "vite.config.ts"]

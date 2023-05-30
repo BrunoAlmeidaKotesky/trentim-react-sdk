@@ -2,8 +2,9 @@ import { createStore, useStore } from "zustand";
 import { subscribeWithSelector } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 import type { Updater, ZustandSubscribe } from "@models/interfaces/DataListStore";
-import type { FilterPluginStore, KeyWrapper, WrappedFilterState } from './types';
+import type { FilterPluginState, FilterPluginStore, KeyWrapper, WrappedFilterState } from './types';
 import type { ColumnKey } from '@models/types/Common';
+import type { Draft } from "immer";
 
 export function getWrappedFilterStoreValueHelper<K extends keyof WrappedFilterState>(
     valuesArray: KeyWrapper<WrappedFilterState[K][0]['value']> | undefined,
@@ -17,20 +18,30 @@ export function getWrappedFilterStoreValueHelper<K extends keyof WrappedFilterSt
     return undefined;
 }
 
-export const filterPluginStore = createStore<FilterPluginStore<any>>()(
+const initialFilterPluginState: FilterPluginState<any> = {
+    currentFiltering: null,
+    queue: [],
+    dateRange: null,
+    options: null,
+    applyFilter: false,
+    selectedKeys: null,
+    showBreadcrumb: false,
+    dropdownValue: null,
+}
+
+export const filterPluginStore: FilterStoreOverwritten = createStore<FilterPluginStore<any>>()(
     subscribeWithSelector(
         immer((set, get, { subscribe }) => ({
-            currentFiltering: null,
-            queue: [],
-            dateRange: null,
-            options: null,
-            applyFilter: false,
-            selectedKeys: null,
-            showBreadcrumb: false,
-            dropdownValue: null,
+            ...initialFilterPluginState,
             setCurrentFiltering: value => set(state => {
                 //@ts-ignore
                 state.currentFiltering = typeof value === 'function'? value(state.currentFiltering) : value;
+            }),
+            resetState: () => set((state) => {
+                for (let key in state) {
+                    if(typeof state[key] !== 'function')
+                        state[key] = initialFilterPluginState[key];
+                }
             }),
             setShowBreadcrumb: value => set(state => { state.showBreadcrumb = value }),
             setQueue: queue => set(state => {
@@ -82,6 +93,24 @@ export const filterPluginStore = createStore<FilterPluginStore<any>>()(
     )
 );
 
+type FilterStoreOverwritten = {
+    getState: () => FilterPluginStore<any>;
+    setState: (nextStateOrUpdater: 
+        FilterPluginStore<any> | 
+        Partial<FilterPluginStore<any>> | 
+        ((state: Draft<FilterPluginStore<any>>) => void), 
+        shouldReplace?: boolean
+    ) => void
+    subscribe: {
+        (listener: (selectedState: FilterPluginStore<any>, previousSelectedState: FilterPluginStore<any>) => void): () => void;
+        <U>(selector: (state: FilterPluginStore<any>) => U, listener: (selectedState: U, previousSelectedState: U) => void, options?: {
+            equalityFn?: (a: U, b: U) => boolean;
+            fireImmediately?: boolean;
+        }): () => void;
+    };
+    destroy: any;
+}
+
 export function useFilterPluginStore<S>(selector: (state: FilterPluginStore<unknown>) => S): S {
     return useStore(filterPluginStore, selector);
 }
@@ -114,4 +143,4 @@ export const stateSelector = (state: FilterPluginStore<any>) => ({
     setApplyFilter: state.setApplyFilter,
     setShowBreadcrumb: state.setShowBreadcrumb,
     setCurrentFiltering: state.setCurrentFiltering
-})
+});

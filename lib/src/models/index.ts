@@ -1,5 +1,4 @@
 export * from '@models/interfaces/DataListStore';
-export * from '@models/interfaces/IDateSlider';
 export * from '@models/types/UtilityTypes';
 export * from '@models/interfaces/ILifecycleProgressProps';
 export * from '@models/interfaces/ITooltipProps';

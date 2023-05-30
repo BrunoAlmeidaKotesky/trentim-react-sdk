@@ -53,7 +53,7 @@ const beforeWriteFile = (path: string, content: string) => {
 
 const removeWrongCSSImport = (file: string) => {
     const filesToIncludeCSS = ['Tooltip', 'StickerCard', 'LifecycleProgress'];
-    const fileNameWithoutType = file.replace('.cjs.js', '').replace('.es.js', '');
+    const fileNameWithoutType = file.replace('.cjs.js', '').replace('.js', '');
     console.log(fileNameWithoutType);
     const isFileToIncludeCSS = filesToIncludeCSS.includes(fileNameWithoutType)
     if(!isFileToIncludeCSS) {
@@ -133,7 +133,6 @@ export default defineConfig({
             //rollupTypes: true,
             //insertTypesEntry: true,
             skipDiagnostics: true,
-            logDiagnostics: true,
             beforeWriteFile,
             afterBuild
         }),
@@ -163,8 +162,8 @@ export default defineConfig({
                 index: resolve(__dirname, 'src/index.ts'),
             },
             name: 'trentim-react-sdk',
-            formats: ['es', 'cjs'],
-            fileName: () => { return `[name].js` },
+            formats: ['es'],
+            fileName: (name) => { return `[name].js` },
         },
         rollupOptions: {
             external: ['react', 'react-dom'],
