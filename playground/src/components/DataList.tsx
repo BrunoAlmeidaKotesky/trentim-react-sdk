@@ -20,7 +20,7 @@ export default function DataListEx() {
         <DataList<Project>
           rows={rows}
           plugins={[searchBoxPlugin, filterPlugin]}
-          maxHeight="400px"
+          maxHeight="400px" styles={{enableColBorder: true}}
           keyUniqueIdentifier="Id"
           columns={COLUMNS_EX}
         />

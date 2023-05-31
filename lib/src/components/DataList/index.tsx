@@ -6,8 +6,10 @@ import { useRef } from 'react'
 import { createUseDataListStore } from './store';
 import type { DataListState, DataListStore } from '@models/interfaces/DataListStore';
 import { ContextualMenu } from '@fluentui/react/lib/ContextualMenu';
+import { useStyling } from './useStyling';
 
 function DataListInner<T>(props: IDataListProps<T>) {
+    useStyling({enableColBorder: props?.styles?.enableColBorder});
     const { state, handlers } = useDataListController(props);
     const { rows, columns, groups, contextMenu, headerMenuItems } = state;
     const { onItemClick, verifyVirtualization, renderPlugins, setContextMenu, onColumnClick } = handlers;

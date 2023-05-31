@@ -46,6 +46,7 @@ export interface IDataListStyles {
     root?: React.CSSProperties;
     /**The container of the `<DetailsList />` list. */
     contentContainer?: React.CSSProperties;
+    enableColBorder?: boolean;
 }
 
 

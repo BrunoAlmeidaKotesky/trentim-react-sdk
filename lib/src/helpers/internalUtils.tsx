@@ -72,7 +72,7 @@ export function mapColumns<T>(column: TColumn<T>, store: DataListStore<T>): TCol
     const transformations = column?.transformations;
     if (!transformations) {
         onRender = (item) => renderValue(item, column, (fieldValue) => <span>{fieldValue}</span>);
-        return {...column, onRender, fieldName: column?.key };
+        return {...column, onRender, fieldName: column?.key, isResizable: true };
     }
     onRender = (item) => renderValue(
         item, 
@@ -84,7 +84,7 @@ export function mapColumns<T>(column: TColumn<T>, store: DataListStore<T>): TCol
         }, 
         transformations?.wrapper
     );
-    return {...column, onRender, fieldName: column?.key}
+    return {...column, onRender, fieldName: column?.key, isResizable: true}
 }
 
 const naturalSort = createNewSortInstance({

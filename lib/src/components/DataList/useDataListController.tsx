@@ -15,11 +15,11 @@ export function useDataListController<T>(props: IDataListProps<T>) {
 
     /**Change the state of the rows and columns once they are on the properties.*/
     useEffect(() => {
-        if (props.rows && props.rows.length > 0) {
+        if (props.rows) {
           store.setRows(props.rows);
           store.setAllRows(props.rows);
         }
-        if (props.columns && props.columns.length > 0) {
+        if (props.columns) {
           const columns = props?.columns;
           const convertedColumns = columns.map(c => mapColumns(c, store));
           store.setColumns(convertedColumns as TColumn<T>[]);
