@@ -25,6 +25,9 @@ export function useFilterBox<T>({getStore}: FilterAreaProps<T>) {
             } else {
                 setShowBreadcrumb(false);
             }
+            const pluginsContainer = [...document.querySelectorAll('.filterPluginContainer')];
+            if(pluginsContainer?.length > 0)
+                pluginsContainer.forEach(i => i.remove());
         },
         cancellationFn: (e) => !!(e.target instanceof HTMLElement && e.target.closest(`span[id^="header"]`))
     });
@@ -130,6 +133,8 @@ export function useFilterBox<T>({getStore}: FilterAreaProps<T>) {
     const width = targetDom?.clientWidth;
     const newDiv = document.createElement('div');
     newDiv.className = 'filterPluginContainer';
+    newDiv.style.position = 'fixed';
+    newDiv.style.zIndex = '99999';
     const sibling = targetDom?.appendChild(newDiv);
 
     return {

@@ -2,6 +2,7 @@ import { VirtualizedComboBox } from '@fluentui/react/lib/ComboBox';
 import { createPortal } from 'react-dom';
 import { DateRangeDropdown } from '@components/DateRangeDropdown';
 import { Breadcrumb, IBreadcrumbItem } from '@fluentui/react/lib/Breadcrumb';
+import { FilterDismiss24Regular } from '@fluentui/react-icons';
 import { useFilterBox } from './useFilterBox';
 import type { FilterAreaProps } from './types';
 import { ReactNode, useMemo } from 'react';
@@ -60,10 +61,11 @@ export function FilterBox<T>({ getStore }: FilterAreaProps<T>): JSX.Element {
 }
 
 function FilterBreadCrumb(){
-    const {showBreadcrumb, queue, applyFilter} = useFilterPluginStore(state => ({
+    const {showBreadcrumb, queue, applyFilter, resetState} = useFilterPluginStore(state => ({
         showBreadcrumb: state.showBreadcrumb,
         queue: state.queue,
-        applyFilter: state.applyFilter
+        applyFilter: state.applyFilter,
+        resetState: state.resetState
     }));
     const breadCrumbItems = useMemo<IBreadcrumbItem[]>(() => {
         return queue?.map((item) => {
@@ -78,7 +80,12 @@ function FilterBreadCrumb(){
         }) || [];
     }, [queue]);
     if(!showBreadcrumb || !applyFilter) return null;
-    return <Breadcrumb items={breadCrumbItems} />
+    return (<div style={{display: 'flex', alignItems: 'center'}}>
+        <Breadcrumb items={breadCrumbItems} />
+        <div style={{display: 'flex', alignSelf: 'center', top: '6px', position: 'relative'}}>
+            <FilterDismiss24Regular cursor={'pointer'} onClick={() => resetState()}/>
+        </div>
+    </div>);
 }
 
 export function FilterWrapper<T>({ getStore }: FilterAreaProps<T>): JSX.Element {

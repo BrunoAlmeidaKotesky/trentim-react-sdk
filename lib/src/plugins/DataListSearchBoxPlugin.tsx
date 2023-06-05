@@ -30,7 +30,7 @@ function SearchBox<T>(props: SearchBoxProps<T>): JSX.Element {
     }, [props?.containerStyles]);
 
     const iconStyles = useMemo<CSSProperties>(() => props?.iconStyles ?? {
-        pointerEvents: "auto", cursor: "pointer", position: 'static', padding: 8, backgroundColor: 'rgb(0, 120, 222)'
+        pointerEvents: "auto", cursor: "pointer", position: 'static', padding: 8, backgroundColor: 'rgb(0, 120, 222)', color: 'white'
     }, [props?.iconStyles]);
 
     /**Works either when user clicks on the icon or press enter on the input 

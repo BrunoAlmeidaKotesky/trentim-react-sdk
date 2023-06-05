@@ -8,7 +8,7 @@ import type { DataListState, DataListStore } from '@models/interfaces/DataListSt
 import { ContextualMenu } from '@fluentui/react/lib/ContextualMenu';
 import { useStyling } from './useStyling';
 
-function DataListInner<T>(props: IDataListProps<T>) {
+function DataListInner<Row, ColMetaData = any>(props: IDataListProps<Row, ColMetaData>) {
     useStyling({enableColBorder: props?.styles?.enableColBorder});
     const { state, handlers } = useDataListController(props);
     const { rows, columns, groups, contextMenu, headerMenuItems } = state;
@@ -16,9 +16,7 @@ function DataListInner<T>(props: IDataListProps<T>) {
 
     return (
         <div style={props?.styles?.root ?? {}}>
-            <div className="data-list-plugins-area">
-                {renderPlugins()}
-            </div>
+            <div className="data-list-plugins-area">{renderPlugins()}</div>
             <div data-is-scrollable="true" style={{ position: 'relative', zIndex: 0, overflowY: 'scroll', height: props?.maxHeight, ...props?.styles?.contentContainer }} id="DataList-root">
                 <DetailsList
                     {...props?.detailsListProps}

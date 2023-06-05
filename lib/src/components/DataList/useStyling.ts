@@ -2,11 +2,10 @@ import { useLayoutEffect } from "react";
 
 type StyleConfig = { enableColBorder: boolean };
 export function useStyling({ enableColBorder }: StyleConfig) {
-    useLayoutEffect(() => {
-        if (enableColBorder) {
-            const style = document.createElement('style');
-            style.id = "dataListBorderStyle";
-            style.textContent = `
+    const addBorder = () => {
+        const style = document.createElement('style');
+        style.id = "dataListBorderStyle";
+        style.textContent = `
             #dataListHeaderContainer div[class*="cellSizer"]::after {
                 content: '';
                 height: 50%;
@@ -29,7 +28,10 @@ export function useStyling({ enableColBorder }: StyleConfig) {
                 height: 50%;
             }
         `;
-            document.head.append(style);
-        }
-    }, []);
+        document.head.append(style);
+    }
+
+    useLayoutEffect(() => {
+        if (enableColBorder) addBorder();
+    }, [enableColBorder]);
 }

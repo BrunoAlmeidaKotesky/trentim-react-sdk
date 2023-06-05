@@ -21,8 +21,7 @@ function LifecycleProgressInner<StageData = any>(props: ILifecycleProgressProps<
     const lifecycleContainer = useRef<HTMLDivElement>(null);
     const overflowStageText = useRef(false);
     const [gridRowNumber, setGridRowNumber] = useState<number>(1);
-    const [visibleStages, setVisibleStages] = useState<ILifecycleStages[]>(
-        props?.stages.map(i => ({...i, hidden: true})) ?? []);
+    const [visibleStages, setVisibleStages] = useState<ILifecycleStages[]>(props?.stages.map(i => ({...i, hidden: true})) ?? []);
 
     const setCSSVariables = () => {
         const root = document.documentElement;

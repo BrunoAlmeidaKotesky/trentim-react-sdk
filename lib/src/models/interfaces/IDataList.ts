@@ -3,7 +3,7 @@ import type { IColumn, IDetailsListProps, IListProps } from "@fluentui/react";
 import type { DataListPlugin } from '@models/interfaces/DataListStore';
 import type { ColumnItemTransformation } from './ColumnItemTransformation';
 
-export type TColumn<T> = IColumn & {
+export type TColumn<T, MetaData = any> = IColumn & {
     /**If the desired value is from an nested object, provide the value with dots. 
      * @example "file.name" will get the value from the file object.
     */
@@ -23,6 +23,8 @@ export type TColumn<T> = IColumn & {
     /**Use this if you don't want to display the column all it's rows, with this you can still use this column on for actions like filtering or grouping. 
      * @default false */
     hideColumn?: boolean;
+    /**A way to store any metadata you want to this column. */
+    metadata?: MetaData;
 }
 
 export type IFluentDetailsListProps = Omit<
@@ -31,14 +33,14 @@ export type IFluentDetailsListProps = Omit<
 >
 
 /**Represents all the functions that can be used. */
-export interface IDataListHandler<T> {
+export interface IDataListHandler<T, ColMetaData = any> {
     /**A custom event to be fired when a row is clicked. */
     onItemClick?: (row: T) => void;
     /**
      * You should see the `transformations` property from `TColumn<T>` first, since it will probably solve your problem.
      * 
      * The same event from `IDetailsListProps` from `@fluent-ui` with generic types.*/
-    onRenderItemColumn?: (item?: T, index?: number, column?: TColumn<T>) => React.ReactNode;
+    onRenderItemColumn?: (item?: T, index?: number, column?: TColumn<T, ColMetaData>) => React.ReactNode;
 }
 
 export interface IDataListStyles {
@@ -50,7 +52,7 @@ export interface IDataListStyles {
 }
 
 
-export interface IDataListProps<T extends any> extends IDataListHandler<T> {
+export interface IDataListProps<T extends any, ColMetaData = any> extends IDataListHandler<T, ColMetaData> {
     /**
      * If a `maxHeight` is not set, the list will not be virtualized by default, even if you return `true` on this property.
      * We do that to ensure that, to ensure with no max height is se to the list, the @fluentui virtualization bug does not occur.
@@ -95,7 +97,7 @@ export interface IDataListProps<T extends any> extends IDataListHandler<T> {
             {key: 'Icon' as any, name: 'Nome Do Projeto', fieldName: 'Title', minWidth: 100, maxWidth: 200, isResizable: true, renderFilterAs: 'SearchBox'}]} />
      * ```
     */
-    columns: TColumn<T>[];
+    columns: TColumn<T, ColMetaData>[];
     /**The list of items to be displayed.*/
     rows: T[];
     /**
