@@ -61,7 +61,7 @@ function DataListInner<Row, ColMetaData = any>(props: IDataListProps<Row, ColMet
         </div>);
 }
 
-export function DataList<T>(props: IDataListProps<T>) {
+export function DataList<Row, ColMetaData = any>(props: IDataListProps<Row, ColMetaData>) {
     return (
         <DataListProvider
             //@ts-ignore
@@ -71,9 +71,9 @@ export function DataList<T>(props: IDataListProps<T>) {
     )
 }
 
-type DataListProviderProps<T> = React.PropsWithChildren<DataListState<T>>;
-function DataListProvider<T>({ children, ...props }: DataListProviderProps<T>) {
-    const storeRef = useRef<DataListStore<T>>();
+type DataListProviderProps<Row> = React.PropsWithChildren<DataListState<Row>>;
+function DataListProvider<Row>({ children, ...props }: DataListProviderProps<Row>) {
+    const storeRef = useRef<DataListStore<Row>>();
     if (!storeRef.current) {
         //@ts-ignore
         storeRef.current = createUseDataListStore(props);
