@@ -71,8 +71,7 @@ export function mapColumns<T>(column: TColumn<T>, store: DataListStore<T>): TCol
     let onRender: (item?: T, index?: number, column?: TColumn<T>) => ReactNode;
     const transformations = column?.transformations;
     if (!transformations) {
-        onRender = (item) => renderValue(item, column, (fieldValue) => <span>{fieldValue}</span>);
-        return {...column, onRender, fieldName: column?.key, isResizable: true };
+        return {...column, fieldName: column?.key, isResizable: true };
     }
     onRender = (item) => renderValue(
         item, 

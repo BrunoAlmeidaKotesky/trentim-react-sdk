@@ -39,7 +39,20 @@ export interface IDataListHandler<T, ColMetaData = any> {
     /**
      * You should see the `transformations` property from `TColumn<T>` first, since it will probably solve your problem.
      * 
-     * The same event from `IDetailsListProps` from `@fluent-ui` with generic types.*/
+     * Otherwise, if you still need to modify the render and the `mapFn` from `transformations` is not enough, you can use this property.
+     * Cases like this can happen if the component that you are trying to render depends on a more complex state management logic.
+     * 
+     * To prevent overwritten other columns `transformations`, check if the `transformations` property is not `undefined` before applying your custom render.
+     * 
+     @example
+     ```tsx
+     <DataList onRenderItemColumn={(item, index, col) => {
+        if(col.transformations && col.onRender) return col.onRender;
+        //If not, make your custom render.
+        return <span>{item[col.key]}</span>;
+     }}
+     ```
+     */
     onRenderItemColumn?: (item?: T, index?: number, column?: TColumn<T, ColMetaData>) => React.ReactNode;
 }
 

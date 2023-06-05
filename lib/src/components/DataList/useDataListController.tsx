@@ -32,6 +32,7 @@ export function useDataListController<T>(props: IDataListProps<T>) {
     //Initializes the plugins once they are set.
     useEffect(() => {
         const initializePlugins = async () => {
+            if(!plugins || plugins.length === 0) return;
             await Promise.all(plugins.map(plugin => initializePlugin(plugin, props)));
             plugins.forEach(plugin => {
                 if(plugin?.onInitialized)
@@ -65,9 +66,9 @@ export function useDataListController<T>(props: IDataListProps<T>) {
     /**If the plugins had implemented the render method, it will render them. */
     const renderPlugins = () => {
         return store.plugins
-            .filter((plugin) => !store?.unmountedPlugins?.get(plugin.name))
-            .map((plugin) => {
-            if (plugin.render)
+            ?.filter((plugin) => !store?.unmountedPlugins?.get(plugin.name))
+            ?.map((plugin) => {
+            if (plugin?.render)
                 return <div key={plugin.name}>{plugin.render(store.getStore, props)}</div>
             return null;
         });
