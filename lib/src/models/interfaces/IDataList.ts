@@ -29,7 +29,7 @@ export type TColumn<T, MetaData = any> = IColumn & {
 
 export type IFluentDetailsListProps = Omit<
     IDetailsListProps, 
-    'columns' | 'items' | 'onRenderItemColumn' | 'onRenderRow' | 'onShouldVirtualize'
+    'columns' | 'items' | 'onRenderItemColumn' | 'onRenderRow' | 'onShouldVirtualize' | 'layoutMode'
 >
 
 /**Represents all the functions that can be used. */
@@ -79,6 +79,7 @@ export interface IDataListProps<T extends any, ColMetaData = any> extends IDataL
      * you can overwrite it by setting the `onShouldVirtualize` property, but we do not recommend.
      **/
     maxHeight?: string | number;
+    layoutMode?: IDetailsListProps['layoutMode'];
     /**Use this to overwrite the default props `IDetailListProps` from Microsoft's `@fluent-ui` */
     detailsListProps?: IFluentDetailsListProps;
     /**Configure the header behavior, such as to enable filter and other functionalities. */

@@ -17,7 +17,7 @@ function DataListInner<Row, ColMetaData = any>(props: IDataListProps<Row, ColMet
     return (
         <div style={props?.styles?.root ?? {}}>
             <div className="data-list-plugins-area">{renderPlugins()}</div>
-            <div data-is-scrollable="true" style={{ position: 'relative', zIndex: 0, overflowY: 'scroll', height: props?.maxHeight, ...props?.styles?.contentContainer }} id="DataList-root">
+            <div data-is-scrollable="true" style={{ position: 'relative', zIndex: 0, overflowY: 'auto', height: props?.maxHeight, ...props?.styles?.contentContainer }} id="DataList-root">
                 <DetailsList
                     {...props?.detailsListProps}
                     onRenderItemColumn={props?.onRenderItemColumn}
@@ -47,9 +47,8 @@ function DataListInner<Row, ColMetaData = any>(props: IDataListProps<Row, ColMet
                     }}
                     groups={groups.length === 0 ? undefined : groups}
                     onShouldVirtualize={verifyVirtualization()}
-                    layoutMode={props?.detailsListProps?.layoutMode ?? DetailsListLayoutMode.justified} isHeaderVisible={true}
-                    checkboxVisibility={props?.detailsListProps?.checkboxVisibility ?? CheckboxVisibility.hidden}
-                />
+                    layoutMode={props?.layoutMode ?? DetailsListLayoutMode.fixedColumns} isHeaderVisible={true}
+                    checkboxVisibility={props?.detailsListProps?.checkboxVisibility ?? CheckboxVisibility.hidden} />
                 {contextMenu.visible && (
                     <ContextualMenu
                         items={headerMenuItems}
