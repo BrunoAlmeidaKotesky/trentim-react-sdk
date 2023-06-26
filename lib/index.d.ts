@@ -1,9 +1,7 @@
 /// <reference path="ConditionalWrapper.d.ts" />
  export * from './ConditionalWrapper'
-/// <reference path="GridView.d.ts" />
- export * from './GridView'
-/// <reference path="IFrame.d.ts" />
- export * from './IFrame'
+/// <reference path="DataList.d.ts" />
+ export * from './DataList'
 /// <reference path="LifecycleProgress.d.ts" />
  export * from './LifecycleProgress'
 /// <reference path="StickerCard.d.ts" />

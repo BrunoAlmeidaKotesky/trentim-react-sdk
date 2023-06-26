@@ -36,7 +36,10 @@
       ],
       "@decorators/*": [
         "src/decorators/*"
-      ]
+      ],
+      "@plugins/*": [
+        "src/plugins/*"
+      ],
     },
   },
   "include": ["src"],

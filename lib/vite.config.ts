@@ -53,7 +53,7 @@ const beforeWriteFile = (path: string, content: string) => {
 
 const removeWrongCSSImport = (file: string) => {
     const filesToIncludeCSS = ['Tooltip', 'StickerCard', 'LifecycleProgress'];
-    const fileNameWithoutType = file.replace('.cjs.js', '').replace('.es.js', '');
+    const fileNameWithoutType = file.replace('.cjs.js', '').replace('.js', '');
     console.log(fileNameWithoutType);
     const isFileToIncludeCSS = filesToIncludeCSS.includes(fileNameWithoutType)
     if(!isFileToIncludeCSS) {
@@ -104,8 +104,7 @@ const generateDeclarationTypes = () => {
         const exports = packageJson.exports;
         const exportKeyName = file.startsWith('index') ? '.' : "./" + file.replace('.d.ts', '');
         exports[exportKeyName] = {
-            import: `./dist/${file.replace('.d.ts', '.es.js')}`,
-            require: `./dist/${file.replace('.d.ts', '.cjs.js')}`
+            import: `./dist/${file.replace('.d.ts', '.js')}`,
         }
         writeFileSync(resolve(__dirname, 'package.json'), JSON.stringify(packageJson, null, 2));
     }
@@ -126,7 +125,7 @@ const afterBuild = () => {
 export default defineConfig({
     plugins: [
         react({
-            jsxRuntime: 'classic'
+            jsxRuntime: 'automatic'
         }),
         libCss(),
         dts({
@@ -134,7 +133,6 @@ export default defineConfig({
             //rollupTypes: true,
             //insertTypesEntry: true,
             skipDiagnostics: true,
-            logDiagnostics: true,
             beforeWriteFile,
             afterBuild
         }),
@@ -149,8 +147,8 @@ export default defineConfig({
             '@components': resolve(__dirname, 'src/components'),
             '@models': resolve(__dirname, 'src/models'),
             '@helpers': resolve(__dirname, 'src/helpers'),
-            '@decorators': resolve(__dirname, 'src/decorators'),
-            '@hooks': resolve(__dirname, 'src/hooks')
+            '@hooks': resolve(__dirname, 'src/hooks'),
+            '@plugins': resolve(__dirname, 'src/plugins'),
         }
     },
     build: {
@@ -158,14 +156,14 @@ export default defineConfig({
             entry: {
                 ...generateComponentsEntries(),
                 helpers: resolve(__dirname, 'src/helpers/index.ts'),
-                decorators: resolve(__dirname, 'src/decorators/index.ts'),
                 hooks: resolve(__dirname, 'src/hooks/index.ts'),
                 models: resolve(__dirname, 'src/models/index.ts'),
+                plugins: resolve(__dirname, 'src/plugins/index.ts'),
                 index: resolve(__dirname, 'src/index.ts'),
             },
             name: 'trentim-react-sdk',
-            formats: ['es', 'cjs'],
-            fileName: (format) => { return `[name].${format}.js` },
+            formats: ['es'],
+            fileName: (name) => { return `[name].js` },
         },
         rollupOptions: {
             external: ['react', 'react-dom'],

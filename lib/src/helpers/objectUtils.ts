@@ -128,6 +128,18 @@ export function getSearchParamsAsObject<
         return result as Record<AsLowerCase extends true ? Lowercase<Keys> : Keys, string>;
     } catch(e) { console.error('[TRS] - Failed to get Url params as an object, ', e); return null; }
 }
+
+/**
+ * Set a query parameter in the URL, either by updating it's value or adding it if it doesn't exist.
+ * @param queryParam The query parameter to update or add.
+ * @param value The value of the query parameter.
+ */
+export function setQueryStringUrl(queryParam: string, value: any) {
+    const url = new URL(window.location.href);
+    url.searchParams.set(queryParam, value.toString());
+    window.history.replaceState({}, document.title, url.toString());
+}
+
 /**The same method as `JSON.parse`, but it handles it when it fails, automatically returning null (If fallback value is not set).
  * @param json The json string
  * @param fallbackValue A value if the parse fails

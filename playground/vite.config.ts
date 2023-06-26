@@ -13,7 +13,8 @@ export default defineConfig({
       '@models': resolve(libPath, 'src/models'),
       '@helpers': resolve(libPath, 'src/helpers'),
       '@decorators': resolve(libPath, 'src/decorators'),
-      '@hooks': resolve(libPath, 'src/hooks')
+      '@hooks': resolve(libPath, 'src/hooks'),
+      '@plugins': resolve(libPath, 'src/plugins'),
     }
   },
 })
