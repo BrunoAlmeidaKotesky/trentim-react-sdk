@@ -31,7 +31,10 @@ function renderValue<T>(
 }
 
 export const convertItemValue = (transformations: ColumnItemTransformation, fieldValue: unknown): string => {
-    if(!transformations?.renderAs) return fieldValue?.toString();
+    if (fieldValue === null || fieldValue === undefined) return "";
+  
+    if(!transformations?.renderAs) return fieldValue?.toString() ?? '';
+
     switch (transformations.renderAs) {
         case 'date': {
             return convertIsoToLocaleString(
@@ -60,7 +63,6 @@ export const convertItemValue = (transformations: ColumnItemTransformation, fiel
         }
     }
 }
-
 /**
  * Maps columns to be used in the DataList component, depending on the transformations provided (if any).
  * 

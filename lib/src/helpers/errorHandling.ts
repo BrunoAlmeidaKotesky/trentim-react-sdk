@@ -116,3 +116,13 @@ export function Catch<R = any, E = any, Args extends any[] = any[], C = any>(Err
 export function DefaultCatch<R = any, E = any, Args extends any[] = any[], C = any>(handler: Handler<R, E, Args, C>) {
     return Factory(handler);
 }
+
+export function isValidDate(date: string | Date): boolean {
+    if (date === null || date === undefined) return false;
+    if (typeof date === 'string') {
+        const dateObject = new Date(date);
+        return !isNaN(dateObject.getTime());
+    } else if (date instanceof Date) 
+        return !isNaN(date.getTime());
+    return false;
+}
