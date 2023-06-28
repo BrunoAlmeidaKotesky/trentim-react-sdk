@@ -69,13 +69,18 @@ export const convertItemValue = (transformations: ColumnItemTransformation, fiel
  * @param c Column to map
  * @returns Mapped column
  */
-export function mapColumns<T>(column: TColumn<T>, store: DataListStore<T>): TColumn<T> {
+ export function mapColumns<T>(column: TColumn<T>, store: DataListStore<T>): TColumn<T> {
     let onRender: (item?: T, index?: number, column?: TColumn<T>) => ReactNode;
     const transformations = column?.transformations;
-    if (!transformations) {
-        return {...column, fieldName: column?.key, isResizable: true };
-    }
-    onRender = (item) => renderValue(
+    if(!column.key) throw new Error('Column key is required.');
+
+    const defaultRender = (item: T) => {
+        //@ts-ignore
+        const fieldValue = getDeepValue(item, column?.key);
+        return fieldValue;
+    };
+
+    const transformedRender = (item: T) => renderValue(
         item, 
         column, 
         (fieldValue) => {
@@ -85,8 +90,10 @@ export function mapColumns<T>(column: TColumn<T>, store: DataListStore<T>): TCol
         }, 
         transformations?.wrapper
     );
-    return {...column, onRender, fieldName: column?.key, isResizable: true}
+    onRender = transformations ? transformedRender : defaultRender;
+    return {...column, onRender, isResizable: true};
 }
+
 
 const naturalSort = createNewSortInstance({
     comparer: new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' }).compare,

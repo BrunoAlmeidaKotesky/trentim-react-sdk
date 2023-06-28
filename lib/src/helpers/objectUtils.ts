@@ -152,3 +152,37 @@ export const tryJSONParse: <Result, Fallback = null>(json: string, fallbackValue
             return fallbackValue as any; 
         }
 }
+
+/**
+ * Fills missing keys in a given object based on a template object. 
+ * If a key from the template is not found in the given object, 
+ * the key will be added to the given object with a provided fallback value.
+ *
+ * @param {T} template The template object to match the keys against.
+ * @param {Partial<T>} obj The object that will be filled with missing keys.
+ * @param {*} fallbackValue The value to be assigned for the missing keys in the object. Default value is null.
+ * 
+ * @returns {T} The resultant object which is a copy of the given object but filled with missing keys.
+ * 
+ * @template T This function can handle any type of object. T is the type of the object.
+ *
+ * @example
+ * const template = { a: 1, b: 2, c: { d: 3 } };
+ * const obj = { a: 10, c: { } };
+ * const fallbackValue = 0;
+ * fillMissingKeys(template, obj, fallbackValue);
+ * // Result: { a: 10, b: 0, c: { d: 0 } }
+ */
+ export function fillMissingKeys<T extends object>(template: T, obj: Partial<T>, fallbackValue = null): T {
+    return Object.keys(template).reduce((acc: Record<any, any>, key) => {
+        //@ts-ignore
+        const value = template[key];
+        if (typeof value === 'object' && value !== null && !(value instanceof Array)) {
+          // Recurse for nested objects
+          acc[key] = fillMissingKeys(value as T, obj[key as keyof typeof obj]  as Partial<T> || {}, fallbackValue);
+        } else {
+          acc[key] = Object.prototype.hasOwnProperty.call(obj, key) ? obj[key as keyof typeof obj] : fallbackValue;
+        }
+        return acc;
+    }, {} as any);
+}
