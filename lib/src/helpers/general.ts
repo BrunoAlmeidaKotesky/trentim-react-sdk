@@ -114,3 +114,18 @@ export function removeDuplicates<T>(arr: T[], selector: (item: T) => any): T[] {
       ))
   );
 }
+
+/**
+ * Check if a given Date object is valid or if it is a valid date string that can be converted to a Date object.
+ * @param date The date to check.
+ * @returns `true` if the date is valid, `false` otherwise.
+ */
+export function isValidDate(date: string | Date): boolean {
+  if (date === null || date === undefined) return false;
+  if (typeof date === 'string') {
+      const dateObject = new Date(date);
+      return !isNaN(dateObject.getTime());
+  } else if (date instanceof Date) 
+      return !isNaN(date.getTime());
+  return false;
+}
