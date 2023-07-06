@@ -186,3 +186,13 @@ export const tryJSONParse: <Result, Fallback = null>(json: string, fallbackValue
         return acc;
     }, {} as any);
 }
+
+/**
+* Remove a query parameter from the URL.
+* @param queryParam The query parameter to remove.
+*/
+export function removeQueryStringParameter(queryParam: string): void {
+    const url = new URL(window.location.href);
+    url.searchParams.delete(queryParam);
+    history.pushState({}, '', url.toString());
+}

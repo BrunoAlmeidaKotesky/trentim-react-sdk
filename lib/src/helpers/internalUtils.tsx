@@ -73,14 +73,9 @@ export const convertItemValue = (transformations: ColumnItemTransformation, fiel
     let onRender: (item?: T, index?: number, column?: TColumn<T>) => ReactNode;
     const transformations = column?.transformations;
     if(!column.key) throw new Error('Column key is required.');
-
-    const defaultRender = (item: T) => {
-        //@ts-ignore
-        const fieldValue = getDeepValue(item, column?.key);
-        return fieldValue;
-    };
-
-    const transformedRender = (item: T) => renderValue(
+    if (!transformations) 
+        return {...column, fieldName: column?.key, isResizable: true };
+        onRender = (item: T) => renderValue(
         item, 
         column, 
         (fieldValue) => {
@@ -90,7 +85,6 @@ export const convertItemValue = (transformations: ColumnItemTransformation, fiel
         }, 
         transformations?.wrapper
     );
-    onRender = transformations ? transformedRender : defaultRender;
     return {...column, onRender, isResizable: true};
 }
 

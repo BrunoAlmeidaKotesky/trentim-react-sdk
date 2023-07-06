@@ -86,3 +86,46 @@ export function memoizeAsync<AsyncFunc extends AnyAsyncFunction>(
     return result;
   };
 }
+
+/**
+ * `removeDuplicates` is a function that removes duplicate elements from an array.
+ *
+ * This function works with arrays of any type. It uses a selector function 
+ * to determine what to check for duplication. The selector function 
+ * should take an element of the array and return a property that will be used 
+ * to check for duplicates.
+ *
+ * For example, if you have an array of objects, and each object has a `name` property, 
+ * you could pass a function that returns the `name` property to remove all objects 
+ * that have the same name.
+ *
+ * The function returns a new array that contains only the first occurrence 
+ * of each duplicate element.
+ *
+ * @template T The type of the elements in the array
+ * @param arr The original array from which to remove duplicates
+ * @param selector A function that takes an array element and returns a property to check for duplication
+ * @returns A new array with duplicates removed
+ */
+export function removeDuplicates<T>(arr: T[], selector: (item: T) => any): T[] {
+  return arr.filter((item, index, self) =>
+      index === self.findIndex((t) => (
+          selector(t) === selector(item)
+      ))
+  );
+}
+
+/**
+ * Check if a given Date object is valid or if it is a valid date string that can be converted to a Date object.
+ * @param date The date to check.
+ * @returns `true` if the date is valid, `false` otherwise.
+ */
+export function isValidDate(date: string | Date): boolean {
+  if (date === null || date === undefined) return false;
+  if (typeof date === 'string') {
+      const dateObject = new Date(date);
+      return !isNaN(dateObject.getTime());
+  } else if (date instanceof Date) 
+      return !isNaN(date.getTime());
+  return false;
+}

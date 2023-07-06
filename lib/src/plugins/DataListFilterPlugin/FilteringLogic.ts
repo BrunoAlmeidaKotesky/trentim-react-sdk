@@ -32,14 +32,14 @@ export class FilteringLogic {
                     return currentValue >= rangeStart && currentValue <= rangeEnd;
                 });
             } else {
-                return filteredRows.filter(row => FilteringLogic.filerRow({ filter, row, column }, getStore));
+                return filteredRows.filter(row => FilteringLogic.filterRow({ filter, row, column }, getStore));
             }
         }, rows);
 
         getStore().setRows(rows);
     }
 
-    private static filerRow({ column, filter, row }: FilterRowConfig<any>, getStore: () => DataListStore<any>): unknown {
+    private static filterRow({ column, filter, row }: FilterRowConfig<any>, getStore: () => DataListStore<any>): unknown {
         let filterValues = filter.values;
         const transformations = column?.transformations;
         if (transformations?.renderAs)
