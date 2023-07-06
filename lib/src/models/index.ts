@@ -10,3 +10,4 @@ export * from '@models/types/Common';
 export * from '@models/types/UtilityTypes';
 export * from '@models/interfaces/IStickerCardProps';
 export * from '@models/interfaces/ColumnItemTransformation';
+export * from '@models/interfaces/ErrorHandling';
