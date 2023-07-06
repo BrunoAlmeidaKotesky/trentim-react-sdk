@@ -1,37 +1,4 @@
-/** Represents a failed computation.*/
-export interface Left<T, E> {
-    type: 'error';
-    error: E;
-    /*** Returns the value of the Result if it is successful, otherwise throws an error.*/
-    unwrap(): T;
-    /*** Returns the value of the Result if it is successful, otherwise returns the provided default value.*/
-    unwrapOr(defaultValue: T): T;
-    /*** Returns the value of the Result if it is successful, otherwise calls the provided function with the error and returns its result.*/
-    unwrapOrElse(fn: (error: E) => T): T;
-    /*** Returns true if the Result is an error, false otherwise.*/
-    isErr(this: Result<T, E>): this is Left<T, E>;
-    /*** Returns true if the Result is successful, false otherwise.*/
-    isOk(this: Result<T, E>): this is Right<T, E>;
-}
-
-/** Represents a successful computation.*/
-export interface Right<T, E> {
-    type: 'ok';
-    value: T;
-    /*** Returns the value of the Result.*/
-    unwrap(): T;
-    /*** Returns the value of the Result.*/
-    unwrapOr(defaultValue: T): T;
-    /*** Returns the value of the Result.*/
-    unwrapOrElse(fn: (error: E) => T): T;
-    /*** Returns true if the Result is an error, false otherwise.*/
-    isErr(this: Result<T, E>): this is Left<T, E>;
-    /*** Returns true if the Result is successful, false otherwise.*/
-    isOk(this: Result<T, E>): this is Right<T, E>;
-}
-
-/**Represents the result of a computation that can either succeed with a value of type T or fail with an error of type E.*/
-export type Result<T, E> = Left<T, E> | Right<T, E>;
+import type { AsyncFunction, SyncFunction, Result, NoneType, Option, SomeType } from '@models/interfaces/ErrorHandling';
 
 /** Creates a successful Result with the given value.
  * @param value The value of the successful computation.
@@ -64,45 +31,6 @@ export function Err<T, E>(error: E): Result<T, E> {
         isOk: () => false
     };
 }
-/**
- * Represents an Option that contains a value.
- */
-export interface SomeType<T> {
-    type: 'some';
-    value: T;
-    /*** Returns the value of the Option if it exists, otherwise throws an error.*/
-    unwrap(): T;
-    /*** Returns the value of the Option if it exists, otherwise returns the provided default value.*/
-    unwrapOr(defaultValue: T): T;
-    /*** Returns the value of the Option if it exists, otherwise calls the provided function and returns its result.*/
-    unwrapOrElse(fn: () => T): T;
-    /*** Returns true if the Option contains a value, false otherwise.*/
-    isSome(this: Option<T>): this is SomeType<T>;
-    /*** Returns true if the Option does not contain a value, false otherwise.*/
-    isNone(this: Option<T>): this is NoneType;
-}
-
-/**
- * Represents an Option that does not contain a value.
- */
-export interface NoneType {
-    type: 'none';
-    /*** Throws an error because None does not contain a value.*/
-    unwrap(): never;
-    /*** Returns the provided default value because None does not contain a value.*/
-    unwrapOr<T>(defaultValue: T): T;
-    /*** Calls the provided function and returns its result because None does not contain a value.*/
-    unwrapOrElse<T>(fn: () => T): T;
-    /*** Returns true if the Option contains a value, false otherwise.*/
-    isSome<T>(this: Option<T>): this is SomeType<T>;
-    /*** Returns true if the Option does not contain a value, false otherwise.*/
-    isNone<T>(this: Option<T>): this is NoneType;
-}
-
-/**
- * Represents an optional value: every Option is either Some with a value of type T or None.
- */
-export type Option<T> = SomeType<T> | NoneType;
 
 /**
  * Creates an Option with a value.
@@ -204,10 +132,110 @@ function Factory<R = any, E = any, Args extends any[] = any[], C = any>(ErrorCla
     };
 };
 
+/**
+ * Catch decorator: A TypeScript decorator that wraps a class method with error handling logic.
+ * It catches errors of a specific type that are thrown within the decorated method.
+ * @param ErrorClassConstructor - The constructor of the specific error type to catch.
+ * @param handler - The function to handle the caught error.
+ * @returns A decorator function.
+ */
 export function Catch<R = any, E = any, Args extends any[] = any[], C = any>(ErrorClassConstructor: Function, handler: Handler<R, E, Args, C>) {
     return Factory(ErrorClassConstructor, handler);
 }
 
+/**
+ * DefaultCatch decorator: A TypeScript decorator that wraps a class method with error handling logic.
+ * It catches all errors that are thrown within the decorated method.
+ * @param handler - The function to handle the caught error.
+ * @returns A decorator function.
+ */
 export function DefaultCatch<R = any, E = any, Args extends any[] = any[], C = any>(handler: Handler<R, E, Args, C>) {
     return Factory(handler);
+}
+
+/**
+ * defaultCatch function: A higher-order function that wraps a target function with error handling logic.
+ * It catches all errors that are thrown within the target function.
+ * @param targetFunction - The function to wrap.
+ * @param handler - The function to handle the caught error.
+ * @returns The wrapped function.
+ */
+export function defaultCatch<Args extends any[] = any[], R = any, E = any>(
+    targetFunction: SyncFunction<Args, R>, 
+    handler: Handler<R, E, Args, any>
+): SyncFunction<Args, R>;
+export function defaultCatch<Args extends any[] = any[], R = any, E = any>(
+    targetFunction: AsyncFunction<Args, R>, 
+    handler: Handler<R, E, Args, any>
+): AsyncFunction<Args, R>;
+export function defaultCatch<Args extends any[] = any[], R = any, E = any>(
+    targetFunction: SyncFunction<Args, R> | AsyncFunction<Args, R>, 
+    handler: Handler<R, E, Args, any>
+): SyncFunction<Args, R> | AsyncFunction<Args, R> {
+    //@ts-ignore
+    return function (...args: Args): R | Promise<R> {
+        try {
+            const response = targetFunction(...args);
+            if (isPromise(response)) {
+                return response.catch((error: E) => {
+                    if (isFunction(handler)) {
+                        return handler.call(null, error, this, ...args);
+                    }
+                    throw error;
+                });
+            }
+            return response;
+        } catch (error) {
+            if (isFunction(handler)) {
+                return handler.call(null, error, this, ...args);
+            }
+            throw error;
+        }
+    };
+}
+
+/**
+ * catchErrors function: A higher-order function that wraps a target function with error handling logic.
+ * It catches errors of a specific type that are thrown within the target function.
+ * @param targetFunction - The function to wrap.
+ * @param ErrorClassConstructor - The constructor of the specific error type to catch.
+ * @param handler - The function to handle the caught error.
+ * @returns The wrapped function.
+ */
+export function catchErrors<R, E extends Error, Args extends any[], C>(
+    targetFunction: AsyncFunction<Args, R>, 
+    ErrorClassConstructor: Function, 
+    handler: Handler<R, E, Args, C>
+): AsyncFunction<Args, R>;
+export function catchErrors<R, E extends Error, Args extends any[], C>(
+    targetFunction: SyncFunction<Args, R>, 
+    ErrorClassConstructor: Function, 
+    handler: Handler<R, E, Args, C>
+): SyncFunction<Args, R>;
+export function catchErrors<R = any, E extends Error = Error, Args extends any[] = any[], C = any>(
+    targetFunction: SyncFunction<Args, R> | AsyncFunction<Args, R>, 
+    ErrorClassConstructor: Function, handler: Handler<R, E, Args, C>
+): SyncFunction<Args, R> | AsyncFunction<Args, R> {
+    //@ts-ignore
+    return function (...args: Args): R | Promise<R> {
+        try {
+            const result = targetFunction(...args);
+            if (isPromise(result)) {
+                return result.catch((error: Error) => {
+                    if (error instanceof ErrorClassConstructor) {
+                        //@ts-ignore
+                        return handler(error, null, ...args);
+                    }
+                    throw error;
+                });
+            }
+            return result;
+        } catch (error) {
+            if (error instanceof ErrorClassConstructor) {
+                //@ts-ignore
+                return handler(error, null, ...args);
+            }
+            throw error;
+        }
+    };
 }

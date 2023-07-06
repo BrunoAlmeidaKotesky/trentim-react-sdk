@@ -20,6 +20,7 @@ export type FilterPluginConfig<T> = {
     /**Fields that won't be filtered */
     excludeColumns?: ColumnKey<T>[];
     dateRangeSliderConfig?: FilterAreaSliderProp<T>[];
+    onFilterCleared?: () => void;
 }
 
 export interface CurrentFiltering<T> {
@@ -31,6 +32,7 @@ export interface CurrentFiltering<T> {
 
 export interface FilterAreaProps<T> {
     getStore: () => DataListStore<T>;
+    onFilterCleared?: () => void;
 }
 
 export type AddOrRemoveConfig<T> = Pick<

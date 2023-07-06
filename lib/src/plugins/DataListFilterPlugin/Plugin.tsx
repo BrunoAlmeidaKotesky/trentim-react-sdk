@@ -114,5 +114,6 @@ export class FilterPlugin<T> implements DataListPlugin<T> {
         setHeaderMenuItems(() => newHeaderMenuItems);
     }
 
-    public render = (getStore: () => DataListStore<T>) => (<FilterWrapper<T> getStore={getStore} />)
+    public render = (getStore: () => DataListStore<T>) => 
+        (<FilterWrapper<T> onFilterCleared={this?.config?.onFilterCleared} getStore={getStore} />)
 }

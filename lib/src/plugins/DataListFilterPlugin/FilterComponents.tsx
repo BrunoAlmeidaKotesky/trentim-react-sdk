@@ -60,7 +60,7 @@ export function FilterBox<T>({ getStore }: FilterAreaProps<T>): JSX.Element {
     );
 }
 
-function FilterBreadCrumb(){
+function FilterBreadCrumb(props: {onFilterCleared?: () => void}){
     const {showBreadcrumb, queue, applyFilter, resetState} = useFilterPluginStore(state => ({
         showBreadcrumb: state.showBreadcrumb,
         queue: state.queue,
@@ -83,14 +83,17 @@ function FilterBreadCrumb(){
     return (<div style={{display: 'flex', alignItems: 'center'}}>
         <Breadcrumb items={breadCrumbItems} />
         <div style={{display: 'flex', alignSelf: 'center', top: '6px', position: 'relative'}}>
-            <FilterDismiss24Regular cursor={'pointer'} onClick={() => resetState()}/>
+            <FilterDismiss24Regular cursor={'pointer'} onClick={() => {
+                resetState();
+                if(props?.onFilterCleared) props.onFilterCleared();
+            }}/>
         </div>
     </div>);
 }
 
-export function FilterWrapper<T>({ getStore }: FilterAreaProps<T>): JSX.Element {
+export function FilterWrapper<T>(props: FilterAreaProps<T>): JSX.Element {
     return (<>
-        <FilterBreadCrumb />
-        <FilterBox getStore={getStore} />
+        <FilterBreadCrumb onFilterCleared={props?.onFilterCleared}/>
+        <FilterBox getStore={props.getStore} />
     </>);
 }
