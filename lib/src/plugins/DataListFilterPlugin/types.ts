@@ -32,7 +32,7 @@ export interface CurrentFiltering<T> {
 
 export interface FilterAreaProps<T> {
     getStore: () => DataListStore<T>;
-    onFilterCleared?: () => void;
+    onFilterCleared?: (allRows: T[]) => void;
 }
 
 export type AddOrRemoveConfig<T> = Pick<

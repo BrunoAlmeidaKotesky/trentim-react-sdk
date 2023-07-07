@@ -42,7 +42,7 @@ export interface IDataListHandler<T, ColMetaData = any> {
      * Otherwise, if you still need to modify the render and the `mapFn` from `transformations` is not enough, you can use this property.
      * Cases like this can happen if the component that you are trying to render depends on a more complex state management logic.
      * 
-     * To prevent overwritten other columns `transformations`, check if the `transformations` property is not `undefined` before applying your custom render.
+     * If a specific column has a `transformations` property, it will be used instead of this one on that column.
      * 
      @example
      ```tsx
@@ -115,16 +115,17 @@ export interface IDataListProps<T extends any, ColMetaData = any> extends IDataL
     /**The list of items to be displayed.*/
     rows: T[];
     /**
+     * @deprecated
      * Before v5 everything related to the row information was an `IRow<T>`,
      * which basically meant that the `IRow<T>` was the `T` itself, but with an required `{Id: string | number}` property.
      * 
      * Since v5, the `IRow<T>` is no longer required, and the `T` itself is used as the `IRow<T>`.
-     * For that to work, you need to provide the `keyUniqueIdentifier` property, which will be used to identify each row.
      * 
      * This makes easier to use, since you don't need to create a new object with the `Id` property 
      * and use your own, and make it easier for plugin developers to create their own plugins.
+     * This property is not required anymore and it's not used internally, but it's still here for backwards compatibility.
      */
-    keyUniqueIdentifier: keyof T;
+    keyUniqueIdentifier?: ColumnKey<T>;
     /**Custom styles to the component container and root. */
     styles?: IDataListStyles;
     plugins?: DataListPlugin<T>[];

@@ -21,7 +21,7 @@ export function useDataListController<T>(props: IDataListProps<T>) {
         }
         if (props.columns) {
           const columns = props?.columns;
-          const convertedColumns = columns.map(c => mapColumns(c, store));
+          const convertedColumns = columns.map(c => mapColumns(c, store, props?.onRenderItemColumn));
           store.setColumns(convertedColumns as TColumn<T>[]);
         }
       }, [props.rows, props.columns]);

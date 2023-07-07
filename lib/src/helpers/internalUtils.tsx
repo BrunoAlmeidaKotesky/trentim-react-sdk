@@ -1,6 +1,6 @@
 /**All the functions in this file are for internal use only. */
 
-import { convertIsoToLocaleString, getDeepValue} from "@helpers/index";
+import { convertIsoToLocaleString, getDeepValue } from "@helpers/index";
 import { createNewSortInstance } from 'fast-sort';
 import type { TColumn } from "@models/interfaces/IDataList";
 import type { ReactNode, ComponentType } from "react";
@@ -32,8 +32,8 @@ function renderValue<T>(
 
 export const convertItemValue = (transformations: ColumnItemTransformation, fieldValue: unknown): string => {
     if (fieldValue === null || fieldValue === undefined) return "";
-  
-    if(!transformations?.renderAs) return fieldValue?.toString() ?? '';
+
+    if (!transformations?.renderAs) return fieldValue?.toString() ?? '';
 
     switch (transformations.renderAs) {
         case 'date': {
@@ -63,29 +63,39 @@ export const convertItemValue = (transformations: ColumnItemTransformation, fiel
         }
     }
 }
+type OnRender<T> = (item?: T, index?: number, column?: TColumn<T>) => ReactNode;
 /**
  * Maps columns to be used in the DataList component, depending on the transformations provided (if any).
  * 
  * @param c Column to map
  * @returns Mapped column
  */
- export function mapColumns<T>(column: TColumn<T>, store: DataListStore<T>): TColumn<T> {
-    let onRender: (item?: T, index?: number, column?: TColumn<T>) => ReactNode;
+export function mapColumns<T>(column: TColumn<T>, store: DataListStore<T>, propRenderItem?: OnRender<T>): TColumn<T> {
+    let onRender: OnRender<T>;
     const transformations = column?.transformations;
-    if(!column.key) throw new Error('Column key is required.');
-    if (!transformations) 
-        return {...column, fieldName: column?.key, isResizable: true };
-        onRender = (item: T) => renderValue(
-        item, 
-        column, 
+    if (!column.key) throw new Error('Column key is required.');
+    if (!transformations) {
+        if (propRenderItem) onRender = propRenderItem;
+        else {
+            onRender = (item, _index, column) => {
+                //@ts-ignore
+                const fieldValue = getDeepValue(item, column?.key);
+                return fieldValue?.toString() ?? '';
+            }
+        }
+        return { ...column, fieldName: column?.key, isResizable: true, onRender };
+    }
+    onRender = (item: T) => renderValue(
+        item,
+        column,
         (fieldValue) => {
             const newValue = convertItemValue(transformations, fieldValue);
             store.setOriginalRowValue(column.key, fieldValue, newValue);
             return newValue;
-        }, 
+        },
         transformations?.wrapper
     );
-    return {...column, onRender, isResizable: true};
+    return { ...column, onRender, isResizable: true };
 }
 
 
