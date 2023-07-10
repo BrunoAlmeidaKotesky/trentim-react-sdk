@@ -1,7 +1,7 @@
 {
   "name": "trentim-react-sdk",
   "private": false,
-  "version": "5.4.2",
+  "version": "5.5.0",
   "description": "Trentim internal SDK for ReactJS projects, with UI components, helpers, hooks and more.",
   "license": "MIT",
   "repository": {
