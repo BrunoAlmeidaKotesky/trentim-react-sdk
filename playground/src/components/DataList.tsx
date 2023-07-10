@@ -10,7 +10,9 @@ const searchBoxPlugin = new SearchBoxPlugin<Project>({
 });
 const filterPlugin = new FilterPlugin<Project>({
   filterText: 'Filtrar por',
-  excludeColumns: ['Title', 'DonoProjeto.Title']
+  excludeColumns: ['Title', 'DonoProjeto.Title'],
+  showTooltip: true,
+  tooltipContent: 'Após selecionar os seus valores, clique fora da caixa de filtro aplica-los'
 });
 
 export default function DataListEx() {

@@ -3,6 +3,7 @@ import type { DataListStore, Updater, ZustandSubscribe } from "@models/interface
 import type { ColumnKey } from '@models/types/Common';
 import type { DateDropdownValues, DateRangeDropdownProps } from '@components/DateRangeDropdown';
 import type { IComboBoxOption } from '@fluentui/react/lib/ComboBox';
+import type { ReactNode } from 'react';
 
 type FilterPluginDateSliderProps = Omit<
     DateRangeDropdownProps, 
@@ -21,6 +22,8 @@ export type FilterPluginConfig<T> = {
     excludeColumns?: ColumnKey<T>[];
     dateRangeSliderConfig?: FilterAreaSliderProp<T>[];
     onFilterCleared?: () => void;
+    showTooltip?: boolean;
+    tooltipContent?: ReactNode;
 }
 
 export interface CurrentFiltering<T> {
@@ -33,6 +36,8 @@ export interface CurrentFiltering<T> {
 export interface FilterAreaProps<T> {
     getStore: () => DataListStore<T>;
     onFilterCleared?: (allRows: T[]) => void;
+    showTooltip?: boolean;
+    tooltipContent?: ReactNode;
 }
 
 export type AddOrRemoveConfig<T> = Pick<
