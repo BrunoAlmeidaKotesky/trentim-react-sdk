@@ -24,6 +24,8 @@ export type FilterPluginConfig<T> = {
     onFilterCleared?: () => void;
     showTooltip?: boolean;
     tooltipContent?: ReactNode;
+    /**@default `Apply Filter` */
+    applyFilterText?: string;
 }
 
 export interface CurrentFiltering<T> {
@@ -38,6 +40,8 @@ export interface FilterAreaProps<T> {
     onFilterCleared?: (allRows: T[]) => void;
     showTooltip?: boolean;
     tooltipContent?: ReactNode;
+    /**@default `Apply Filter` */
+    applyFilterText?: string;
 }
 
 export type AddOrRemoveConfig<T> = Pick<

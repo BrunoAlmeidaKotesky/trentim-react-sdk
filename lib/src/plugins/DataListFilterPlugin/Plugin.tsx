@@ -116,5 +116,7 @@ export class FilterPlugin<T> implements DataListPlugin<T> {
 
     public render = (getStore: () => DataListStore<T>) => (<FilterWrapper<T> 
         onFilterCleared={this?.config?.onFilterCleared} getStore={getStore} 
-        showTooltip={this?.config?.showTooltip ?? false} tooltipContent={this?.config?.tooltipContent}/>)
+        applyFilterText={this?.config?.applyFilterText}
+        showTooltip={this?.config?.showTooltip ?? false} 
+        tooltipContent={this?.config?.tooltipContent}/>)
 }

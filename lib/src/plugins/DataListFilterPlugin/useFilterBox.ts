@@ -16,19 +16,22 @@ export function useFilterBox<T>({getStore}: FilterAreaProps<T>) {
 
     const clickedKey = getStore().clickedColumnKey;
     const TARGET_SELECTOR = `div[data-item-key="${clickedKey}"]` as const;
+
+    const onApplyFilter = () => {
+        setCurrentFiltering({ ...currentFiltering, show: false });
+        if(queue.length > 0) {
+            setApplyFilter(true);
+            setShowBreadcrumb(true);
+        } else {
+            setShowBreadcrumb(false);
+        }
+        const pluginsContainer = [...document.querySelectorAll('.filterPluginContainer')];
+        if(pluginsContainer?.length > 0)
+            pluginsContainer.forEach(i => i.remove());
+    }
+
     const useOuterClickRef = useOuterClick<HTMLDivElement>({
-        onOuterClick: () => {
-            setCurrentFiltering({ ...currentFiltering, show: false });
-            if(queue.length > 0) {
-                setApplyFilter(true);
-                setShowBreadcrumb(true);
-            } else {
-                setShowBreadcrumb(false);
-            }
-            const pluginsContainer = [...document.querySelectorAll('.filterPluginContainer')];
-            if(pluginsContainer?.length > 0)
-                pluginsContainer.forEach(i => i.remove());
-        },
+        onOuterClick: onApplyFilter,
         cancellationFn: (e) => !!(e.target instanceof HTMLElement && e.target.closest(`span[id^="header"]`))
     });
 
@@ -144,8 +147,7 @@ export function useFilterBox<T>({getStore}: FilterAreaProps<T>) {
             currentFiltering
         },
         handlers: {
-            onComboBoxChange,
-            onDateSelected
+            onComboBoxChange, onDateSelected, onApplyFilter
         }
     }
 }

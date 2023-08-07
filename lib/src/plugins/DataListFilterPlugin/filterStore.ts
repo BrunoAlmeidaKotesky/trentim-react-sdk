@@ -37,11 +37,12 @@ export const filterPluginStore: FilterStoreOverwritten = createStore<FilterPlugi
                 //@ts-ignore
                 state.currentFiltering = typeof value === 'function'? value(state.currentFiltering) : value;
             }),
-            resetState: () => set((state) => {
+            resetState: (clearCb?: () => void) => set((state) => {
                 for (let key in state) {
                     if(typeof state[key] !== 'function')
                         state[key] = initialFilterPluginState[key];
                 }
+                if(clearCb) clearCb();
             }),
             setShowBreadcrumb: value => set(state => { state.showBreadcrumb = value }),
             setQueue: queue => set(state => {

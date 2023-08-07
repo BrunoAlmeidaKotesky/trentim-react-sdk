@@ -6,13 +6,15 @@ import { COLUMNS_EX, Project } from './constants';
 const rows: Project[] = json;
 const searchBoxPlugin = new SearchBoxPlugin<Project>({
   placeholder: 'Buscar', 
-  keysToSearch: ['Title', 'DonoProjeto.Title']
+  keysToSearch: ['Title', 'DonoProjeto.Title'],
+  showClearButton: true
 });
 const filterPlugin = new FilterPlugin<Project>({
   filterText: 'Filtrar por',
   excludeColumns: ['Title', 'DonoProjeto.Title'],
   showTooltip: true,
-  tooltipContent: 'Após selecionar os seus valores, clique fora da caixa de filtro aplica-los'
+  tooltipContent: 'Após selecionar os seus valores, clique fora da caixa de filtro aplica-los',
+  applyFilterText: 'Aplicar Filtro'
 });
 
 export default function DataListEx() {

@@ -2,6 +2,7 @@ import { VirtualizedComboBox } from '@fluentui/react/lib/ComboBox';
 import { createPortal } from 'react-dom';
 import { DateRangeDropdown } from '@components/DateRangeDropdown';
 import { Breadcrumb, IBreadcrumbItem } from '@fluentui/react/lib/Breadcrumb';
+import { PrimaryButton } from '@fluentui/react/lib/Button';
 import { FilterDismiss24Regular } from '@fluentui/react-icons';
 import { Tooltip } from '@components/Tooltip';
 import { ConditionalWrapper } from '@components/ConditionalWrapper';
@@ -17,6 +18,12 @@ const BoxShadow = ({ children }: { children: ReactNode }) => (
     }}>{children}</div>
 )
 
+const ApplyFilterBtn = ({text, onClick}: {text: string, onClick: () => void}) => (
+    <div style={{display: 'grid', padding: '8px 2px 0px 2px', marginTop: 8}}>
+        <PrimaryButton onClick={onClick}>{text || 'Apply Filter'}</PrimaryButton>
+    </div>
+)
+
 export function FilterBox<T>(props: FilterAreaProps<T>): JSX.Element {
     const { state, handlers } = useFilterBox({ getStore: props.getStore });
     const {
@@ -24,7 +31,7 @@ export function FilterBox<T>(props: FilterAreaProps<T>): JSX.Element {
         dropdownValue, dateRange, selectedKeys, options,
         currentFiltering
     } = state;
-    const { onComboBoxChange, onDateSelected } = handlers;
+    const { onComboBoxChange, onDateSelected, onApplyFilter } = handlers;
     const content: ReactNode = props?.tooltipContent || "After selecting your values, click outside the filter box to apply them";
 
     if (!currentFiltering?.show || !targetDom)
@@ -42,6 +49,7 @@ export function FilterBox<T>(props: FilterAreaProps<T>): JSX.Element {
                                 dropdownValue={dropdownValue}
                                 dateRange={dateRange}
                                 onDateValueChange={onDateSelected} />
+                            <ApplyFilterBtn onClick={onApplyFilter} text={props?.applyFilterText} />
                         </div>
                     </BoxShadow> :
                     <BoxShadow>
@@ -56,6 +64,7 @@ export function FilterBox<T>(props: FilterAreaProps<T>): JSX.Element {
                             }}
                             options={options || []}
                             autoComplete="on" />
+                        <ApplyFilterBtn onClick={onApplyFilter} text={props?.applyFilterText} />
                     </BoxShadow>
                 }
             </div>
