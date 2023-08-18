@@ -195,6 +195,11 @@ export function defaultCatch<Args extends any[] = any[], R = any, E = any>(
 }
 
 /**
+ *
+ * @deprecated This function has been deprecated due to its verbosity and potential overengineering.
+ * In many cases, a simple try/catch block with instanceof checks may be more clear and concise.
+ * Consider the specific needs of your code and prefer simpler error handling mechanisms when possible.
+ * 
  * catchErrors function: A higher-order function that wraps a target function with error handling logic.
  * It catches errors of a specific type that are thrown within the target function.
  * @param targetFunction - The function to wrap.

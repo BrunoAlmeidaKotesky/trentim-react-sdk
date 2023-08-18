@@ -64,13 +64,14 @@ export function DataList<Row, ColMetaData = any>(props: IDataListProps<Row, ColM
     return (
         <DataListProvider
             //@ts-ignore
-            rows={props?.rows} plugins={props?.plugins} allRows={new Map()} columns={props?.columns} >
+            rows={props?.rows} plugins={props?.plugins} allRows={new Map()} columns={props?.columns}
+            columnMenuConfig={props?.columnMenuConfig}>
             <DataListInner {...props} />
         </DataListProvider>
     )
 }
 
-type DataListProviderProps<Row> = React.PropsWithChildren<DataListState<Row>>;
+type DataListProviderProps<Row> = React.PropsWithChildren<DataListState<Row> & Pick<IDataListProps<Row>, 'columnMenuConfig'>>;
 function DataListProvider<Row>({ children, ...props }: DataListProviderProps<Row>) {
     const storeRef = useRef<DataListStore<Row>>();
     if (!storeRef.current) {
